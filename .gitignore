@@ -1,0 +1,19 @@
+# Dependencies and generated output
+node_modules/
+dist/
+test-results/
+playwright-report/
+*.tsbuildinfo
+*.log
+
+# Local configuration and operating-system files
+.DS_Store
+.env
+.env.*
+!.env.example
+!.env.sample
+.vercel/
+.wrangler/
+
+# Raw participant interviews remain local; publish the synthesis in context.md.
+/reference/figma/figjam-board-snapshot.xml

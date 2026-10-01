@@ -1,0 +1,58 @@
+{
+  "characters": [
+    {
+      "name": "Mimo",
+      "collection": "Mimo \u2022 character",
+      "body": "Mimo / continuous plush body",
+      "root": "Mimo / move character",
+      "vertices": 187490,
+      "eyes": [
+        "Mimo / eye L",
+        "Mimo / eye R"
+      ],
+      "faces": 374976,
+      "reference_match": "Front silhouette and eye locations measured from reference; body depth inferred"
+    },
+    {
+      "name": "Luma",
+      "collection": "Luma \u2022 character",
+      "body": "Luma / continuous plush body",
+      "root": "Luma / move character",
+      "vertices": 216188,
+      "eyes": [
+        "Luma / eye L",
+        "Luma / eye R"
+      ],
+      "faces": 432372,
+      "reference_match": "Front silhouette and eye locations measured from reference; body depth inferred"
+    },
+    {
+      "name": "Pip",
+      "collection": "Pip \u2022 character",
+      "body": "Pip / continuous plush body",
+      "root": "Pip / move character",
+      "vertices": 242476,
+      "eyes": [
+        "Pip / eye L",
+        "Pip / eye R"
+      ],
+      "faces": 484960,
+      "reference_match": "Front silhouette and eye locations measured from reference; body depth inferred"
+    },
+    {
+      "name": "Nori",
+      "collection": "Nori \u2022 character",
+      "body": "Nori / continuous plush body",
+      "root": "Nori / move character",
+      "vertices": 205094,
+      "eyes": [
+        "Nori / eye L",
+        "Nori / eye R"
+      ],
+      "faces": 410184,
+      "reference_match": "Front silhouette and eye locations measured from reference; body depth inferred"
+    }
+  ],
+  "animation_actions": 0,
+  "blender": "4.5.10 LTS"
+}

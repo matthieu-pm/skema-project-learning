@@ -1,0 +1,362 @@
+[
+  {
+    "key": "S1",
+    "page": "Welcome",
+    "pet": "Mimo",
+    "gesture": "Friendly wave",
+    "start": 1,
+    "end": 24,
+    "fps": 12,
+    "file": "S1.gif",
+    "camera": {
+      "x": -4.97371768951416,
+      "z": 1.530896448995918,
+      "ortho_scale": 3.5812709808349608
+    }
+  },
+  {
+    "key": "S2",
+    "page": "Your role",
+    "pet": "Mimo",
+    "gesture": "Curious question",
+    "start": 31,
+    "end": 54,
+    "fps": 12,
+    "file": "S2.gif",
+    "camera": {
+      "x": -4.50003981590271,
+      "z": 1.4979720353148878,
+      "ortho_scale": 3.55
+    }
+  },
+  {
+    "key": "S3",
+    "page": "Email",
+    "pet": "Nori",
+    "gesture": "Point to your email",
+    "start": 61,
+    "end": 84,
+    "fps": 12,
+    "file": "S3.gif",
+    "camera": {
+      "x": 4.916317939758301,
+      "z": 1.504239301662892,
+      "ortho_scale": 3.55
+    }
+  },
+  {
+    "key": "S4",
+    "page": "Age",
+    "pet": "Nori",
+    "gesture": "Slow breath",
+    "start": 91,
+    "end": 114,
+    "fps": 12,
+    "file": "S4.gif",
+    "camera": {
+      "x": 4.501645922660828,
+      "z": 1.5523627505172044,
+      "ortho_scale": 3.55
+    }
+  },
+  {
+    "key": "S5",
+    "page": "Email verification",
+    "pet": "Nori",
+    "gesture": "Two little nods",
+    "start": 121,
+    "end": 144,
+    "fps": 12,
+    "file": "S5.gif",
+    "camera": {
+      "x": 4.501682996749878,
+      "z": 1.4954391526989639,
+      "ortho_scale": 3.55
+    }
+  },
+  {
+    "key": "L1",
+    "page": "Language",
+    "pet": "Mimo",
+    "gesture": "Welcome gesture",
+    "start": 151,
+    "end": 174,
+    "fps": 12,
+    "file": "L1.gif",
+    "camera": {
+      "x": -4.715913534164429,
+      "z": 1.543217325117439,
+      "ortho_scale": 3.55
+    }
+  },
+  {
+    "key": "L2",
+    "page": "Level",
+    "pet": "Mimo",
+    "gesture": "Thoughtful head tilt",
+    "start": 181,
+    "end": 204,
+    "fps": 12,
+    "file": "L2.gif",
+    "camera": {
+      "x": -4.433167934417725,
+      "z": 1.497903489973396,
+      "ortho_scale": 3.55
+    }
+  },
+  {
+    "key": "L3",
+    "page": "Learning topic",
+    "pet": "Pip",
+    "gesture": "Happy spring",
+    "start": 211,
+    "end": 234,
+    "fps": 12,
+    "file": "L3.gif",
+    "camera": {
+      "x": 1.4980773329734802,
+      "z": 1.6340221874415874,
+      "ortho_scale": 4.295052933692932
+    }
+  },
+  {
+    "key": "L4",
+    "page": "Personal goal",
+    "pet": "Pip",
+    "gesture": "You can do it",
+    "start": 241,
+    "end": 264,
+    "fps": 12,
+    "file": "L4.gif",
+    "camera": {
+      "x": 1.7068644762039185,
+      "z": 1.5422868130262941,
+      "ortho_scale": 4.210316228866577
+    }
+  },
+  {
+    "key": "L5",
+    "page": "Lesson format",
+    "pet": "Mimo",
+    "gesture": "This or that",
+    "start": 271,
+    "end": 294,
+    "fps": 12,
+    "file": "L5.gif",
+    "camera": {
+      "x": -4.501674175262451,
+      "z": 1.4976185797713697,
+      "ortho_scale": 3.985504913330078
+    }
+  },
+  {
+    "key": "L6",
+    "page": "City",
+    "pet": "Mimo",
+    "gesture": "Look around",
+    "start": 301,
+    "end": 324,
+    "fps": 12,
+    "file": "L6.gif",
+    "camera": {
+      "x": -4.500003337860107,
+      "z": 1.4955131052993238,
+      "ortho_scale": 3.55
+    }
+  },
+  {
+    "key": "L7",
+    "page": "Available days",
+    "pet": "Mimo",
+    "gesture": "Alternating arm taps",
+    "start": 331,
+    "end": 354,
+    "fps": 12,
+    "file": "L7.gif",
+    "camera": {
+      "x": -4.50063681602478,
+      "z": 1.5067386864684522,
+      "ortho_scale": 3.55
+    }
+  },
+  {
+    "key": "L8",
+    "page": "Time of day",
+    "pet": "Mimo",
+    "gesture": "A soft stretch",
+    "start": 361,
+    "end": 384,
+    "fps": 12,
+    "file": "L8.gif",
+    "camera": {
+      "x": -4.50044858455658,
+      "z": 1.589320921804756,
+      "ortho_scale": 4.090614366531372
+    }
+  },
+  {
+    "key": "L9",
+    "page": "Ready to find a teacher",
+    "pet": "Pip",
+    "gesture": "Hooray",
+    "start": 391,
+    "end": 414,
+    "fps": 12,
+    "file": "L9.gif",
+    "camera": {
+      "x": 1.497881293296814,
+      "z": 1.6494389567524195,
+      "ortho_scale": 5.1295257091522215
+    }
+  },
+  {
+    "key": "T1",
+    "page": "Teacher name",
+    "pet": "Luma",
+    "gesture": "A polite bow",
+    "start": 421,
+    "end": 444,
+    "fps": 12,
+    "file": "T1.gif",
+    "camera": {
+      "x": -1.5000029802322388,
+      "z": 1.480583917349577,
+      "ortho_scale": 3.55
+    }
+  },
+  {
+    "key": "T2",
+    "page": "Profile photo",
+    "pet": "Luma",
+    "gesture": "Camera pose",
+    "start": 451,
+    "end": 474,
+    "fps": 12,
+    "file": "T2.gif",
+    "camera": {
+      "x": -1.6847156286239624,
+      "z": 1.5173620809800923,
+      "ortho_scale": 3.55
+    }
+  },
+  {
+    "key": "T3",
+    "page": "Teaching languages",
+    "pet": "Luma",
+    "gesture": "Proud little lift",
+    "start": 481,
+    "end": 504,
+    "fps": 12,
+    "file": "T3.gif",
+    "camera": {
+      "x": -1.4986655116081238,
+      "z": 1.5718956817872822,
+      "ortho_scale": 3.7496556520462034
+    }
+  },
+  {
+    "key": "T4",
+    "page": "Teaching levels",
+    "pet": "Luma",
+    "gesture": "I understand",
+    "start": 511,
+    "end": 534,
+    "fps": 12,
+    "file": "T4.gif",
+    "camera": {
+      "x": -1.570487141609192,
+      "z": 1.502454959321767,
+      "ortho_scale": 3.55
+    }
+  },
+  {
+    "key": "T5",
+    "page": "Teaching approach",
+    "pet": "Luma",
+    "gesture": "Let me think",
+    "start": 541,
+    "end": 564,
+    "fps": 12,
+    "file": "T5.gif",
+    "camera": {
+      "x": -1.2519739866256714,
+      "z": 1.4953094352968037,
+      "ortho_scale": 3.55
+    }
+  },
+  {
+    "key": "T6",
+    "page": "Teaching format",
+    "pet": "Luma",
+    "gesture": "Open arms",
+    "start": 571,
+    "end": 594,
+    "fps": 12,
+    "file": "T6.gif",
+    "camera": {
+      "x": -1.4999970197677612,
+      "z": 1.5452211727388203,
+      "ortho_scale": 4.731273221969604
+    }
+  },
+  {
+    "key": "T7",
+    "page": "Teaching city",
+    "pet": "Luma",
+    "gesture": "A small step",
+    "start": 601,
+    "end": 624,
+    "fps": 12,
+    "file": "T7.gif",
+    "camera": {
+      "x": -1.499293327331543,
+      "z": 1.5077620376832783,
+      "ortho_scale": 3.55
+    }
+  },
+  {
+    "key": "T8",
+    "page": "Lesson rate",
+    "pet": "Luma",
+    "gesture": "Confident nod",
+    "start": 631,
+    "end": 654,
+    "fps": 12,
+    "file": "T8.gif",
+    "camera": {
+      "x": -1.4993320107460022,
+      "z": 1.5342151750810444,
+      "ortho_scale": 3.55
+    }
+  },
+  {
+    "key": "T9",
+    "page": "Identity verification",
+    "pet": "Nori",
+    "gesture": "Reassuring hello",
+    "start": 661,
+    "end": 684,
+    "fps": 12,
+    "file": "T9.gif",
+    "camera": {
+      "x": 4.229679584503174,
+      "z": 1.5150754260830581,
+      "ortho_scale": 3.55
+    }
+  },
+  {
+    "key": "T10",
+    "page": "Verification pending",
+    "pet": "Nori",
+    "gesture": "Thank-you bow",
+    "start": 691,
+    "end": 714,
+    "fps": 12,
+    "file": "T10.gif",
+    "camera": {
+      "x": 4.501204609870911,
+      "z": 1.4881032444536686,
+      "ortho_scale": 3.55
+    }
+  }
+]

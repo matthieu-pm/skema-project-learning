@@ -1,0 +1,5 @@
+Generated with the built-in image_gen tool using the original Luma asset as a reference.
+
+Saved asset: public/assets/onboarding/luma-coming-soon.png
+
+Use case: stylized-concept. Asset type: small transparent mascot illustration for a mobile app's More languages / Coming soon card. Reference image: preserve Luma's exact character identity, lavender purple felt fur, glossy small black eyes, pear-shaped body, long soft rounded arms and stubby feet, no mouth. Create a new pose: Luma leans forward eagerly, one soft arm raised above its eyes like a lookout shading its eyes as it peers toward the right, anticipating what is coming next. The other arm rests naturally beside its body. Friendly curious anticipation, clearly different from the standing reference. Full body isolated, centered, tightly framed with small padding, silhouette clear at small UI size. Same soft 3D felt rendering and lighting as reference. True transparent background. No text, no stars, no sparkles, no props, no scenery, no floor, no watermark.

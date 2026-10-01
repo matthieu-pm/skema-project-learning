@@ -1,0 +1,40 @@
+{
+  "pets": [
+    {
+      "name": "Mimo",
+      "bones": 6,
+      "action": "Mimo \u2022 onboarding gestures",
+      "vertices": 187490,
+      "eyes": 2,
+      "clips": 8
+    },
+    {
+      "name": "Luma",
+      "bones": 6,
+      "action": "Luma \u2022 onboarding gestures",
+      "vertices": 216188,
+      "eyes": 2,
+      "clips": 8
+    },
+    {
+      "name": "Pip",
+      "bones": 6,
+      "action": "Pip \u2022 onboarding gestures",
+      "vertices": 242476,
+      "eyes": 2,
+      "clips": 3
+    },
+    {
+      "name": "Nori",
+      "bones": 6,
+      "action": "Nori \u2022 onboarding gestures",
+      "vertices": 205094,
+      "eyes": 2,
+      "clips": 5
+    }
+  ],
+  "clips": 24,
+  "unique_gestures": 24,
+  "frames_per_clip": 24,
+  "fps": 12
+}

@@ -1,0 +1,838 @@
+{
+  "page": {
+    "id": "26:248",
+    "name": "Start & Setup · Companions"
+  },
+  "sections": [
+    {
+      "id": "26:249",
+      "name": "Companions / local components",
+      "type": "FRAME",
+      "children": [
+        {
+          "id": "26:250",
+          "name": "Pet/Mimo",
+          "type": "COMPONENT",
+          "text": []
+        },
+        {
+          "id": "26:252",
+          "name": "Pet/Luma",
+          "type": "COMPONENT",
+          "text": []
+        },
+        {
+          "id": "26:254",
+          "name": "Pet/Pip",
+          "type": "COMPONENT",
+          "text": []
+        },
+        {
+          "id": "26:256",
+          "name": "Pet/Nori",
+          "type": "COMPONENT",
+          "text": []
+        },
+        {
+          "id": "26:376",
+          "name": "Companions/Button/Primary",
+          "type": "COMPONENT",
+          "text": [
+            "CONTINUE"
+          ]
+        },
+        {
+          "id": "26:378",
+          "name": "Companions/Button/Secondary",
+          "type": "COMPONENT",
+          "text": [
+            "CONTINUE"
+          ]
+        },
+        {
+          "id": "26:380",
+          "name": "Companions/Choice/Default",
+          "type": "COMPONENT",
+          "text": [
+            "English",
+            "A language for new connections"
+          ]
+        },
+        {
+          "id": "26:385",
+          "name": "Companions/Choice/Selected",
+          "type": "COMPONENT",
+          "text": [
+            "English",
+            "A language for new connections"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "27:1310",
+      "name": "01 · A friendly start",
+      "type": "SECTION",
+      "children": [
+        {
+          "id": "27:1311",
+          "name": "01 · A friendly start",
+          "type": "TEXT",
+          "text": []
+        },
+        {
+          "id": "27:1312",
+          "name": "Welcome, role and account setup",
+          "type": "TEXT",
+          "text": []
+        },
+        {
+          "id": "27:1319",
+          "name": "S1 · Welcome",
+          "type": "FRAME",
+          "text": [
+            "9:41",
+            "LET’S GET STARTED",
+            "one to one",
+            "A little courage.\nA real conversation.",
+            "Learn a language with a teacher who gets you.",
+            "One teacher. Your goals. Real progress."
+          ]
+        },
+        {
+          "id": "27:1341",
+          "name": "S1",
+          "type": "TEXT",
+          "text": []
+        },
+        {
+          "id": "27:1342",
+          "name": "S2 · Your role",
+          "type": "FRAME",
+          "text": [
+            "9:41",
+            "LET’S GET TO KNOW YOU",
+            "What brings you here?",
+            "Choose how you’d like to use One to One.",
+            "I want to learn",
+            "Find a teacher for your goals",
+            "I want to teach",
+            "Help someone find their voice",
+            "A real person, on your side",
+            "Meet a teacher or learner. Build a connection."
+          ]
+        },
+        {
+          "id": "27:1382",
+          "name": "S2",
+          "type": "TEXT",
+          "text": []
+        },
+        {
+          "id": "27:1383",
+          "name": "S3 · Email",
+          "type": "FRAME",
+          "text": [
+            "9:41",
+            "LET’S GET TO KNOW YOU",
+            "SEND MY CODE",
+            "Where can we reach you?",
+            "We’ll send a code to sign you in securely.",
+            "Email address",
+            "alex@example.com",
+            "No password to remember",
+            "New here or coming back? Start with your email."
+          ]
+        },
+        {
+          "id": "27:1419",
+          "name": "S3",
+          "type": "TEXT",
+          "text": []
+        },
+        {
+          "id": "27:1420",
+          "name": "S4 · Age",
+          "type": "FRAME",
+          "text": [
+            "9:41",
+            "LET’S GET TO KNOW YOU",
+            "CONTINUE",
+            "What’s your date of birth?",
+            "This helps us show the right account options.",
+            "Date of birth",
+            "14 / 09 / 1999",
+            "Just for your account",
+            "Your date of birth stays off your public profile."
+          ]
+        },
+        {
+          "id": "27:1456",
+          "name": "S4",
+          "type": "TEXT",
+          "text": []
+        },
+        {
+          "id": "27:1457",
+          "name": "S5 · Email verification",
+          "type": "FRAME",
+          "text": [
+            "9:41",
+            "LET’S GET TO KNOW YOU",
+            "VERIFY EMAIL",
+            "You’ve got mail!",
+            "Enter the 6-digit code sent to alex@example.com.",
+            "2",
+            "4",
+            "8",
+            "1",
+            "0",
+            "6",
+            "Resend code in 0:30",
+            "A small step toward something good",
+            "Once you’re in, we’ll make this space yours."
+          ]
+        },
+        {
+          "id": "27:1503",
+          "name": "S5",
+          "type": "TEXT",
+          "text": []
+        }
+      ]
+    },
+    {
+      "id": "27:1313",
+      "name": "02 · Find your kind of teacher",
+      "type": "SECTION",
+      "children": [
+        {
+          "id": "27:1314",
+          "name": "02 · Find your kind of teacher",
+          "type": "TEXT",
+          "text": []
+        },
+        {
+          "id": "27:1315",
+          "name": "One preference at a time",
+          "type": "TEXT",
+          "text": []
+        },
+        {
+          "id": "27:1504",
+          "name": "L1 · Language",
+          "type": "FRAME",
+          "text": [
+            "9:41",
+            "YOUR LEARNING, YOUR WAY",
+            "CONTINUE",
+            "Which language will open doors for you?",
+            "Pick one to get started. You can add more later.",
+            "English",
+            "English",
+            "French",
+            "Français",
+            "Spanish",
+            "Español",
+            "More languages",
+            "Find your language"
+          ]
+        },
+        {
+          "id": "27:1555",
+          "name": "L1",
+          "type": "TEXT",
+          "text": []
+        },
+        {
+          "id": "27:1556",
+          "name": "L2 · Level",
+          "type": "FRAME",
+          "text": [
+            "9:41",
+            "YOUR LEARNING, YOUR WAY",
+            "CONTINUE",
+            "Where are you starting from?",
+            "A rough idea is enough. Your teacher will help.",
+            "Just starting",
+            "I’m learning my first words",
+            "A few basics",
+            "I can handle simple phrases",
+            "Getting comfortable",
+            "I can keep a conversation going",
+            "Pretty confident",
+            "I want to refine my skills"
+          ]
+        },
+        {
+          "id": "27:1607",
+          "name": "L2",
+          "type": "TEXT",
+          "text": []
+        },
+        {
+          "id": "27:1608",
+          "name": "L3 · Learning topic",
+          "type": "FRAME",
+          "text": [
+            "9:41",
+            "YOUR LEARNING, YOUR WAY",
+            "CONTINUE",
+            "Where would you love to use it?",
+            "Choose the topic that matters most right now.",
+            "Everyday conversations",
+            "Feel at home in daily life",
+            "Work & interviews",
+            "Speak with confidence at work",
+            "Travel & discovery",
+            "Connect wherever you go",
+            "Study & exams",
+            "Prepare for your next milestone"
+          ]
+        },
+        {
+          "id": "27:1659",
+          "name": "L3",
+          "type": "TEXT",
+          "text": []
+        },
+        {
+          "id": "27:1660",
+          "name": "L4 · Personal goal",
+          "type": "FRAME",
+          "text": [
+            "9:41",
+            "YOUR LEARNING, YOUR WAY",
+            "SKIP FOR NOW",
+            "CONTINUE",
+            "What would make you feel proud?",
+            "Give your teacher one real-life goal to work on.",
+            "My goal",
+            "Feel confident introducing myself in a job interview.",
+            "Make it yours",
+            "A situation, a conversation, or a small win."
+          ]
+        },
+        {
+          "id": "27:1697",
+          "name": "L4",
+          "type": "TEXT",
+          "text": []
+        },
+        {
+          "id": "27:1698",
+          "name": "L5 · Lesson format",
+          "type": "FRAME",
+          "text": [
+            "9:41",
+            "YOUR LEARNING, YOUR WAY",
+            "CONTINUE",
+            "How would you like to meet?",
+            "You’ll choose your teacher before booking.",
+            "Online",
+            "Learn from wherever you feel comfortable",
+            "In person",
+            "Meet a teacher near you",
+            "Either works",
+            "Show me both options"
+          ]
+        },
+        {
+          "id": "27:1744",
+          "name": "L5",
+          "type": "TEXT",
+          "text": []
+        },
+        {
+          "id": "27:1745",
+          "name": "L6 · City",
+          "type": "FRAME",
+          "text": [
+            "9:41",
+            "YOUR LEARNING, YOUR WAY",
+            "CONTINUE",
+            "Where should we look?",
+            "We use your city to find nearby teachers.",
+            "City",
+            "Paris, France",
+            "Your city is enough",
+            "You don’t need to share your home address."
+          ]
+        },
+        {
+          "id": "27:1781",
+          "name": "L6",
+          "type": "TEXT",
+          "text": []
+        },
+        {
+          "id": "27:1782",
+          "name": "L7 · Available days",
+          "type": "FRAME",
+          "text": [
+            "9:41",
+            "YOUR LEARNING, YOUR WAY",
+            "SKIP FOR NOW",
+            "CONTINUE",
+            "Which days usually work?",
+            "Pick as many as you like. Nothing is booked yet.",
+            "Monday",
+            "Tuesday",
+            "Wednesday",
+            "Thursday",
+            "Friday",
+            "Saturday",
+            "Sunday"
+          ]
+        },
+        {
+          "id": "27:1830",
+          "name": "L7",
+          "type": "TEXT",
+          "text": []
+        },
+        {
+          "id": "27:1831",
+          "name": "L8 · Time of day",
+          "type": "FRAME",
+          "text": [
+            "9:41",
+            "YOUR LEARNING, YOUR WAY",
+            "SKIP FOR NOW",
+            "CONTINUE",
+            "And what time feels right?",
+            "These are preferences, not a fixed schedule.",
+            "Morning",
+            "08:00–12:00",
+            "Afternoon",
+            "12:00–18:00",
+            "Evening",
+            "18:00–22:00",
+            "I’m flexible",
+            "Show all available times"
+          ]
+        },
+        {
+          "id": "27:1883",
+          "name": "L8",
+          "type": "TEXT",
+          "text": []
+        },
+        {
+          "id": "27:1884",
+          "name": "L9 · Ready to find a teacher",
+          "type": "FRAME",
+          "text": [
+            "9:41",
+            "YOUR LEARNING, YOUR WAY",
+            "EXPLORE TEACHERS",
+            "one to one",
+            "Your next conversation starts here.",
+            "Your preferences are ready. Now choose a teacher you click with."
+          ]
+        },
+        {
+          "id": "27:1913",
+          "name": "L9",
+          "type": "TEXT",
+          "text": []
+        }
+      ]
+    },
+    {
+      "id": "27:1316",
+      "name": "03 · Share what you know",
+      "type": "SECTION",
+      "children": [
+        {
+          "id": "27:1317",
+          "name": "03 · Share what you know",
+          "type": "TEXT",
+          "text": []
+        },
+        {
+          "id": "27:1318",
+          "name": "Build a teacher profile, then verify your identity",
+          "type": "TEXT",
+          "text": []
+        },
+        {
+          "id": "27:1914",
+          "name": "T1 · Teacher name",
+          "type": "FRAME",
+          "text": [
+            "9:41",
+            "YOUR TEACHING PROFILE",
+            "CONTINUE",
+            "What should your students call you?",
+            "Let’s start with the name on your profile.",
+            "Your name",
+            "Camille Martin"
+          ]
+        },
+        {
+          "id": "27:1947",
+          "name": "T1",
+          "type": "TEXT",
+          "text": []
+        },
+        {
+          "id": "27:1948",
+          "name": "T2 · Profile photo",
+          "type": "FRAME",
+          "text": [
+            "9:41",
+            "YOUR TEACHING PROFILE",
+            "SKIP FOR NOW",
+            "CHOOSE A PHOTO",
+            "Let’s put a face to your name.",
+            "Choose a clear photo where students can see you.",
+            "A friendly hello starts here",
+            "JPG or PNG · Clear, recent photo"
+          ]
+        },
+        {
+          "id": "27:1985",
+          "name": "T2",
+          "type": "TEXT",
+          "text": []
+        },
+        {
+          "id": "27:1986",
+          "name": "T3 · Teaching languages",
+          "type": "FRAME",
+          "text": [
+            "9:41",
+            "YOUR TEACHING PROFILE",
+            "CONTINUE",
+            "Which languages do you teach?",
+            "Select every language you feel confident teaching.",
+            "French",
+            "Français",
+            "English",
+            "English",
+            "Spanish",
+            "Español",
+            "Add another language",
+            "Search all languages"
+          ]
+        },
+        {
+          "id": "27:2037",
+          "name": "T3",
+          "type": "TEXT",
+          "text": []
+        },
+        {
+          "id": "27:2038",
+          "name": "T4 · Teaching levels",
+          "type": "FRAME",
+          "text": [
+            "9:41",
+            "YOUR TEACHING PROFILE",
+            "CONTINUE",
+            "Who can you help grow?",
+            "Choose the levels you’re comfortable teaching.",
+            "Beginners",
+            "Build the foundations",
+            "Intermediate learners",
+            "Develop fluency",
+            "Advanced learners",
+            "Refine the details"
+          ]
+        },
+        {
+          "id": "27:2084",
+          "name": "T4",
+          "type": "TEXT",
+          "text": []
+        },
+        {
+          "id": "27:2085",
+          "name": "T5 · Teaching approach",
+          "type": "FRAME",
+          "text": [
+            "9:41",
+            "YOUR TEACHING PROFILE",
+            "CONTINUE",
+            "What’s a lesson with you like?",
+            "A short, personal introduction helps students choose.",
+            "My teaching approach",
+            "Friendly, practical lessons built around your goals. We practise real conversations, one small step at a time.",
+            "Your lessons, your choices",
+            "You can use optional AI tools while staying in control."
+          ]
+        },
+        {
+          "id": "27:2121",
+          "name": "T5",
+          "type": "TEXT",
+          "text": []
+        },
+        {
+          "id": "27:2122",
+          "name": "T6 · Teaching format",
+          "type": "FRAME",
+          "text": [
+            "9:41",
+            "YOUR TEACHING PROFILE",
+            "CONTINUE",
+            "How do you like to teach?",
+            "Choose where you’re happy to meet students.",
+            "Online",
+            "Teach from your own space",
+            "In person",
+            "Meet students nearby",
+            "Both",
+            "Offer students either format"
+          ]
+        },
+        {
+          "id": "27:2168",
+          "name": "T6",
+          "type": "TEXT",
+          "text": []
+        },
+        {
+          "id": "27:2169",
+          "name": "T7 · Teaching city",
+          "type": "FRAME",
+          "text": [
+            "9:41",
+            "YOUR TEACHING PROFILE",
+            "CONTINUE",
+            "Where do you teach in person?",
+            "Students will see your city on your profile.",
+            "Teaching city",
+            "Paris, France",
+            "Keep the details private",
+            "Agree on the meeting place when a lesson is booked."
+          ]
+        },
+        {
+          "id": "27:2205",
+          "name": "T7",
+          "type": "TEXT",
+          "text": []
+        },
+        {
+          "id": "27:2206",
+          "name": "T8 · Lesson rate",
+          "type": "FRAME",
+          "text": [
+            "9:41",
+            "YOUR TEACHING PROFILE",
+            "CONTINUE",
+            "What’s your lesson rate?",
+            "Set a clear price for a 60-minute lesson.",
+            "Price per lesson",
+            "€ 25",
+            "You’re in control",
+            "You can update your rate in your profile."
+          ]
+        },
+        {
+          "id": "27:2242",
+          "name": "T8",
+          "type": "TEXT",
+          "text": []
+        },
+        {
+          "id": "27:2243",
+          "name": "T9 · Identity verification",
+          "type": "FRAME",
+          "text": [
+            "9:41",
+            "YOUR TEACHING PROFILE",
+            "START VERIFICATION",
+            "One last step to build trust.",
+            "Verify your identity before your profile goes live.",
+            "Have a photo ID ready",
+            "You’ll take a photo of your ID and a quick selfie.",
+            "Your documents stay private",
+            "They’re used for verification and won’t appear on your teaching profile.",
+            "Opens our secure verification partner"
+          ]
+        },
+        {
+          "id": "27:2279",
+          "name": "T9",
+          "type": "TEXT",
+          "text": []
+        },
+        {
+          "id": "27:2280",
+          "name": "T10 · Verification pending",
+          "type": "FRAME",
+          "text": [
+            "9:41",
+            "YOUR TEACHING PROFILE",
+            "PREVIEW MY PROFILE",
+            "one to one",
+            "Thanks! We’re checking your details.",
+            "We’ll email you when your profile is ready to go live.",
+            "Verification in progress",
+            "Your profile stays private until it’s approved."
+          ]
+        },
+        {
+          "id": "27:2312",
+          "name": "T10",
+          "type": "TEXT",
+          "text": []
+        }
+      ]
+    },
+    {
+      "id": "37:676",
+      "name": "Blender · 24 animated model renders",
+      "type": "SECTION",
+      "children": [
+        {
+          "id": "37:677",
+          "name": "S1 / Mimo / Friendly wave",
+          "type": "COMPONENT",
+          "text": []
+        },
+        {
+          "id": "37:679",
+          "name": "S2 / Mimo / Curious question",
+          "type": "COMPONENT",
+          "text": []
+        },
+        {
+          "id": "37:681",
+          "name": "S3 / Nori / Point to your email",
+          "type": "COMPONENT",
+          "text": []
+        },
+        {
+          "id": "37:683",
+          "name": "S4 / Nori / Slow breath",
+          "type": "COMPONENT",
+          "text": []
+        },
+        {
+          "id": "37:685",
+          "name": "S5 / Nori / Two little nods",
+          "type": "COMPONENT",
+          "text": []
+        },
+        {
+          "id": "37:687",
+          "name": "L1 / Mimo / Welcome gesture",
+          "type": "COMPONENT",
+          "text": []
+        },
+        {
+          "id": "37:689",
+          "name": "L2 / Mimo / Thoughtful head tilt",
+          "type": "COMPONENT",
+          "text": []
+        },
+        {
+          "id": "37:691",
+          "name": "L3 / Pip / Happy spring",
+          "type": "COMPONENT",
+          "text": []
+        },
+        {
+          "id": "37:693",
+          "name": "L4 / Pip / You can do it",
+          "type": "COMPONENT",
+          "text": []
+        },
+        {
+          "id": "37:695",
+          "name": "L5 / Mimo / This or that",
+          "type": "COMPONENT",
+          "text": []
+        },
+        {
+          "id": "37:697",
+          "name": "L6 / Mimo / Look around",
+          "type": "COMPONENT",
+          "text": []
+        },
+        {
+          "id": "37:699",
+          "name": "L7 / Mimo / Alternating arm taps",
+          "type": "COMPONENT",
+          "text": []
+        },
+        {
+          "id": "37:701",
+          "name": "L8 / Mimo / A soft stretch",
+          "type": "COMPONENT",
+          "text": []
+        },
+        {
+          "id": "37:703",
+          "name": "L9 / Pip / Hooray",
+          "type": "COMPONENT",
+          "text": []
+        },
+        {
+          "id": "37:705",
+          "name": "T1 / Luma / A polite bow",
+          "type": "COMPONENT",
+          "text": []
+        },
+        {
+          "id": "37:707",
+          "name": "T2 / Luma / Camera pose",
+          "type": "COMPONENT",
+          "text": []
+        },
+        {
+          "id": "37:709",
+          "name": "T3 / Luma / Proud little lift",
+          "type": "COMPONENT",
+          "text": []
+        },
+        {
+          "id": "37:711",
+          "name": "T4 / Luma / I understand",
+          "type": "COMPONENT",
+          "text": []
+        },
+        {
+          "id": "37:713",
+          "name": "T5 / Luma / Let me think",
+          "type": "COMPONENT",
+          "text": []
+        },
+        {
+          "id": "37:715",
+          "name": "T6 / Luma / Open arms",
+          "type": "COMPONENT",
+          "text": []
+        },
+        {
+          "id": "37:717",
+          "name": "T7 / Luma / A small step",
+          "type": "COMPONENT",
+          "text": []
+        },
+        {
+          "id": "37:719",
+          "name": "T8 / Luma / Confident nod",
+          "type": "COMPONENT",
+          "text": []
+        },
+        {
+          "id": "37:721",
+          "name": "T9 / Nori / Reassuring hello",
+          "type": "COMPONENT",
+          "text": []
+        },
+        {
+          "id": "37:723",
+          "name": "T10 / Nori / Thank-you bow",
+          "type": "COMPONENT",
+          "text": []
+        }
+      ]
+    }
+  ]
+}

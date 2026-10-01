@@ -1,0 +1,270 @@
+{
+  "screens": 24,
+  "uniqueAnimations": 24,
+  "results": [
+    {
+      "key": "S1",
+      "screenId": "27:1319",
+      "instanceId": "27:1335",
+      "componentId": "37:677",
+      "hash": "14ac405f6b6f7b9306c9cc8162e6ee7c9a6eeba5",
+      "signature": "GIF89a",
+      "frames": 24,
+      "duration": 2000,
+      "bytes": 857074
+    },
+    {
+      "key": "S2",
+      "screenId": "27:1342",
+      "instanceId": "27:1363",
+      "componentId": "37:679",
+      "hash": "2bc582ce011e8243416c42fa870ca027a6ebe4b8",
+      "signature": "GIF89a",
+      "frames": 24,
+      "duration": 2000,
+      "bytes": 871829
+    },
+    {
+      "key": "S3",
+      "screenId": "27:1383",
+      "instanceId": "27:1406",
+      "componentId": "37:681",
+      "hash": "9656e36214336041c4a0d73ac59dc73857852b06",
+      "signature": "GIF89a",
+      "frames": 24,
+      "duration": 2000,
+      "bytes": 879060
+    },
+    {
+      "key": "S4",
+      "screenId": "27:1420",
+      "instanceId": "27:1443",
+      "componentId": "37:683",
+      "hash": "07245525295063e41f51554a862bc51584fa3049",
+      "signature": "GIF89a",
+      "frames": 24,
+      "duration": 2000,
+      "bytes": 868817
+    },
+    {
+      "key": "S5",
+      "screenId": "27:1457",
+      "instanceId": "27:1480",
+      "componentId": "37:685",
+      "hash": "f61febadac701fe7d3aa10bfee08fa076587fabd",
+      "signature": "GIF89a",
+      "frames": 24,
+      "duration": 2000,
+      "bytes": 866797
+    },
+    {
+      "key": "L1",
+      "screenId": "27:1504",
+      "instanceId": "27:1527",
+      "componentId": "37:687",
+      "hash": "993ed64365c3aaf893bf7b1ce8d4db2fa4c44ec2",
+      "signature": "GIF89a",
+      "frames": 24,
+      "duration": 2000,
+      "bytes": 869340
+    },
+    {
+      "key": "L2",
+      "screenId": "27:1556",
+      "instanceId": "27:1579",
+      "componentId": "37:689",
+      "hash": "c0af4209e309bc35e6fb592a9a94bccd7c84b2d9",
+      "signature": "GIF89a",
+      "frames": 24,
+      "duration": 2000,
+      "bytes": 852131
+    },
+    {
+      "key": "L3",
+      "screenId": "27:1608",
+      "instanceId": "27:1631",
+      "componentId": "37:691",
+      "hash": "2f92c92aeb067e011272f6cc55f0b03cf68aecfc",
+      "signature": "GIF89a",
+      "frames": 24,
+      "duration": 2000,
+      "bytes": 771115
+    },
+    {
+      "key": "L4",
+      "screenId": "27:1660",
+      "instanceId": "27:1684",
+      "componentId": "37:693",
+      "hash": "98b4ccdf9a1cb9ec172a21f61f12d2c8e05f2885",
+      "signature": "GIF89a",
+      "frames": 24,
+      "duration": 2000,
+      "bytes": 810149
+    },
+    {
+      "key": "L5",
+      "screenId": "27:1698",
+      "instanceId": "27:1721",
+      "componentId": "37:695",
+      "hash": "a62f0f89a0d60d8c2c6a0b9e7337a2b0acb5dec9",
+      "signature": "GIF89a",
+      "frames": 24,
+      "duration": 2000,
+      "bytes": 711363
+    },
+    {
+      "key": "L6",
+      "screenId": "27:1745",
+      "instanceId": "27:1768",
+      "componentId": "37:697",
+      "hash": "098e4c9d76f192849823509c55a42c2644dd5b1a",
+      "signature": "GIF89a",
+      "frames": 24,
+      "duration": 2000,
+      "bytes": 857208
+    },
+    {
+      "key": "L7",
+      "screenId": "27:1782",
+      "instanceId": "27:1806",
+      "componentId": "37:699",
+      "hash": "09f26edbecddf639f26b76842af7f4dd5d63bb97",
+      "signature": "GIF89a",
+      "frames": 24,
+      "duration": 2000,
+      "bytes": 867801
+    },
+    {
+      "key": "L8",
+      "screenId": "27:1831",
+      "instanceId": "27:1855",
+      "componentId": "37:701",
+      "hash": "06ca565e0136087f614ddcb83062e814fc72052b",
+      "signature": "GIF89a",
+      "frames": 24,
+      "duration": 2000,
+      "bytes": 683934
+    },
+    {
+      "key": "L9",
+      "screenId": "27:1884",
+      "instanceId": "27:1908",
+      "componentId": "37:703",
+      "hash": "8cd4963ec48eae0f554d73e56c0e1a6f9e0c21f5",
+      "signature": "GIF89a",
+      "frames": 24,
+      "duration": 2000,
+      "bytes": 566863
+    },
+    {
+      "key": "T1",
+      "screenId": "27:1914",
+      "instanceId": "27:1937",
+      "componentId": "37:705",
+      "hash": "272f36d32da7fa93eca309f1b3a43bb2a5bc4f30",
+      "signature": "GIF89a",
+      "frames": 24,
+      "duration": 2000,
+      "bytes": 966064
+    },
+    {
+      "key": "T2",
+      "screenId": "27:1948",
+      "instanceId": "27:1972",
+      "componentId": "37:707",
+      "hash": "4d162cbc79b91806727f46cb11a5798f9f30164c",
+      "signature": "GIF89a",
+      "frames": 24,
+      "duration": 2000,
+      "bytes": 982747
+    },
+    {
+      "key": "T3",
+      "screenId": "27:1986",
+      "instanceId": "27:2009",
+      "componentId": "37:709",
+      "hash": "56fc63517b8f03c4cd9e232d468e91a775302cc7",
+      "signature": "GIF89a",
+      "frames": 24,
+      "duration": 2000,
+      "bytes": 893738
+    },
+    {
+      "key": "T4",
+      "screenId": "27:2038",
+      "instanceId": "27:2061",
+      "componentId": "37:711",
+      "hash": "d93ab16f76825751a40d3370d2a729845921a4fe",
+      "signature": "GIF89a",
+      "frames": 24,
+      "duration": 2000,
+      "bytes": 985858
+    },
+    {
+      "key": "T5",
+      "screenId": "27:2085",
+      "instanceId": "27:2108",
+      "componentId": "37:713",
+      "hash": "bb883472e13486c19760361f2bf032ad636da4e7",
+      "signature": "GIF89a",
+      "frames": 24,
+      "duration": 2000,
+      "bytes": 983736
+    },
+    {
+      "key": "T6",
+      "screenId": "27:2122",
+      "instanceId": "27:2145",
+      "componentId": "37:715",
+      "hash": "4b0125b38847c8d841b1c428f99bcf2451e615ba",
+      "signature": "GIF89a",
+      "frames": 24,
+      "duration": 2000,
+      "bytes": 596834
+    },
+    {
+      "key": "T7",
+      "screenId": "27:2169",
+      "instanceId": "27:2192",
+      "componentId": "37:717",
+      "hash": "cbfb599acda0982ed2d3c8d92499acd79a3ca3f4",
+      "signature": "GIF89a",
+      "frames": 24,
+      "duration": 2000,
+      "bytes": 972163
+    },
+    {
+      "key": "T8",
+      "screenId": "27:2206",
+      "instanceId": "27:2229",
+      "componentId": "37:719",
+      "hash": "85936387cdb4e311cd9d6696b41ffee87b2a99e7",
+      "signature": "GIF89a",
+      "frames": 24,
+      "duration": 2000,
+      "bytes": 973626
+    },
+    {
+      "key": "T9",
+      "screenId": "27:2243",
+      "instanceId": "27:2266",
+      "componentId": "37:721",
+      "hash": "64b0ec5d7c287af313444eae4e111ff52a47dcca",
+      "signature": "GIF89a",
+      "frames": 24,
+      "duration": 2000,
+      "bytes": 868052
+    },
+    {
+      "key": "T10",
+      "screenId": "27:2280",
+      "instanceId": "27:2304",
+      "componentId": "37:723",
+      "hash": "a17f54caf0c3ee4cfc8757501a052ffc718f068f",
+      "signature": "GIF89a",
+      "frames": 24,
+      "duration": 2000,
+      "bytes": 875550
+    }
+  ]
+}

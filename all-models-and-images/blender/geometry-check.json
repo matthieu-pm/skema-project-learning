@@ -1,0 +1,41 @@
+{
+  "models": [
+    {
+      "name": "Mimo",
+      "vertices": 187490,
+      "faces": 374976,
+      "connected_components": 1,
+      "non_manifold_edges": 0,
+      "fiber_length": 0.012000000104308128,
+      "eyes": 2
+    },
+    {
+      "name": "Luma",
+      "vertices": 216188,
+      "faces": 432372,
+      "connected_components": 1,
+      "non_manifold_edges": 0,
+      "fiber_length": 0.012000000104308128,
+      "eyes": 2
+    },
+    {
+      "name": "Pip",
+      "vertices": 242476,
+      "faces": 484960,
+      "connected_components": 1,
+      "non_manifold_edges": 0,
+      "fiber_length": 0.012000000104308128,
+      "eyes": 2
+    },
+    {
+      "name": "Nori",
+      "vertices": 205094,
+      "faces": 410184,
+      "connected_components": 1,
+      "non_manifold_edges": 0,
+      "fiber_length": 0.012000000104308128,
+      "eyes": 2
+    }
+  ],
+  "animation_actions": 0
+}

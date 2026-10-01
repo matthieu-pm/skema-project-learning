@@ -1,0 +1,374 @@
+<canvas id="0:1" name="Archive · Start &amp; Setup v1" x="0" y="0" width="0" height="0">
+  <frame id="3:48" name="Local components" x="2100" y="100" width="454" height="2161">
+    <text id="3:49" name="Onboarding components" x="32" y="32" width="328" height="33" />
+    <text id="3:50" name="Nunito / warm green / reusable states" x="32" y="89" width="253" height="22" />
+    <symbol id="3:51" name="Icon/arrow" x="32" y="135" width="24" height="24" />
+    <symbol id="3:54" name="Icon/check" x="32" y="183" width="24" height="24" />
+    <symbol id="3:57" name="Icon/chevron" x="32" y="231" width="24" height="24" />
+    <symbol id="3:60" name="Icon/book" x="32" y="279" width="24" height="24" />
+    <symbol id="3:63" name="Icon/chat" x="32" y="327" width="24" height="24" />
+    <symbol id="3:67" name="Icon/work" x="32" y="375" width="24" height="24" />
+    <symbol id="3:71" name="Icon/pin" x="32" y="423" width="24" height="24" />
+    <symbol id="3:75" name="Icon/video" x="32" y="471" width="24" height="24" />
+    <symbol id="3:79" name="Icon/globe" x="32" y="519" width="24" height="24" />
+    <symbol id="3:84" name="Icon/mail" x="32" y="567" width="24" height="24" />
+    <symbol id="3:88" name="Icon/shield" x="32" y="615" width="24" height="24" />
+    <symbol id="3:92" name="Icon/attach" x="32" y="663" width="24" height="24" />
+    <symbol id="3:95" name="Icon/camera" x="32" y="711" width="24" height="24" />
+    <symbol id="3:99" name="Icon/lock" x="32" y="759" width="24" height="24" />
+    <symbol id="3:103" name="Button/Primary" x="32" y="807" width="342" height="54" />
+    <symbol id="3:105" name="Button/Secondary" x="32" y="885" width="342" height="54" />
+    <symbol id="3:107" name="Button/Disabled" x="32" y="963" width="342" height="54" />
+    <symbol id="3:109" name="Choice/Default" x="32" y="1041" width="342" height="78" />
+    <symbol id="3:119" name="Choice/Selected" x="32" y="1143" width="342" height="78" />
+    <symbol id="3:129" name="Chip/Default" x="32" y="1245" width="104" height="48" />
+    <symbol id="3:131" name="Chip/Selected" x="32" y="1317" width="104" height="48" />
+    <symbol id="3:133" name="Field/Default" x="32" y="1389" width="342" height="78" />
+    <symbol id="3:137" name="Field/Focus" x="32" y="1491" width="342" height="78" />
+    <symbol id="3:141" name="Field/Error" x="32" y="1593" width="342" height="78" />
+    <symbol id="3:145" name="System/Status" x="32" y="1695" width="390" height="50" />
+    <symbol id="3:153" name="System/Home indicator" x="32" y="1769" width="390" height="20" />
+    <symbol id="7:8" name="Illustration/Conversation" x="32" y="1813" width="342" height="170" />
+    <frame id="7:560" name="Variant states" x="32" y="2007" width="342" height="20">
+      <text id="7:561" name="Default / selected / disabled / error" x="0" y="0" width="342" height="20" />
+    </frame>
+    <symbol id="8:248" name="Verification/Step" x="32" y="2051" width="342" height="78" />
+  </frame>
+  <section id="7:22" name="Start &amp; Setup / high-fidelity screens" x="100" y="100" width="1740" height="2180">
+    <text id="7:23" name="One to One" x="36" y="36" width="1668" height="40" />
+    <text id="7:24" name="Start &amp; Setup / a thoughtful beginning to a real conversation" x="36" y="92" width="1668" height="22" />
+    <text id="7:26" name="A1 / Welcome" x="36" y="184" width="390" height="20" />
+    <frame id="7:27" name="A1 · Welcome" x="36" y="216" width="390" height="844">
+      <instance id="7:28" name="System/Status" x="0" y="0" width="390" height="50" />
+      <frame id="7:36" name="Main content" x="0" y="50" width="390" height="660">
+        <frame id="7:40" name="Wordmark" x="24" y="8" width="282" height="24">
+          <instance id="7:41" name="Icon/chat" x="0" y="0" width="24" height="24" />
+          <text id="7:45" name="one to one" x="32" y="0" width="250" height="22" />
+        </frame>
+        <instance id="7:46" name="Illustration/Conversation" x="24" y="44" width="342" height="170" />
+        <frame id="7:60" name="Heading" x="24" y="226" width="342" height="132">
+          <text id="7:61" name="A language. A real connection." x="0" y="0" width="342" height="80" />
+          <text id="7:62" name="Learn with a teacher who gets you. One conversation at a time." x="0" y="88" width="342" height="44" />
+        </frame>
+        <frame id="7:63" name="Choose your role" x="24" y="370" width="342" height="166">
+          <instance id="7:64" name="Choice/Selected" x="0" y="0" width="342" height="78" />
+          <instance id="7:77" name="Choice/Default" x="0" y="88" width="342" height="78" />
+        </frame>
+      </frame>
+      <frame id="7:37" name="Footer" x="0" y="710" width="390" height="114">
+        <instance id="7:89" name="Button/Primary" x="24" y="12" width="342" height="54" />
+        <text id="7:91" name="I already have an account" x="24" y="78" width="342" height="20" />
+      </frame>
+      <instance id="7:38" name="System/Home indicator" x="0" y="824" width="390" height="20" />
+    </frame>
+    <text id="7:92" name="Choose a role. The primary prototype follows the learner path; the teacher card opens A7." x="36" y="1080" width="390" height="34" />
+    <text id="7:93" name="A2 / Your account" x="462" y="184" width="390" height="20" />
+    <frame id="7:94" name="A2 · Your account" x="462" y="216" width="390" height="844">
+      <instance id="7:95" name="System/Status" x="0" y="0" width="390" height="50" />
+      <frame id="7:103" name="Main content" x="0" y="50" width="390" height="660">
+        <frame id="7:107" name="Step 1 of 5" x="24" y="8" width="342" height="40">
+          <frame id="7:108" name="Back" x="0" y="0" width="40" height="40">
+            <instance id="7:109" name="Icon/arrow" x="8" y="8" width="24" height="24" />
+          </frame>
+          <frame id="7:112" name="Setup progress" x="52" y="16" width="246" height="8" />
+          <text id="7:114" name="1/5" x="310" y="11.5" width="32" height="17" />
+        </frame>
+        <frame id="7:115" name="Heading" x="24" y="68" width="342" height="96">
+          <text id="7:116" name="First, a place to keep your progress." x="0" y="0" width="342" height="66" />
+          <text id="7:117" name="We’ll send you a secure sign-in code." x="0" y="74" width="342" height="22" />
+        </frame>
+        <frame id="7:118" name="Account details" x="24" y="184" width="342" height="309">
+          <instance id="7:119" name="Field/Focus" x="0" y="0" width="342" height="78" />
+          <frame id="7:123" name="Age range" x="0" y="102" width="342" height="76">
+            <text id="7:124" name="Your age range" x="0" y="0" width="342" height="20" />
+            <frame id="7:125" name="Options" x="0" y="28" width="342" height="48">
+              <instance id="7:126" name="Chip/Selected" x="0" y="0" width="167" height="48" />
+              <instance id="7:128" name="Chip/Default" x="175" y="0" width="167" height="48" />
+            </frame>
+          </frame>
+          <frame id="7:130" name="Helpful note" x="0" y="202" width="342" height="66">
+            <instance id="7:131" name="Icon/mail" x="16" y="21" width="24" height="24" />
+            <text id="7:135" name="No password to remember. Just a code in your inbox." x="52" y="16" width="274" height="34" />
+          </frame>
+          <text id="7:136" name="By continuing, you agree to our Terms and Privacy Policy." x="0" y="292" width="342" height="17" />
+        </frame>
+      </frame>
+      <frame id="7:104" name="Footer" x="0" y="710" width="390" height="114">
+        <instance id="7:137" name="Button/Primary" x="24" y="12" width="342" height="54" />
+        <text id="7:139" name="Already registered? Use the same email." x="24" y="78" width="342" height="20" />
+      </frame>
+      <instance id="7:105" name="System/Home indicator" x="0" y="824" width="390" height="20" />
+    </frame>
+    <text id="7:140" name="Passwordless access. Under-18 selection hands off to guardian setup (I8)." x="462" y="1080" width="390" height="34" />
+    <text id="7:141" name="A3 / Check your email" x="888" y="184" width="390" height="20" />
+    <frame id="7:142" name="A3 · Check your email" x="888" y="216" width="390" height="844">
+      <instance id="7:143" name="System/Status" x="0" y="0" width="390" height="50" />
+      <frame id="7:151" name="Main content" x="0" y="50" width="390" height="660">
+        <frame id="7:155" name="Step 2 of 5" x="24" y="8" width="342" height="40">
+          <frame id="7:156" name="Back" x="0" y="0" width="40" height="40">
+            <instance id="7:157" name="Icon/arrow" x="8" y="8" width="24" height="24" />
+          </frame>
+          <frame id="7:160" name="Setup progress" x="52" y="16" width="246" height="8" />
+          <text id="7:162" name="2/5" x="310" y="11.5" width="32" height="17" />
+        </frame>
+        <frame id="7:163" name="Heading" x="24" y="68" width="342" height="85">
+          <text id="7:164" name="You’ve got mail." x="0" y="0" width="342" height="33" />
+          <text id="7:165" name="Enter the 6-digit code we sent to alex@example.com." x="0" y="41" width="342" height="44" />
+        </frame>
+        <frame id="7:166" name="Verification" x="24" y="173" width="342" height="321">
+          <frame id="7:167" name="Mail illustration" x="0" y="0" width="72" height="72">
+            <instance id="7:168" name="Icon/mail" x="18" y="18" width="36" height="36" />
+          </frame>
+          <frame id="7:172" name="Six-digit code" x="0" y="96" width="340" height="60">
+            <frame id="7:173" name="Digit" x="0" y="0" width="50" height="60">
+              <text id="7:174" name="4" x="17" y="15" width="16" height="30" />
+            </frame>
+            <frame id="7:175" name="Digit" x="58" y="0" width="50" height="60">
+              <text id="7:176" name="8" x="17" y="15" width="16" height="30" />
+            </frame>
+            <frame id="7:177" name="Digit" x="116" y="0" width="50" height="60">
+              <text id="7:178" name="1" x="17" y="15" width="16" height="30" />
+            </frame>
+            <frame id="7:179" name="Digit" x="174" y="0" width="50" height="60">
+              <text id="7:180" name="6" x="17" y="15" width="16" height="30" />
+            </frame>
+            <frame id="7:181" name="Digit" x="232" y="0" width="50" height="60">
+              <text id="7:182" name="2" x="17" y="15" width="16" height="30" />
+            </frame>
+            <frame id="7:183" name="Digit" x="290" y="0" width="50" height="60">
+              <text id="7:184" name="9" x="17" y="15" width="16" height="30" />
+            </frame>
+          </frame>
+          <text id="7:185" name="You can request a new code in 0:30." x="0" y="180" width="342" height="17" />
+          <frame id="7:186" name="Change email address" x="0" y="221" width="342" height="20">
+            <text id="7:187" name="Change email address" x="0" y="0" width="342" height="20" />
+          </frame>
+          <frame id="7:188" name="Helpful note" x="0" y="265" width="342" height="56">
+            <instance id="7:189" name="Icon/mail" x="16" y="16" width="24" height="24" />
+            <text id="7:193" name="Check your spam folder if the email hasn’t arrived." x="52" y="19.5" width="274" height="17" />
+          </frame>
+        </frame>
+      </frame>
+      <frame id="7:152" name="Footer" x="0" y="710" width="390" height="114">
+        <instance id="7:194" name="Button/Primary" x="24" y="12" width="342" height="54" />
+        <text id="7:196" name="Resend code in 0:30" x="24" y="78" width="342" height="20" />
+      </frame>
+      <instance id="7:153" name="System/Home indicator" x="0" y="824" width="390" height="20" />
+    </frame>
+    <text id="7:197" name="Resend is disabled during the countdown. Invalid code uses the error field and inline message." x="888" y="1080" width="390" height="34" />
+    <text id="7:198" name="A4 / Language &amp; level" x="1314" y="184" width="390" height="20" />
+    <frame id="7:199" name="A4 · Language &amp; level" x="1314" y="216" width="390" height="844">
+      <instance id="7:200" name="System/Status" x="0" y="0" width="390" height="50" />
+      <frame id="7:208" name="Main content" x="0" y="50" width="390" height="663">
+        <frame id="7:212" name="Step 3 of 5" x="24" y="8" width="342" height="40">
+          <frame id="7:213" name="Back" x="0" y="0" width="40" height="40">
+            <instance id="7:214" name="Icon/arrow" x="8" y="8" width="24" height="24" />
+          </frame>
+          <frame id="7:217" name="Setup progress" x="52" y="16" width="246" height="8" />
+          <text id="7:219" name="3/5" x="310" y="11.5" width="32" height="17" />
+        </frame>
+        <frame id="7:220" name="Heading" x="24" y="68" width="342" height="96">
+          <text id="7:221" name="What would you like to learn?" x="0" y="0" width="342" height="66" />
+          <text id="7:222" name="Let’s find a comfortable starting point." x="0" y="74" width="342" height="22" />
+        </frame>
+        <frame id="7:223" name="Language and starting level" x="24" y="184" width="342" height="418">
+          <instance id="7:224" name="Field/Default" x="0" y="0" width="342" height="78" />
+          <text id="7:228" name="How much do you know already?" x="0" y="94" width="342" height="20" />
+          <frame id="7:229" name="Options" x="0" y="130" width="342" height="48">
+            <instance id="7:230" name="Chip/Default" x="0" y="0" width="108.66666412353516" height="48" />
+            <instance id="7:232" name="Chip/Selected" x="116.66666412353516" y="0" width="108.66666412353516" height="48" />
+            <instance id="7:234" name="Chip/Default" x="233.3333282470703" y="0" width="108.66666412353516" height="48" />
+          </frame>
+          <frame id="7:236" name="Options" x="0" y="194" width="342" height="48">
+            <instance id="7:237" name="Chip/Default" x="0" y="0" width="108.66666412353516" height="48" />
+            <instance id="7:239" name="Chip/Default" x="116.66666412353516" y="0" width="108.66666412353516" height="48" />
+            <instance id="7:241" name="Chip/Default" x="233.3333282470703" y="0" width="108.66666412353516" height="48" />
+          </frame>
+          <instance id="7:243" name="Choice/Default" x="0" y="258" width="342" height="78" />
+          <frame id="7:256" name="Helpful note" x="0" y="352" width="342" height="66">
+            <instance id="7:257" name="Icon/book" x="16" y="21" width="24" height="24" />
+            <text id="7:260" name="A2 · You can manage simple, everyday conversations." x="52" y="16" width="274" height="34" />
+          </frame>
+        </frame>
+      </frame>
+      <frame id="7:209" name="Footer" x="0" y="713" width="390" height="111">
+        <instance id="7:261" name="Button/Primary" x="24" y="12" width="342" height="54" />
+        <text id="7:263" name="Your pace. Your choice." x="24" y="78" width="342" height="17" />
+      </frame>
+      <instance id="7:210" name="System/Home indicator" x="0" y="824" width="390" height="20" />
+    </frame>
+    <text id="7:264" name="Language picker supports search by name. Selected A2 has a plain-language description." x="1314" y="1080" width="390" height="34" />
+    <text id="7:265" name="A5 / Your goal" x="36" y="1184" width="390" height="20" />
+    <frame id="7:266" name="A5 · Your goal" x="36" y="1216" width="390" height="844">
+      <instance id="7:267" name="System/Status" x="0" y="0" width="390" height="50" />
+      <frame id="7:275" name="Main content" x="0" y="50" width="390" height="663">
+        <frame id="7:279" name="Step 4 of 5" x="24" y="8" width="342" height="40">
+          <frame id="7:280" name="Back" x="0" y="0" width="40" height="40">
+            <instance id="7:281" name="Icon/arrow" x="8" y="8" width="24" height="24" />
+          </frame>
+          <frame id="7:284" name="Setup progress" x="52" y="16" width="246" height="8" />
+          <text id="7:286" name="4/5" x="310" y="11.5" width="32" height="17" />
+        </frame>
+        <frame id="7:287" name="Heading" x="24" y="68" width="342" height="96">
+          <text id="7:288" name="Make it about your life." x="0" y="0" width="342" height="66" />
+          <text id="7:289" name="What would you like to feel more confident doing?" x="0" y="74" width="342" height="22" />
+        </frame>
+        <frame id="7:290" name="Goal brief" x="24" y="184" width="342" height="391">
+          <instance id="7:291" name="Choice/Selected" x="0" y="0" width="342" height="78" />
+          <instance id="7:304" name="Choice/Default" x="0" y="90" width="342" height="78" />
+          <instance id="7:317" name="Choice/Default" x="0" y="180" width="342" height="78" />
+          <frame id="7:329" name="Specific goal" x="0" y="270" width="342" height="85">
+            <text id="7:330" name="One thing I’d love to do" x="0" y="0" width="342" height="20" />
+            <frame id="7:331" name="Goal input" x="0" y="28" width="342" height="57">
+              <text id="7:332" name="Order a meal confidently in French." x="17.5" y="17.5" width="310" height="22" />
+            </frame>
+          </frame>
+          <frame id="7:333" name="Add a file or voice note (optional)" x="0" y="367" width="338" height="24">
+            <instance id="7:334" name="Icon/attach" x="0" y="0" width="24" height="24" />
+            <text id="7:337" name="Add a file or voice note (optional)" x="32" y="2" width="306" height="20" />
+          </frame>
+        </frame>
+      </frame>
+      <frame id="7:276" name="Footer" x="0" y="713" width="390" height="111">
+        <instance id="7:338" name="Button/Primary" x="24" y="12" width="342" height="54" />
+        <text id="7:340" name="Your pace. Your choice." x="24" y="78" width="342" height="17" />
+      </frame>
+      <instance id="7:277" name="System/Home indicator" x="0" y="824" width="390" height="20" />
+    </frame>
+    <text id="7:341" name="Only the chosen teacher sees the goal brief. Attachments open I3; content stays editable." x="36" y="2080" width="390" height="34" />
+    <text id="7:342" name="A6 / Meeting preferences" x="462" y="1184" width="390" height="20" />
+    <frame id="7:343" name="A6 · Meeting preferences" x="462" y="1216" width="390" height="844">
+      <instance id="7:344" name="System/Status" x="0" y="0" width="390" height="50" />
+      <frame id="7:352" name="Main content" x="0" y="50" width="390" height="660">
+        <frame id="7:356" name="Step 5 of 5" x="24" y="8" width="342" height="40">
+          <frame id="7:357" name="Back" x="0" y="0" width="40" height="40">
+            <instance id="7:358" name="Icon/arrow" x="8" y="8" width="24" height="24" />
+          </frame>
+          <frame id="7:361" name="Setup progress" x="52" y="16" width="246" height="8" />
+          <text id="7:363" name="5/5" x="310" y="11.5" width="32" height="17" />
+        </frame>
+        <frame id="7:364" name="Heading" x="24" y="68" width="342" height="96">
+          <text id="7:365" name="How do you like to meet?" x="0" y="0" width="342" height="66" />
+          <text id="7:366" name="A few preferences to guide your search." x="0" y="74" width="342" height="22" />
+        </frame>
+        <frame id="7:367" name="Session preferences" x="24" y="184" width="342" height="456">
+          <frame id="7:368" name="Meeting format" x="0" y="0" width="341.79998779296875" height="80">
+            <frame id="7:369" name="In person" x="0" y="0" width="108.5999984741211" height="80">
+              <instance id="7:370" name="Icon/pin" x="42.29999923706055" y="14" width="24" height="24" />
+              <text id="7:374" name="In person" x="12.299999237060547" y="46" width="84" height="20" />
+            </frame>
+            <frame id="7:375" name="Online" x="116.5999984741211" y="0" width="108.5999984741211" height="79">
+              <instance id="7:376" name="Icon/video" x="42.29999923706055" y="13.5" width="24" height="24" />
+              <text id="7:380" name="Online" x="12.299999237060547" y="45.5" width="84" height="20" />
+            </frame>
+            <frame id="7:381" name="Either" x="233.1999969482422" y="0" width="108.5999984741211" height="79">
+              <instance id="7:382" name="Icon/globe" x="42.29999923706055" y="13.5" width="24" height="24" />
+              <text id="7:387" name="Either" x="12.299999237060547" y="45.5" width="84" height="20" />
+            </frame>
+          </frame>
+          <instance id="7:388" name="Field/Default" x="0" y="96" width="342" height="78" />
+          <text id="7:392" name="Usually free on…" x="0" y="190" width="342" height="20" />
+          <frame id="7:393" name="Options" x="0" y="226" width="342" height="48">
+            <instance id="7:394" name="Chip/Selected" x="0" y="0" width="167" height="48" />
+            <instance id="7:396" name="Chip/Default" x="175" y="0" width="167" height="48" />
+          </frame>
+          <text id="7:398" name="Your preferred time" x="0" y="290" width="342" height="20" />
+          <frame id="7:399" name="Options" x="0" y="326" width="342" height="48">
+            <instance id="7:400" name="Chip/Default" x="0" y="0" width="108.66666412353516" height="48" />
+            <instance id="7:402" name="Chip/Default" x="116.66666412353516" y="0" width="108.66666412353516" height="48" />
+            <instance id="7:404" name="Chip/Selected" x="233.3333282470703" y="0" width="108.66666412353516" height="48" />
+          </frame>
+          <frame id="7:406" name="Helpful note" x="0" y="390" width="342" height="66">
+            <instance id="7:407" name="Icon/pin" x="16" y="21" width="24" height="24" />
+            <text id="7:411" name="These are preferences. You’ll choose the exact time when you book." x="52" y="16" width="274" height="34" />
+          </frame>
+        </frame>
+      </frame>
+      <frame id="7:353" name="Footer" x="0" y="710" width="390" height="114">
+        <instance id="7:412" name="Button/Primary" x="24" y="12" width="342" height="54" />
+        <text id="7:414" name="I’ll choose these later" x="24" y="78" width="342" height="20" />
+      </frame>
+      <instance id="7:354" name="System/Home indicator" x="0" y="824" width="390" height="20" />
+    </frame>
+    <text id="7:415" name="Learner setup ends here → B2 (teacher discovery). Preferences are optional; location access is not required." x="462" y="2080" width="390" height="34" />
+    <text id="7:416" name="A7 / Teacher profile" x="888" y="1184" width="390" height="20" />
+    <frame id="7:417" name="A7 · Teacher profile" x="888" y="1216" width="390" height="844">
+      <instance id="7:418" name="System/Status" x="0" y="0" width="390" height="50" />
+      <frame id="7:426" name="Main content" x="0" y="50" width="390" height="660">
+        <frame id="7:430" name="Step 3 of 4" x="24" y="8" width="342" height="40">
+          <frame id="7:431" name="Back" x="0" y="0" width="40" height="40">
+            <instance id="7:432" name="Icon/arrow" x="8" y="8" width="24" height="24" />
+          </frame>
+          <frame id="7:435" name="Setup progress" x="52" y="16" width="246" height="8" />
+          <text id="7:437" name="3/4" x="310" y="11.5" width="32" height="17" />
+        </frame>
+        <frame id="7:438" name="Heading" x="24" y="68" width="342" height="96">
+          <text id="7:439" name="Your teaching. Your own style." x="0" y="0" width="342" height="66" />
+          <text id="7:440" name="Give learners a little glimpse of you." x="0" y="74" width="342" height="22" />
+        </frame>
+        <frame id="7:441" name="Teacher introduction" x="24" y="184" width="342" height="353">
+          <frame id="7:442" name="Profile photo" x="0" y="0" width="340" height="48">
+            <frame id="7:443" name="Maya avatar" x="0" y="0" width="48" height="48">
+              <text id="7:444" name="M" x="16" y="13" width="16" height="22" />
+            </frame>
+            <frame id="7:445" name="Photo action" x="60" y="0" width="280" height="37">
+              <text id="7:446" name="Add a friendly photo" x="0" y="0" width="280" height="20" />
+              <text id="7:447" name="Or a short video introduction" x="0" y="20" width="280" height="17" />
+            </frame>
+          </frame>
+          <instance id="7:448" name="Field/Default" x="0" y="60" width="342" height="78" />
+          <instance id="7:452" name="Field/Default" x="0" y="150" width="342" height="78" />
+          <frame id="7:456" name="Teaching approach" x="0" y="240" width="342" height="77">
+            <text id="7:457" name="Your approach, in a sentence" x="0" y="0" width="342" height="20" />
+            <frame id="7:458" name="Approach input" x="0" y="28" width="342" height="49">
+              <text id="7:459" name="Practical conversation, at your pace." x="13.5" y="13.5" width="318" height="22" />
+            </frame>
+          </frame>
+          <frame id="7:460" name="Online + Paris · €30 / 45 min" x="0" y="329" width="338" height="24">
+            <instance id="7:461" name="Icon/pin" x="0" y="0" width="24" height="24" />
+            <text id="7:465" name="Online + Paris · €30 / 45 min" x="32" y="2" width="306" height="20" />
+          </frame>
+        </frame>
+      </frame>
+      <frame id="7:427" name="Footer" x="0" y="710" width="390" height="114">
+        <instance id="7:466" name="Button/Primary" x="24" y="12" width="342" height="54" />
+        <text id="7:468" name="Save and finish later" x="24" y="78" width="342" height="20" />
+      </frame>
+      <instance id="7:428" name="System/Home indicator" x="0" y="824" width="390" height="20" />
+    </frame>
+    <text id="7:469" name="Teacher branch after sign-in. Profile stays draft; credentials, formats and pricing remain editable." x="888" y="2080" width="390" height="34" />
+    <text id="7:470" name="A8 / Identity verification" x="1314" y="1184" width="390" height="20" />
+    <frame id="7:471" name="A8 · Identity verification" x="1314" y="1216" width="390" height="844">
+      <instance id="7:472" name="System/Status" x="0" y="0" width="390" height="50" />
+      <frame id="7:480" name="Main content" x="0" y="50" width="390" height="660">
+        <frame id="7:484" name="Step 4 of 4" x="24" y="8" width="342" height="40">
+          <frame id="7:485" name="Back" x="0" y="0" width="40" height="40">
+            <instance id="7:486" name="Icon/arrow" x="8" y="8" width="24" height="24" />
+          </frame>
+          <frame id="7:489" name="Setup progress" x="52" y="16" width="246" height="8" />
+          <text id="7:491" name="4/4" x="310" y="11.5" width="32" height="17" />
+        </frame>
+        <frame id="7:492" name="Heading" x="24" y="68" width="342" height="96">
+          <text id="7:493" name="A little trust goes a long way." x="0" y="0" width="342" height="66" />
+          <text id="7:494" name="Verify your identity before accepting bookings." x="0" y="74" width="342" height="22" />
+        </frame>
+        <frame id="7:495" name="Verification steps" x="24" y="184" width="342" height="398">
+          <frame id="7:496" name="Helpful note" x="0" y="0" width="342" height="66">
+            <instance id="7:497" name="Icon/shield" x="16" y="21" width="24" height="24" />
+            <text id="7:501" name="Your identity document is never shown on your public profile." x="52" y="16" width="274" height="34" />
+          </frame>
+          <instance id="7:502" name="Verification step" x="0" y="82" width="342" height="78" />
+          <instance id="7:514" name="Verification step" x="0" y="176" width="342" height="78" />
+          <instance id="7:527" name="Verification step" x="0" y="270" width="342" height="78" />
+          <text id="7:540" name="Identity verification confirms who you are, not your teaching qualifications." x="0" y="364" width="342" height="34" />
+        </frame>
+      </frame>
+      <frame id="7:481" name="Footer" x="0" y="710" width="390" height="114">
+        <instance id="7:541" name="Button/Primary" x="24" y="12" width="342" height="54" />
+        <text id="7:543" name="Finish this later" x="24" y="78" width="342" height="20" />
+      </frame>
+      <instance id="7:482" name="System/Home indicator" x="0" y="824" width="390" height="20" />
+    </frame>
+    <text id="7:544" name="Hands off to secure identity provider → I4 (review status). Draft lessons remain available while waiting." x="1314" y="2080" width="390" height="34" />
+  </section>
+</canvas>

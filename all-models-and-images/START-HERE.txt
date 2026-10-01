@@ -1,0 +1,12 @@
+One to One — models and images
+
+blender/companions.blend: all four editable static models.
+blender/companions-animated.blend: all four rigged and animated models.
+pets/: original character images.
+blender/*-front.png: rendered model images.
+blender/animations/: 24 animated GIFs and 576 transparent PNG frames.
+blender/animations/index.html: local animation gallery.
+Root PNG files: onboarding design previews.
+
+Models saved in Blender 4.5.10 LTS; materials are procedural and need no external textures.
+Figma playback was not verified; local GIFs and Blender animations are included.
