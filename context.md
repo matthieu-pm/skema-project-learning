@@ -216,6 +216,23 @@ Local files are in `output/storyboard/`: `storyboard.md` (all scene copy and sou
 
 **Known stale scene:** scene 4 / node `208:1805` still mentions a small practice target and reminders. The app has since removed daily practice goals and uses a general notification choice. Do not reintroduce those removed screens based on the storyboard. No storyboard/Figma edits were made during this documentation task.
 
+### Six additional role-specific storyboards — 2 October 2026
+
+[Six reasons to use Mimo — section 250:1964](https://www.figma.com/board/AYNNAqQDARTmwlsa6AYHsd?node-id=250-1964) contains **six new storyboards and 24 illustrated scenes**, arranged in student and teacher columns. Each follows one role and a different reason for using the product:
+
+| Role | Storyboard | Issue and research reference |
+| --- | --- | --- |
+| Student · Maya | **Past the basics** (`251:1964`) | Repetition without useful progression; Maya persona `43:2819`. |
+| Student · Lucas | **When real speech is too fast** (`251:1993`) | Recognizing written words but struggling with natural speech; Lucas persona `44:2209`. |
+| Student · Léa | **A lesson that fits this week** (`251:2022`) | An unpredictable schedule makes rigid routines difficult; Léa persona `44:2453`. |
+| Teacher · Gilbert | **Adapt without starting over** (`251:2051`) | Adapting resources for different proficiency levels takes preparation time; research `69:1642`. |
+| Teacher · Gilbert | **A no-show needs a clear next step** (`251:2080`) | A missed session leaves reserved time and session status unresolved; research `156:2097`. |
+| Teacher · Gilbert | **Helpful AI, with a human check** (`251:2109`) | Generated material can be inaccurate or unsuitable; creative-control research `69:1698`. |
+
+Each storyboard includes its issue, four scenes, emotions, a question to test, a source link, and a prototype-boundary note. Narration and specific situations are illustrative, not participant quotations. Intended outcomes are hypotheses. Current onboarding is distinguished from proposed booking, live lessons, reusable resources, no-show handling, and AI draft review. No-show fees and cancellation policy remain undecided; optional practice has no daily quota or streak. The teacher can edit, discard, or work manually before deliberately sharing an AI-assisted draft.
+
+All 24 illustrations are editable native vector groups in FigJam. Local narrative, vector source, node IDs, and seven final screenshots are in `output/storyboard/role-stories/`. Verified all six individual storyboard screenshots and the collection overview; structural checks reported no section-bound violations or sibling-text overlaps. The earlier storyboard was preserved. No app behavior changed.
+
 ## Broader wireframe proposal
 
 `all-models-and-images/wireframe-screen-index.md` is the full **72-screen** index, with primary actions, onward routes, state behavior, and research-to-design rationale. It describes structural 390 × 844 wireframes, not an implemented full product.
@@ -295,7 +312,11 @@ Teacher deferral ends at `teacher-draft`; adult learner deferral ends at `learne
 
 ## Technical structure and commands
 
-The workspace root is `/Users/matthieu/Projects/skema-project-learning`. On 2 October 2026, Git was initialized on `main` and the public repository [matthieu-pm/skema-project-learning](https://github.com/matthieu-pm/skema-project-learning) was created, with `origin` pointing to it. Repository publication is separate from app deployment; no public deployed app URL is recorded.
+The workspace root is `/Users/matthieu/Projects/skema-project-learning`. On 2 October 2026, Git was initialized on `main` and the public repository [matthieu-pm/skema-project-learning](https://github.com/matthieu-pm/skema-project-learning) was created, with `origin` pointing to it.
+
+On 2 October 2026, the prototype was deployed to [skema-project-learning.vercel.app](https://skema-project-learning.vercel.app). The Vercel project is [matthieu-pm/skema-project-learning](https://vercel.com/matthieu-pm/skema-project-learning), ID `prj_JjASv88OtH8bAhrroKgtvQ7TVmT0`. The CLI uploaded only `app/`; `app/vercel.json` selects Vite, `npm run build`, and static output `dist/client`. The existing Sites worker packaging and protected runtime remain unchanged. `app/.vercelignore` excludes local dependencies, build output, QA captures, logs, and environment files. No Git integration was configured in this deployment task; subsequent deployments can be made from `app/` with `vercel --prod --scope matthieu-pm`.
+
+Deployment `dpl_9kFHuas9C5QPobL1ERFnkTBfu4to` was confirmed **Ready**, with the stable domain assigned. Although the command requested `--target preview`, Vercel made this first deployment production automatically. The local onboarding suite passed **13 tests**, and local and remote builds passed the **28-file runtime integrity check**. Verification covered build logs and deployment metadata; the hosted UI was not browser-tested during deployment. This remains a frontend prototype with simulated verification and no connected production services.
 
 The public repository includes the prototype, documentation, and design assets. The raw participant interview snapshot at `reference/figma/figjam-board-snapshot.xml` stays local and is excluded by the root `.gitignore`; the research synthesis above remains public. Dependencies, build/test output, local environment files, and operating-system metadata are also excluded. The original local assets are preserved. The repository setup re-ran the runtime integrity check successfully (28 protected files); app behavior was not changed or re-tested for this publication.
 
@@ -334,7 +355,7 @@ npm run test:runtime
 npm run test:sites
 ```
 
-Use the checks relevant to the change. `build` runs TypeScript/Vite plus static-worker preparation and invokes runtime integrity beforehand. Expected deployment outputs include `dist/client/index.html`, `dist/server/index.js`, `dist/.openai/hosting.json`, and source `.openai/hosting.json`. Sites checks are required for a Sites handoff; publishing/deployment requires a user request. No public deployed URL is recorded here.
+Use the checks relevant to the change. `build` runs TypeScript/Vite plus static-worker preparation and invokes runtime integrity beforehand. Expected deployment outputs include `dist/client/index.html`, `dist/server/index.js`, `dist/.openai/hosting.json`, and source `.openai/hosting.json`. Vercel serves only `dist/client`; Sites checks are required for a Sites handoff. Publishing/deployment requires a user request.
 
 Read `app/AGENTS.md` before app edits. App-owned work belongs primarily in `Prototype.tsx`, `prototype.css`, and the onboarding model. Do not alter protected runtime files or weaken/update their hash lock merely to bypass a failed check. Runtime changes require an explicit request and appropriate verification.
 

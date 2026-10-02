@@ -1,0 +1,230 @@
+[
+  {
+    "id": "S1",
+    "role": "STUDENT",
+    "title": "Past the basics",
+    "person": "Maya",
+    "issue": "Practising often, but still repeating material she already knows.",
+    "color": "F8F5FF",
+    "sourceLabel": "Maya persona · targeted feedback and visible progress",
+    "source": "43:2819",
+    "question": "Does a specific speaking task reveal improvement better than completed exercises?",
+    "boundary": "Goal setup exists in the prototype. Teacher choice, lessons and progress comparison are proposed.",
+    "scenes": [
+      [
+        "The same easy exercise",
+        "RESEARCH-BASED SITUATION",
+        "Maya finishes another basic exercise, then struggles to explain a work decision in French. Her effort feels disconnected from what she wants to do.",
+        "Frustrated · effort without progress"
+      ],
+      [
+        "Name the missing skill",
+        "ONBOARDING PROTOTYPE",
+        "She selects French, her current level and At work. She writes a specific goal: explain a decision and answer follow-up questions.",
+        "Focused · a useful goal"
+      ],
+      [
+        "Ask for the right challenge",
+        "PROPOSED EXPERIENCE",
+        "Maya chooses a teacher whose approach fits. In a one-to-one lesson, she attempts the work scenario and asks for feedback on where she gets stuck.",
+        "Challenged · feedback she can use"
+      ],
+      [
+        "Try the task again",
+        "INTENDED OUTCOME",
+        "At a later lesson, she tries a similar scenario and compares it with her earlier attempt. She and her teacher agree what improved and what to practise next.",
+        "Encouraged · progress she can describe"
+      ]
+    ]
+  },
+  {
+    "id": "S2",
+    "role": "STUDENT",
+    "title": "When real speech is too fast",
+    "person": "Lucas",
+    "issue": "Recognising written words, but losing the meaning in natural conversation.",
+    "color": "FFF7F0",
+    "sourceLabel": "Lucas persona · authentic speech, culture and pronunciation",
+    "source": "44:2209",
+    "question": "Can the learner follow an unfamiliar speaker after practising connected speech?",
+    "boundary": "Goal and optional resource entry exist. Listening tools and tutoring activities are proposed.",
+    "scenes": [
+      [
+        "The words run together",
+        "RESEARCH-BASED SITUATION",
+        "Lucas follows a written French phrase, but loses it when someone says it naturally. Replaying the same audio leaves him guessing where one word ends.",
+        "Lost · familiar words sound different"
+      ],
+      [
+        "Bring a real example",
+        "ONBOARDING PROTOTYPE",
+        "He chooses Everyday life and describes the listening problem. He can attach a short audio example so the goal starts with a real situation.",
+        "Curious · something concrete to discuss"
+      ],
+      [
+        "Hear the pieces, then the whole",
+        "PROPOSED EXPERIENCE",
+        "With his chosen teacher, Lucas asks for the phrase slowly, then at a natural pace. He practises hearing connected words and saying the phrase himself.",
+        "Reassured · allowed to ask again"
+      ],
+      [
+        "Listen beyond the lesson",
+        "INTENDED OUTCOME",
+        "He tries a new short clip from a different real speaker. He identifies what he understood and brings the remaining difficulty to his next lesson.",
+        "More capable · still learning"
+      ]
+    ]
+  },
+  {
+    "id": "S3",
+    "role": "STUDENT",
+    "title": "A lesson that fits this week",
+    "person": "Léa",
+    "issue": "Wanting personal support while an unpredictable week makes rigid schedules hard.",
+    "color": "FFF0FA",
+    "sourceLabel": "Léa persona · availability and low-pressure support",
+    "source": "44:2453",
+    "question": "Can learners arrange one useful lesson without feeling locked into a routine?",
+    "boundary": "Meeting preferences exist. Live availability, booking and between-lesson practice are proposed.",
+    "scenes": [
+      [
+        "Another week slips by",
+        "RESEARCH-BASED SITUATION",
+        "Léa wants help with French, but work and travel keep changing her week. She postpones looking for a teacher because a fixed routine feels hard to promise.",
+        "Overwhelmed · no room for a rigid plan"
+      ],
+      [
+        "Start with what can work",
+        "ONBOARDING PROTOTYPE",
+        "She selects Online and the days or time of day that might suit her. She can leave preferences undecided; these choices do not book a session.",
+        "Relieved · flexibility is allowed"
+      ],
+      [
+        "Choose one workable slot",
+        "PROPOSED EXPERIENCE",
+        "Léa reviews a teacher’s actual availability and chooses one session that fits. She checks the time and format before confirming, rather than committing to a recurring schedule.",
+        "In control · one clear commitment"
+      ],
+      [
+        "Keep a connection to her goal",
+        "INTENDED OUTCOME",
+        "After the lesson, she uses a short teacher-provided exercise when it is useful. She chooses when to book again, without a daily quota or streak to maintain.",
+        "Supported · learning fits her life"
+      ]
+    ]
+  },
+  {
+    "id": "T1",
+    "role": "TEACHER",
+    "title": "Adapt without starting over",
+    "person": "Gilbert",
+    "issue": "The same useful material needs a different level of challenge for each learner.",
+    "color": "F5FBFF",
+    "sourceLabel": "Teacher synthesis · level adaptation and reusable lesson blocks",
+    "source": "69:1642",
+    "question": "Does adapting a short template reduce preparation while keeping the lesson relevant?",
+    "boundary": "This teacher-workspace story is proposed. It depicts separate one-to-one sessions, never a group lesson.",
+    "scenes": [
+      [
+        "One resource, different needs",
+        "RESEARCH-BASED SITUATION",
+        "Gilbert has a useful article, but the next beginner needs support and a later learner needs more challenge. Rebuilding both lessons would duplicate his work.",
+        "Stretched · adaptation takes time"
+      ],
+      [
+        "Start from something reusable",
+        "PROPOSED EXPERIENCE",
+        "He opens an existing short lesson template and reads the next learner’s goal. He keeps the useful structure instead of building a long course from scratch.",
+        "Prepared · a starting point"
+      ],
+      [
+        "Change the right parts",
+        "PROPOSED EXPERIENCE",
+        "For the beginner, he simplifies vocabulary and adds speaking prompts. He keeps a separate, more demanding version for the other learner and checks each task himself.",
+        "In control · level-appropriate choices"
+      ],
+      [
+        "Teach from a plan he owns",
+        "INTENDED OUTCOME",
+        "Before each separate lesson, he previews the learner’s version and makes a final adjustment. The template supports his teaching without prescribing every moment.",
+        "Ready · reusable but personal"
+      ]
+    ]
+  },
+  {
+    "id": "T2",
+    "role": "TEACHER",
+    "title": "A no-show needs a clear next step",
+    "person": "Gilbert",
+    "issue": "An absent learner leaves reserved time, follow-up and the session status unresolved.",
+    "color": "FFFBF0",
+    "sourceLabel": "Cautions · no-shows, lost time and administrative work",
+    "source": "156:2097",
+    "question": "Can the teacher resolve an attendance issue with less back-and-forth and clear status?",
+    "boundary": "Proposed exception flow. Waiting periods, charges, refunds and cancellation rules remain undecided.",
+    "scenes": [
+      [
+        "Waiting in an empty call",
+        "RESEARCH-BASED SITUATION",
+        "Gilbert is ready for an agreed online lesson, but the learner has not joined. He does not know whether they are late, confused about the time or unable to attend.",
+        "Uncertain · reserved time is slipping"
+      ],
+      [
+        "Check before concluding",
+        "PROPOSED EXPERIENCE",
+        "He opens the session details, checks the agreed time and sends a short private message. He records the attendance issue without marking the lesson completed.",
+        "Calmer · the issue is visible"
+      ],
+      [
+        "Agree what happens next",
+        "PROPOSED EXPERIENCE",
+        "The learner explains that they missed the session. Gilbert reviews the available next steps and proposes another time; any policy consequences must be clear before action.",
+        "Fair · a conversation, not a guess"
+      ],
+      [
+        "Close the loop",
+        "INTENDED OUTCOME",
+        "Once the learner accepts, the replacement session appears as confirmed. The original remains recorded as missed, so his schedule and lesson notes tell the same story.",
+        "Resolved · both people know the plan"
+      ]
+    ]
+  },
+  {
+    "id": "T3",
+    "role": "TEACHER",
+    "title": "Helpful AI, with a human check",
+    "person": "Gilbert",
+    "issue": "An AI suggestion can save effort but still contain wrong or unsuitable teaching material.",
+    "color": "F1FEFD",
+    "sourceLabel": "Teacher synthesis · creative control and review of AI content",
+    "source": "69:1698",
+    "question": "Can teachers spot and correct unsuitable content before anything reaches a learner?",
+    "boundary": "Optional AI drafting is proposed. No live model is connected; no accuracy or time-saving result is claimed.",
+    "scenes": [
+      [
+        "A draft is not a finished lesson",
+        "RESEARCH-BASED SITUATION",
+        "Gilbert wants a short grammar exercise for one learner. An AI suggestion looks useful at first, but he knows fluent wording can hide an error or the wrong difficulty.",
+        "Cautious · convenience needs checking"
+      ],
+      [
+        "Notice what does not fit",
+        "PROPOSED EXPERIENCE",
+        "He reads the proposed answers and explanations. One rule is misleading and the vocabulary is too advanced, so he keeps the draft unshared and flags those parts.",
+        "Alert · his judgment matters"
+      ],
+      [
+        "Edit, or do it himself",
+        "PROPOSED EXPERIENCE",
+        "Gilbert rewrites the explanation, adjusts the examples and checks the answer key. If the suggestion is not worth repairing, he discards it and uses his own material.",
+        "Confident · AI remains optional"
+      ],
+      [
+        "Share only the reviewed version",
+        "INTENDED OUTCOME",
+        "He previews the final exercise and deliberately shares it with the learner. He remains responsible for the lesson and the final feedback.",
+        "Accountable · approval is explicit"
+      ]
+    ]
+  }
+]
