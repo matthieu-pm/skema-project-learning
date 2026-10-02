@@ -1,0 +1,110 @@
+{
+  "status": "Local source map; hosted Code Connect blocked by Figma plan/seat",
+  "mappings": [
+    {
+      "figmaNodeId": "93:262",
+      "figmaName": "Mimo/Pet",
+      "source": "app/src/Prototype.tsx",
+      "component": "Mascot",
+      "css": "app/src/prototype.css"
+    },
+    {
+      "figmaNodeId": "99:262",
+      "figmaName": "Mimo/Guide",
+      "source": "app/src/Prototype.tsx",
+      "component": "Mascot + Bubble",
+      "css": "app/src/prototype.css"
+    },
+    {
+      "figmaNodeId": "96:629",
+      "figmaName": "Mimo/Choice/Compact",
+      "source": "app/src/Prototype.tsx",
+      "component": "Choice",
+      "css": "app/src/prototype.css"
+    },
+    {
+      "figmaNodeId": "96:768",
+      "figmaName": "Mimo/Choice/Detail",
+      "source": "app/src/Prototype.tsx",
+      "component": "Choice",
+      "css": "app/src/prototype.css"
+    },
+    {
+      "figmaNodeId": "97:294",
+      "figmaName": "Mimo/Input/Text",
+      "source": "app/src/Prototype.tsx",
+      "component": "Field",
+      "css": "app/src/prototype.css"
+    },
+    {
+      "figmaNodeId": "97:406",
+      "figmaName": "Mimo/Input/Textarea",
+      "source": "app/src/Prototype.tsx",
+      "component": "Field",
+      "css": "app/src/prototype.css"
+    },
+    {
+      "figmaNodeId": "97:518",
+      "figmaName": "Mimo/Input/Code",
+      "source": "app/src/Prototype.tsx",
+      "component": "Field",
+      "css": "app/src/prototype.css"
+    },
+    {
+      "figmaNodeId": "98:433",
+      "figmaName": "Mimo/Upload",
+      "source": "app/src/Prototype.tsx",
+      "component": "Upload",
+      "css": "app/src/prototype.css"
+    },
+    {
+      "figmaNodeId": "98:267",
+      "figmaName": "Mimo/Note",
+      "source": "app/src/Prototype.tsx",
+      "component": "Note",
+      "css": "app/src/prototype.css"
+    },
+    {
+      "figmaNodeId": "99:297",
+      "figmaName": "Mimo/Header",
+      "source": "app/src/Prototype.tsx",
+      "component": "Header",
+      "css": "app/src/prototype.css"
+    },
+    {
+      "figmaNodeId": "98:328",
+      "figmaName": "Mimo/Progress",
+      "source": "app/src/Prototype.tsx",
+      "component": "Header",
+      "css": "app/src/prototype.css"
+    },
+    {
+      "figmaNodeId": "99:332",
+      "figmaName": "Mimo/Footer",
+      "source": "app/src/Prototype.tsx",
+      "component": "Footer",
+      "css": "app/src/prototype.css"
+    },
+    {
+      "figmaNodeId": "96:292",
+      "figmaName": "Mimo/Button/Primary",
+      "source": "app/src/Prototype.tsx",
+      "component": "Footer (.primary)",
+      "css": "app/src/prototype.css"
+    },
+    {
+      "figmaNodeId": "96:379",
+      "figmaName": "Mimo/Button/Secondary",
+      "source": "app/src/Prototype.tsx",
+      "component": "Footer (.secondary)",
+      "css": "app/src/prototype.css"
+    },
+    {
+      "figmaNodeId": "96:466",
+      "figmaName": "Mimo/Button/Text",
+      "source": "app/src/Prototype.tsx",
+      "component": "Footer (.text-button)",
+      "css": "app/src/prototype.css"
+    }
+  ]
+}

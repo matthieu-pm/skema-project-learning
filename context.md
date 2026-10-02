@@ -106,6 +106,8 @@ Personas are synthesis artifacts, not literal interview quotations or a single v
 
 ## FigJam ideation, feature clusters, and risk notes
 
+An editable [impact–effort matrix, section `227:1777`](https://www.figma.com/board/AYNNAqQDARTmwlsa6AYHsd?node-id=227-1777) was added below the brainstorm on **2 October 2026**. Impact increases upward; effort increases to the right. Quadrants are **Do now** (high impact / low effort), **Do next** (high / high), **Do later** (low / low), and **Don’t do** (low impact / high effort). The areas are empty for collaborative idea placement; this is a prioritization template, not an agreed feature ranking or delivery roadmap. The final matrix was visually checked for readable labels and correctly positioned axes; existing ideas were preserved.
+
 The original [Brainstorm section, 132:1682](https://www.figma.com/board/AYNNAqQDARTmwlsa6AYHsd?node-id=132-1682) groups ideas around scheduling/communication, teacher workspace, live learning/AI, resources/practice, feedback/progress, and teacher recognition. Later clusters are:
 
 | Cluster | Node | Contents / status |
@@ -129,6 +131,18 @@ Six Thinking Hats material includes:
 - **Scope/process direction** (`156:1983`, `156:2005`, `156:2022`): focus the product on tutoring and reduce unnecessary authoring/admin. The board's note “Being creeps → ID verification” (`167:1922`) is an idea, not evidence that identity checks solve safety.
 
 ## Figma design contents
+
+### Mimo design system — created 2 October 2026
+
+[Design-system cover, `101:248`](https://www.figma.com/design/w4nc4L3hNF63uh2HBX9Np5?node-id=101-248). Eight new pages (`92:248`–`92:255`) document the current prototype: getting started, foundations, pets/icons, buttons, choices, inputs, feedback, and patterns. The library contains **135 component masters/variants, 19 component sets, 13 new Nunito text styles, four effect styles, 108 new variables and 16 reused primitives**. Semantic aliases support Learner and Teacher modes. Components also expose Role variants; explicit component modes override parent frame modes, so use the matching Role variant.
+
+Includes all four original pets—purple Luma, blue Nori, green Mimo, yellow Pip—plus Luma lookout; 12 editable vector icons; source language flags and Persona branding. Pets remain original raster artwork in editable component containers. Mimo and Pip are library assets, not new app role assignments.
+
+Extended palettes, accessible primary alternatives, status badges, disabled/outlined-error fields, empty cards and dialogs are clearly labeled **design additions, not implemented app behavior**. Home navigation reuses the existing proposed home components. Bright prototype buttons are preserved, with contrast limitations and darker proposed alternatives documented. Interaction states are static specimens; no pet motion playback is claimed.
+
+All eight review sheets were visually inspected. Targeted fixes addressed asset scaling, label wrapping, specimen property values, input fitting and speech pointers. Final structural checks found no overflowing review text, unstyled component text, or unbound solid fills on component roots. New variable scopes, code syntax and semantic aliases passed; reused source primitives received code syntax metadata. All 28 protected runtime files passed integrity checks; no app code changed.
+
+Handoff records: `output/design-system/README.md`, `state.json`, `validation.json`, `tokens.json`, `tokens.css`, `source-map.json`, construction scripts and `cover-preview.png`. Token CSS is an export only, not imported by the app. Hosted Code Connect is blocked by the current Figma plan/seat (connector requires Organization/Enterprise with Dev/Full seat); local source mappings are provided. The library is available within this design file and has not been published as a shared team library.
 
 The 1 October inspection found the two historical pages below. On 2 October, a third page, **Home · Mimo prototype**, was added for the current home-screen concepts.
 

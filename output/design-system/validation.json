@@ -1,0 +1,302 @@
+[
+  {
+    "page": "00 · Mimo system",
+    "pageId": "92:248",
+    "review": "101:248",
+    "components": 0,
+    "sets": 0,
+    "instances": 4,
+    "unStyledText": [],
+    "overflow": [],
+    "unboundComponentFills": [],
+    "variants": []
+  },
+  {
+    "page": "01 · Foundations",
+    "pageId": "92:249",
+    "review": "100:248",
+    "components": 0,
+    "sets": 0,
+    "instances": 0,
+    "unStyledText": [],
+    "overflow": [],
+    "unboundComponentFills": [],
+    "variants": []
+  },
+  {
+    "page": "02 · Pets & icons",
+    "pageId": "92:250",
+    "review": "93:248",
+    "components": 24,
+    "sets": 1,
+    "instances": 24,
+    "unStyledText": [],
+    "overflow": [],
+    "unboundComponentFills": [],
+    "variants": [
+      {
+        "id": "93:262",
+        "name": "Mimo/Pet",
+        "count": 5,
+        "properties": [
+          "Character"
+        ]
+      }
+    ]
+  },
+  {
+    "page": "03 · Buttons",
+    "pageId": "92:251",
+    "review": "96:248",
+    "components": 26,
+    "sets": 4,
+    "instances": 50,
+    "unStyledText": [],
+    "overflow": [],
+    "unboundComponentFills": [],
+    "variants": [
+      {
+        "id": "96:292",
+        "name": "Mimo/Button/Primary",
+        "count": 8,
+        "properties": [
+          "Icon#96:24",
+          "Show icon#96:25",
+          "Label#96:26",
+          "Role",
+          "State"
+        ]
+      },
+      {
+        "id": "96:379",
+        "name": "Mimo/Button/Secondary",
+        "count": 8,
+        "properties": [
+          "Icon#96:51",
+          "Show icon#96:52",
+          "Label#96:53",
+          "Role",
+          "State"
+        ]
+      },
+      {
+        "id": "96:466",
+        "name": "Mimo/Button/Text",
+        "count": 8,
+        "properties": [
+          "Icon#96:78",
+          "Show icon#96:79",
+          "Label#96:80",
+          "Role",
+          "State"
+        ]
+      },
+      {
+        "id": "96:520",
+        "name": "Mimo/Button/Accessible",
+        "count": 2,
+        "properties": [
+          "Label#96:83",
+          "Role"
+        ]
+      }
+    ]
+  },
+  {
+    "page": "04 · Choices",
+    "pageId": "92:252",
+    "review": "96:530",
+    "components": 23,
+    "sets": 3,
+    "instances": 81,
+    "unStyledText": [],
+    "overflow": [],
+    "unboundComponentFills": [],
+    "variants": [
+      {
+        "id": "96:546",
+        "name": "Mimo/Checkbox",
+        "count": 6,
+        "properties": [
+          "Role",
+          "State"
+        ]
+      },
+      {
+        "id": "96:629",
+        "name": "Mimo/Choice/Compact",
+        "count": 8,
+        "properties": [
+          "Leading asset#96:116",
+          "Show asset#96:117",
+          "Label#96:118",
+          "Show checkbox#96:119",
+          "Role",
+          "State"
+        ]
+      },
+      {
+        "id": "96:768",
+        "name": "Mimo/Choice/Detail",
+        "count": 8,
+        "properties": [
+          "Leading asset#96:160",
+          "Show asset#96:161",
+          "Label#96:162",
+          "Description#96:163",
+          "Show checkbox#96:164",
+          "Role",
+          "State"
+        ]
+      }
+    ]
+  },
+  {
+    "page": "05 · Inputs",
+    "pageId": "92:253",
+    "review": "97:248",
+    "components": 30,
+    "sets": 3,
+    "instances": 30,
+    "unStyledText": [],
+    "overflow": [],
+    "unboundComponentFills": [],
+    "variants": [
+      {
+        "id": "97:294",
+        "name": "Mimo/Input/Text",
+        "count": 10,
+        "properties": [
+          "Label#97:22",
+          "Value#97:23",
+          "Message#97:24",
+          "Role",
+          "State"
+        ]
+      },
+      {
+        "id": "97:406",
+        "name": "Mimo/Input/Textarea",
+        "count": 10,
+        "properties": [
+          "Label#97:55",
+          "Value#97:56",
+          "Message#97:57",
+          "Role",
+          "State"
+        ]
+      },
+      {
+        "id": "97:518",
+        "name": "Mimo/Input/Code",
+        "count": 10,
+        "properties": [
+          "Label#97:88",
+          "Value#97:89",
+          "Message#97:90",
+          "Role",
+          "State"
+        ]
+      }
+    ]
+  },
+  {
+    "page": "06 · Feedback",
+    "pageId": "92:254",
+    "review": "98:248",
+    "components": 22,
+    "sets": 4,
+    "instances": 28,
+    "unStyledText": [],
+    "overflow": [],
+    "unboundComponentFills": [],
+    "variants": [
+      {
+        "id": "98:267",
+        "name": "Mimo/Note",
+        "count": 5,
+        "properties": [
+          "Title#98:10",
+          "Message#98:11",
+          "Tone"
+        ]
+      },
+      {
+        "id": "98:328",
+        "name": "Mimo/Progress",
+        "count": 10,
+        "properties": [
+          "Role",
+          "Progress"
+        ]
+      },
+      {
+        "id": "98:394",
+        "name": "Mimo/Badge",
+        "count": 4,
+        "properties": [
+          "Label#98:16",
+          "Status"
+        ]
+      },
+      {
+        "id": "98:433",
+        "name": "Mimo/Upload",
+        "count": 3,
+        "properties": [
+          "Title#98:23",
+          "Description#98:24",
+          "State"
+        ]
+      }
+    ]
+  },
+  {
+    "page": "07 · Patterns",
+    "pageId": "92:255",
+    "review": "99:248",
+    "components": 10,
+    "sets": 4,
+    "instances": 30,
+    "unStyledText": [],
+    "overflow": [],
+    "unboundComponentFills": [],
+    "variants": [
+      {
+        "id": "99:262",
+        "name": "Mimo/Guide",
+        "count": 2,
+        "properties": [
+          "Message#99:2",
+          "Role"
+        ]
+      },
+      {
+        "id": "99:297",
+        "name": "Mimo/Header",
+        "count": 2,
+        "properties": [
+          "Role"
+        ]
+      },
+      {
+        "id": "99:332",
+        "name": "Mimo/Footer",
+        "count": 2,
+        "properties": [
+          "Role"
+        ]
+      },
+      {
+        "id": "99:360",
+        "name": "Mimo/Card",
+        "count": 3,
+        "properties": [
+          "Title#99:9",
+          "Body#99:10",
+          "Type"
+        ]
+      }
+    ]
+  }
+]
