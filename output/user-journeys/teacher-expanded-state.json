@@ -1,0 +1,46 @@
+{
+  "fileKey": "AYNNAqQDARTmwlsa6AYHsd",
+  "teacherId": "301:2202",
+  "actionCount": 49,
+  "mainActions": 46,
+  "alternativeActions": 3,
+  "onboardingActions": 28,
+  "sections": [
+    {
+      "id": "311:2134",
+      "key": "awareness"
+    },
+    {
+      "id": "311:2177",
+      "key": "start"
+    },
+    {
+      "id": "311:2260",
+      "key": "profile"
+    },
+    {
+      "id": "312:2111",
+      "key": "offer"
+    },
+    {
+      "id": "312:2174",
+      "key": "identity"
+    },
+    {
+      "id": "312:2257",
+      "key": "exits"
+    },
+    {
+      "id": "314:2111",
+      "key": "preparation"
+    },
+    {
+      "id": "314:2194",
+      "key": "teaching"
+    },
+    {
+      "id": "314:2267",
+      "key": "followup"
+    }
+  ]
+}

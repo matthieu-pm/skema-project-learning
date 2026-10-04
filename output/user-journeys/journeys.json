@@ -1,0 +1,232 @@
+[
+  {
+    "key": "student",
+    "title": "Student journey · Léa",
+    "goal": "From hesitating in everyday conversation to using one useful skill with confidence.",
+    "color": "#7840B5",
+    "tint": "#F8F5FF",
+    "source": "Léa persona · patient, personalized human guidance",
+    "sourceId": "44:2453",
+    "steps": [
+      [
+        "Attempt a conversation",
+        "Research-informed situation",
+        "Tries to express one idea in an everyday conversation.",
+        "Everyday conversation\nExisting language apps\nNative videos or audio",
+        "Frustrated",
+        "I know some words, but I freeze when I need to use them.",
+        -2,
+        "Pressure and generic practice make the gap feel bigger."
+      ],
+      [
+        "Explore Mimo",
+        "Proposed discovery",
+        "Explores Mimo as a possible source of one-to-one support.",
+        "Mimo introduction\nWelcome screen\nExplanation of tutoring",
+        "Cautiously hopeful",
+        "Maybe a patient teacher could help me say what I mean.",
+        0,
+        "Needs a clear promise, without unrealistic progress claims."
+      ],
+      [
+        "Set a learning goal",
+        "Current onboarding",
+        "Describes one practical situation she wants to handle.",
+        "Account setup\nLanguage, level and goal\nOptional resources/preferences",
+        "Understood",
+        "I can explain what I need and leave some choices for later.",
+        1,
+        "Setup must feel manageable; optional answers stay optional."
+      ],
+      [
+        "Choose a teacher",
+        "Proposed experience",
+        "Selects a teacher whose approach fits her learning needs.",
+        "Teacher profiles\nTeaching approach\nLesson format and rate",
+        "Uncertain → reassured",
+        "Will this teacher understand me and be patient?",
+        0,
+        "A clear teaching approach helps her judge compatibility."
+      ],
+      [
+        "Book a lesson",
+        "Proposed experience",
+        "Reserves one available session with her chosen teacher.",
+        "Teacher availability\nBooking details\nBooking confirmation",
+        "Hesitant but committed",
+        "This time works for me. I want to know exactly what I am booking.",
+        -1,
+        "Clear timing, price and session details reduce uncertainty."
+      ],
+      [
+        "Practise with a teacher",
+        "Proposed experience",
+        "Practises one everyday conversation with her teacher.",
+        "One-to-one call or meeting\nTeacher-led activity\nShared notes and feedback",
+        "Supported",
+        "I can ask again and make mistakes without feeling judged.",
+        2,
+        "Respectful feedback matters more than finishing an exercise."
+      ],
+      [
+        "Try the skill in real life",
+        "Proposed outcome",
+        "Uses the practised skill in an everyday interaction.",
+        "Everyday interaction\nTeacher-approved recap\nOptional practice / private feedback",
+        "More confident",
+        "I managed that conversation. I know what I want to practise next.",
+        3,
+        "Progress should be visible in useful tasks, without daily pressure."
+      ]
+    ],
+    "stageGroups": [
+      {
+        "name": "Awareness",
+        "steps": [
+          1,
+          2
+        ]
+      },
+      {
+        "name": "Onboarding",
+        "steps": [
+          3
+        ]
+      },
+      {
+        "name": "Booking & preparation",
+        "steps": [
+          4,
+          5
+        ]
+      },
+      {
+        "name": "Lesson",
+        "steps": [
+          6
+        ]
+      },
+      {
+        "name": "Progress",
+        "steps": [
+          7
+        ]
+      }
+    ]
+  },
+  {
+    "key": "teacher",
+    "title": "Teacher journey · Gilbert",
+    "goal": "From scattered preparation to a personal lesson he can adapt, teach and follow up.",
+    "color": "#276D99",
+    "tint": "#F5FBFF",
+    "source": "Teacher synthesis · adaptation and creative control",
+    "sourceId": "69:1698",
+    "steps": [
+      [
+        "Find suitable materials",
+        "Research-informed situation",
+        "Searches his existing resources for material suited to the learner.",
+        "Personal files and worksheets\nEmail or messaging\nCalendar and learner notes",
+        "Stretched",
+        "I want more time to teach, but preparation keeps expanding.",
+        -2,
+        "Fragmented tools and repeated adaptation create extra work."
+      ],
+      [
+        "Create a teaching profile",
+        "Current onboarding",
+        "Creates a profile describing his teaching offer.",
+        "Teacher account/profile setup\nTeaching preferences and rate\nOptional identity-check preview",
+        "Cautiously optimistic",
+        "I want to explain how I teach and keep control of my offer.",
+        0,
+        "The prototype simulates checks; it does not approve a live profile."
+      ],
+      [
+        "Read the learner’s goal",
+        "Proposed experience",
+        "Reads the learner’s brief to understand the desired outcome.",
+        "Learner goal brief\nPrivate conversation\nAvailability and session details",
+        "Focused",
+        "What does this learner need to do, and what is difficult now?",
+        1,
+        "A short, specific brief is more useful than extra administration."
+      ],
+      [
+        "Adapt a lesson",
+        "Proposed experience",
+        "Adapts one reusable lesson to the learner’s level and goal.",
+        "Lesson library\nReusable template\nModular lesson editor",
+        "In control",
+        "I can adapt a useful starting point instead of rebuilding everything.",
+        2,
+        "Reuse must preserve personalization and the teacher's method."
+      ],
+      [
+        "Approve the lesson",
+        "Proposed experience",
+        "Approves a lesson version that meets his teaching standards.",
+        "Lesson preview\nOptional AI draft review\nManual editing and share action",
+        "Alert → confident",
+        "If a suggestion is wrong, I can change it or use my own material.",
+        1,
+        "AI stays optional; unreviewed drafts remain unshared."
+      ],
+      [
+        "Teach the session",
+        "Proposed experience",
+        "Teaches one personal lesson focused on the learner’s goal.",
+        "One-to-one call or meeting\nShared lesson material\nLive notes and correction",
+        "Engaged",
+        "The plan supports the conversation; I can change it as we go.",
+        3,
+        "Tools should support attention and human judgment."
+      ],
+      [
+        "Share a recap",
+        "Proposed experience",
+        "Shares a teacher-approved recap of the session.",
+        "Learner record\nTeacher-approved recap\nPrivate feedback / next-session plan",
+        "Satisfied, still attentive",
+        "I know what to work on next without writing everything again.",
+        2,
+        "Less follow-up work is a hypothesis to test, not a measured result."
+      ]
+    ],
+    "stageGroups": [
+      {
+        "name": "Awareness",
+        "steps": [
+          1
+        ]
+      },
+      {
+        "name": "Onboarding",
+        "steps": [
+          2
+        ]
+      },
+      {
+        "name": "Lesson preparation",
+        "steps": [
+          3,
+          4,
+          5
+        ]
+      },
+      {
+        "name": "Teaching",
+        "steps": [
+          6
+        ]
+      },
+      {
+        "name": "Follow-up",
+        "steps": [
+          7
+        ]
+      }
+    ]
+  }
+]

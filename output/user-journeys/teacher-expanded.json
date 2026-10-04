@@ -1,0 +1,524 @@
+[
+  {
+    "key": "awareness",
+    "stage": "Awareness",
+    "subtitle": "A teacher's reason to look for support",
+    "status": "RESEARCH-INFORMED SCENARIO",
+    "note": "Illustrative context grounded in teacher preparation workload and fragmented tools. This is not a measured customer journey.",
+    "steps": [
+      [
+        "01",
+        "Find a teaching resource",
+        "Personal worksheets\nSaved lesson files",
+        "Stretched",
+        "I have useful material, but finding the right piece takes time.",
+        "Searches existing files for one suitable resource.",
+        "research"
+      ],
+      [
+        "02",
+        "Identify a repeated task",
+        "Preparation notes\nPrevious lesson plans",
+        "Frustrated",
+        "I keep making similar changes for different learners.",
+        "Identifies one preparation task he repeats.",
+        "research"
+      ],
+      [
+        "03",
+        "Explore Mimo",
+        "Product introduction\nWelcome screen",
+        "Curious",
+        "Could this help me teach in my own way?",
+        "Explores Mimo as a possible teaching tool.",
+        "proposed discovery"
+      ]
+    ]
+  },
+  {
+    "key": "start",
+    "stage": "Onboarding · Get started",
+    "subtitle": "Current prototype / shared entry and teacher branch",
+    "status": "CURRENT ONBOARDING",
+    "note": "The shared greeting uses Luma before the role is chosen. Choosing teacher switches to Nori. Email and code verification are local simulations.",
+    "steps": [
+      [
+        "04",
+        "Start onboarding",
+        "Welcome / “Get started”",
+        "Open",
+        "Let me see how this works.",
+        "Opens the setup flow.",
+        "welcome"
+      ],
+      [
+        "05",
+        "Read the greeting",
+        "Greeting / Luma\n“Continue”",
+        "Welcomed",
+        "This feels approachable.",
+        "Reads the companion's greeting.",
+        "greeting"
+      ],
+      [
+        "06",
+        "Choose the teacher role",
+        "Role / “I want to teach”",
+        "Recognized",
+        "I am here to teach.",
+        "Selects the teacher role.",
+        "role"
+      ],
+      [
+        "07",
+        "Read the setup introduction",
+        "Setup introduction / Nori",
+        "Reassured",
+        "The next steps will help learners get to know me.",
+        "Reads the teacher setup introduction.",
+        "setup-intro"
+      ],
+      [
+        "08",
+        "Enter an email address",
+        "Email field\n“No password to remember”",
+        "Cautious",
+        "I want a simple way to sign in.",
+        "Enters an email address in the preview.",
+        "email"
+      ],
+      [
+        "09",
+        "Enter the sample code",
+        "6-digit code field\nVerify & continue",
+        "Focused",
+        "I can try the code without waiting for an email.",
+        "Enters the displayed preview code, 481629.",
+        "verify"
+      ],
+      [
+        "10",
+        "Read the teaching introduction",
+        "Teacher introduction\n“Your language. Your way of teaching.”",
+        "Encouraged",
+        "My way of teaching belongs here.",
+        "Reads the teacher-specific introduction.",
+        "teacher-intro"
+      ]
+    ]
+  },
+  {
+    "key": "profile",
+    "stage": "Onboarding · Teaching profile",
+    "subtitle": "Current prototype / one profile choice or entry per step",
+    "status": "CURRENT ONBOARDING",
+    "note": "Photo/video is optional and stays local (up to 20 MB). Language and level selections allow multiple choices. The approach field is limited to 300 characters.",
+    "steps": [
+      [
+        "11",
+        "Enter a display name",
+        "Display-name field",
+        "Comfortable",
+        "This is how learners will address me.",
+        "Enters the name learners should use.",
+        "name"
+      ],
+      [
+        "12",
+        "Add a profile photo",
+        "Local photo/video picker\n“Skip for now” alternative",
+        "Slightly self-conscious",
+        "I want to give a friendly first impression.",
+        "Adds a profile image or short video if desired.",
+        "photo · optional"
+      ],
+      [
+        "13",
+        "Choose teaching languages",
+        "Search languages\nLanguage checkboxes",
+        "Capable",
+        "I can choose the languages I actually teach.",
+        "Selects one or more teaching languages.",
+        "teaching-languages"
+      ],
+      [
+        "14",
+        "Choose teaching levels",
+        "A1–C2 checkboxes",
+        "Responsible",
+        "I should choose levels I can support well.",
+        "Selects the proficiency levels he teaches.",
+        "teaching-levels"
+      ],
+      [
+        "15",
+        "Describe a teaching approach",
+        "“Your approach, in a sentence”",
+        "In control",
+        "I can explain what a lesson with me feels like.",
+        "Writes a short description of his approach.",
+        "approach"
+      ]
+    ]
+  },
+  {
+    "key": "offer",
+    "stage": "Onboarding · Lesson offer",
+    "subtitle": "Current prototype / format, location, duration and price",
+    "status": "CURRENT ONBOARDING",
+    "note": "Format and city can be deferred. Online skips the city screen. The review remains a draft; the price does not trigger payment.",
+    "steps": [
+      [
+        "16",
+        "Choose a lesson format",
+        "In person / Online / Either\n“I’ll choose later”",
+        "Flexible",
+        "I can choose a format that works for me.",
+        "Selects a preferred meeting format.",
+        "format · optional"
+      ],
+      [
+        "17",
+        "Enter a meeting area",
+        "City or neighbourhood field\n“I’ll choose later”",
+        "Privacy-conscious",
+        "A city is enough; I do not need to share my address.",
+        "Enters a city or neighbourhood if relevant.",
+        "city · conditional"
+      ],
+      [
+        "18",
+        "Choose a lesson duration",
+        "30 / 45 / 60 minutes",
+        "Practical",
+        "This is enough time for a focused lesson.",
+        "Selects a session duration.",
+        "duration"
+      ],
+      [
+        "19",
+        "Set a lesson price",
+        "Price in euros per duration",
+        "Deliberate",
+        "I want the price to reflect my time.",
+        "Enters a price for the chosen duration.",
+        "rate"
+      ],
+      [
+        "20",
+        "Review the teaching profile",
+        "Profile summary\n“Continue to verification”",
+        "Reflective",
+        "Does this represent how I want to teach?",
+        "Reviews the draft profile.",
+        "teacher-review"
+      ]
+    ]
+  },
+  {
+    "key": "identity",
+    "stage": "Onboarding · Identity preview",
+    "subtitle": "Current prototype / document route with sample details only",
+    "status": "CURRENT ONBOARDING",
+    "note": "At step 21, choose document preview, Persona shortcut, or finish later. The seven cards here show the document route. No real identity check is submitted.",
+    "steps": [
+      [
+        "21",
+        "Start the document preview",
+        "Identity introduction\n“Start verification preview”",
+        "Cautious",
+        "I need to know what this check does.",
+        "Starts the sample document-verification route.",
+        "identity-intro"
+      ],
+      [
+        "22",
+        "Enter a sample legal name",
+        "Full legal-name field",
+        "Careful",
+        "This is separate from my display name.",
+        "Enters an example full legal name.",
+        "legal-name"
+      ],
+      [
+        "23",
+        "Enter a sample birth date",
+        "Date-of-birth field\nDD/MM/YYYY",
+        "Privacy-conscious",
+        "My birth date should stay private.",
+        "Enters an example date of birth.",
+        "date-of-birth"
+      ],
+      [
+        "24",
+        "Enter an issuing country",
+        "Document issuing-country field",
+        "Focused",
+        "Which country issued this sample ID?",
+        "Enters the document's issuing country.",
+        "country"
+      ],
+      [
+        "25",
+        "Choose a document type",
+        "Passport / ID card /\nDriving licence",
+        "Methodical",
+        "I can see which document types are offered.",
+        "Selects a document type.",
+        "document-type"
+      ],
+      [
+        "26",
+        "Add a sample document",
+        "“Use a sample document”",
+        "Reassured",
+        "I can try this without uploading my real ID.",
+        "Adds the built-in sample document.",
+        "document"
+      ],
+      [
+        "27",
+        "Try the sample selfie check",
+        "“Try the sample check”\nNo camera access",
+        "Relieved",
+        "I do not have to turn on my camera for this preview.",
+        "Runs the sample selfie check.",
+        "selfie"
+      ]
+    ]
+  },
+  {
+    "key": "exits",
+    "stage": "Onboarding · Completion and alternatives",
+    "subtitle": "Current prototype / exit routes, not four consecutive steps",
+    "status": "CURRENT ONBOARDING",
+    "note": "Document route: 27 → 28. Persona: 21 → A1 → 28. Fallback: A1 → A2 → 22. Defer: 21 → A3. Both end screens offer Replay onboarding; neither opens a live teacher workspace.",
+    "steps": [
+      [
+        "28",
+        "Read the completion status",
+        "Verification-ready summary\n“Replay onboarding”",
+        "Clear, not yet live",
+        "I have finished the preview, not a real verification.",
+        "Reads the local completion summary.",
+        "verification-ready"
+      ],
+      [
+        "A1",
+        "Link a sample Persona ID",
+        "Link Persona ID\n“Link sample Persona ID”",
+        "Interested",
+        "I can try the shorter route.",
+        "Links the built-in sample Persona identity.",
+        "persona-link · alternative"
+      ],
+      [
+        "A2",
+        "Switch to a document",
+        "“Use a document instead”",
+        "In control",
+        "I can return to the document route.",
+        "Switches from Persona to the legal-name screen.",
+        "persona-link · fallback"
+      ],
+      [
+        "A3",
+        "Defer verification",
+        "“Finish this later”\nTeacher-draft summary",
+        "Unpressured",
+        "I can stop here and finish later.",
+        "Defers the identity preview.",
+        "teacher-draft · alternative"
+      ]
+    ]
+  },
+  {
+    "key": "preparation",
+    "stage": "Lesson preparation",
+    "subtitle": "Proposed experience / after future account readiness and booking",
+    "status": "PROPOSED · NOT IMPLEMENTED",
+    "note": "The prototype ends at onboarding. These steps assume future account readiness and an agreed booking; they do not imply current integrations or a live workspace.",
+    "steps": [
+      [
+        "29",
+        "Set available times",
+        "Availability editor\nTeacher calendar",
+        "Organized",
+        "I want lessons to fit the time I can offer.",
+        "Sets bookable teaching times.",
+        "proposed"
+      ],
+      [
+        "30",
+        "Read the session details",
+        "Confirmed session\nTime and meeting format",
+        "Oriented",
+        "I know when and where this lesson will happen.",
+        "Reads the agreed session details.",
+        "proposed"
+      ],
+      [
+        "31",
+        "Read the learner's goal",
+        "Learner goal brief\nRelevant shared example",
+        "Focused",
+        "What should this learner be able to do?",
+        "Reads the learner's practical goal.",
+        "proposed"
+      ],
+      [
+        "32",
+        "Choose a reusable lesson",
+        "Lesson library\nSaved templates",
+        "Relieved",
+        "I already have a useful starting point.",
+        "Selects one lesson template.",
+        "proposed"
+      ],
+      [
+        "33",
+        "Adapt the lesson",
+        "Modular lesson editor\nExisting resources",
+        "Creative",
+        "I can make this right for this learner.",
+        "Adapts the lesson to the learner's needs.",
+        "proposed"
+      ],
+      [
+        "34",
+        "Approve the lesson",
+        "Learner-view preview\nOptional AI draft review",
+        "Accountable",
+        "Nothing should be shared before I am happy with it.",
+        "Approves the reviewed lesson version.",
+        "proposed"
+      ],
+      [
+        "35",
+        "Share the lesson",
+        "Explicit share action\nPrivate learner space",
+        "Prepared",
+        "The learner can now see the version I chose.",
+        "Shares the approved lesson.",
+        "proposed"
+      ]
+    ]
+  },
+  {
+    "key": "teaching",
+    "stage": "Teaching",
+    "subtitle": "Proposed experience / one teacher and one learner",
+    "status": "PROPOSED · NOT IMPLEMENTED",
+    "note": "The journey supports an online call or an in-person meeting. The teacher remains responsible for pacing, correction and adaptation.",
+    "steps": [
+      [
+        "36",
+        "Join the session",
+        "Call link or meeting details",
+        "Ready",
+        "I know how to meet the learner.",
+        "Joins the planned one-to-one session.",
+        "proposed"
+      ],
+      [
+        "37",
+        "Welcome the learner",
+        "Live conversation",
+        "Warm",
+        "I want them to feel comfortable speaking.",
+        "Welcomes the learner personally.",
+        "proposed"
+      ],
+      [
+        "38",
+        "Introduce the lesson goal",
+        "Shared lesson opening",
+        "Aligned",
+        "We know what we are working towards.",
+        "Introduces the session's practical goal.",
+        "proposed"
+      ],
+      [
+        "39",
+        "Guide one activity",
+        "Teacher-led exercise\nShared lesson material",
+        "Engaged",
+        "The activity should lead to useful conversation.",
+        "Guides one focused learning activity.",
+        "proposed"
+      ],
+      [
+        "40",
+        "Give a specific correction",
+        "Spoken or written feedback",
+        "Attentive",
+        "One clear correction can help more than many at once.",
+        "Gives feedback on one observed difficulty.",
+        "proposed"
+      ],
+      [
+        "41",
+        "Record an observation",
+        "Private learner notes",
+        "Reflective",
+        "I want to remember what mattered today.",
+        "Records one useful learning observation.",
+        "proposed"
+      ]
+    ]
+  },
+  {
+    "key": "followup",
+    "stage": "Follow-up",
+    "subtitle": "Proposed experience / useful continuity without extra pressure",
+    "status": "PROPOSED · NOT IMPLEMENTED",
+    "note": "AI assistance, if used, remains optional and reviewable. Practice is optional. Feedback is private. Reduced workload and improved learning are hypotheses to test.",
+    "steps": [
+      [
+        "42",
+        "Draft a short recap",
+        "Recap editor\nSession notes",
+        "Reflective",
+        "What is worth remembering from this lesson?",
+        "Drafts a concise session recap.",
+        "proposed"
+      ],
+      [
+        "43",
+        "Approve the recap",
+        "Editable recap preview",
+        "Responsible",
+        "The recap needs to reflect what really happened.",
+        "Approves the recap's content.",
+        "proposed"
+      ],
+      [
+        "44",
+        "Share the recap",
+        "Private learner conversation\nExplicit share action",
+        "Helpful",
+        "The learner can revisit the important points.",
+        "Shares the approved recap.",
+        "proposed"
+      ],
+      [
+        "45",
+        "Suggest optional practice",
+        "Teacher-selected resource\nOptional practice task",
+        "Supportive",
+        "This could help when they have time.",
+        "Suggests one relevant optional practice activity.",
+        "proposed"
+      ],
+      [
+        "46",
+        "Choose the next focus",
+        "Learner record\nPrivate feedback",
+        "Purposeful",
+        "I know what to build on next time.",
+        "Chooses a focus for a possible next lesson.",
+        "proposed"
+      ]
+    ]
+  }
+]

@@ -233,6 +233,21 @@ Each storyboard includes its issue, four scenes, emotions, a question to test, a
 
 All 24 illustrations are editable native vector groups in FigJam. Local narrative, vector source, node IDs, and seven final screenshots are in `output/storyboard/role-stories/`. Verified all six individual storyboard screenshots and the collection overview; structural checks reported no section-bound violations or sibling-text overlaps. The earlier storyboard was preserved. No app behavior changed.
 
+## FigJam user journeys — 2 October 2026
+
+**Latest revision:** [Gilbert · Original user journey, `372:2151`](https://www.figma.com/board/AYNNAqQDARTmwlsa6AYHsd?node-id=372-2151) restores the original seven-action teacher story as one continuous horizontal map, with **Stages**, **Steps**, **Touchpoints**, and **Experience (emotions + illustrative verbatims)**. Five stage bands span the seven aligned columns. The final screenshot and structural audit passed (no overflowing children or overlapping sibling text). This redo was added below the existing expanded teacher map (`332:2301`), which was preserved. Local evidence: `output/user-journeys/teacher-original-redo.png` and `teacher-original-redo-state.json`. No app behavior changed.
+
+The following describes the earlier collection. Its original collection and teacher container IDs were no longer present in the live board during this revision; use the latest link above for the recreated original teacher journey.
+
+[User journey collection, section `300:2077`](https://www.figma.com/board/AYNNAqQDARTmwlsa6AYHsd?node-id=300-2077) adds two editable maps below the storyboards, each with five broader stages spanning seven single-action steps:
+
+- **Student · Léa** (`301:2077`): attempt a conversation → explore Mimo → set a learning goal → choose a teacher → book a lesson → practise with a teacher → try the skill in real life.
+- **Teacher · Gilbert** (`301:2202`): find suitable materials → create a teaching profile → read the learner’s goal → adapt a lesson → approve the lesson → teach the session → share a recap.
+
+Both maps contain **Stages**, **Steps**, **Touchpoints**, and **Experience (emotions + verbatims)**, plus a qualitative emotional arc. Stages group the actions: student Awareness (1–2), Onboarding (3), Booking & preparation (4–5), Lesson (6), Progress (7); teacher Awareness (1), Onboarding (2), Lesson preparation (3–5), Teaching (6), Follow-up (7). The user clarified that every step must be a single action; the labels and descriptions now follow that rule. Screenshots and structural checks passed after both revisions. First-person statements are explicitly labeled illustrative scenario voice, not interview quotations. Curve positions are design hypotheses, not measured emotional scores. Research anchors were re-read live: Léa `44:2453`, teacher level adaptation `69:1642`, teacher creative control `69:1698`, and projected feelings `165:1878`.
+
+The maps distinguish current frontend onboarding from proposed discovery, booking, lesson authoring, teaching, practice, and follow-up. Teacher identity checks remain simulated; human choice, optional AI, and private feedback remain in scope. All three screenshots (student, teacher, collection) passed visual inspection; structural checks found no overflowing children or overlapping sibling text. Existing board content and app behavior were preserved. Local source data, node IDs and screenshots: `output/user-journeys/`.
+
 ## Broader wireframe proposal
 
 `all-models-and-images/wireframe-screen-index.md` is the full **72-screen** index, with primary actions, onward routes, state behavior, and research-to-design rationale. It describes structural 390 × 844 wireframes, not an implemented full product.
@@ -301,6 +316,8 @@ Teacher deferral ends at `teacher-draft`; adult learner deferral ends at `learne
 - Email, guardian actions, identity verification, notifications, and widget installation are simulations. There is no discovery, booking, payment, calendar, video-call, AI, or backend integration.
 
 ## Current visual and interaction direction
+
+[Mimo design guidelines](design.md), added **4 October 2026**, translate the supplied brand-guidelines example into app-specific product, visual, copy, interaction, accessibility, and verification guidance. The guide is grounded in the current source and local design-system handoff, and distinguishes implemented behavior from proposed additions. Its creation changes documentation only; it does not change app behavior or establish new rendered-flow verification.
 
 - Preserve **Mimo**, locally bundled **Nunito**, rounded cards, raised CTAs, colored selected states, and companion speech bubbles. Use one decision or entry per screen.
 - **Learner/default:** purple primary `#9955e8`, blue selections, **Luma** (purple/lilac). The shared welcome uses Luma.

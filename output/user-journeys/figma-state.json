@@ -1,0 +1,20 @@
+{
+  "fileKey": "AYNNAqQDARTmwlsa6AYHsd",
+  "rootId": "300:2077",
+  "studentId": "301:2077",
+  "teacherId": "301:2202",
+  "requiredRows": [
+    "Stages",
+    "Steps",
+    "Touchpoints",
+    "Experience (emotions + verbatims)"
+  ],
+  "structuralIssues": [],
+  "visualChecks": [
+    "student.png",
+    "teacher.png",
+    "overview.png"
+  ],
+  "stepsPerJourney": 7,
+  "stagesPerJourney": 5
+}
