@@ -58,3 +58,22 @@ document.querySelectorAll('[data-prompt]').forEach((button) => {
     document.querySelector('#how-it-works').scrollIntoView({ behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'instant' : 'smooth' });
   });
 });
+
+
+// Duplicate only the visual groups; assistive technology gets the twelve original reviews.
+const reviewsSection = document.querySelector('.reviews-section');
+reviewsSection.querySelectorAll('.reviews-group').forEach((group) => {
+  // Two copies also cover viewports wider than one review group.
+  for (let i = 0; i < 2; i++) {
+    const copy = group.cloneNode(true);
+    copy.setAttribute('aria-hidden', 'true');
+    copy.inert = true;
+    group.parentElement.append(copy);
+  }
+});
+reviewsSection.dataset.marqueeReady = '';
+let reviewsInView = true;
+function syncReviewVisibility() { reviewsSection.dataset.reviewsVisible = String(reviewsInView && !document.hidden); }
+new IntersectionObserver(([entry]) => { reviewsInView = entry.isIntersecting; syncReviewVisibility(); }).observe(reviewsSection);
+document.addEventListener('visibilitychange', syncReviewVisibility);
+syncReviewVisibility();

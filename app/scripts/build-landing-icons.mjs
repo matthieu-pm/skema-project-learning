@@ -9,7 +9,7 @@ const selected = {
   book: 'BookOpen01Icon', target: 'Target01Icon', check: 'Tick02Icon',
   plus: 'Add01Icon', globe: 'Globe02Icon', travel: 'Airplane01Icon',
   work: 'Briefcase01Icon', sparkles: 'SparklesIcon', clock: 'Clock01Icon',
-  calendar: 'Calendar03Icon', play: 'PlayIcon', pause: 'PauseIcon',
+  calendar: 'Calendar03Icon',
 };
 const escape = (value) => String(value).replaceAll('&', '&amp;').replaceAll('"', '&quot;');
 const symbols = Object.entries(selected).map(([id, name]) => {

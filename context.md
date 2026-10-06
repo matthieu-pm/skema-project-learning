@@ -319,9 +319,27 @@ Teacher deferral ends at `teacher-draft`; adult learner deferral ends at `learne
 
 ### Companion landing page — 6 October 2026
 
-**Animation exploration:** An image-based Three.js parallax/shader experiment was rejected by the user. Its module is disconnected from the landing page; the approved still artwork is restored. Do not treat the experimental `app/landing/hero-scene.js` or generated bundle as the approved implementation. A true 3D rebuild versus character-only animation is awaiting clarification.
+**Animation exploration (reverted):** The user asked to undo the Three.js change. Both the image-animation experiment and modeled 3D scene are removed from the active implementation, together with their scripts, controls, styles, and dependency. The static `conversation-landscape-pets-sides.jpg` hero is restored: purple Luma playing on the left and blue Nori reading on the right.
 
 **Hero pets revision:** The header image now uses `conversation-landscape-pets-sides.jpg`, an imagegen edit integrating the original purple Luma and blue Nori references into the landscape. Per the user’s correction, purple Luma plays with a ball on the left and blue Nori reads on the right, with the center open. Mobile displays the full panorama beneath the navigation so neither pet is cropped. The prior landscape remains available and still serves the footer. Verified the new composition at 1280px and 390px; both pets are visible. Build and 28 protected runtime checks passed. Screenshots: `app/qa/landing/desktop-pets-sides.jpg` and `mobile-pets-sides.jpg`.
+
+**Review scrolling:** Reviews now move automatically right to left in two seamless rows, each with six different reviews and avatars (108s and 128s loops to retain the slow movement speed). All quotes, including the purple review, use the same font size. Scrolling pauses on hover, keyboard focus, and when offscreen/hidden. The user requested removal of the visible pause button. Reduced-motion presents manually scrollable static rows. Visual duplicates are hidden from assistive technology.
+
+**Mock review panel:** The first overlapping card after the hero now contains six fictional learner/teacher reviews with generated avatars in a varied grid. It replaces the three-column approach summary. The reviews and generated profiles remain mock content; the user subsequently requested removal of the visible sample-review notice. Avatars use one local image sheet at `app/public/landing/images/review-avatars.jpg`; cards were initially stacked on phones; the subsequent scrolling revision uses two horizontal rows on all sizes. Verified six reviews and avatar crops at 1280px, and single-column 390px layout without horizontal overflow. Production build and all 28 runtime integrity checks passed.
+
+**Section heading refinement:** Removed all four small uppercase eyebrow labels above the hero, phrase prompt, teacher, and FAQ headings at the user’s request. Main headings and supporting descriptions remain.
+
+**Hero copy refinement:** Removed the “Preview setup today. Lesson booking is not available yet.” line below the hero actions at the user’s request. Availability details remain in the FAQ.
+
+**Navigation motion:** Desktop navigation, Lesson ideas, and mobile-menu links now use 520ms upward text rolls and a growing underline on hover/keyboard focus. Labels retain their original accessible names, touch does not get sticky hover, and reduced-motion removes movement.
+
+**Navigation height:** Reduced the landing header from 70px to 58px on desktop and from 64px to 54px on mobile after a second request for a slightly shorter bar. Verified both rendered heights at 1280px and 390px, no horizontal overflow, and mobile-menu opening; all 28 protected runtime checks passed.
+
+**Navigation branding:** The header home link now shows only the Luma companion, with no visible “mimo” wordmark. Its accessible name remains “Mimo home”; the footer wordmark stays as designed.
+
+**Button motion pacing:** The user requested a clear slowdown. Rolling text and arrow transitions now take twice as long: 680ms main CTAs, 520ms navigation, 560ms character rolls with 20ms stagger, 300ms goal selectors, and 460ms phrase shortcuts. Press feedback remains responsive.
+
+**Button motion refinement:** Landing CTAs use clipped rolling labels: primary text rolls upward, yellow CTA downward, colored feature actions use a short per-character cascade, and goal/prompt controls use faster whole-label rolls. Hover is restricted to fine pointers; keyboard focus gets the same response. Duplicates are hidden from assistive technology, reduced-motion disables text/icon movement, and button dimensions remain stable. The hero stays static. Verified keyboard-triggered transition start/end transforms, feature stagger delays, original accessible names, 36px CTA heights, and goal selection.
 
 **Current polish revision:** The navigation attaches directly to the viewport top (`top: 0`) with rounded lower corners and a connected mobile menu. Landing typography is now locally bundled **Labil Grotesk**, using the user’s installed upright variable font; the mobile onboarding retains Nunito. Buttons are 36px high (32px in navigation) with 14px radii. Copy now names the real destinations (“Try the preview”, “See lesson examples”), labels sample lessons, and distinguishes planned teaching features from the current setup preview. Goal selection includes a persistent check and a concise live announcement. Menus support Escape, outside clicks, anchor closure, and desktop-resize cleanup.
 

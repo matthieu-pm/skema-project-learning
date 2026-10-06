@@ -17,6 +17,14 @@ When implementing from a selected generated mock, treat that image as the source
 - The separately requested 6 October 2026 landing page is in `public/landing/` and is served in development at `/landing/index.html`. Its visual reference is Clay's go-to-market platform, not the personal CRM named Clay. Preserve the original onboarding at `/` and the protected runtime. Landing-specific styles/scripts stay separate; product previews on the page remain labeled concepts.
 - Later landing feedback on 6 October: follow the supplied Clay homepage screenshot more closely, including its illustrated landscape hero, green headline area, and large pastel feature panels. Use Hugeicons for interface icons and imagegen for needed background imagery. Generated page assets live in `public/landing/images/`; the original Mimo companions remain unchanged. The web page's palette does not redefine onboarding role colors.
 
+- Reviews move right to left in two slow continuous rows of six different reviews each, with no visible pause button; use equal quote font sizes, including the purple card, and retain pause/reduced-motion support.
+- First landing card after the hero: use the mock learner/teacher review mosaic with generated avatars; these are fictional preview testimonials; the user requested removal of the visible sample-review notice.
+- Landing headings: omit small uppercase eyebrow labels above the hero and section headings.
+- Navigation motion: match the slow 520ms rolling text and underline on desktop and mobile-menu links; support keyboard focus and reduced motion.
+- Navigation height: keep the landing header compact at 58px on desktop and 54px on mobile, with centered controls and its top-edge attachment.
+- Navigation branding: companion-only home link, no visible “mimo” text in the header; retain its accessible name.
+- Button pacing: use the slower 680ms main roll, 520ms navigation roll, 560ms feature roll with 20ms stagger, 300ms goal roll, and 460ms prompt roll requested by the user.
+- Button motion: preserve rolling-text variants on landing actions (upward primary, downward yellow, staggered colored features, faster goal controls), stable compact geometry, keyboard parity, and reduced-motion support.
 - Hero artwork: purple Luma plays on the left, blue Nori reads on the right; do not center the pets. Keep both visible in the mobile panorama.
 - Latest landing feedback on 6 October: use Labil Grotesk for this website, shorter 36px buttons (32px navigation), and larger 14px button corners. The navigation must attach directly to the top edge like a dynamic island. Preserve Nunito in the phone onboarding.
 
