@@ -449,6 +449,7 @@ footer nav strong { font-size: 10px; margin-bottom: 5px; }
 .reviews-section h2 span { color: #607363; }
 .review-card { display: flex; flex-direction: column; justify-content: space-between; gap: 24px; min-height: 175px; grid-column: span 4; margin: 0; padding: 23px; border-radius: 19px; background: #fffefa; box-shadow: 0 1px 1px oklch(0 0 0 / .035); }
 .review-card.review-featured { background: #ede8f3; }
+.review-card.review-blue { background: #e5f0f8; }
 .review-card blockquote { margin: 0; font-size: 15px; line-height: 1.45; letter-spacing: -.015em; text-wrap: pretty; }
 .review-card figcaption { display: flex; gap: 11px; align-items: center; }
 .review-avatar { display: block; flex: 0 0 42px; width: 42px; height: 42px; border-radius: 13px; background-image: url('./images/review-avatars.jpg'); background-size: 300% 200%; background-position: var(--avatar-position); box-shadow: inset 0 0 0 1px oklch(0 0 0 / .06); }
