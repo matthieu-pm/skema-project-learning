@@ -331,6 +331,8 @@ Teacher deferral ends at `teacher-draft`; adult learner deferral ends at `learne
 
 ### Companion landing page — 6 October 2026
 
+**App favicon:** Both the onboarding app and landing page use the original purple Luma PNG at `/assets/onboarding/luma.png` as their browser favicon.
+
 **Animation exploration (reverted):** The user asked to undo the Three.js change. Both the image-animation experiment and modeled 3D scene are removed from the active implementation, together with their scripts, controls, styles, and dependency. The static `conversation-landscape-pets-sides.jpg` hero is restored: purple Luma playing on the left and blue Nori reading on the right.
 
 **Hero height refinement:** Increased the desktop hero image area from `clamp(340px, 38vw, 580px)` to `clamp(420px, 46vw, 700px)`, about 21% taller at 1280px (589px). Both companions remain visible; the mobile panorama retains its full-image composition.
