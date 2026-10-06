@@ -1,6 +1,6 @@
 export type Role = '' | 'learner' | 'teacher';
 export type Answers = {
-  role: Role; email: string; age: string; guardianEmail: string; guardianReady: boolean;
+  role: Role; accountMethod: 'email' | 'google'; email: string; age: string; guardianEmail: string; guardianReady: boolean;
   code: string; verified: boolean; learningLanguages: string[]; learningLevels: Record<string,string>; topic: string;
   personalGoal: string; format: string; city: string;
   days: string[]; time: string; notifications: boolean; widget: boolean;
@@ -9,7 +9,7 @@ export type Answers = {
   documentType: string; documentReady: boolean; selfieReady: boolean; identityPreviewComplete: boolean; identityMethod: 'document' | 'persona';
 };
 export const initialAnswers: Answers = {
-  role:'', email:'', age:'', guardianEmail:'', guardianReady:false, code:'', verified:false,
+  role:'', accountMethod:'email', email:'', age:'', guardianEmail:'', guardianReady:false, code:'', verified:false,
   learningLanguages:[], learningLevels:{}, topic:'', personalGoal:'', format:'', city:'',
   days:[], time:'', notifications:false, widget:false, name:'', teachingLanguages:[],
   teachingLevels:[], approach:'', duration:'', rate:'', legalName:'', dateOfBirth:'', country:'',
@@ -23,7 +23,7 @@ export function toggleLearningLanguage(a: Answers, language: string): Partial<An
   if(selected)delete learningLevels[language];
   return {learningLanguages:selected?a.learningLanguages.filter(value=>value!==language):[...a.learningLanguages,language],learningLevels};
 }
-export const sharedSteps = ['welcome','greeting','role','setup-intro','email'] as const;
+export const sharedSteps = ['welcome','greeting','role','setup-intro','account'] as const;
 export const identitySteps = ['identity-intro','legal-name','date-of-birth','country','document-type','document','selfie'] as const;
 export const needsGuardian = (a: Answers) => a.role==='learner' && a.age==='Under 18';
 export const clearedIdentity = {legalName:'',dateOfBirth:'',country:'',documentType:'',documentReady:false,selfieReady:false,identityPreviewComplete:false,identityMethod:'document' as const};
@@ -33,7 +33,7 @@ export function changeAge(a: Answers, age: string): Partial<Answers> {
 export const verificationExit = (a: Answers): Step => a.role==='teacher'?'teacher-draft':needsGuardian(a)?'language':'learner-ready';
 export const learnerSteps = ['language','level','topic','personal-goal','resource','encouragement','format','city','days','time','notifications','widget','benefits',...identitySteps,'learner-ready'] as const;
 export const teacherSteps = ['teacher-intro','name','photo','teaching-languages','teaching-levels','approach','format','city','duration','rate','teacher-review',...identitySteps,'verification-ready'] as const;
-export const stepIds = [...sharedSteps,'age','guardian','guardian-handoff','verify',...learnerSteps,...teacherSteps,...languageLevelSteps,'persona-link','teacher-draft'] as const;
+export const stepIds = [...sharedSteps,'email','google-connect','age','guardian','guardian-handoff','verify',...learnerSteps,...teacherSteps,...languageLevelSteps,'persona-link','teacher-draft'] as const;
 export type Step = typeof stepIds[number];
 export const emailValid = (value: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value.trim());
 export function routeFor(a: Answers): Step[] {
@@ -43,7 +43,9 @@ export function routeFor(a: Answers): Step[] {
   const guardianVerification: Step[] = needsGuardian(a)?['guardian-handoff',...verificationSteps]:[];
   const remainingSteps = branch.filter(s=>(s!=='city'||a.format!=='Online') &&
     (!needsGuardian(a)||!identitySteps.some(identityStep=>identityStep===s)));
-  return [...sharedSteps, ...ageSteps, 'verify', ...guardianVerification, ...remainingSteps.flatMap(s=>!needsGuardian(a)&&a.identityMethod==='persona'&&identitySteps.some(identityStep=>identityStep===s)?(s==='identity-intro'?verificationSteps:[]):s==='level'&&a.learningLanguages.length?a.learningLanguages.map(language=>`level-${language}` as Step):[s])];
+  const accountSteps: Step[] = a.accountMethod==='google'?['google-connect']:['email'];
+  const codeSteps: Step[] = a.accountMethod==='google'?[]:['verify'];
+  return [...sharedSteps, ...accountSteps, ...ageSteps, ...codeSteps, ...guardianVerification, ...remainingSteps.flatMap(s=>!needsGuardian(a)&&a.identityMethod==='persona'&&identitySteps.some(identityStep=>identityStep===s)?(s==='identity-intro'?verificationSteps:[]):s==='level'&&a.learningLanguages.length?a.learningLanguages.map(language=>`level-${language}` as Step):[s])];
 }
 export function nextStep(step: Step, a: Answers): Step | null {
   const route = routeFor(a), index = route.indexOf(step);
@@ -97,3 +99,9 @@ export function dateOfBirthValid(value: string, today = new Date()): boolean {
   if(day>days[month-1])return false;
   return year*10000+month*100+day <= today.getFullYear()*10000+(today.getMonth()+1)*100+today.getDate();
 }
+
+// Switching providers must not carry a previous account's verification forward.
+export function changeAccountMethod(a: Answers, accountMethod: Answers['accountMethod']): Partial<Answers> {
+  return a.accountMethod===accountMethod?{accountMethod}:{accountMethod,email:'',code:'',verified:false,guardianEmail:'',guardianReady:false,...clearedIdentity};
+}
+export const sampleGoogleAccount = {email:'alex@example.com',code:'',verified:true} as const;

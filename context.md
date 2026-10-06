@@ -144,7 +144,7 @@ These are **proposed identity directions, not a selected logo or implemented app
 
 ### Mimo design system — created 2 October 2026
 
-**Typography revision — 6 October 2026, user-confirmed:** The user confirmed that the **Labil Grotesk** update worked after running the imported desktop plugin **Mimo · Labil Grotesk typography**. The plugin at `output/design-system/labil-font-update/manifest.json` targets the eight system pages and 13 existing `Mimo/System/` text styles, retaining editable text and existing type sizes. It uses installed local fonts because the connected Figma font catalog did not expose Labil faces. Completion is confirmed by the user; no subsequent agent read-back or visual audit has been performed. App typography is unchanged. The Nunito counts and visual checks below describe the original 2 October delivery, before this revision.
+**Typography revision — 6 October 2026, user-confirmed:** The user confirmed that the **Labil Grotesk** update worked after running the imported desktop plugin **Mimo · Labil Grotesk typography**. The plugin at `output/design-system/labil-font-update/manifest.json` targets the eight system pages and 13 existing `Mimo/System/` text styles, retaining editable text and existing type sizes. It uses installed local fonts because the connected Figma font catalog did not expose Labil faces. Completion is confirmed by the user; no subsequent agent read-back or visual audit has been performed. App typography was subsequently updated as described under Current visual and interaction direction. The Nunito counts and visual checks below describe the original 2 October delivery, before this revision.
 
 [Design-system cover, `101:248`](https://www.figma.com/design/w4nc4L3hNF63uh2HBX9Np5?node-id=101-248). Eight new pages (`92:248`–`92:255`) document the current prototype: getting started, foundations, pets/icons, buttons, choices, inputs, feedback, and patterns. The library contains **135 component masters/variants, 19 component sets, 13 new Nunito text styles, four effect styles, 108 new variables and 16 reused primitives**. Semantic aliases support Learner and Teacher modes. Components also expose Role variants; explicit component modes override parent frame modes, so use the matching Role variant.
 
@@ -286,7 +286,9 @@ People, commercial terms, and locations are examples. The index's **€30 sessio
 
 ### Shared setup
 
-Welcome → Luma greeting → learn/teach role → setup introduction → email. Learners then choose `18 or older` or `Under 18`; under-18 learners provide a different guardian email before code entry. Teachers skip the early age-range/guardian screens.
+Welcome → Luma greeting → learn/teach role → setup introduction → account choice (Continue with email / Continue with Google). Email keeps the existing email-entry and preview-code flow. Google opens a labeled sample-account confirmation using `alex@example.com`, then skips email entry and the email code. No OAuth, Google account connection, data sharing, or account creation occurs. Learners then choose `18 or older` or `Under 18`; under-18 learners provide a different guardian email before continuing (and before code entry on the email path). Teachers skip the early age-range/guardian screens. After the Google sample confirmation, adult learners still choose their age range before language selection; under-18 learners still provide a guardian email and complete the guardian handoff/identity preview; teachers go directly to their introduction. Back from Google returns to the account choice. Changing providers clears the previous sample email and verification state; returning to the same email path preserves the draft.
+
+**Account-choice verification — 6 October 2026:** production build, 16 onboarding tests, all 28 protected runtime hashes, and diff whitespace checks pass. Visually inspected the new account screen in iPhone and Pixel previews. Browser checks confirmed teacher email/code and Google continuation, Back to account choice, provider switching clearing the sample email, and the Google under-18 guardian handoff/identity deferral returning to language selection. Google remains a local simulation. Account screenshot: `app/qa/account/iphone-account.png`.
 
 The working preview email code is **481629**, with a 30-second resend countdown after requesting another preview code and a change-email action. Email/account creation is simulated. Returning-account entry also leads into the preview; it is not connected sign-in.
 
@@ -302,7 +304,7 @@ The working preview email code is **481629**, with a 30-second resend countdown 
 
 ### Under-18 learner / guardian branch
 
-Guardian email is collected before the email-code screen. **Immediately after successful code entry**, the app asks the learner to hand over to the guardian and runs the adult's identity preview before language selection. Completing or deferring verification resumes at language selection. Verification is not repeated after benefits. The adult uses their own details, not the child's ID. Switching age branches clears guardian/identity state.
+Guardian email is collected before the email-code screen on the email path, or immediately after age selection on the sample Google path. **After successful code entry on the email path, or guardian email collection on the sample Google path**, the app asks the learner to hand over to the guardian and runs the adult's identity preview before language selection. Completing or deferring verification resumes at language selection. Verification is not repeated after benefits. The adult uses their own details, not the child's ID. Switching age branches clears guardian/identity state.
 
 No guardian invitation is sent, no consent is recorded, and no legal age/eligibility policy has been established by this prototype.
 
@@ -328,6 +330,12 @@ Teacher deferral ends at `teacher-draft`; adult learner deferral ends at `learne
 - Email, guardian actions, identity verification, notifications, and widget installation are simulations. There is no discovery, booking, payment, calendar, video-call, AI, or backend integration.
 
 ## Current visual and interaction direction
+
+### Prototype typography — 6 October 2026
+
+The phone onboarding now uses **Labil Grotesk** for app-owned text, wordmark, buttons, inputs, and textareas. It shares the existing upright variable font at `app/public/landing/fonts/LabilGroteskVariable-Upright.ttf` with the landing page. Nunito imports were removed from `Prototype.tsx`; existing type sizes, weights, role colors, and layout remain. Platform status bars, keyboards, and other protected runtime typography are unchanged. This supersedes the earlier landing-only typography scope below.
+
+Verification: production build, all 28 protected runtime hashes, and `git diff --check` passed. Browser checks confirmed the variable font loaded and was applied to the wordmark and input fields; teacher setup reached its introduction, and learner setup reached language selection and individual level selection. Visually inspected iPhone welcome/role and Pixel language/390px level screens; no horizontal overflow on the checked language screen or 390px browser viewport. Screenshots: `app/qa/typography/`. This is focused typography verification, not a full onboarding audit.
 
 ### Companion landing page — 6 October 2026
 
@@ -387,7 +395,7 @@ Verification on 6 October: production build and all 28 protected runtime hashes 
 
 [Mimo design guidelines](design.md), added **4 October 2026**, translate the supplied brand-guidelines example into app-specific product, visual, copy, interaction, accessibility, and verification guidance. The guide is grounded in the current source and local design-system handoff, and distinguishes implemented behavior from proposed additions. Its creation changes documentation only; it does not change app behavior or establish new rendered-flow verification.
 
-- Preserve **Mimo**, locally bundled **Nunito**, rounded cards, raised CTAs, colored selected states, and companion speech bubbles. Use one decision or entry per screen.
+- Preserve **Mimo**, locally bundled **Labil Grotesk**, rounded cards, raised CTAs, colored selected states, and companion speech bubbles. Use one decision or entry per screen.
 - **Learner/default:** purple primary `#9955e8`, blue selections, **Luma** (purple/lilac). The shared welcome uses Luma.
 - **Teacher:** blue primary `#1cb0f6`, orange selections, **Nori** (blue). Preserve role-specific copy and routing.
 - Use supplied original character assets. App copies live in `app/public/assets/onboarding/`; originals remain in `all-models-and-images/pets/`.
@@ -407,7 +415,7 @@ Deployment `dpl_9kFHuas9C5QPobL1ERFnkTBfu4to` was confirmed **Ready**, with the 
 
 The public repository includes the prototype, documentation, and design assets. The raw participant interview snapshot at `reference/figma/figjam-board-snapshot.xml` stays local and is excluded by the root `.gitignore`; the research synthesis above remains public. Dependencies, build/test output, local environment files, and operating-system metadata are also excluded. The original local assets are preserved. The repository setup re-ran the runtime integrity check successfully (28 protected files); app behavior was not changed or re-tested for this publication.
 
-`app/package.json` declares React 19, TypeScript, Vite, Motion, Radix UI components/icons, gesture support, local Nunito/Roboto, and Playwright. `app/package-lock.json` is present. This is a frontend mobile simulation, not a native mobile app.
+`app/package.json` declares React 19, TypeScript, Vite, Motion, Radix UI components/icons, gesture support, Roboto for Android chrome, and Playwright; app-owned content uses the bundled Labil Grotesk variable font. `app/package-lock.json` is present. This is a frontend mobile simulation, not a native mobile app.
 
 | Path | Purpose |
 | --- | --- |

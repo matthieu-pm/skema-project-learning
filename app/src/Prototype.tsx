@@ -1,11 +1,7 @@
 import { createContext, useContext, useEffect, useRef, useState, type ReactNode, type InputHTMLAttributes } from 'react';
 import { ArrowLeftIcon, CheckIcon, UploadIcon } from '@radix-ui/react-icons';
 import { FlowStack, MobileScroll, KeyboardInput, KeyboardTextarea, useFlow, useKeyboard, useKeyboardInsets, type FlowScreen } from './mobile';
-import { initialAnswers, languageChoices, toggleLearningLanguage, needsGuardian, changeAge, clearedIdentity, verificationExit, levelChoices, formatDateOfBirth, dateOfBirthValid, nextStep, routeFor, stepIds, validStep, type Answers, type Step } from './onboarding';
-import '@fontsource/nunito/400.css';
-import '@fontsource/nunito/700.css';
-import '@fontsource/nunito/800.css';
-import '@fontsource/nunito/900.css';
+import { initialAnswers, changeAccountMethod, sampleGoogleAccount, languageChoices, toggleLearningLanguage, needsGuardian, changeAge, clearedIdentity, verificationExit, levelChoices, formatDateOfBirth, dateOfBirthValid, nextStep, routeFor, stepIds, validStep, type Answers, type Step } from './onboarding';
 
 const asset = (name: string) => `/assets/onboarding/${name}.png`;
 const languages = languageChoices;
@@ -23,6 +19,9 @@ const useSetup = () => useContext(Setup);
 function Mascot({className = ''}: {className?:string}) {
   const teacher=useSetup().answers.role==='teacher';
   return <img className={`mascot ${className}`} src={asset(teacher?'nori':'luma')} alt={teacher?'Nori, your fuzzy blue teaching companion':'Luma, your fuzzy purple learning companion'} draggable={false}/>;
+}
+function GoogleMark() {
+  return <svg className="google-mark" viewBox="0 0 48 48" aria-hidden="true" focusable="false"><path fill="#4285F4" d="M43.6 24.5c0-1.4-.1-2.8-.4-4.1H24v7.8h11a9.4 9.4 0 0 1-4.1 6.2v5.1h6.6c3.9-3.6 6.1-8.8 6.1-15Z"/><path fill="#34A853" d="M24 44c5.5 0 10.1-1.8 13.5-4.9l-6.6-5.1c-1.8 1.2-4.1 1.9-6.9 1.9-5.3 0-9.8-3.6-11.4-8.4H5.8v5.3A20.4 20.4 0 0 0 24 44Z"/><path fill="#FBBC05" d="M12.6 27.5a12.3 12.3 0 0 1 0-7.8v-5.3H5.8a20.4 20.4 0 0 0 0 18.4l6.8-5.3Z"/><path fill="#EA4335" d="M24 11.3c3 0 5.6 1 7.7 3l5.8-5.8A19.6 19.6 0 0 0 24 3.2 20.4 20.4 0 0 0 5.8 14.4l6.8 5.3c1.6-4.8 6.1-8.4 11.4-8.4Z"/></svg>;
 }
 function Bubble({children}: {children:ReactNode}) { return <div className="speech">{children}</div>; }
 function Choice({label,description,icon,selected,onClick,check=false}: {label:string;description?:string;icon?:string;selected:boolean;onClick:()=>void;check?:boolean}) {
@@ -59,7 +58,7 @@ function Upload({kind}: {kind:'resource'|'photo'}) {
   </div>;
 }
 const headings: Partial<Record<Step,string>> = {
-  role:'What brings you here?', email:'First, a place to keep your progress.',age:'Which age range are you in?',guardian:'Let’s bring your parent or guardian in.',verify:'You’ve got mail.',
+  account:'Create your account','google-connect':'Try Google sign-in',role:'What brings you here?', email:'First, a place to keep your progress.',age:'Which age range are you in?',guardian:'Let’s bring your parent or guardian in.',verify:'You’ve got mail.',
   language:'Which languages would you like to learn?',level:'Let’s find a comfortable starting point.',topic:'Make it about your life.',
   'personal-goal':'What’s one thing you’d love to do?','resource':'Want to share a little more?',
   format:'How do you like to meet?',city:'Where would you like to meet?',days:'Which days usually work for you?',time:'What time suits you best?',
@@ -84,12 +83,17 @@ function Footer({step}: {step:Step}) {
     if(endings.has(step)){reset();return;}
     if(step==='verify' && a.code!=='481629'){setError('That code doesn’t match. Use 481629 in this preview.');keyboard.hide();return;}
     if(step==='age'||(step==='email'&&a.role==='teacher'))setResendAt(Date.now()+30000);
-    advance(step==='verify'?{verified:true}:step==='guardian'?{guardianReady:true}:step==='notifications'?{notifications:true}:step==='widget'?{widget:true}:(step==='selfie'||step==='persona-link')?{identityPreviewComplete:true}:step==='identity-intro'?{identityMethod:'document',identityPreviewComplete:false}:{});
+    advance(step==='google-connect'?sampleGoogleAccount:step==='verify'?{verified:true}:step==='guardian'?{guardianReady:true}:step==='notifications'?{notifications:true}:step==='widget'?{widget:true}:(step==='selfie'||step==='persona-link')?{identityPreviewComplete:true}:step==='identity-intro'?{identityMethod:'document',identityPreviewComplete:false}:{});
   };
   const optional:Partial<Record<Step,string>>={resource:'Skip for now',photo:'Skip for now',format:'I’ll choose later',city:'I’ll choose later',days:'I’ll choose later',time:'I’ll choose later',notifications:'Not now',widget:'Not now','identity-intro':'Finish this later','persona-link':'Use a document instead'};
-  const label:Partial<Record<Step,string>>={welcome:'Get started',email:'Continue',guardian:'Continue','guardian-handoff':'I’m the parent or guardian',verify:'Verify & continue',notifications:'Allow notifications',widget:'Add widget','teacher-review':'Continue to verification','identity-intro':'Start verification preview','persona-link':'Link sample Persona ID',document:'Continue',selfie:'Finish verification preview','learner-ready':'Finish setup','verification-ready':'Finish setup','teacher-draft':'Back to welcome'};
+  const label:Partial<Record<Step,string>>={welcome:'Get started','google-connect':'Continue with sample account',email:'Continue',guardian:'Continue','guardian-handoff':'I’m the parent or guardian',verify:'Verify & continue',notifications:'Allow notifications',widget:'Add widget','teacher-review':'Continue to verification','identity-intro':'Start verification preview','persona-link':'Link sample Persona ID',document:'Continue',selfie:'Finish verification preview','learner-ready':'Finish setup','verification-ready':'Finish setup','teacher-draft':'Back to welcome'};
   const endLabel=endings.has(step)?'Replay onboarding':undefined;
   const mainDisabled=!validStep(step,a) || (['format','city','days','time'].includes(step) && !({format:a.format,city:a.city.trim(),days:a.days.length,time:a.time} as Record<string,unknown>)[step]);
+  if(step==='account')return <div className="actions two-actions account-actions">
+    <button className="primary" onClick={()=>advance(changeAccountMethod(a,'email'))}>Continue with email</button>
+    <span className="account-divider" aria-hidden="true">or</span>
+    <button className="secondary google-button" onClick={()=>advance(changeAccountMethod(a,'google'))}><GoogleMark/>Continue with Google</button>
+  </div>;
   return <div className={`actions ${optional[step]||step==='welcome'?'two-actions':''}`}>
     <button className="primary" disabled={mainDisabled} onClick={submit}>{endLabel || label[step] || 'Continue'}</button>
     {optional[step] && <button className="text-button" onClick={()=>{
@@ -113,19 +117,21 @@ function Screen({step}: {step:Step}) {
   const heading=isLevel?`How much ${levelLanguage} do you know?`:step==='identity-intro'&&guardian?'Let’s verify you, the parent or guardian.':headings[step];
   const [search,setSearch]=useState(''),[now,setNow]=useState(Date.now());
   useEffect(()=>{if(step!=='verify'||!active)return;const id=window.setInterval(()=>setNow(Date.now()),1000);return ()=>window.clearInterval(id);},[step,active]);
-  const chooseRole=(role:Answers['role'])=>{if(a.role===role)return;setup.setResource(null);setup.setPhoto(null);setError('');update({...initialAnswers,role,email:a.email,age:a.age});};
+  const chooseRole=(role:Answers['role'])=>{if(a.role===role)return;setup.setResource(null);setup.setPhoto(null);setError('');update({...initialAnswers,role,email:a.accountMethod==='google'?'':a.email,age:a.age});};
   const toggle=(field:'days'|'teachingLanguages'|'teachingLevels',value:string)=>update({[field]:a[field].includes(value)?a[field].filter(v=>v!==value):[...a[field],value]});
   const single=(values:string[],field:keyof Answers,descriptions?:string[]) => <div className="options">{values.map((value,i)=><Choice key={value} label={value} description={descriptions?.[i]} selected={a[field]===value} onClick={()=>update(field==='age'?changeAge(a,value):{[field]:value,...(field==='format'&&value==='Online'?{city:''}:{})})}/>)}</div>;
   const mediaHeading=step==='photo'||step==='resource';
   return <MobileScroll className={`learning-scroll setup-scroll ${isKeyboardVisible?'keyboard-open':''}`}>
     <main inert={!active} aria-hidden={!active} className={`onboarding-content setup-content ${step==='welcome'?'setup-welcome':''}`} data-step={isLevel?'level':step} aria-label={heading||step}>
       {step==='welcome'?<div className="welcome"><Mascot/><h1>mimo</h1><p>A language. A real connection.</p></div>:
+      step==='account'?<div className="account-intro"><Mascot/><h1>Create your account</h1><p>A language. A real connection.<br/>Choose how you’d like to get started.</p><p className="preview-note">Preview only. No account will be created.</p></div>:
       centered.has(step)?<div className="intro-scene"><Bubble>{step==='greeting'?`Hi there! I’m ${a.role==='teacher'?'Nori':'Luma'}!`:step==='setup-intro'?a.role==='teacher'?<>Let’s help learners<br/>get to know <b>you.</b></>:<>A few small steps to find<br/><b>your kind of teacher.</b></>:step==='teacher-intro'?<>Your language.<br/>Your way of teaching.</>:<>A goal that’s yours.<br/>A teacher to help you get there.</>}</Bubble><Mascot/></div>:
       <div className="guide"><Mascot/><Bubble>{heading}</Bubble></div>}
       {step==='role' && <div className="options role-options"><Choice label="I want to learn" description="Find a teacher. Make it personal." icon="conversation" selected={a.role==='learner'} onClick={()=>chooseRole('learner')}/><Choice label="I want to teach" description="Share your language, your way." icon="book" selected={a.role==='teacher'} onClick={()=>chooseRole('teacher')}/></div>}
+      {step==='google-connect' && <><div className="google-preview"><GoogleMark/><h2>A sample account for this preview</h2><p>Try the next steps without signing in to Google.</p><div className="sample-account"><span aria-hidden="true">A</span><div><strong>Alex · Sample account</strong><span>{sampleGoogleAccount.email}</span></div></div></div><p className="preview-note">No Google account is connected and no data is shared. Go back to use email instead.</p></>}
       {step==='email' && <><Field label="Email address" type="email" autoComplete="email" placeholder="you@example.com" value={a.email} onChange={e=>update({email:e.target.value,code:'',verified:false})}/><Note>No password to remember. Just a sign-in code.</Note><p className="preview-note">Local preview: no email is sent and no account is created.</p></>}
       {step==='age' && <>{single(['18 or older','Under 18'],'age')}<Note>{a.age==='Under 18'?'We’ll include a parent or guardian before you continue.':'This helps us guide you to the right setup.'}</Note></>}
-      {step==='guardian' && <><Field label="Parent or guardian’s email" type="email" placeholder="guardian@example.com" value={a.guardianEmail} onChange={e=>update({guardianEmail:e.target.value,guardianReady:false,...clearedIdentity})}/><Note>Your parent or guardian will have their own identity check right after the email code step.</Note><p className="preview-note">This previews the handoff only. No message is sent or consent recorded.</p></>}
+      {step==='guardian' && <><Field label="Parent or guardian’s email" type="email" placeholder="guardian@example.com" value={a.guardianEmail} onChange={e=>update({guardianEmail:e.target.value,guardianReady:false,...clearedIdentity})}/><Note>{a.accountMethod==='google'?'Next, we’ll ask your parent or guardian to try the identity check.':'Your parent or guardian will have their own identity check right after the email code step.'}</Note><p className="preview-note">This previews the handoff only. No message is sent or consent recorded.</p></>}
       {step==='verify' && <><p className="step-description">A code would be sent to <b>{a.email}</b>.</p><Field label="6-digit code" inputMode="numeric" autoComplete="one-time-code" maxLength={6} placeholder="000000" value={a.code} onChange={e=>{setError('');update({code:e.target.value.replace(/\D/g,'').slice(0,6)});}}/><Note>For this preview, use <b>481629</b>.</Note><button className="inline-link" onClick={()=>{keyboard.hide();update({code:'',verified:false});setError('');flow.push(screens.email);}}>Change email address</button><button className="inline-link" disabled={now<resendAt} onClick={()=>{update({code:''});setError('');setResendAt(Date.now()+30000);setNow(Date.now());}}> {now<resendAt?`Resend code in ${Math.ceil((resendAt-now)/1000)}s`:'Resend preview code'}</button></>}
       {(step==='language'||step==='teaching-languages') && <>{step==='teaching-languages'?<Field label="Search languages" type="search" placeholder="Search by name" value={search} onChange={e=>setSearch(e.target.value)}/>:<p className="step-description">Choose one or more.</p>}<div className="options languages">{languages.filter(l=>step==='language'||l.toLowerCase().includes(search.toLowerCase())).map(language=><Choice key={language} label={language} icon={flags[languages.indexOf(language)]} check selected={step==='language'?a.learningLanguages.includes(language):a.teachingLanguages.includes(language)} onClick={()=>{keyboard.hide();step==='language'?update(toggleLearningLanguage(a,language)):toggle('teachingLanguages',language);}}/>)}</div>{step==='language'?<div className="languages-coming-soon"><div className="coming-soon-pet"><img className="mascot" src={asset('luma-coming-soon')} alt="Luma looking ahead to new languages" draggable={false}/></div><div><strong>More languages</strong><span>Coming soon!</span></div></div>:!languages.some(l=>l.toLowerCase().includes(search.toLowerCase()))&&<Note>No matching language. Try another name.</Note>}</>}
       {isLevel && <div className="options level-options">{levelChoices.map(([level,description])=><Choice key={level} label={level} description={description} selected={a.learningLevels[levelLanguage]===level} onClick={()=>update({learningLevels:{...a.learningLevels,[levelLanguage]:level}})}/>)}<Choice label="I’m not sure yet" description="My teacher can help me find out." icon="conversation" selected={a.learningLevels[levelLanguage]==='Not sure'} onClick={()=>update({learningLevels:{...a.learningLevels,[levelLanguage]:'Not sure'}})}/></div>}
@@ -162,7 +168,7 @@ function Screen({step}: {step:Step}) {
 }
 const screens = Object.fromEntries([...new Set(stepIds)].map(step=>[step,{
   id:step,header:step==='welcome'?undefined:()=> <Header step={step}/>,headerHeight:54,
-  footer:()=> <Footer step={step}/>,footerHeight:['welcome','resource','photo','format','city','days','time','notifications','widget','identity-intro','persona-link'].includes(step)?139:82,
+  footer:()=> <Footer step={step}/>,footerHeight:step==='account'?167:['welcome','resource','photo','format','city','days','time','notifications','widget','identity-intro','persona-link'].includes(step)?139:82,
   render:()=> <Screen step={step}/>,
 } satisfies FlowScreen])) as unknown as Record<Step,FlowScreen>;
 export default function Prototype() {

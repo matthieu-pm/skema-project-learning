@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { initialAnswers, toggleLearningLanguage, identitySteps, needsGuardian, changeAge, verificationExit, routeFor, nextStep, validStep, stepIds, dateOfBirthValid, formatDateOfBirth } from '../src/onboarding.ts';
+import { initialAnswers, changeAccountMethod, sampleGoogleAccount, toggleLearningLanguage, identitySteps, needsGuardian, changeAge, verificationExit, routeFor, nextStep, validStep, stepIds, dateOfBirthValid, formatDateOfBirth } from '../src/onboarding.ts';
 const answers = patch => ({...initialAnswers,...patch});
 test('learner route isolates each input and ends at teacher discovery handoff',()=>{
  const route=routeFor(answers({role:'learner',age:'18 or older',format:'In person'}));
@@ -133,4 +133,40 @@ test('Persona shortcut skips document steps and resumes the right branch',()=>{
   assert.equal(nextStep('identity-intro',document),'legal-name');
   assert.ok(!routeFor(document).includes('persona-link'));
  }
+});
+
+
+test('account choice routes email through code and Google through its sample confirmation',()=>{
+ for(const role of ['learner','teacher']) {
+  const email=answers({role,age:'18 or older'});
+  assert.equal(nextStep('setup-intro',email),'account');
+  assert.equal(nextStep('account',email),'email');
+  assert.ok(routeFor(email).includes('verify'));
+  const google={...email,accountMethod:'google',...sampleGoogleAccount};
+  const route=routeFor(google);
+  assert.equal(nextStep('account',google),'google-connect');
+  assert.equal(nextStep('google-connect',google),role==='teacher'?'teacher-intro':'age');
+  assert.ok(!route.includes('email'));assert.ok(!route.includes('verify'));
+  assert.equal(new Set(route).size,route.length);
+  route.forEach(step=>assert.ok(stepIds.includes(step)));
+  if(role==='learner')assert.equal(nextStep('age',google),'language');
+ }
+});
+test('Google preview retains the minor guardian collection and identity handoff',()=>{
+ const a=answers({role:'learner',age:'Under 18',accountMethod:'google',...sampleGoogleAccount});
+ assert.equal(nextStep('age',a),'guardian');
+ assert.equal(validStep('guardian',a),false);
+ assert.equal(nextStep('guardian',a),'guardian-handoff');
+ assert.equal(nextStep('guardian-handoff',a),'identity-intro');
+ assert.equal(nextStep('selfie',a),'language');
+ assert.equal(nextStep('benefits',a),'learner-ready');
+});
+test('changing account method clears sample email and previous verification without losing role',()=>{
+ const google=answers({role:'teacher',accountMethod:'google',...sampleGoogleAccount,guardianEmail:'parent@example.com',guardianReady:true,identityPreviewComplete:true});
+ const email={...google,...changeAccountMethod(google,'email')};
+ assert.equal(email.role,'teacher');assert.equal(email.email,'');assert.equal(email.verified,false);
+ assert.equal(email.guardianReady,false);assert.equal(email.guardianEmail,'');assert.equal(email.identityPreviewComplete,false);
+ const draft={...email,email:'draft@example.com'};
+ assert.equal({...draft,...changeAccountMethod(draft,'email')}.email,'draft@example.com');
+ assert.equal({...draft,...changeAccountMethod(draft,'google')}.email,'');
 });

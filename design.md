@@ -1,6 +1,6 @@
 ---
 name: mimo-design-guidelines
-description: "Design, build, or improve Mimo's mobile language-tutoring experience. Use for onboarding, learner and teacher flows, companion artwork, controls, and proposed screens that need Mimo's Nunito typography, role palettes, raised surfaces, human guidance, and mobile interaction conventions."
+description: "Design, build, or improve Mimo's mobile language-tutoring experience. Use for onboarding, learner and teacher flows, companion artwork, controls, and proposed screens that need Mimo's Labil Grotesk typography, role palettes, raised surfaces, human guidance, and mobile interaction conventions."
 ---
 
 # Design the Mimo app
@@ -13,7 +13,7 @@ The separately requested **6 October 2026 landing page** at `app/public/landing/
 
 **Superseding landing direction from the user's later screenshot:** closely follow Clay's landscape-first homepage structure: generated 3D scenery, emerald hero band, compact floating navigation, overlapping intro panel, spacious product preview, and four large pastel feature panels. Use official Hugeicons for UI icons and original generated imagery for website backgrounds and feature illustrations. The landing now uses emerald, cream, yellow, and panel-specific web actions rather than the initial purple CTA palette. Preserve Nunito, product scope, original companion identity, and the existing phone app. The screenshot drives website composition only; do not copy Clay claims, customer logos, or its actual artwork.
 
-**Current landing refinement:** Labil Grotesk supersedes Nunito on the website only. Use compact 36px actions, 32px navigation actions, 14px button corners, and a navigation island attached to the top edge. The phone app retains its established typography. Preview copy must describe available setup and label lesson/teacher tools as examples or planned.
+**Current landing refinement:** Labil Grotesk supersedes Nunito on the website and, following the later prototype request, in app-owned phone content. Use compact 36px actions, 32px navigation actions, 14px button corners, and a navigation island attached to the top edge. The phone runtime retains its platform-specific device chrome typography. Preview copy must describe available setup and label lesson/teacher tools as examples or planned.
 
 ## Product and brand context
 
@@ -60,7 +60,7 @@ When requirements compete, protect them in this order:
 1. Preserve the requested scope, supplied meaning, user choices, privacy boundaries, and truthful state descriptions.
 2. Preserve the phone runtime, routing, keyboard behavior, and existing app conventions.
 3. Make the screen's question, available choice, and next action immediately clear.
-4. Maintain Mimo's role colors, original companions, Nunito typography, and raised controls.
+4. Maintain Mimo's role colors, original companions, Labil Grotesk typography, and raised controls.
 5. Refine spacing, density, motion, and responsive behavior without obscuring content or changing unrelated screens.
 
 Use established patterns for routine decisions. Leave unresolved product policy explicitly unresolved. Example prices, cancellation windows, fees, and future services are not commitments.
@@ -96,7 +96,7 @@ For future home screens, put the next useful task first: an upcoming lesson or f
 
 #### Brand and companions
 
-Keep the product name **Mimo**. Use the existing Nunito wordmark treatment. The product and the older green companion share a name; they are distinct.
+Keep the product name **Mimo**. Use the existing wordmark treatment in Labil Grotesk. The product and the older green companion share a name; they are distinct.
 
 | Companion | Appearance | Current use |
 | --- | --- | --- |
@@ -136,7 +136,7 @@ The existing bright buttons have known contrast limitations. The library records
 
 #### Typography
 
-Use locally bundled **Nunito** for app content. The app imports weights 400, 700, 800, and 900. Preserve the platform typography of device chrome; it belongs to the runtime.
+Use locally bundled **Labil Grotesk** for app content, including controls and text fields. The upright variable font is shared with the landing page at `app/public/landing/fonts/LabilGroteskVariable-Upright.ttf`, declared for weights 100–900; existing UI weights remain 400, 700, 800, and 900. Preserve the platform typography of device chrome; it belongs to the runtime.
 
 | Existing role | Typical treatment |
 | --- | --- |

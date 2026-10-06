@@ -31,7 +31,7 @@ When implementing from a selected generated mock, treat that image as the source
 - Button pacing: use the slower 680ms main roll, 520ms navigation roll, 560ms feature roll with 20ms stagger, 300ms goal roll, and 460ms prompt roll requested by the user.
 - Button motion: preserve rolling-text variants on landing actions (upward primary, downward yellow, staggered colored features, faster goal controls), stable compact geometry, keyboard parity, and reduced-motion support.
 - Hero artwork: purple Luma plays on the left, blue Nori reads on the right; do not center the pets. Keep both visible in the mobile panorama.
-- Latest landing feedback on 6 October: use Labil Grotesk for this website, shorter 36px buttons (32px navigation), and larger 14px button corners. The navigation must attach directly to the top edge like a dynamic island. Preserve Nunito in the phone onboarding.
+- Latest landing feedback on 6 October: use Labil Grotesk for this website, shorter 36px buttons (32px navigation), and larger 14px button corners. The navigation must attach directly to the top edge like a dynamic island. The later prototype typography request below supersedes the earlier Nunito phone styling.
 
 - Build app-specific UI in `src/Prototype.tsx` and `src/prototype.css`.
 - Treat `src/App.tsx`, `src/main.tsx`, `src/styles.css`, `src/mobile/`, `public/assets/iphone/`, `public/assets/android/`, `public/assets/status/`, `vite.config.ts`, `worker/index.js`, and `scripts/prepare-sites-build.mjs` as protected runtime files. Do not edit, replace, remove, or recreate them unless the user explicitly asks to change the mobile runtime itself. For an explicit runtime change, update the affected lock hashes only after verifying the new runtime behavior.
@@ -93,7 +93,7 @@ When any text-entry control loses focus, dismiss the simulated keyboard. If the 
 
 ## Onboarding direction (2026-10-01)
 
-Preserve the existing Duolingo-inspired Mimo design (rounded Nunito, raised CTAs, colored selections, companion speech bubbles). Use Figma section `w4nc4L3hNF63uh2HBX9Np5 / 7:22` for onboarding content and learner/teacher branches, not its visual palette. Keep one decision or entry action per screen. Retain existing welcome and useful encouragement screens where they fit the tutoring flow.
+Preserve the existing Duolingo-inspired Mimo design (Labil Grotesk, raised CTAs, colored selections, companion speech bubbles). Use Figma section `w4nc4L3hNF63uh2HBX9Np5 / 7:22` for onboarding content and learner/teacher branches, not its visual palette. Keep one decision or entry action per screen. Retain existing welcome and useful encouragement screens where they fit the tutoring flow.
 
 Teacher-specific direction: use blue primary CTAs/progress and orange selected options. Learner styling uses purple primary controls and blue selections. This is a color-only change; preserve the existing screen content and routing, including the existing identity-verification sequence.
 
@@ -122,3 +122,7 @@ Style the learner’s ‘More languages / Coming soon!’ message as a non-selec
 The coming-soon card uses a generated Luma lookout pose (`luma-coming-soon.png`), with an arm raised above its eyes in anticipation. No decorative star in the card. Keep the original Luma asset on other screens.
 
 Identity introduction offers Link Persona ID using the supplied Persona logo for all roles. It opens a local sample-link preview that skips document/selfie entry and returns to the correct branch. Keep the document fallback and finish-later paths. Do not imply a real Persona account is connected or a real identity has been verified.
+
+Prototype typography update (2026-10-06): use locally bundled Labil Grotesk for all app-owned content, including the wordmark, buttons, inputs, and textareas. Reuse `public/landing/fonts/LabilGroteskVariable-Upright.ttf` at weights 100–900. Preserve existing sizes, weights, layout, role palettes, and platform typography in the protected device chrome.
+
+Account choice update (2026-10-06): after setup introduction, offer Continue with email and Continue with Google. Email retains the passwordless preview-code flow. Google must remain a clearly labeled local sample-account confirmation, with Back available; no real Google sign-in or data sharing is connected. The sample route skips email/code entry but preserves learner age, guardian email/handoff/identity, and teacher branching. Changing account methods clears stale account verification; returning to the same email method preserves its draft. Use Labil Grotesk and the existing role palettes and raised controls.
