@@ -9,6 +9,12 @@ Shape the task, language, and interface together. Help someone take one clear st
 
 This guide adapts the supplied brand-guidelines example to Mimo. It documents the existing visual foundation and gives direction for future work. It does not introduce a new theme, runtime, or product scope.
 
+The separately requested **6 October 2026 landing page** at `app/public/landing/index.html` uses Clay's go-to-market website as a marketing-layout reference: pale grids, spacious headings, and layered product illustrations, adapted with Nunito and Mimo's original companions. This is a companion website, not a replacement for the mobile experience. It uses darker purple `#7640B5` for readable web CTAs; onboarding colors are unchanged. Interactive learning-goal examples are illustrations, and all entry CTAs lead to the existing onboarding welcome. See `context.md` for references and verification.
+
+**Superseding landing direction from the user's later screenshot:** closely follow Clay's landscape-first homepage structure: generated 3D scenery, emerald hero band, compact floating navigation, overlapping intro panel, spacious product preview, and four large pastel feature panels. Use official Hugeicons for UI icons and original generated imagery for website backgrounds and feature illustrations. The landing now uses emerald, cream, yellow, and panel-specific web actions rather than the initial purple CTA palette. Preserve Nunito, product scope, original companion identity, and the existing phone app. The screenshot drives website composition only; do not copy Clay claims, customer logos, or its actual artwork.
+
+**Current landing refinement:** Labil Grotesk supersedes Nunito on the website only. Use compact 36px actions, 32px navigation actions, 14px button corners, and a navigation island attached to the top edge. The phone app retains its established typography. Preview copy must describe available setup and label lesson/teacher tools as examples or planned.
+
 ## Product and brand context
 
 Mimo is a mobile concept for one-to-one language tutoring with a teacher chosen by the learner, online or in person. Practical conversation, useful feedback, and the relationship between learner and teacher are central.

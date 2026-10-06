@@ -14,6 +14,12 @@ When implementing from a selected generated mock, treat that image as the source
 
 ## Editing Boundary
 
+- The separately requested 6 October 2026 landing page is in `public/landing/` and is served in development at `/landing/index.html`. Its visual reference is Clay's go-to-market platform, not the personal CRM named Clay. Preserve the original onboarding at `/` and the protected runtime. Landing-specific styles/scripts stay separate; product previews on the page remain labeled concepts.
+- Later landing feedback on 6 October: follow the supplied Clay homepage screenshot more closely, including its illustrated landscape hero, green headline area, and large pastel feature panels. Use Hugeicons for interface icons and imagegen for needed background imagery. Generated page assets live in `public/landing/images/`; the original Mimo companions remain unchanged. The web page's palette does not redefine onboarding role colors.
+
+- Hero artwork: purple Luma plays on the left, blue Nori reads on the right; do not center the pets. Keep both visible in the mobile panorama.
+- Latest landing feedback on 6 October: use Labil Grotesk for this website, shorter 36px buttons (32px navigation), and larger 14px button corners. The navigation must attach directly to the top edge like a dynamic island. Preserve Nunito in the phone onboarding.
+
 - Build app-specific UI in `src/Prototype.tsx` and `src/prototype.css`.
 - Treat `src/App.tsx`, `src/main.tsx`, `src/styles.css`, `src/mobile/`, `public/assets/iphone/`, `public/assets/android/`, `public/assets/status/`, `vite.config.ts`, `worker/index.js`, and `scripts/prepare-sites-build.mjs` as protected runtime files. Do not edit, replace, remove, or recreate them unless the user explicitly asks to change the mobile runtime itself. For an explicit runtime change, update the affected lock hashes only after verifying the new runtime behavior.
 - Run `npm run check:runtime` before preview or handoff. If it fails, restore the protected runtime instead of weakening or bypassing the check.

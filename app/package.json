@@ -10,9 +10,10 @@
     "test:sites": "node --test tests/sites-worker.test.mjs",
     "predev": "npm run check:runtime",
     "dev": "vite",
-    "prebuild": "npm run check:runtime",
+    "prebuild": "npm run check:runtime && npm run build:landing",
     "build": "tsc && vite build && node scripts/prepare-sites-build.mjs",
-    "test:onboarding": "node --test tests/onboarding.test.mjs"
+    "test:onboarding": "node --test tests/onboarding.test.mjs",
+    "build:landing": "node scripts/build-landing-icons.mjs && node scripts/build-landing-hero.mjs"
   },
   "dependencies": {
     "@fontsource/nunito": "^5.3.0",
@@ -26,10 +27,12 @@
     "react-dom": "19.2.7"
   },
   "devDependencies": {
+    "@hugeicons/core-free-icons": "4.3.5",
     "@playwright/test": "1.61.1",
     "@types/react": "19.2.17",
     "@types/react-dom": "19.2.3",
     "@vitejs/plugin-react": "6.0.3",
+    "three": "0.186.1",
     "typescript": "7.0.2",
     "vite": "8.1.3"
   }
