@@ -323,6 +323,10 @@ Teacher deferral ends at `teacher-draft`; adult learner deferral ends at `learne
 
 **Hero pets revision:** The header image now uses `conversation-landscape-pets-sides.jpg`, an imagegen edit integrating the original purple Luma and blue Nori references into the landscape. Per the user’s correction, purple Luma plays with a ball on the left and blue Nori reads on the right, with the center open. Mobile displays the full panorama beneath the navigation so neither pet is cropped. The prior landscape remains available and still serves the footer. Verified the new composition at 1280px and 390px; both pets are visible. Build and 28 protected runtime checks passed. Screenshots: `app/qa/landing/desktop-pets-sides.jpg` and `mobile-pets-sides.jpg`.
 
+**Feature card scrolling:** The four pastel feature cards now stack using native sticky positioning: each incoming card scrolls over the previous one beneath the navigation. Card height and viewport determine the sticky offset so tall mobile cards can scroll fully into view. Reduced-motion keeps ordinary non-overlapping flow. Section links return to the original card position.
+
+**Small-text readability:** Landing page text now has a 12px minimum across desktop and mobile, raising previously smaller captions, table labels, badges, review details, and footer text. Larger body text and headings retain their existing sizes.
+
 **Review colors:** Eight of the twelve review cards stay warm white, with two soft purple and two soft blue cards spaced across the scrolling rows.
 
 **Review scrolling:** Reviews now move automatically right to left in two seamless rows, each with six different reviews and avatars (108s and 128s loops to retain the slow movement speed). All quotes, including the purple review, use the same font size. Scrolling pauses on hover, keyboard focus, and when offscreen/hidden. The user requested removal of the visible pause button. Reduced-motion presents manually scrollable static rows. Visual duplicates are hidden from assistive technology.

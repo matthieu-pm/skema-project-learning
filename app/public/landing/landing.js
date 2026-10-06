@@ -77,3 +77,32 @@ function syncReviewVisibility() { reviewsSection.dataset.reviewsVisible = String
 new IntersectionObserver(([entry]) => { reviewsInView = entry.isIntersecting; syncReviewVisibility(); }).observe(reviewsSection);
 document.addEventListener('visibilitychange', syncReviewVisibility);
 syncReviewVisibility();
+
+// Native sticky scrolling layers each card over the previous one. Tall cards
+// stick only after their lower content has entered the viewport on small screens.
+const featurePanels = [...document.querySelectorAll('.feature-panel')];
+function sizeFeatureStack() {
+  const headerClearance = header.offsetHeight + 22;
+  const offsets = featurePanels.map((panel) => Math.min(headerClearance, window.innerHeight - panel.offsetHeight - 20));
+  featurePanels.forEach((panel, index) => panel.style.setProperty('--feature-stick-top', `${offsets[index]}px`));
+}
+const featureStackObserver = new ResizeObserver(sizeFeatureStack);
+featurePanels.forEach((panel) => featureStackObserver.observe(panel));
+featureStackObserver.observe(header);
+window.addEventListener('resize', sizeFeatureStack, { passive: true });
+sizeFeatureStack();
+
+// A pinned card's visible position is not its original anchor position.
+// Return section links to the start of that card's scroll sequence.
+document.addEventListener('click', (event) => {
+  const link = event.target.closest('a[href^="#"]');
+  if (!link || event.defaultPrevented || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+  const index = featurePanels.findIndex((panel) => `#${panel.id}` === link.getAttribute('href'));
+  if (index < 0) return;
+  event.preventDefault();
+  const section = featurePanels[0].parentElement;
+  const gap = parseFloat(getComputedStyle(section).rowGap);
+  const precedingHeight = featurePanels.slice(0, index).reduce((height, panel) => height + panel.offsetHeight + gap, 0);
+  history.pushState(null, '', link.getAttribute('href'));
+  window.scrollTo({ top: window.scrollY + section.getBoundingClientRect().top + precedingHeight - 100, behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'instant' : 'smooth' });
+});
