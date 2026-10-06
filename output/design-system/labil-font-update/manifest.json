@@ -1,0 +1,9 @@
+{
+  "name": "Mimo · Labil Grotesk typography",
+  "id": "mimo-labil-grotesk-typography",
+  "api": "1.0.0",
+  "main": "code.js",
+  "editorType": ["figma"],
+  "documentAccess": "dynamic-page",
+  "networkAccess": { "allowedDomains": ["none"] }
+}

@@ -25,6 +25,7 @@ When implementing from a selected generated mock, treat that image as the source
 - First landing card after the hero: use the mock learner/teacher review mosaic with generated avatars; these are fictional preview testimonials; the user requested removal of the visible sample-review notice.
 - Landing headings: omit small uppercase eyebrow labels above the hero and section headings.
 - Navigation motion: match the slow 520ms rolling text and underline on desktop and mobile-menu links; support keyboard focus and reduced motion.
+- Navigation typography: 15px desktop links, 14px header CTA, 16px mobile-menu links; preserve compact header and button heights.
 - Navigation height: keep the landing header compact at 58px on desktop and 54px on mobile, with centered controls and its top-edge attachment.
 - Navigation branding: companion-only home link, no visible “mimo” text in the header; retain its accessible name.
 - Button pacing: use the slower 680ms main roll, 520ms navigation roll, 560ms feature roll with 20ms stagger, 300ms goal roll, and 460ms prompt roll requested by the user.

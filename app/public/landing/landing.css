@@ -31,10 +31,10 @@ a:focus-visible, button:focus-visible, summary:focus-visible { outline: 3px soli
 .site-header { position: fixed; z-index: 10; top: 0; left: 32px; right: 32px; max-width: 1180px; margin: auto; min-height: 58px; padding: 0 22px; display: flex; align-items: center; gap: 40px; background: #fffefb; border-radius: 0 0 32px 32px; box-shadow: 0 0 0 1px oklch(0 0 0 / .04), 0 4px 8px -4px oklch(0 0 0 / .1), 0 12px 28px -12px oklch(0 0 0 / .14); }
 .wordmark { font-size: 31px; font-weight: 800; letter-spacing: -1.7px; display: flex; align-items: center; line-height: 1; }
 .wordmark img { margin-right: 5px; }
-.desktop-nav { display: flex; gap: 20px; align-items: center; font-size: 12px; font-weight: 500; }
+.desktop-nav { display: flex; gap: 20px; align-items: center; font-size: 15px; font-weight: 500; }
 .desktop-nav a:hover, footer a:hover { color: #6c319e; }
 .nav-actions { display: flex; align-items: center; gap: 18px; margin-left: auto; }
-.nav-text { font-size: 12px; }
+.nav-text { font-size: 15px; }
 .desktop-nav a, .nav-text { display: inline-flex; align-items: center; min-height: 44px; border-radius: 6px; }
 .menu-toggle { display: none; width: 44px; height: 44px; align-items: center; justify-content: center; padding: 10px; border: 0; background: none; }
 #mobile-nav[hidden] { display: none; }
@@ -425,6 +425,7 @@ footer nav strong { font-size: 12px; margin-bottom: 5px; }
 /* Compact companion-only home link in the navigation. */
 .site-header .wordmark { justify-content: center; min-width: 36px; min-height: 44px; }
 .site-header .wordmark img { margin-right: 0; }
+.site-header .button-small { font-size: 14px; padding-block: 5px; }
 
 /* Navigation echoes the slower button rolls, with an understated underline. */
 .site-header .nav-roll { position: relative; }

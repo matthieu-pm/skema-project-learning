@@ -1,0 +1,20 @@
+await figma.setCurrentPageAsync(await figma.getNodeByIdAsync('149:248'));
+const b=await figma.getNodeByIdAsync('151:248');
+const marks=b.query('TEXT').filter(n=>n.characters==='mimo').toArray();
+const outlines={"Bold":{"path":"M42 0H196V280C196 352 231 394 288 394C344 394 376 354 376 288V0H529V280C529 352 562 394 617 394C669 394 700 354 700 288V0H854V321C854 437 779 518 672 518C592 518 534 477 510 409C481 476 421 518 345 518C271 518 217 479 193 414L196 507H42ZM910.0 0H1064.0V507H910.0ZM894.0 658C894.0 604 935.0 564 987.0 564C1041.0 564 1081.0 604 1081.0 658C1081.0 710 1041.0 751 987.0 751C935.0 751 894.0 710 894.0 658ZM1124.0 0H1278.0V280C1278.0 352 1313.0 394 1370.0 394C1426.0 394 1458.0 354 1458.0 288V0H1611.0V280C1611.0 352 1644.0 394 1699.0 394C1751.0 394 1782.0 354 1782.0 288V0H1936.0V321C1936.0 437 1861.0 518 1754.0 518C1674.0 518 1616.0 477 1592.0 409C1563.0 476 1503.0 518 1427.0 518C1353.0 518 1299.0 479 1275.0 414L1278.0 507H1124.0ZM2250.0 -15C2408.0 -15 2522.0 97 2522.0 253C2522.0 410 2408.0 522 2250.0 522C2093.0 522 1979.0 410 1979.0 253C1979.0 97 2093.0 -15 2250.0 -15ZM2134.0 253C2134.0 335 2182.0 392 2250.0 392C2319.0 392 2367.0 335 2367.0 253C2367.0 172 2319.0 115 2250.0 115C2182.0 115 2134.0 172 2134.0 253Z","advance":2549,"units":1000,"baseline":868,"family":"Labil Grotesk Bold","style":"Regular"},"Medium":{"path":"M51 0H175V269C175 362 215 415 286 415C351 415 388 369 388 291V0H512V269C512 362 551 415 619 415C681 415 717 369 717 291V0H841V316C841 436 769 515 662 515C579 515 521 471 498 397C472 471 411 515 331 515C250 515 194 470 172 396L175 503H51ZM914.0 0H1038.0V503H914.0ZM896.0 655C896.0 609 931.0 574 976.0 574C1022.0 574 1057.0 609 1057.0 655C1057.0 700 1022.0 735 976.0 735C931.0 735 896.0 700 896.0 655ZM1115.0 0H1239.0V269C1239.0 362 1279.0 415 1350.0 415C1415.0 415 1452.0 369 1452.0 291V0H1576.0V269C1576.0 362 1615.0 415 1683.0 415C1745.0 415 1781.0 369 1781.0 291V0H1905.0V316C1905.0 436 1833.0 515 1726.0 515C1643.0 515 1585.0 471 1562.0 397C1536.0 471 1475.0 515 1395.0 515C1314.0 515 1258.0 470 1236.0 396L1239.0 503H1115.0ZM2225.0 -15C2377.0 -15 2487.0 96 2487.0 252C2487.0 407 2377.0 518 2225.0 518C2072.0 518 1962.0 407 1962.0 252C1962.0 96 2072.0 -15 2225.0 -15ZM2087.0 252C2087.0 346 2143.0 413 2225.0 413C2306.0 413 2362.0 346 2362.0 252C2362.0 157 2306.0 90 2225.0 90C2143.0 90 2087.0 157 2087.0 252Z","advance":2521,"units":1000,"baseline":860,"family":"Labil Grotesk Medium","style":"Regular"}};
+const created=[],removed=[],parents=[],mapping=[];
+for(const n of marks){
+ for(const s of n.getStyledTextSegments(['fontName'])) await figma.loadFontAsync(s.fontName);
+ const style=n.fontName.family==='Fredoka'?'Medium':'Bold';
+ const o=outlines[style],size=n.fontSize,fill=n.fills.find(p=>p.type==='SOLID');
+ const color='#'+[fill.color.r,fill.color.g,fill.color.b].map(v=>Math.round(v*255).toString(16).padStart(2,'0')).join('');
+ const svg='<svg xmlns="http://www.w3.org/2000/svg" width="'+(o.advance/o.units*size)+'" height="'+size+'" viewBox="0 0 '+o.advance+' '+o.units+'"><path fill="'+color+'" transform="translate(0 '+o.baseline+') scale(1 -1)" d="'+o.path+'"/></svg>';
+ const v=figma.createNodeFromSvg(svg);v.name='mimo / Labil Grotesk '+style+' / outlines';
+ const parent=n.parent,index=parent.children.indexOf(n);parent.insertChild(index,v);
+ created.push(v.id,...v.findAll().map(x=>x.id));parents.push(parent.id);
+ mapping.push({previousId:n.id,nodeId:v.id,style,fontSize:size,width:v.width,height:v.height});removed.push(n.id);n.remove();
+}
+const foot=b.query('TEXT').filter(n=>n.characters.startsWith('Editable wordmarks and layout')).first();
+if(foot){for(const s of foot.getStyledTextSegments(['fontName']))await figma.loadFontAsync(s.fontName);foot.characters='Labil Grotesk vector wordmarks · original Luma image';}
+figma.currentPage.selection=[b];figma.viewport.scrollAndZoomIntoView([b]);
+return {createdNodeIds:created,removedNodeIds:removed,mutatedNodeIds:[...parents,...(foot?[foot.id]:[])],wordmarks:mapping,boardId:b.id};

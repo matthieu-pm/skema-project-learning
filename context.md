@@ -132,7 +132,19 @@ Six Thinking Hats material includes:
 
 ## Figma design contents
 
+### Logo explorations — created 6 October 2026
+
+**Latest typography revision:** All 12 wordmarks on the purple Luma logo board now use **Labil Grotesk** (Bold in layouts 01–03, Medium in 04). Figma's connected font catalog does not expose the installed local font; exact outlines from the user's installed OTF files provide faithful rendering. The wordmarks are editable vectors, not live text. Original pet images and layouts were preserved. The rendered board and containment checks passed. Outline source, update script, and replacement IDs are in `output/logo-explorations/labil-*` and `update-labil-wordmarks.js`.
+
+**Current direction, user revision:** Use the **original purple Luma pet in the logo**. [Purple Luma logo board, `151:248`](https://www.figma.com/design/w4nc4L3hNF63uh2HBX9Np5?node-id=151-248), on page `149:248`, contains four layouts: Side by side, Luma above, Companion badge, and A little hello (peeking crop), each with light/dark previews. Luma is reused from the existing library asset (`93:253`) as the original raster image; wordmarks and layouts are editable. The board was visually inspected; checks found 12 lockups, 12 original pet images, and no text overflow. This establishes the pet direction, not a final selected layout or app implementation. Handoff: `output/logo-explorations/luma-state.json`, `create-luma-logos.js`, and `README.md`.
+
+[Six logo directions, review board `149:249`](https://www.figma.com/design/w4nc4L3hNF63uh2HBX9Np5?node-id=149-249), on page **08 · Logo explorations** (`149:248`), adds six editable concepts: Say hello, One to one, Little companion, Open dialogue, Shared chapter, and Back and forth. Each includes a color lockup, monochrome lockup, reversed lockup, app-icon preview, and 24 px symbol. Symbols are native vectors; wordmarks use editable Nunito or Fredoka text. Purple/blue extends the current identity; Shared chapter explores green.
+
+These are **proposed identity directions, not a selected logo or implemented app change**. The rendered review board was visually inspected; structural checks found 18 logo lockups, 75 vector nodes, and no overflowing text. Existing Figma pages and app code were preserved. Source script, IDs, and handoff notes: `output/logo-explorations/`.
+
 ### Mimo design system — created 2 October 2026
+
+**Typography revision — 6 October 2026, user-confirmed:** The user confirmed that the **Labil Grotesk** update worked after running the imported desktop plugin **Mimo · Labil Grotesk typography**. The plugin at `output/design-system/labil-font-update/manifest.json` targets the eight system pages and 13 existing `Mimo/System/` text styles, retaining editable text and existing type sizes. It uses installed local fonts because the connected Figma font catalog did not expose Labil faces. Completion is confirmed by the user; no subsequent agent read-back or visual audit has been performed. App typography is unchanged. The Nunito counts and visual checks below describe the original 2 October delivery, before this revision.
 
 [Design-system cover, `101:248`](https://www.figma.com/design/w4nc4L3hNF63uh2HBX9Np5?node-id=101-248). Eight new pages (`92:248`–`92:255`) document the current prototype: getting started, foundations, pets/icons, buttons, choices, inputs, feedback, and patterns. The library contains **135 component masters/variants, 19 component sets, 13 new Nunito text styles, four effect styles, 108 new variables and 16 reused primitives**. Semantic aliases support Learner and Teacher modes. Components also expose Role variants; explicit component modes override parent frame modes, so use the matching Role variant.
 
@@ -340,6 +352,8 @@ Teacher deferral ends at `teacher-draft`; adult learner deferral ends at `learne
 **Hero copy refinement:** Removed the “Preview setup today. Lesson booking is not available yet.” line below the hero actions at the user’s request. Availability details remain in the FAQ.
 
 **Navigation motion:** Desktop navigation, Lesson ideas, and mobile-menu links now use 520ms upward text rolls and a growing underline on hover/keyboard focus. Labels retain their original accessible names, touch does not get sticky hover, and reduced-motion removes movement.
+
+**Navigation readability:** Desktop navigation links and Lesson ideas now use 15px text (previously 12px); the header CTA uses 14px on desktop and mobile. Header heights stay 58px/54px, the CTA stays 32px, and the mobile menu retains 16px links.
 
 **Navigation height:** Reduced the landing header from 70px to 58px on desktop and from 64px to 54px on mobile after a second request for a slightly shorter bar. Verified both rendered heights at 1280px and 390px, no horizontal overflow, and mobile-menu opening; all 28 protected runtime checks passed.
 
