@@ -345,8 +345,6 @@ footer nav strong { font-size: 10px; margin-bottom: 5px; }
 .goal-tabs button { font-size: 12px; }
 .goal-tabs button:hover { background: #f1f4df; }
 .goal-tabs button[aria-pressed="true"] { font-weight: 700; }
-.selected-check { width: 14px !important; height: 14px !important; opacity: 0; }
-[aria-pressed="true"] .selected-check { opacity: 1; }
 .prompt-choices button { border: 0; box-shadow: var(--shadow-border); }
 .prompt-choices button:hover { box-shadow: var(--shadow-hover); }
 .feature-detail strong, .feature-detail span { font-size: 12px; }
@@ -369,7 +367,7 @@ footer nav strong { font-size: 10px; margin-bottom: 5px; }
   .hero-copy { padding-top: 10px; }
   .goal-tabs { justify-content: space-between; }
   .goal-tabs button { font-size: 11px; padding: 7px 10px; }
-  .goal-tabs .icon:not(.selected-check) { display: none; }
+  .goal-tabs .icon { display: none; }
   .feature-copy>p { font-size: 14px; }
   .teacher-note { font-size: 11px; }
 }
