@@ -41,7 +41,7 @@ a:focus-visible, button:focus-visible, summary:focus-visible { outline: 3px soli
 #mobile-nav { position: absolute; top: 100%; left: 0; right: 0; border-top: 1px solid #e5e7df; border-radius: 0 0 32px 32px; background: #fffefb; padding: 12px; box-shadow: 0 12px 20px -12px oklch(0 0 0 / .18); }
 #mobile-nav a { display: block; padding: 13px; }
 .hero { background: var(--green); color: white; padding-bottom: 115px; }
-.hero-landscape { height: clamp(340px, 38vw, 580px); position: relative; overflow: hidden; }
+.hero-landscape { height: clamp(420px, 46vw, 700px); position: relative; overflow: hidden; }
 .hero-landscape img { width: 100%; height: 100%; object-fit: cover; object-position: center; }
 .hero-landscape::after { content: ''; position: absolute; inset: 0; background: linear-gradient(transparent 66%, #00583e65 83%, var(--green)); }
 .hero-copy { display: grid; grid-template-columns: 1.2fr 1fr; gap: 80px; align-items: center; padding-top: 10px; }

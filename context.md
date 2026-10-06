@@ -321,6 +321,8 @@ Teacher deferral ends at `teacher-draft`; adult learner deferral ends at `learne
 
 **Animation exploration (reverted):** The user asked to undo the Three.js change. Both the image-animation experiment and modeled 3D scene are removed from the active implementation, together with their scripts, controls, styles, and dependency. The static `conversation-landscape-pets-sides.jpg` hero is restored: purple Luma playing on the left and blue Nori reading on the right.
 
+**Hero height refinement:** Increased the desktop hero image area from `clamp(340px, 38vw, 580px)` to `clamp(420px, 46vw, 700px)`, about 21% taller at 1280px (589px). Both companions remain visible; the mobile panorama retains its full-image composition.
+
 **Hero pets revision:** The header image now uses `conversation-landscape-pets-sides.jpg`, an imagegen edit integrating the original purple Luma and blue Nori references into the landscape. Per the user’s correction, purple Luma plays with a ball on the left and blue Nori reads on the right, with the center open. Mobile displays the full panorama beneath the navigation so neither pet is cropped. The prior landscape remains available and still serves the footer. Verified the new composition at 1280px and 390px; both pets are visible. Build and 28 protected runtime checks passed. Screenshots: `app/qa/landing/desktop-pets-sides.jpg` and `mobile-pets-sides.jpg`.
 
 **Feature card scrolling:** The four pastel feature cards now stack using native sticky positioning: each incoming card scrolls over the previous one beneath the navigation. Card height and viewport determine the sticky offset so tall mobile cards can scroll fully into view. Reduced-motion keeps ordinary non-overlapping flow. Section links return to the original card position.
