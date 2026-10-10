@@ -1,0 +1,233 @@
+/* Keep the workspace's density; borrow onboarding's rounded, tactile surfaces. */
+.teacher-workspace {
+  --tw-card-edge: #e4e0eb;
+  --tw-card-bottom: #ded9e7;
+  --tw-action-bottom: #3d24b4;
+  --tw-secondary-bottom: #ded9e7;
+}
+.teacher-workspace .tw-button {
+  border-radius: 12px;
+  min-height: 40px;
+  padding: 8px 14px;
+  font-weight: 700;
+  border-width: 2px;
+  scale: 1;
+  transition:
+    transform 100ms ease-out,
+    box-shadow 100ms ease-out,
+    background-color 120ms ease-out,
+    border-color 120ms ease-out;
+}
+.teacher-workspace .tw-button:has(> svg) {
+  padding-left: 12px;
+}
+.teacher-workspace .tw-button.tw-primary {
+  background: #5235e9;
+  border-color: #5235e9;
+  box-shadow: 0 4px 0 var(--tw-action-bottom);
+}
+.teacher-workspace .tw-button.tw-primary:hover:not(:disabled) {
+  background: #6043ee;
+  border-color: #6043ee;
+}
+.teacher-workspace .tw-button.tw-primary:not(:disabled):focus {
+  box-shadow: 0 4px 0 var(--tw-action-bottom) !important;
+}
+.teacher-workspace .tw-button.tw-primary:active:not(:disabled),
+.teacher-workspace .tw-button.tw-primary:not(:disabled):focus:active {
+  transform: translateY(3px);
+  box-shadow: 0 1px 0 var(--tw-action-bottom) !important;
+  scale: 1;
+}
+.teacher-workspace .tw-button.tw-secondary {
+  background: #fffdff;
+  border-color: var(--tw-card-edge);
+  color: #5e4984;
+  box-shadow: 0 2px 0 var(--tw-secondary-bottom);
+}
+.teacher-workspace .tw-button.tw-secondary:not(:disabled):focus {
+  box-shadow: 0 2px 0 var(--tw-secondary-bottom) !important;
+}
+.teacher-workspace .tw-button.tw-secondary:hover:not(:disabled) {
+  background: #f6f1ff;
+  border-color: #d5c8ef;
+}
+.teacher-workspace .tw-button.tw-secondary:active:not(:disabled),
+.teacher-workspace .tw-button.tw-secondary:not(:disabled):focus:active {
+  transform: translateY(2px);
+  box-shadow: 0 0 0 var(--tw-secondary-bottom) !important;
+  scale: 1;
+}
+.teacher-workspace .tw-button.tw-danger {
+  box-shadow: 0 3px 0 #eac1bb;
+}
+.teacher-workspace .tw-button.tw-danger:not(:disabled):focus {
+  box-shadow: 0 3px 0 #eac1bb !important;
+}
+.teacher-workspace .tw-button.tw-danger:active:not(:disabled),
+.teacher-workspace .tw-button.tw-danger:not(:disabled):focus:active {
+  transform: translateY(2px);
+  box-shadow: 0 1px 0 #eac1bb !important;
+  scale: 1;
+}
+.teacher-workspace .tw-button.tw-quiet {
+  border-color: transparent;
+  box-shadow: none;
+  transition:
+    scale 150ms ease-out,
+    background-color 120ms ease-out;
+}
+.teacher-workspace .tw-button.tw-quiet:hover:not(:disabled) {
+  background: #f4efff;
+}
+.teacher-workspace .tw-button.tw-quiet:active:not(:disabled) {
+  transform: none;
+  scale: 0.96;
+}
+.teacher-workspace .tw-button:disabled {
+  transform: none;
+  scale: 1;
+  box-shadow: none !important;
+}
+.teacher-workspace .tw-button:focus-visible {
+  outline-offset: 5px;
+}
+
+.teacher-workspace
+  :is(
+    .tw-panel,
+    .tw-student-card,
+    .tw-lesson-card,
+    .tw-template-card,
+    .tw-module-card,
+    .tw-block,
+    .tw-lesson-block,
+    .tw-student-line,
+    .tw-learner-preview,
+    .tw-live-activity
+  ) {
+  border: 2px solid var(--tw-card-edge);
+  border-radius: 16px;
+  box-shadow: 0 2px 0 var(--tw-card-bottom);
+}
+.teacher-workspace :is(.tw-student-card, .tw-template-card, .tw-student-line) {
+  transition:
+    transform 100ms ease-out,
+    box-shadow 100ms ease-out,
+    border-color 120ms ease-out,
+    background-color 120ms ease-out;
+}
+.teacher-workspace
+  :is(.tw-student-card, .tw-template-card, .tw-student-line):hover {
+  border-color: #cfc1ee;
+  background: #fffdff;
+  box-shadow: 0 2px 0 #d8ceed;
+}
+.teacher-workspace
+  :is(
+    button.tw-student-card,
+    button.tw-template-card,
+    button.tw-student-line
+  ):active {
+  transform: translateY(2px);
+  box-shadow: 0 0 0 var(--tw-card-bottom);
+}
+.teacher-workspace .tw-next-session {
+  border-radius: 18px;
+  background: #fffdff;
+}
+.teacher-workspace .tw-next-session > img {
+  border-radius: 6px;
+  background: #f1ebfc;
+}
+.teacher-workspace .tw-library-summary {
+  background: #faf7ff;
+  border-color: #e4daf4;
+  box-shadow: 0 2px 0 #ded2f0;
+}
+.teacher-workspace .tw-small-art {
+  background: #eee4fc;
+}
+.teacher-workspace .tw-lesson-art {
+  border-radius: 6px;
+  background: #f5effd !important;
+}
+.teacher-workspace .tw-lesson-card:nth-child(3n + 2) .tw-lesson-art {
+  background: #edf6ff !important;
+}
+.teacher-workspace .tw-lesson-card:nth-child(3n) .tw-lesson-art {
+  background: #fff3e3 !important;
+}
+.teacher-workspace .tw-editor-aside {
+  border-radius: 16px;
+}
+
+.teacher-workspace .tw-segments {
+  border-radius: 12px;
+}
+.teacher-workspace .tw-segments button {
+  border: 2px solid transparent;
+  border-radius: 8px;
+  font-weight: 650;
+}
+.teacher-workspace .tw-segments button[aria-pressed="true"] {
+  background: #f2ebff;
+  color: #6541ac;
+  border-color: #d8c5f2;
+  box-shadow: 0 1px 0 #d8c5f2;
+}
+.teacher-workspace .tw-full-calendar {
+  border: 2px solid var(--tw-card-edge);
+  border-radius: 16px;
+  box-shadow: 0 2px 0 var(--tw-card-bottom);
+}
+.teacher-workspace .tw-cal-today {
+  border: 2px solid var(--tw-card-edge);
+  border-radius: 10px;
+  background: #fffdff;
+  box-shadow: 0 2px 0 var(--tw-card-bottom);
+  font-weight: 650;
+  transition:
+    transform 100ms ease-out,
+    box-shadow 100ms ease-out;
+}
+.teacher-workspace .tw-cal-today:active {
+  transform: translateY(2px);
+  box-shadow: none;
+}
+.teacher-workspace .tw-cal-views {
+  border-radius: 12px;
+  background: #f7f4fb;
+}
+.teacher-workspace .tw-cal-views button {
+  border: 2px solid transparent;
+  border-radius: 8px;
+}
+.teacher-workspace .tw-cal-views button[aria-pressed="true"] {
+  background: #f2ebff;
+  color: #6541ac;
+  border-color: #d8c5f2;
+  box-shadow: 0 1px 0 #d8c5f2;
+}
+.teacher-workspace :is(.tw-cal-timed-event, .tw-cal-month-event) {
+  border-radius: 6px;
+  box-shadow: 0 1px 0 #0000000d;
+}
+.teacher-mobile .tw-button {
+  min-height: 44px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+@media (prefers-reduced-motion: reduce) {
+  .teacher-workspace
+    :is(
+      .tw-button,
+      button.tw-student-card,
+      button.tw-template-card,
+      button.tw-student-line,
+      .tw-cal-today
+    ):active {
+    transform: none !important;
+    scale: 1 !important;
+  }
+}

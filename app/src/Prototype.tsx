@@ -1,5 +1,7 @@
-import { createContext, useContext, useEffect, useRef, useState, type ReactNode, type InputHTMLAttributes } from 'react';
+import { createContext, lazy, Suspense, useContext, useEffect, useRef, useState, type ReactNode, type InputHTMLAttributes } from 'react';
 import { ArrowLeftIcon, CheckIcon, UploadIcon } from '@radix-ui/react-icons';
+import { createPortal } from 'react-dom';
+const TeacherWorkspace = lazy(() => import('./teacher/TeacherWorkspace'));
 import { FlowStack, MobileScroll, KeyboardInput, KeyboardTextarea, useFlow, useKeyboard, useKeyboardInsets, type FlowScreen } from './mobile';
 import { initialAnswers, changeAccountMethod, sampleGoogleAccount, languageChoices, toggleLearningLanguage, needsGuardian, changeAge, clearedIdentity, verificationExit, levelChoices, formatDateOfBirth, dateOfBirthValid, nextStep, routeFor, stepIds, validStep, type Answers, type Step } from './onboarding';
 
@@ -12,7 +14,7 @@ type Media = { name:string; url:string; type:string } | null;
 type SetupContext = {
   answers:Answers; update:(patch:Partial<Answers>)=>void; resource:Media; setResource:(media:Media)=>void;
   photo:Media; setPhoto:(media:Media)=>void; error:string; setError:(s:string)=>void;
-  resendAt:number; setResendAt:(n:number)=>void; reset:()=>void;
+  resendAt:number; setResendAt:(n:number)=>void; reset:()=>void; openWorkspace:()=>void;
 };
 const Setup = createContext<SetupContext>(null!);
 const useSetup = () => useContext(Setup);
@@ -76,18 +78,18 @@ function Header({step}: {step:Step}) {
   </nav>;
 }
 function Footer({step}: {step:Step}) {
-  const flow=useFlow(),keyboard=useKeyboard(),{answers:a,update,setError,setResendAt,setResource,setPhoto,reset}=useSetup();
+  const flow=useFlow(),keyboard=useKeyboard(),{answers:a,update,setError,setResendAt,setResource,setPhoto,reset,openWorkspace}=useSetup();
   const advance=(patch:Partial<Answers>={})=>{ keyboard.hide();setError('');const next=nextStep(step,{...a,...patch});update(patch);if(next)flow.push(screens[next]); };
   const submit=()=>{
     if(!validStep(step,a))return;
-    if(endings.has(step)){reset();return;}
+    if(endings.has(step)){if(a.role==='teacher')openWorkspace();else reset();return;}
     if(step==='verify' && a.code!=='481629'){setError('That code doesn’t match. Use 481629 in this preview.');keyboard.hide();return;}
     if(step==='age'||(step==='email'&&a.role==='teacher'))setResendAt(Date.now()+30000);
     advance(step==='google-connect'?sampleGoogleAccount:step==='verify'?{verified:true}:step==='guardian'?{guardianReady:true}:step==='notifications'?{notifications:true}:step==='widget'?{widget:true}:(step==='selfie'||step==='persona-link')?{identityPreviewComplete:true}:step==='identity-intro'?{identityMethod:'document',identityPreviewComplete:false}:{});
   };
   const optional:Partial<Record<Step,string>>={resource:'Skip for now',photo:'Skip for now',format:'I’ll choose later',city:'I’ll choose later',days:'I’ll choose later',time:'I’ll choose later',notifications:'Not now',widget:'Not now','identity-intro':'Finish this later','persona-link':'Use a document instead'};
   const label:Partial<Record<Step,string>>={welcome:'Get started','google-connect':'Continue with sample account',email:'Continue',guardian:'Continue','guardian-handoff':'I’m the parent or guardian',verify:'Verify & continue',notifications:'Allow notifications',widget:'Add widget','teacher-review':'Continue to verification','identity-intro':'Start verification preview','persona-link':'Link sample Persona ID',document:'Continue',selfie:'Finish verification preview','learner-ready':'Finish setup','verification-ready':'Finish setup','teacher-draft':'Back to welcome'};
-  const endLabel=endings.has(step)?'Replay onboarding':undefined;
+  const endLabel=endings.has(step)?a.role==='teacher'?'Open teaching workspace':'Replay onboarding':undefined;
   const mainDisabled=!validStep(step,a) || (['format','city','days','time'].includes(step) && !({format:a.format,city:a.city.trim(),days:a.days.length,time:a.time} as Record<string,unknown>)[step]);
   if(step==='account')return <div className="actions two-actions account-actions">
     <button className="primary" onClick={()=>advance(changeAccountMethod(a,'email'))}>Continue with email</button>
@@ -161,7 +163,7 @@ function Screen({step}: {step:Step}) {
       {step==='document' && <><button className={`choice sample-action ${a.documentReady?'selected':''}`} aria-pressed={a.documentReady} onClick={()=>update({documentReady:!a.documentReady})}><span className="choice-copy"><strong>{a.documentReady?'Sample document added':'Use a sample document'}</strong><span>{a.documentType} · {a.country}</span></span>{a.documentReady&&<CheckIcon/>}</button><Note>In the full app, a secure provider would handle your document. This preview doesn’t collect identity documents.</Note></>}
       {step==='selfie' && <><div className="selfie-preview"><Mascot/></div><button className={`choice sample-action ${a.selfieReady?'selected':''}`} aria-pressed={a.selfieReady} onClick={()=>update({selfieReady:!a.selfieReady})}><span className="choice-copy"><strong>{a.selfieReady?'Sample check complete':'Try the sample check'}</strong><span>No camera access needed for this preview.</span></span>{a.selfieReady&&<CheckIcon/>}</button></>}
       {step==='learner-ready' && <><div className="setup-summary"><h2>Your languages</h2>{a.learningLanguages.map(language=><p key={language}><strong>{language}</strong> · {a.learningLevels[language]==='Not sure'?'Level to explore':a.learningLevels[language]}</p>)}<blockquote>{a.personalGoal}</blockquote><p>{a.topic}</p><p>{a.format||'Flexible format'}{a.city?` · ${a.city}`:''}</p><p>{a.days.join(' & ')||'Flexible days'} · {a.time||'Flexible time'}</p>{setup.resource&&<p>Attached: {setup.resource.name}</p>}<p>{guardian?'Parent or guardian verification':'Identity verification'}: {a.identityPreviewComplete?(a.identityMethod==='persona'?'Persona preview complete':'preview complete'):'to finish later'}.</p></div><Note>No identity verification was submitted. Next comes teacher discovery. You’ve reached the end of this onboarding preview.</Note></>}
-      {(step==='verification-ready'||step==='teacher-draft') && <><div className="setup-summary"><h2>{a.name || 'Your profile'}</h2><p>{a.teachingLanguages.join(', ')} · €{a.rate} / {a.duration}</p><p>{step==='teacher-draft'?'You can finish verification later.':a.identityMethod==='persona'?'You’ve tried the instant Persona verification preview.':'You’ve walked through the verification preview.'}</p></div><Note>No verification was submitted. In the full app, your profile would stay a draft while the provider reviews your identity.</Note></>}
+      {(step==='verification-ready'||step==='teacher-draft') && <><div className="setup-summary"><h2>{a.name || 'Your profile'}</h2><p>{a.teachingLanguages.join(', ')} · €{a.rate} / {a.duration}</p><p>{step==='teacher-draft'?'You can finish verification later.':a.identityMethod==='persona'?'You’ve tried the instant Persona verification preview.':'You’ve walked through the verification preview.'}</p></div><Note>No verification was submitted. Your profile stays a local draft. Next, explore your teaching workspace with sample learners and sessions.</Note></>}
       {error && active && <p role="alert" className="field-error">{error}</p>}
     </main>
   </MobileScroll>;
@@ -174,11 +176,14 @@ const screens = Object.fromEntries([...new Set(stepIds)].map(step=>[step,{
 export default function Prototype() {
   const [answers,setAnswers]=useState<Answers>(initialAnswers),[resource,setResource]=useState<Media>(null),[photo,setPhoto]=useState<Media>(null);
   const [error,setError]=useState(''),[resendAt,setResendAt]=useState(0),[run,setRun]=useState(0);
+  const [workspaceOpen,setWorkspaceOpen]=useState(()=>new URLSearchParams(window.location.search).get('teacher')==='1');
+  const web=new URLSearchParams(window.location.search).get('view')==='web';
   const keyboard=useKeyboard();
   useEffect(()=>()=>{if(resource)URL.revokeObjectURL(resource.url);},[resource]);
   useEffect(()=>()=>{if(photo)URL.revokeObjectURL(photo.url);},[photo]);
   const reset=()=>{keyboard.hide();setAnswers({...initialAnswers});setResource(null);setPhoto(null);setError('');setRun(r=>r+1);};
-  return <Setup.Provider value={{answers,update:patch=>setAnswers(a=>({...a,...patch})),resource,setResource,photo,setPhoto,error,setError,resendAt,setResendAt,reset}}>
+  if(workspaceOpen){const workspace=<Suspense fallback={<div role="status" className="teacher-loading">Opening your teaching workspace…</div>}><TeacherWorkspace mobile={!web} answers={answers.role==='teacher'?answers:undefined}/></Suspense>;return web?createPortal(workspace,document.body):workspace;}
+  return <Setup.Provider value={{answers,update:patch=>setAnswers(a=>({...a,...patch})),resource,setResource,photo,setPhoto,error,setError,resendAt,setResendAt,reset,openWorkspace:()=>{keyboard.hide();setWorkspaceOpen(true);}}}>
     <div className={`learning-app updated-onboarding ${answers.role==='teacher'?'teacher-theme':''}`}><FlowStack key={run} initial={screens.welcome}/></div>
   </Setup.Provider>;
 }

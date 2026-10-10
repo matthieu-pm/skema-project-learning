@@ -8,7 +8,7 @@ Mimo is a mobile product concept for **one-to-one language tutoring with a teach
 
 The project contains research and personas, ideation and scope decisions, an experience storyboard, a broad wireframe specification, Figma onboarding and home-screen designs, original companion images and editable Blender models, and a working frontend onboarding prototype in `app/`.
 
-**Implemented today:** learner, guardian, and teacher onboarding with simulated account and identity checks. **Proposed beyond onboarding:** teacher discovery, booking, payment, lessons, teacher workspace, practice, progress, and follow-up. The prototype has no connected backend or production services.
+**Implemented today:** learner, guardian, and teacher onboarding with simulated account and identity checks, plus an interactive teacher workspace on web and in the mobile preview. Teacher lessons, scheduling, messages, feedback, and recaps use fictional sample data. **Proposed services:** learner discovery/booking, real payments, video calls, AI generation, persistent accounts, and cross-device synchronization. The prototype has no connected backend or production services.
 
 The central product hypothesis is that a teacher can turn a learner's practical goal into a useful, short, editable one-to-one lesson with less preparation and administration. This is a hypothesis to test, not a validated business result.
 
@@ -171,7 +171,7 @@ Review board: [Mimo · Learning & teaching homes, `82:679`](https://www.figma.co
 | Learning · First visit | `84:530` | Find a teacher, saved learning goal, explanation of where future bookings appear. |
 | Teaching · First visit | `84:603` | Set availability, create a reusable short lesson, empty schedule explanation. Assumes profile is ready; verification-pending behavior is not designed here. |
 
-All four frames are **390 × 844**, with Nunito, the current purple/blue role palettes, raised buttons/cards, and the original Luma/Nori assets copied from `app/public/assets/onboarding/`. Learner navigation: Home / Explore / Sessions / Profile. Teacher navigation: Today / Learners / Lessons / Profile. Messages are in the header. Navigation and home actions are design affordances, not connected prototype routes. Names, sessions, times, submissions, and goals are sample content; the static 9:41 mock status bar does not change the app's live device clock.
+All four historical frames are **390 × 844**, with Nunito, purple/blue role palettes, raised buttons/cards, and original Luma/Nori assets copied from `app/public/assets/onboarding/`. Learner navigation: Home / Explore / Sessions / Profile. Their teacher navigation, Today / Learners / Lessons / Profile, is superseded by the implemented October 10 teacher architecture below. These Figma home actions remain design affordances. Names, sessions, times, submissions, and goals are sample content; the static 9:41 mock status bar does not change the app's live device clock.
 
 The page includes six reusable local components (two companions, two role buttons, two role navigation bars), color variables, and Nunito text styles. Existing onboarding pages remain unchanged. Visual review passed after correcting auto-layout row heights and companion scaling. Structural read-back confirmed **334 descendants, including 92 editable text nodes and 12 component instances**; the only raster content is four original companion images. All content clears the bottom navigation, and all text uses Nunito. This is design verification, not usability testing or runtime integration.
 
@@ -260,6 +260,60 @@ Both maps contain **Stages**, **Steps**, **Touchpoints**, and **Experience (emot
 
 The maps distinguish current frontend onboarding from proposed discovery, booking, lesson authoring, teaching, practice, and follow-up. Teacher identity checks remain simulated; human choice, optional AI, and private feedback remain in scope. All three screenshots (student, teacher, collection) passed visual inspection; structural checks found no overflowing children or overlapping sibling text. Existing board content and app behavior were preserved. Local source data, node IDs and screenshots: `output/user-journeys/`.
 
+## FigJam goal-based user flows — 9 October 2026
+
+[Mimo · User flows, section `440:2676`](https://www.figma.com/board/AYNNAqQDARTmwlsa6AYHsd?node-id=440-2676) contains **10 editable flows**, grouped into learner and teacher columns. The user's rule is **one user flow = one goal**. Each has an entry condition, a single successful outcome, decision branches where relevant, and a current/proposed status. These are bounded task flows, not an end-to-end journey.
+
+| Flow | Goal | Status | Node |
+| --- | --- | --- | --- |
+| L1 | Set my learning goal | Current local prototype | `428:2182` |
+| L2 | Set my meeting preferences | Current local prototype | `430:2226` |
+| L3 | Choose a suitable teacher | Proposed | `431:2265` |
+| L4 | Book one lesson | Proposed | `432:2319` |
+| L5 | Reschedule a lesson | Proposed | `433:2377` |
+| L6 | Join my online lesson | Proposed | `434:2430` |
+| L7 | Submit a practice response | Proposed | `435:2480` |
+| T1 | Create my teaching profile draft | Current local prototype | `436:2534` |
+| T2 | Prepare a lesson for one learner | Proposed | `437:2591` |
+| T3 | Share a lesson recap | Proposed | `438:2652` |
+
+The onboarding flows begin after the simulated account step and any applicable guardian handoff. T1 ends with a local draft at profile review, before the separate identity-preview goal. Online skips city; the diagram's “City needed” branch represents In person / Either. Proposed flows preserve learner choice, optional teacher-controlled AI and practice, private feedback, pending-payment distinction, and drafts when sharing fails. Pricing, cancellation and eligibility rules are not defined by these diagrams.
+
+Verified all ten flow screenshots and the collection overview, then shortened three cramped labels and inspected the affected flows again. Structural checks found **99 shapes, 109 connectors, no dangling connector endpoints, and no collection overflow**. Prior board content was preserved. This is artifact verification, not usability testing or implementation of the proposed flows. No app behavior changed. Mermaid sources, entry/boundary notes, node IDs, and screenshots: `output/user-flows/`.
+
+### Additional teacher flows — 9 October 2026
+
+[Teacher goals · Additional flows, section `466:3308`](https://www.figma.com/board/AYNNAqQDARTmwlsa6AYHsd?node-id=466-3308) adds **13 separate goal-based flows** beside the existing teacher section. The board had been rearranged since the original delivery: `440:2676` now contains teacher material, including user-added flows. Its content and layout were preserved; the original ten-flow collection description and screenshots above record the earlier delivery, not the current arrangement.
+
+| Flow | Goal | Status | Node |
+| --- | --- | --- | --- |
+| T4 | Set my availability | Proposed | `452:2685` |
+| T5 | Share a prepared lesson | Proposed | `453:2743` |
+| T6 | Teach an online lesson | Proposed | `454:2799` |
+| T7 | Review a learner submission | Proposed | `455:2848` |
+| T8 | Create a reusable lesson | Proposed | `456:2898` |
+| T9 | Adapt a saved lesson | Proposed | `457:2946` |
+| T10 | Reschedule a session | Proposed | `458:2994` |
+| T11 | Cancel a session | Proposed | `459:3042` |
+| T12 | Report a learner no-show | Proposed | `460:3089` |
+| T13 | Message a learner | Proposed | `462:3128` |
+| T14 | Update my teaching profile | Proposed | `463:3171` |
+| T15 | Complete the identity preview | Current simulated prototype | `464:3231` |
+| T16 | Receive a payout | Concept · policies open | `465:3279` |
+
+Each new flow has one goal, an entry condition, a clearly marked successful outcome, and relevant decision/recovery paths. Adaptation ends at a learner-specific draft; the earlier preparation flow continues to approval. The no-show flow records an issue and next step without deciding blame or promising compensation. Identity remains a local sample-document/Persona preview with a finish-later exit, not real verification. Payouts are a concept with provider, fees, timing and initiation policy still open. No new commercial rules or integrations were implemented.
+
+Verified the overview and all 13 flow screenshots; shortened a wrapped cancellation label and rechecked it. Structural checks found **122 shapes, 127 connectors, no dangling endpoints, no shape overflow within flows, and no collection overflow**. No app code changed. Sources, node IDs, and screenshots: `output/user-flows/teacher-additions/`.
+
+## App architecture and website sitemap — 9 October 2026
+
+[Editable collection, section `484:3607`](https://www.figma.com/board/AYNNAqQDARTmwlsa6AYHsd?node-id=484-3607) sits beside the teacher flows. The user confirmed that app architecture means **screens and navigation**.
+
+- [App architecture, `482:3564`](https://www.figma.com/board/AYNNAqQDARTmwlsa6AYHsd?node-id=482-3564): implemented local setup plus explicitly proposed learner, teacher and shared navigation. Learner tabs remain Home / Explore / Sessions / Profile; teacher tabs remain Today / Learners / Lessons / Profile; Messages is accessed via the header. Leaf boxes group related screens; diagram layout is not tab order or a chronological user flow. Account, guardian and identity remain simulations. Guardian handling applies only to under-18 learners.
+- [Website sitemap, `480:3392`](https://www.figma.com/board/AYNNAqQDARTmwlsa6AYHsd?node-id=480-3392): the current single landing page at `/landing/index.html`, its section anchors, illustrative content and interactive lesson examples, with preview CTAs linking to the app at `/`. Example tabs and hash anchors are not separate pages.
+
+Sources were the current onboarding and landing code, proposed home navigation, and goal-based flows. Visually inspected both diagrams and the collection, then added visible implementation-status headings and rechecked the composition. Structural validation found **45 shapes, 44 connectors, no dangling endpoints and no section overflow** before the heading additions; the four headings fit the existing group insets. No app code changed. Mermaid sources, node state and rendered screenshots are in `output/architecture-sitemap/`.
+
 ## Broader wireframe proposal
 
 `all-models-and-images/wireframe-screen-index.md` is the full **72-screen** index, with primary actions, onward routes, state behavior, and research-to-design rationale. It describes structural 390 × 844 wireframes, not an implemented full product.
@@ -321,6 +375,41 @@ The introduction now also offers **Link Persona ID** with the user-supplied logo
 Introduction → legal name → **date of birth** → issuing country → document type (passport, national identity card, driving licence) → sample document → sample selfie. Date entry formats as DD/MM/YYYY, rejects impossible/future dates, and restores on Back. Do not invent a minimum teaching age.
 
 Teacher deferral ends at `teacher-draft`; adult learner deferral ends at `learner-ready`; guardian completion/deferral resumes at `language`. Identity verification is separate from teaching qualification. No camera, real identity-document upload, or verification provider is used.
+
+### Teacher workspace — implemented 10 October 2026
+
+Teacher completion now opens the teaching workspace. Public name, teaching languages/levels, approach, format/city, duration, rate, and identity-preview status transfer from onboarding. Legal identity details stay separate. The supplied October 10 architecture supersedes the older Today / Learners home concept: **Students / Schedule / Lessons / Profile**, with Messages reachable from the header and Students.
+
+- **Students:** searchable profiles, learner goals, ongoing modules, editable learning points after reviewing module results, private conversations, and review/share of a sample learner submission.
+- **Schedule:** full day/week/month calendar with date navigation, Today, status filters, clickable bookings and month-to-day drill-down, availability, meeting requests, session details, approved-lesson selection, rescheduling, cancellation, no-show reports, online lobby/session simulation, private session notes, and recap editing/learner preview/sharing.
+- **Lessons:** Library, Module editor, Templates, and Archive. Reusable lessons can be cloned for one learner, edited as activity blocks, reordered, previewed, approved, and explicitly shared. Optional AI produces labeled sample material for review/apply/discard; unavailable AI leaves manual editing available.
+- **Profile:** public teaching-profile edit/preview/save, Help, Account settings, separate sample identity checks, and conceptual payout setup/status previews. Payout provider, timing, fees, and initiation policy remain undecided.
+
+The web workspace is at `/?teacher=1&view=web`; the mobile workspace is at `/?teacher=1`, inside the existing iPhone/Pixel runtime. Both use the same React screens, model, and interactions, with desktop sidebar and mobile bottom navigation/FlowStack. They are separate in-memory preview sessions, not synchronized accounts or native mobile binaries. Direct links seed Gilbert plus four fictional learners and October 2026 sessions. Reload/replay resets preview edits.
+
+The current live [teacher goal section, `440:2676`](https://www.figma.com/board/AYNNAqQDARTmwlsa6AYHsd?node-id=440-2676) and [additional flows, `466:3308`](https://www.figma.com/board/AYNNAqQDARTmwlsa6AYHsd?node-id=466-3308) were read alongside the three supplied screenshots. The source includes the user-added module-results and meeting-arrangement paths. Earlier “Proposed” labels above record the diagrams' original status; these paths now have frontend simulations, not connected services.
+
+Draft/share boundaries: reusable sources survive adaptation, completed sessions keep lesson snapshots, and learner previews exclude private teaching notes. Sharing needs approval, learner preview, and a selected recipient; success is local to the preview. Conflicting confirmed slots are blocked, and a rescheduled booking retains its original time until sample learner acceptance. Offline simulation preserves editable drafts and requires retry; pending payout status does not trigger another transfer. Session issue reports do not decide fault or compensation. Availability currently supports Europe/Paris only and preserves existing bookings.
+
+Implementation: `app/src/teacher/TeacherWorkspace.tsx` composes web/mobile navigation; `context.ts` owns workspace state; `components.tsx` owns shared controls; `pages.tsx` implements flows; `model.ts` holds fixtures/validation/snapshot rules; `teacher.css` and `uxcel.css` style app-owned surfaces; `CalendarPage.tsx` / `calendar.ts` / `calendar.css` implement the responsive calendar and date/event layout. `WebSidebar.tsx` uses generated shadcn sidebar-08 primitives from `ui/`, and `icons.tsx` renders Hugeicons. The workspace is lazy-loaded after onboarding. Protected runtime files and original research/assets are unchanged.
+
+Verification: production build and **28 protected runtime hashes** passed, together with **16 onboarding tests and 8 teacher model/calendar tests**. Rendered checks covered the actual teacher-onboarding handoff, profile transfer, lesson adaptation/edit/AI review/approve/share, private-note exclusion, feedback/recap sharing, message failure/retry, scheduling conflicts, replacement acceptance, cancellation, no-show reporting, availability, and sample teaching completion. iPhone/Pixel layouts and keyboard dismissal on tab changes were inspected; web checks included desktop and 390px without horizontal overflow. Captures and exact scope are in `app/qa/teacher-workspace/` and `verification.md`. No deployment or external integration was performed.
+
+### Teacher workspace design and calendar revision — 10 October 2026
+
+The teacher web/mobile workspace now follows the supplied [Uxcel Home flow on Mobbin](https://mobbin.com/flows/67d21fa1-0aba-4f35-9615-35dd8102342d): restrained neutral navigation, flat white bordered cards, purple actions, compact controls and a main content/secondary panel arrangement. The seven-screen flow was inspected through the Mobbin connector. Mimo retains its Labil Grotesk typography, original companions and one-to-one flows; onboarding and landing styles remain separate.
+
+The desktop shell uses actual **shadcn sidebar-08**, generated with `npx shadcn@latest add sidebar-08 --yes` in an isolated scaffold, then adapted to existing routes. It includes icon collapse, expandable section links, an account menu and a responsive navigation drawer. Interface icons use `@hugeicons/react` and `@hugeicons/core-free-icons`. Tailwind theme/utilities are scoped to teacher sources and omit preflight to preserve mobile runtime defaults; PostCSS configuration is app-owned and protected Vite/runtime files remain unchanged.
+
+Schedule now renders **Day / Week / Month** calendars. Web starts in Week; the phone starts in Month. Previous/next adjusts the active period; Today returns to the explicitly labeled sample date **10 October 2026**. Month cells open day view, and booking tiles open existing session details/actions. All/confirmed/requested/completed filters apply in every view. Timed views display duration and place overlapping events side by side, with Europe/Paris UTC offsets calculated for the selected date. The time grid covers 08:00–20:00 and expands to include sessions outside those hours. All bookings remain fictional local state; there is no external calendar integration.
+
+Fresh browser checks covered all calendar modes, previous/next month and day navigation, date drill-down, booking details and request filtering. iPhone/Pixel current screens measured 393px/427px without horizontal overflow; responsive web measured 390px without overflow. Sidebar collapse, library submenu, account-settings destination and drawer dismissal were checked. Production build, 28 runtime hashes, 16 onboarding tests and 8 teacher tests passed. New screenshots are `app/qa/teacher-workspace/calendar-month-{web,iphone,web-390}.jpg`; earlier captures show the prior workspace styling. Detailed verification remains in that folder's `verification.md`.
+
+### Workspace buttons and cards blended with onboarding — 10 October 2026
+
+The user's latest styling revision merges the Uxcel workspace with the current onboarding's tactile surfaces. `app/src/teacher/onboarding-blend.css`, imported after workspace base styles, adds 12px rounded action buttons, a 4px solid primary edge, 2px secondary edges, heavier button text and stable translate-on-press feedback. Focus preserves elevation and a visible outline; disabled controls have no press/elevation feedback. Cards use 16px corners, 2px outlines and a restrained 2px lower edge, with pastel companion/lesson illustration areas. Calendar controls and its outer surface use the same shapes while internal date-grid lines and time geometry remain compact. Purple actions, Hugeicons, shadcn sidebar-08, Labil typography, content and all existing flows remain in place.
+
+This supersedes the flat button/card treatment in the earlier Uxcel revision, while preserving its layout. Onboarding, landing and protected runtime files were not restyled. Desktop dashboard, session actions and month calendar were inspected; iPhone dashboard/lesson cards and Pixel lesson layout retained matching client/scroll widths (393px and 427px). A focused secondary button retained its shadow and 3px outline with no stuck transform after activation. Active/disabled/reduced-motion styles were inspected in source; physical touch hardware and slowed animation playback were not checked. Build and all 28 runtime hashes passed; existing onboarding/teacher tests remain green. Proof: `app/qa/teacher-workspace/onboarding-blend-web.jpg` and `onboarding-blend-iphone.jpg`.
 
 ### State and media
 
@@ -422,11 +511,13 @@ The public repository includes the prototype, documentation, and design assets. 
 | `app/src/Prototype.tsx` | App-owned screens, controls, media preview, session state, and flow composition. |
 | `app/src/onboarding.ts` | Answers model, choices, branch/step construction, guardian handling, level state, field/date validation. |
 | `app/src/prototype.css` | App-owned visual styling and role palettes. |
+| `app/src/teacher/` | Shared teacher web/mobile workspace, fixtures, state, flow screens, and styling. |
 | `app/src/mobile/` | Protected phone runtime, navigation, scrolling, keyboard, sheets, carousels, geometry, and device components. |
 | `app/src/mobile/COMPONENTS.md` | Full runtime/component/gesture contract. |
 | `app/AGENTS.md` | Required app-specific operating instructions and durable visual decisions. |
 | `app/mobile-runtime.lock.json` | Hashes protecting 28 runtime files. |
 | `app/tests/onboarding.test.mjs` | Routing/validation regression tests. |
+| `app/tests/teacher-workspace.test.mjs` | Booking conflicts, lesson adaptation, private snapshots, profile transfer, and parent-tab mapping. |
 | `app/tests/mobile-runtime.spec.ts` | Playwright runtime tests. |
 | `app/tests/sites-worker.test.mjs` | Static-worker/Sites behavior tests. |
 | `app/scripts/` and `app/worker/` | Runtime checks and static hosting build preparation. |
@@ -444,6 +535,7 @@ Local preview: `http://localhost:4173`. Check whether an existing server is avai
 
 ```sh
 npm run test:onboarding
+npm run test:teacher
 npm run check:runtime
 npm run build
 npm run test:runtime

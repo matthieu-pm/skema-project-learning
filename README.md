@@ -4,7 +4,7 @@
 
 Mimo is a SKEMA product design project exploring personal language tutoring, online or in person. It brings together learner and teacher research, product concepts, Figma designs, original companion characters, and an interactive onboarding prototype.
 
-The idea is to help learners work toward a practical goal while giving teachers short, reusable, editable lesson materials. The repository documents that product hypothesis and its design exploration; the working app currently covers onboarding.
+The idea is to help learners work toward a practical goal while giving teachers short, reusable, editable lesson materials. The working prototype covers onboarding and an interactive teacher workspace on web and mobile.
 
 ## Try the prototype
 
@@ -21,6 +21,8 @@ Open [localhost:4173](http://localhost:4173). Use the device picker to switch be
 
 Choose **Learn** or **Teach** to explore the two onboarding paths. Choosing **Under 18** on the learner path also demonstrates the guardian handoff. Back preserves answers; Replay or a page reload resets the session.
 
+Teacher onboarding continues into the mobile workspace. You can also open [teacher web](http://localhost:4173/?teacher=1&view=web) or [teacher mobile](http://localhost:4173/?teacher=1) directly with sample data.
+
 ## What works today
 
 | Path | Included in the prototype |
@@ -28,17 +30,18 @@ Choose **Learn** or **Teach** to explore the two onboarding paths. Choosing **Un
 | Learner | Multiple languages, a separate level for each language, a personal goal, optional learning resources, meeting preferences, and a setup summary. |
 | Guardian | A handoff immediately after the email-code step, followed by the adult's sample identity flow before learner preferences. |
 | Teacher | Profile details, optional photo/video, teaching languages and levels, approach, meeting preferences, lesson duration, rate, and profile review. |
+| Teacher workspace | Students, Schedule, Lessons, Profile; editable lessons, optional sample AI review, private messages/feedback/recaps, session management, profile settings, and payout concepts. |
 | Identity preview | Sample document/selfie steps, a finish-later option, and a simulated Link Persona ID path. |
 
 The browser preview includes device frames, a simulated keyboard, scrolling and gestures, safe areas, and a live status-bar clock. Purple **Luma** guides learners; blue **Nori** guides teachers.
 
 **This is a frontend prototype.** Email, identity checks, guardian actions, notifications, and widget installation are simulated. No Persona service is connected. Answers stay in memory for the current page session, and selected files use local previews with a 20 MB limit; they are not uploaded.
 
-Teacher discovery, booking, payment, live lessons, teacher workspaces, practice, and progress are proposed product areas. Home-screen concepts and broader wireframes are design artifacts, not connected app screens. There is no production authentication, database, or AI integration.
+Teacher workspace interactions use fictional learners and local sample sessions. Booking changes, messages, video lessons, AI drafts, verification, and payout statuses are simulations. Learner discovery/booking and connected services remain proposed. Historical home concepts and broader wireframes remain reference artifacts. There is no production authentication, database, native mobile binary, or AI integration.
 
 ## Research and design
 
-The product direction centers on practical conversation, a learner's choice of teacher, and teacher control over lesson content. Optional AI assistance remains a proposal. Social feeds, group sessions, public leaderboards, and mandatory daily streaks are outside the current scope.
+The product direction centers on practical conversation, a learner's choice of teacher, and teacher control over lesson content. Optional AI assistance has an editable sample preview; generated content requires teacher review. Social feeds, group sessions, public leaderboards, and mandatory daily streaks are outside the current scope.
 
 | Resource | Contents |
 | --- | --- |
@@ -59,6 +62,7 @@ Some older assets use the name **One to One** or earlier companion assignments. 
 | [`app/`](app/) | React 19, TypeScript, and Vite prototype, with Motion, Radix UI, and locally bundled fonts. |
 | [`app/src/Prototype.tsx`](app/src/Prototype.tsx) | App screens and flow composition. |
 | [`app/src/onboarding.ts`](app/src/onboarding.ts) | Answers, branching, choices, and validation. |
+| [`app/src/teacher/`](app/src/teacher/) | Shared teacher web/mobile screens, navigation, local state, model, and styling. |
 | [`app/src/prototype.css`](app/src/prototype.css) | App styling and learner/teacher palettes. |
 | [`app/src/mobile/`](app/src/mobile/) | Protected mobile preview runtime and components. |
 | [`all-models-and-images/`](all-models-and-images/) | Original companion artwork, editable Blender models, animation exports, and wireframe documentation. |
@@ -71,6 +75,7 @@ Run these commands from `app/`:
 
 ```sh
 npm run test:onboarding   # Branching and input validation
+npm run test:teacher      # Teacher model and private snapshot rules
 npm run check:runtime     # Integrity of protected mobile runtime files
 npm run build             # TypeScript, Vite, and static-worker output
 npx playwright install chromium
