@@ -67,7 +67,7 @@ export default function WebOnboarding({ answers, initial, onBack, children }: Pr
           {children(flow)}
         </section>
         <p className="web-setup-preview">Local preview · Your answers stay in this session.</p>
-        <a className="web-mobile-link" href="/">Try the mobile preview <Icon name="arrow" size={14} /></a>
+        <a className="web-mobile-link" href="/?view=mobile">Try the mobile preview <Icon name="arrow" size={14} /></a>
       </div>
     </div>
   );

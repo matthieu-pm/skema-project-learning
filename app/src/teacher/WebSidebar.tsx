@@ -202,7 +202,7 @@ export function WebSidebar({
             </SidebarMenuItem>
             <SidebarMenuItem>
               <SidebarMenuButton asChild tooltip="Mobile app">
-                <a href="/?teacher=1">
+                <a href="/?teacher=1&view=mobile">
                   <Icon name="video" />
                   <span>Mobile app</span>
                 </a>

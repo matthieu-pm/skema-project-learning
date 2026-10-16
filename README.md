@@ -17,11 +17,11 @@ npm ci
 npm run dev -- --host 0.0.0.0 --port 4173
 ```
 
-Open [localhost:4173](http://localhost:4173). Use the device picker to switch between **iPhone** and **Pixel 10**, and enter **481629** when asked for the preview email code.
+Open [localhost:4173](http://localhost:4173) to select the desktop or mobile flow automatically. In the [mobile preview](http://localhost:4173/?view=mobile), use the device picker to switch between **iPhone** and **Pixel 10**. Enter **481629** when asked for the preview email code.
 
 Choose **Learn** or **Teach** to explore the two onboarding paths. Choosing **Under 18** on the learner path also demonstrates the guardian handoff. Back preserves answers; Replay or a page reload resets the session.
 
-Open [web onboarding](http://localhost:4173/?view=web) for the same learner/teacher flow in a desktop layout inspired by Uxcel. Teacher completion opens the matching web or mobile workspace. You can also open [teacher web](http://localhost:4173/?teacher=1&view=web) or [teacher mobile](http://localhost:4173/?teacher=1) directly with sample data.
+Open [web onboarding](http://localhost:4173/?view=web) for the same learner/teacher flow in a desktop layout inspired by Uxcel. Teacher completion opens the matching web or mobile workspace. You can also open [teacher web](http://localhost:4173/?teacher=1&view=web) or [teacher mobile](http://localhost:4173/?teacher=1&view=mobile) directly with sample data.
 
 ## What works today
 

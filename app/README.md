@@ -9,11 +9,11 @@ npm ci
 npm run dev -- --host 0.0.0.0 --port 4173
 ```
 
-Open http://localhost:4173. The device picker switches between iPhone and Pixel 10. The preview scales to small browser windows.
+Open http://localhost:4173. Entry automatically selects web for desktop browsers and the mobile preview for phones/tablets. Detection runs once before mounting; resizing does not reset the flow. In the mobile preview, the device picker switches between iPhone and Pixel 10.
 
-Onboarding previews: [web](http://localhost:4173/?view=web) and [mobile](http://localhost:4173/). They share the same steps, branching, validation and answers. The web shell uses Uxcel-inspired centered forms, top progress and a fixed action bar. Teacher completion opens the matching workspace with the public profile details just entered.
+Explicit onboarding previews (override detection): [web](http://localhost:4173/?view=web) and [mobile](http://localhost:4173/?view=mobile). They share the same steps, branching, validation and answers. The web shell uses Uxcel-inspired centered forms, top progress and a fixed action bar. Teacher completion opens the matching workspace with the public profile details just entered.
 
-Direct workspace previews: [teacher web](http://localhost:4173/?teacher=1&view=web) and [teacher mobile](http://localhost:4173/?teacher=1).
+Direct workspace previews: [teacher web](http://localhost:4173/?teacher=1&view=web) and [teacher mobile](http://localhost:4173/?teacher=1&view=mobile).
 
 ## Flow
 
@@ -53,6 +53,8 @@ The lazy-loaded teacher workspace lives in `src/teacher/`, with shared state, mo
 The full calendar supports Day, Week and Month, previous/next navigation, status filters, clickable sessions and month-date drill-down. Web defaults to Week and mobile to Month. “Today” returns to the clearly labeled sample date 10 October 2026. Timed bookings use their durations and overlap columns; Europe/Paris offsets follow the selected date.
 
 ## Verification
+
+`npm run test:routing` checks device hints, explicit overrides and query/hash preservation. `npx playwright test tests/device-routing.spec.ts` checks desktop/mobile entry, teacher switching, resize stability and hidden phone content while web onboarding is deliberately delayed.
 
 `npm run test:onboarding` checks branching, progression and required inputs. `npm run build` checks TypeScript, creates the production build and verifies mobile runtime integrity. Rendered checks and captures are recorded in `design-qa.md` and `qa/step-update/`.
 

@@ -2592,10 +2592,10 @@ function SettingsPage() {
           <a className="tw-button tw-secondary" href="/?teacher=1&view=web">
             Open web app
           </a>
-          <a className="tw-button tw-secondary" href="/?teacher=1">
+          <a className="tw-button tw-secondary" href="/?teacher=1&view=mobile">
             Open mobile app
           </a>
-          <a className="tw-button tw-quiet" href={mobile ? '/' : '/?view=web'}>
+          <a className="tw-button tw-quiet" href={mobile ? '/?view=mobile' : '/?view=web'}>
             Replay onboarding
           </a>
         </div>

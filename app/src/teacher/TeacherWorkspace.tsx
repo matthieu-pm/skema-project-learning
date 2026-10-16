@@ -109,7 +109,7 @@ function Toolbar({
       </div>
       <div className="tw-toolbar-right">
         {!mobile && (
-          <a className="tw-device-link" href="/?teacher=1">
+          <a className="tw-device-link" href="/?teacher=1&view=mobile">
             Mobile app <Icon name="arrow" size={16} />
           </a>
         )}
