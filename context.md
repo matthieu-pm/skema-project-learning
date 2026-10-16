@@ -411,6 +411,20 @@ The user's latest styling revision merges the Uxcel workspace with the current o
 
 This supersedes the flat button/card treatment in the earlier Uxcel revision, while preserving its layout. Onboarding, landing and protected runtime files were not restyled. Desktop dashboard, session actions and month calendar were inspected; iPhone dashboard/lesson cards and Pixel lesson layout retained matching client/scroll widths (393px and 427px). A focused secondary button retained its shadow and 3px outline with no stuck transform after activation. Active/disabled/reduced-motion styles were inspected in source; physical touch hardware and slowed animation playback were not checked. Build and all 28 runtime hashes passed; existing onboarding/teacher tests remain green. Proof: `app/qa/teacher-workspace/onboarding-blend-web.jpg` and `onboarding-blend-iphone.jpg`.
 
+### Teacher web scrolling — implemented 10 October 2026
+
+The web workspace now fills a `100dvh` frame with a stationary sidebar and toolbar. Only `.tw-content` scrolls, with contained overscroll; the main shell and document cannot grow or scroll with page content. Narrow web layouts no longer reserve the obsolete 85px bottom-navigation gap. Changes are scoped to teacher web styles in `teacher.css` / `uxcel.css`.
+
+Rendered checks at 1280×720 and 390×844 confirmed content scroll movement while document scroll stayed at zero and the toolbar remained at its original top position (8px desktop, 0px narrow web). The narrow content pane reaches the viewport bottom. Build and all 28 protected runtime hashes passed. Captures are in `app/qa/workspace-scroll/`.
+
+### Web onboarding — implemented 10 October 2026
+
+`/?view=web` now runs the same onboarding as mobile: shared screen content, actions, answers, `nextStep`, `routeFor` and validation in `Prototype.tsx` / `onboarding.ts`. It preserves every learner/teacher step, account method, independent language levels, guardian handoff, optional preferences/media, identity document/Persona alternative and deferral. Only presentation differs. Teacher completion opens the web workspace with public profile details; learner completion remains the teacher-discovery handoff at the end of the preview. Direct sample-workspace URLs remain available.
+
+The latest format follows the user-selected [Uxcel onboarding on Mobbin](https://mobbin.com/flows/452191b8-996a-4e8e-a17b-691e5c04f042), inspected through the Mobbin connector (23-screen flow; sampled previews at positions 1, 7, 12, 18 and 23). A centered form sits on a white canvas beneath slim top progress, Back and Mimo branding. A fixed pale action rail places secondary actions left and the main action right. Compact outlined choices, purple web actions/selections, Labil Grotesk, Hugeicons and original Mimo companions connect it to the workspace. The initial split companion-panel exploration is superseded. Mobile keeps its original role colors and runtime geometry. All onboarding interface icons now use Hugeicons.
+
+The lazy-loaded `WebOnboarding.tsx` / `web-onboarding.css` render through a body portal using app-owned styles; protected phone runtime remains mounted and is hidden only for the web presentation. Native web inputs/textarea replace simulated keyboard fields only on web. Browser checks covered complete teacher email/document/selfie handoff to the web workspace, Back preserving answers, wrong-code recovery, online city skipping, learner Google/minor/guardian/Persona progression and multilingual summary, and 390px web choice/account layouts without horizontal overflow. iPhone (393px) and Pixel (427px) keyboard opening/dismissal and progression remained functional. Existing 16 onboarding tests, 8 teacher tests, production build and 28 runtime hashes pass. Proof and limits: `app/qa/web-onboarding/verification.md`.
+
 ### State and media
 
 - State is in React memory for the current page session. Back preserves answers; Replay and reload reset them. There is no persistent account/storage service.

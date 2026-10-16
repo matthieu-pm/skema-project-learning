@@ -25,6 +25,7 @@ import {
   CircleIcon as HugeCircleIcon,
   MoreVerticalIcon,
   ArrowUpDownIcon,
+  Upload01Icon,
 } from "@hugeicons/core-free-icons";
 import type { SVGProps } from "react";
 
@@ -54,6 +55,7 @@ const icons: Record<string, IconSvgElement> = {
   circle: HugeCircleIcon,
   more: MoreVerticalIcon,
   expand: ArrowUpDownIcon,
+  upload: Upload01Icon,
 };
 type Props = Omit<SVGProps<SVGSVGElement>, "strokeWidth"> & {
   size?: number;

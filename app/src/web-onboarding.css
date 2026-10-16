@@ -1,0 +1,94 @@
+body:has(.web-onboarding) { height: auto; overflow: auto; background: white; }
+body:has(.web-onboarding) #root { display: none; }
+.learning-app.web-onboarding { position: relative; inset: auto; min-height: 100dvh; background: white; color: #272330; --paper: #fff; --line: #e9e7ee; --primary: #8050d6; --primary-shadow: #6238b0; }
+.web-onboarding *, .web-onboarding *::before, .web-onboarding *::after { box-sizing: border-box; }
+.web-onboarding .web-setup-header { position: sticky; top: 0; z-index: 20; padding: 24px 32px; background: #ffffffed; }
+.web-onboarding .web-setup-header nav { display: flex; align-items: center; gap: 22px; max-width: 960px; height: 36px; margin: auto; }
+.web-onboarding .web-back, .web-onboarding .web-back-placeholder { display: grid; place-items: center; width: 36px; height: 36px; flex-shrink: 0; }
+.web-onboarding .web-back { border: none; border-radius: 8px; background: none; color: #817b89; }
+.web-onboarding .web-back:hover { background: #f6f3fb; color: #6238b0; }
+.web-onboarding .web-setup-header .progress { height: 9px; background: #f0eff3; }
+.web-onboarding .web-setup-header .progress > span { min-width: 0; }
+.web-onboarding .web-setup-header .progress > span::after { display: none; }
+.web-onboarding .web-setup-brand { color: #6238b0; font-size: 23px; letter-spacing: -1px; font-weight: 900; text-decoration: none; }
+.web-onboarding .web-setup-main { max-width: 504px; padding: 26px 12px 145px; margin: 0 auto; }
+.web-onboarding .web-step-meta { display: flex; align-items: center; justify-content: space-between; gap: 16px; color: #817b89; font-size: 12px; margin: 0 0 25px; }
+.web-onboarding .web-setup-stage { scroll-margin-top: 110px; }
+.web-onboarding .web-setup-stage:focus { outline: none; }
+.web-onboarding.updated-onboarding .setup-content { padding: 0; }
+.web-onboarding.updated-onboarding .guide { min-height: 0; margin: 0 0 28px; justify-content: center; }
+.web-onboarding.updated-onboarding .guide > .mascot { display: none; }
+.web-onboarding.updated-onboarding .guide .speech { background: none; border: none; padding: 0; font-size: 27px; font-weight: 850; line-height: 1.25; letter-spacing: -.45px; text-align: center; }
+.web-onboarding .guide .speech::before { display: none; }
+.web-onboarding .speech { margin: 0; }
+.web-onboarding.updated-onboarding .welcome, .web-onboarding.updated-onboarding .intro-scene { position: static; margin: 0; }
+.web-onboarding.updated-onboarding .welcome { padding: 12px 0 24px; }
+.web-onboarding .welcome > .mascot { width: 120px; height: 145px; }
+.web-onboarding .welcome h1 { font-size: 54px; margin: 20px 0 18px; }
+.web-onboarding .welcome p { font-size: 22px; line-height: 1.4; color: #5f586c; }
+.web-onboarding .intro-scene { gap: 26px; padding: 22px 0 16px; }
+.web-onboarding .intro-scene .speech { font-size: 25px; line-height: 1.35; padding: 18px 22px; }
+.web-onboarding .intro-scene > .mascot { width: 148px; height: 170px; }
+.web-onboarding .account-intro { padding: 8px 0 16px; }
+.web-onboarding .account-intro > .mascot { width: 85px; height: 100px; margin-bottom: 20px; }
+.web-onboarding .account-intro h1 { font-size: 27px; }
+.web-onboarding .account-intro .preview-note { margin-bottom: 0; }
+.web-onboarding .actions { position: fixed; bottom: 0; left: 0; right: 0; z-index: 25; min-height: 90px; padding: 20px max(32px, calc((100vw - 960px) / 2)); background: #faf7ff; border-top: 1px solid #f0eaf8; display: flex; flex-direction: row; align-items: center; justify-content: flex-end; gap: 16px; }
+.web-onboarding .primary, .web-onboarding .secondary { width: auto; min-width: 150px; padding: 0 24px; height: 46px; border-radius: 10px; font-size: 14px; text-transform: none; letter-spacing: 0; }
+.web-onboarding .actions > .primary { order: 2; }
+.web-onboarding .actions > .secondary, .web-onboarding .actions > .text-button { order: 0; margin-right: auto; }
+.web-onboarding .actions > .text-button { width: auto; color: #62596e; font-size: 14px; padding: 0; text-transform: none; letter-spacing: 0; font-weight: 700; }
+.web-onboarding .actions > .secondary { color: #6238b0; background: white; }
+.web-onboarding .actions.account-actions > .secondary { color: #39333f; }
+.web-onboarding .account-divider { order: 1; flex: none; font-size: 13px; }
+.web-onboarding .account-divider::before, .web-onboarding .account-divider::after { display: none; }
+.web-onboarding .choice { border: 1.5px solid #e9e7ee; box-shadow: 0 2px 0 #f2f0f5; border-radius: 12px; background: white; padding: 14px 18px; min-height: 62px; }
+.web-onboarding .choice:hover { background: #faf8fd; border-color: #d5c6ec; }
+.web-onboarding .choice.selected { background: #f7f2ff; border-color: #a17adf; color: #6238b0; box-shadow: 0 2px 0 #e5d5fc; }
+.web-onboarding .choice strong { font-size: 16px; font-weight: 750; }
+.web-onboarding .choice-copy > span { font-size: 14px; color: #817b89; }
+.web-onboarding .options { gap: 12px; }
+.web-onboarding .role-options .choice, .web-onboarding .topic-options .choice { min-height: 86px; }
+.web-onboarding .options.languages, .web-onboarding .teaching-level-options { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+.web-onboarding.updated-onboarding .languages .choice { min-height: 62px; padding: 12px 16px; gap: 12px; }
+.web-onboarding .languages .choice-icon { width: 30px; height: 28px; }
+.web-onboarding .checkbox { width: 22px; height: 22px; border-radius: 6px; border-width: 1.5px; }
+.web-onboarding .selected .checkbox { background: #8050d6; border-color: #8050d6; color: white; }
+.web-onboarding .checkbox svg { width: 19px; height: 19px; }
+.web-onboarding.updated-onboarding .teaching-level-options .choice-copy { display: block; }
+.web-onboarding.updated-onboarding .teaching-level-options .choice-copy > span { margin-top: 4px; }
+.web-onboarding.updated-onboarding .level-options .choice, .web-onboarding.updated-onboarding .teaching-level-options .choice { padding: 12px 16px; min-height: 62px; }
+.web-onboarding .setup-field { font-size: 14px; font-weight: 750; gap: 9px; }
+.web-onboarding .setup-field input, .web-onboarding .setup-field textarea { border: 1.5px solid #e9e7ee; border-radius: 10px; padding: 14px 16px; font-size: 16px; min-height: 52px; background: white; }
+.web-onboarding .setup-field textarea { min-height: 140px; resize: vertical; }
+.web-onboarding .setup-field input:focus, .web-onboarding .setup-field textarea:focus { background: #fbf9ff; border-color: #a17adf; }
+.web-onboarding .setup-field input:focus-visible, .web-onboarding .setup-field textarea:focus-visible { outline: 3px solid #dcccfa; outline-offset: 2px; }
+.web-onboarding .setup-note { background: #f8f7fa; color: #756c81; font-size: 14px; margin: 20px 0 0; border-radius: 10px; }
+.web-onboarding .step-description { font-size: 14px; color: #817b89; }
+.web-onboarding [data-step=language] > .step-description, .web-onboarding [data-step=teaching-levels] > .step-description { text-align: center; margin-bottom: 20px; }
+.web-onboarding .preview-note, .web-onboarding .web-setup-preview { font-size: 12px; line-height: 1.5; text-align: center; color: #817b89; }
+.web-onboarding .web-setup-preview { margin: 28px 0 0; }
+.web-onboarding .web-mobile-link { display: flex; justify-content: center; align-items: center; gap: 6px; margin-top: 14px; text-decoration: none; font-size: 12px; font-weight: 650; color: #817b89; }
+.web-onboarding .inline-link { color: #8050d6; }
+.web-onboarding .inline-link:disabled { color: #afafaf; }
+.web-onboarding .languages-coming-soon { margin-top: 14px; }
+.web-onboarding.updated-onboarding .notification-example { margin-top: 24px; margin-bottom: 24px; }
+.web-onboarding .setup-summary, .web-onboarding .info-card, .web-onboarding .google-preview, .web-onboarding .persona-link-card { border-width: 1.5px; border-radius: 14px; box-shadow: 0 2px 0 #f2f0f5; }
+.web-onboarding .setup-summary { padding: 24px; }
+.web-onboarding .upload-target { border-width: 1.5px; background: #fcfbfe; }
+.web-onboarding a:focus-visible { outline: 3px solid #8050d6; outline-offset: 4px; border-radius: 4px; }
+@media (min-width: 1440px) { .web-onboarding .web-setup-main { padding-top: 44px; } }
+@media (max-width: 620px) {
+  .web-onboarding .web-setup-header { padding: 16px; }
+  .web-onboarding .web-setup-header nav { gap: 12px; }
+  .web-onboarding .web-setup-main { padding: 24px 24px 165px; }
+  .web-onboarding .actions { padding: 18px 24px 24px; gap: 12px; min-height: 86px; }
+  .web-onboarding .primary, .web-onboarding .secondary { min-width: 110px; padding: 0 16px; font-size: 13px; }
+  .web-onboarding .actions.two-actions { flex-wrap: wrap; }
+  .web-onboarding .actions.account-actions > .primary, .web-onboarding .actions.account-actions > .secondary, .web-onboarding [data-web-step=welcome] .actions > button { flex: 1 1 100%; margin: 0; }
+  .web-onboarding .actions.account-actions > .primary, .web-onboarding [data-web-step=welcome] .actions > .primary { order: 0; }
+  .web-onboarding .account-divider { display: none; }
+  .web-onboarding .guide .speech { font-size: 25px; }
+  .web-onboarding .options.languages, .web-onboarding .teaching-level-options { grid-template-columns: 1fr; }
+  .web-onboarding .actions > .text-button { max-width: 120px; text-align: left; font-size: 13px; }
+}

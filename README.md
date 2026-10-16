@@ -21,7 +21,7 @@ Open [localhost:4173](http://localhost:4173). Use the device picker to switch be
 
 Choose **Learn** or **Teach** to explore the two onboarding paths. Choosing **Under 18** on the learner path also demonstrates the guardian handoff. Back preserves answers; Replay or a page reload resets the session.
 
-Teacher onboarding continues into the mobile workspace. You can also open [teacher web](http://localhost:4173/?teacher=1&view=web) or [teacher mobile](http://localhost:4173/?teacher=1) directly with sample data.
+Open [web onboarding](http://localhost:4173/?view=web) for the same learner/teacher flow in a desktop layout inspired by Uxcel. Teacher completion opens the matching web or mobile workspace. You can also open [teacher web](http://localhost:4173/?teacher=1&view=web) or [teacher mobile](http://localhost:4173/?teacher=1) directly with sample data.
 
 ## What works today
 

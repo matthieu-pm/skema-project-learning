@@ -11,7 +11,9 @@ npm run dev -- --host 0.0.0.0 --port 4173
 
 Open http://localhost:4173. The device picker switches between iPhone and Pixel 10. The preview scales to small browser windows.
 
-Direct workspace previews: [teacher web](http://localhost:4173/?teacher=1&view=web) and [teacher mobile](http://localhost:4173/?teacher=1). Teacher onboarding completion also opens the mobile workspace with the public profile details just entered.
+Onboarding previews: [web](http://localhost:4173/?view=web) and [mobile](http://localhost:4173/). They share the same steps, branching, validation and answers. The web shell uses Uxcel-inspired centered forms, top progress and a fixed action bar. Teacher completion opens the matching workspace with the public profile details just entered.
+
+Direct workspace previews: [teacher web](http://localhost:4173/?teacher=1&view=web) and [teacher mobile](http://localhost:4173/?teacher=1).
 
 ## Flow
 
@@ -44,7 +46,7 @@ Learner views exclude private notes. Adaptation preserves the source lesson; com
 - Teacher flows: https://www.figma.com/board/AYNNAqQDARTmwlsa6AYHsd?node-id=440-2676 and additional flows at node `466:3308`, plus the supplied October 10 architecture screenshot.
 - App font: locally bundled Labil Grotesk; platform chrome retains its protected runtime typography.
 
-App UI lives in `src/Prototype.tsx` and `src/prototype.css`. Routing and validation live in `src/onboarding.ts`. Protected mobile runtime files are unchanged.
+App UI lives in `src/Prototype.tsx` and `src/prototype.css`. Routing and validation live in `src/onboarding.ts`. `src/WebOnboarding.tsx` and `src/web-onboarding.css` provide the lazy-loaded desktop presentation of the shared flow. Web fields use native browser input; mobile fields retain the simulated keyboard. Protected mobile runtime files are unchanged. Web verification is recorded in `qa/web-onboarding/verification.md`.
 
 The lazy-loaded teacher workspace lives in `src/teacher/`, with shared state, model, controls, pages, and web/mobile styling. Its Uxcel-inspired design uses Hugeicons and actual generated shadcn sidebar-08 primitives, including desktop collapse and a responsive drawer. Its buttons and cards blend that layout with onboarding: rounded raised actions, stronger card outlines and restrained pastel accents, styled in `onboarding-blend.css`. Tailwind utilities omit preflight to preserve the mobile runtime.
 

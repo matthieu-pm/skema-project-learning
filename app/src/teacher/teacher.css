@@ -1502,8 +1502,8 @@ body:has(.teacher-web) #root {
   display: none;
 }
 body:has(.teacher-web) {
-  height: auto;
-  overflow: auto;
+  height: 100dvh;
+  overflow: hidden;
 }
 .teacher-mobile {
   --mobile-safe-area-height: var(--device-safe-area-bottom, 34px);

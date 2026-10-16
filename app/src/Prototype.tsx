@@ -1,8 +1,9 @@
 import { createContext, lazy, Suspense, useContext, useEffect, useRef, useState, type ReactNode, type InputHTMLAttributes } from 'react';
-import { ArrowLeftIcon, CheckIcon, UploadIcon } from '@radix-ui/react-icons';
+import { Icon, CheckIcon } from './teacher/icons';
 import { createPortal } from 'react-dom';
 const TeacherWorkspace = lazy(() => import('./teacher/TeacherWorkspace'));
-import { FlowStack, MobileScroll, KeyboardInput, KeyboardTextarea, useFlow, useKeyboard, useKeyboardInsets, type FlowScreen } from './mobile';
+const WebOnboarding = lazy(() => import('./WebOnboarding'));
+import { FlowStack, MobileScroll, KeyboardInput, KeyboardTextarea, useFlow, useKeyboard, useKeyboardInsets, type FlowScreen, type FlowControls } from './mobile';
 import { initialAnswers, changeAccountMethod, sampleGoogleAccount, languageChoices, toggleLearningLanguage, needsGuardian, changeAge, clearedIdentity, verificationExit, levelChoices, formatDateOfBirth, dateOfBirthValid, nextStep, routeFor, stepIds, validStep, type Answers, type Step } from './onboarding';
 
 const asset = (name: string) => `/assets/onboarding/${name}.png`;
@@ -14,10 +15,12 @@ type Media = { name:string; url:string; type:string } | null;
 type SetupContext = {
   answers:Answers; update:(patch:Partial<Answers>)=>void; resource:Media; setResource:(media:Media)=>void;
   photo:Media; setPhoto:(media:Media)=>void; error:string; setError:(s:string)=>void;
-  resendAt:number; setResendAt:(n:number)=>void; reset:()=>void; openWorkspace:()=>void;
+  resendAt:number; setResendAt:(n:number)=>void; reset:()=>void; openWorkspace:()=>void; web:boolean;
 };
 const Setup = createContext<SetupContext>(null!);
 const useSetup = () => useContext(Setup);
+const SetupNavigation = createContext<FlowControls>(null!);
+const useSetupFlow = () => useContext(SetupNavigation);
 function Mascot({className = ''}: {className?:string}) {
   const teacher=useSetup().answers.role==='teacher';
   return <img className={`mascot ${className}`} src={asset(teacher?'nori':'luma')} alt={teacher?'Nori, your fuzzy blue teaching companion':'Luma, your fuzzy purple learning companion'} draggable={false}/>;
@@ -25,7 +28,10 @@ function Mascot({className = ''}: {className?:string}) {
 function GoogleMark() {
   return <svg className="google-mark" viewBox="0 0 48 48" aria-hidden="true" focusable="false"><path fill="#4285F4" d="M43.6 24.5c0-1.4-.1-2.8-.4-4.1H24v7.8h11a9.4 9.4 0 0 1-4.1 6.2v5.1h6.6c3.9-3.6 6.1-8.8 6.1-15Z"/><path fill="#34A853" d="M24 44c5.5 0 10.1-1.8 13.5-4.9l-6.6-5.1c-1.8 1.2-4.1 1.9-6.9 1.9-5.3 0-9.8-3.6-11.4-8.4H5.8v5.3A20.4 20.4 0 0 0 24 44Z"/><path fill="#FBBC05" d="M12.6 27.5a12.3 12.3 0 0 1 0-7.8v-5.3H5.8a20.4 20.4 0 0 0 0 18.4l6.8-5.3Z"/><path fill="#EA4335" d="M24 11.3c3 0 5.6 1 7.7 3l5.8-5.8A19.6 19.6 0 0 0 24 3.2 20.4 20.4 0 0 0 5.8 14.4l6.8 5.3c1.6-4.8 6.1-8.4 11.4-8.4Z"/></svg>;
 }
-function Bubble({children}: {children:ReactNode}) { return <div className="speech">{children}</div>; }
+function Bubble({children}: {children:ReactNode}) {
+  const {web}=useSetup();
+  return web?<h1 className="speech">{children}</h1>:<div className="speech">{children}</div>;
+}
 function Choice({label,description,icon,selected,onClick,check=false}: {label:string;description?:string;icon?:string;selected:boolean;onClick:()=>void;check?:boolean}) {
   return <button className={`choice ${selected?'selected':''} ${description?'detailed':''}`} onClick={onClick} aria-pressed={selected}>
     {icon && <img className="choice-icon" src={asset(icon)} alt=""/>}
@@ -35,7 +41,11 @@ function Choice({label,description,icon,selected,onClick,check=false}: {label:st
 }
 function Note({children}: {children:ReactNode}) { return <p className="setup-note">{children}</p>; }
 function Field({label,multiline=false,...props}: InputHTMLAttributes<HTMLInputElement> & {label:string;multiline?:boolean}) {
-  const keyboard=useKeyboard();
+  const keyboard=useKeyboard(), {web}=useSetup();
+  if(web)return <label className="setup-field"><span>{label}</span>{multiline ?
+    <textarea aria-label={label} placeholder={props.placeholder} value={props.value} maxLength={props.maxLength} onChange={e=>props.onChange?.(e as unknown as React.ChangeEvent<HTMLInputElement>)} rows={4}/> :
+    <input {...props} aria-label={label}/>}
+  </label>;
   return <label className="setup-field"><span>{label}</span>{multiline ?
     <KeyboardTextarea aria-label={label} placeholder={props.placeholder} value={props.value} maxLength={props.maxLength} onChange={e=>props.onChange?.(e as unknown as React.ChangeEvent<HTMLInputElement>)} onBlur={()=>keyboard.hide()} rows={4}/> :
     <KeyboardInput {...props} aria-label={label} onBlur={()=>keyboard.hide()}/>}
@@ -54,7 +64,7 @@ function Upload({kind}: {kind:'resource'|'photo'}) {
     {media?.type.startsWith('image/') && <img className="upload-preview" src={media.url} alt={kind==='photo'?'Your profile photo':'Attached image'}/>}
     {media?.type.startsWith('video/') && <video className="upload-preview" src={media.url} controls/>}
     {media?.type.startsWith('audio/') && <audio className="audio-preview" src={media.url} controls/>}
-    <button className="upload-target" onClick={()=>{keyboard.hide();fileRef.current?.click();}}><UploadIcon/><strong>{media?'Choose a different file':kind==='photo'?'Add a photo or short video':'Add a file or voice note'}</strong><span>{media?.name || 'Choose a file from your device'}</span></button>
+    <button className="upload-target" onClick={()=>{keyboard.hide();fileRef.current?.click();}}><Icon name="upload"/><strong>{media?'Choose a different file':kind==='photo'?'Add a photo or short video':'Add a file or voice note'}</strong><span>{media?.name || 'Choose a file from your device'}</span></button>
     {media && <button className="text-button" onClick={()=>setMedia(null)}>Remove file</button>}
     <Note>{kind==='photo'?'Give learners a friendly first impression.':'A document, photo, or recorded voice note can help explain your goal.'} Files stay in this local preview. Up to 20 MB.</Note>
   </div>;
@@ -73,12 +83,12 @@ const headings: Partial<Record<Step,string>> = {
 function Header({step}: {step:Step}) {
   const flow=useFlow(),{answers,setError}=useSetup(); const route=routeFor(answers);
   const percent=endings.has(step)?100:Math.max(5,Math.round((route.indexOf(step)-1)/(route.length-2)*100));
-  return <nav className="onboarding-nav" aria-label="Onboarding"><button className="back" aria-label="Go back" onClick={()=>{setError('');flow.pop();}}><ArrowLeftIcon/></button>
+  return <nav className="onboarding-nav" aria-label="Onboarding"><button className="back" aria-label="Go back" onClick={()=>{setError('');flow.pop();}}><Icon name="back"/></button>
     {!centered.has(step) && <div className="progress" role="progressbar" aria-label="Setup progress" aria-valuemin={0} aria-valuemax={100} aria-valuenow={percent}><span style={{width:`${percent}%`}}/></div>}
   </nav>;
 }
 function Footer({step}: {step:Step}) {
-  const flow=useFlow(),keyboard=useKeyboard(),{answers:a,update,setError,setResendAt,setResource,setPhoto,reset,openWorkspace}=useSetup();
+  const flow=useSetupFlow(),keyboard=useKeyboard(),{answers:a,update,setError,setResendAt,setResource,setPhoto,reset,openWorkspace}=useSetup();
   const advance=(patch:Partial<Answers>={})=>{ keyboard.hide();setError('');const next=nextStep(step,{...a,...patch});update(patch);if(next)flow.push(screens[next]); };
   const submit=()=>{
     if(!validStep(step,a))return;
@@ -111,7 +121,7 @@ function Footer({step}: {step:Step}) {
 }
 function Screen({step}: {step:Step}) {
   const setup=useSetup(),{answers:a,update,error,setError,resendAt,setResendAt}=setup;
-  const flow=useFlow(), keyboard=useKeyboard(),{isKeyboardVisible}=useKeyboardInsets();
+  const flow=useSetupFlow(), keyboard=useKeyboard(),{isKeyboardVisible}=useKeyboardInsets();
   const active=flow.current.id===step;
   const guardian=needsGuardian(a);
   const isLevel=step==='level'||step.startsWith('level-');
@@ -123,7 +133,8 @@ function Screen({step}: {step:Step}) {
   const toggle=(field:'days'|'teachingLanguages'|'teachingLevels',value:string)=>update({[field]:a[field].includes(value)?a[field].filter(v=>v!==value):[...a[field],value]});
   const single=(values:string[],field:keyof Answers,descriptions?:string[]) => <div className="options">{values.map((value,i)=><Choice key={value} label={value} description={descriptions?.[i]} selected={a[field]===value} onClick={()=>update(field==='age'?changeAge(a,value):{[field]:value,...(field==='format'&&value==='Online'?{city:''}:{})})}/>)}</div>;
   const mediaHeading=step==='photo'||step==='resource';
-  return <MobileScroll className={`learning-scroll setup-scroll ${isKeyboardVisible?'keyboard-open':''}`}>
+  const Scroll=setup.web?'div':MobileScroll;
+  return <Scroll className={`learning-scroll setup-scroll ${!setup.web&&isKeyboardVisible?'keyboard-open':''}`}>
     <main inert={!active} aria-hidden={!active} className={`onboarding-content setup-content ${step==='welcome'?'setup-welcome':''}`} data-step={isLevel?'level':step} aria-label={heading||step}>
       {step==='welcome'?<div className="welcome"><Mascot/><h1>mimo</h1><p>A language. A real connection.</p></div>:
       step==='account'?<div className="account-intro"><Mascot/><h1>Create your account</h1><p>A language. A real connection.<br/>Choose how you’d like to get started.</p><p className="preview-note">Preview only. No account will be created.</p></div>:
@@ -166,12 +177,20 @@ function Screen({step}: {step:Step}) {
       {(step==='verification-ready'||step==='teacher-draft') && <><div className="setup-summary"><h2>{a.name || 'Your profile'}</h2><p>{a.teachingLanguages.join(', ')} · €{a.rate} / {a.duration}</p><p>{step==='teacher-draft'?'You can finish verification later.':a.identityMethod==='persona'?'You’ve tried the instant Persona verification preview.':'You’ve walked through the verification preview.'}</p></div><Note>No verification was submitted. Your profile stays a local draft. Next, explore your teaching workspace with sample learners and sessions.</Note></>}
       {error && active && <p role="alert" className="field-error">{error}</p>}
     </main>
-  </MobileScroll>;
+  </Scroll>;
+}
+function MobileScreen({step}: {step:Step}) {
+  const flow=useFlow();
+  return <SetupNavigation.Provider value={flow}><Screen step={step}/></SetupNavigation.Provider>;
+}
+function MobileFooter({step}: {step:Step}) {
+  const flow=useFlow();
+  return <SetupNavigation.Provider value={flow}><Footer step={step}/></SetupNavigation.Provider>;
 }
 const screens = Object.fromEntries([...new Set(stepIds)].map(step=>[step,{
   id:step,header:step==='welcome'?undefined:()=> <Header step={step}/>,headerHeight:54,
-  footer:()=> <Footer step={step}/>,footerHeight:step==='account'?167:['welcome','resource','photo','format','city','days','time','notifications','widget','identity-intro','persona-link'].includes(step)?139:82,
-  render:()=> <Screen step={step}/>,
+  footer:()=> <MobileFooter step={step}/>,footerHeight:step==='account'?167:['welcome','resource','photo','format','city','days','time','notifications','widget','identity-intro','persona-link'].includes(step)?139:82,
+  render:()=> <MobileScreen step={step}/>,
 } satisfies FlowScreen])) as unknown as Record<Step,FlowScreen>;
 export default function Prototype() {
   const [answers,setAnswers]=useState<Answers>(initialAnswers),[resource,setResource]=useState<Media>(null),[photo,setPhoto]=useState<Media>(null);
@@ -183,7 +202,8 @@ export default function Prototype() {
   useEffect(()=>()=>{if(photo)URL.revokeObjectURL(photo.url);},[photo]);
   const reset=()=>{keyboard.hide();setAnswers({...initialAnswers});setResource(null);setPhoto(null);setError('');setRun(r=>r+1);};
   if(workspaceOpen){const workspace=<Suspense fallback={<div role="status" className="teacher-loading">Opening your teaching workspace…</div>}><TeacherWorkspace mobile={!web} answers={answers.role==='teacher'?answers:undefined}/></Suspense>;return web?createPortal(workspace,document.body):workspace;}
-  return <Setup.Provider value={{answers,update:patch=>setAnswers(a=>({...a,...patch})),resource,setResource,photo,setPhoto,error,setError,resendAt,setResendAt,reset,openWorkspace:()=>{keyboard.hide();setWorkspaceOpen(true);}}}>
-    <div className={`learning-app updated-onboarding ${answers.role==='teacher'?'teacher-theme':''}`}><FlowStack key={run} initial={screens.welcome}/></div>
+  const webFlow=<Suspense fallback={<div role="status" className="teacher-loading">Opening your setup…</div>}><WebOnboarding key={run} answers={answers} initial={screens.welcome} onBack={()=>setError('')}>{flow=><SetupNavigation.Provider value={flow}><Screen key={flow.current.key} step={flow.current.id as Step}/><Footer step={flow.current.id as Step}/></SetupNavigation.Provider>}</WebOnboarding></Suspense>;
+  return <Setup.Provider value={{answers,update:patch=>setAnswers(a=>({...a,...patch})),resource,setResource,photo,setPhoto,error,setError,resendAt,setResendAt,reset,web,openWorkspace:()=>{keyboard.hide();setWorkspaceOpen(true);}}}>
+    {web?createPortal(webFlow,document.body):<div className={`learning-app updated-onboarding ${answers.role==='teacher'?'teacher-theme':''}`}><FlowStack key={run} initial={screens.welcome}/></div>}
   </Setup.Provider>;
 }

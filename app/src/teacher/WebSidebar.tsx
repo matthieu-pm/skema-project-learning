@@ -259,7 +259,7 @@ export function WebSidebar({
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem asChild>
-                  <a href="/">
+                  <a href="/?view=web">
                     <Icon name="back" />
                     Replay onboarding
                   </a>

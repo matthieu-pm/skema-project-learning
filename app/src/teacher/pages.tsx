@@ -2536,7 +2536,7 @@ function ProfileEditPage({ navigate }: { navigate: Navigate }) {
   );
 }
 function SettingsPage() {
-  const { offline, setOffline, aiUnavailable, setAiUnavailable } =
+  const { offline, setOffline, aiUnavailable, setAiUnavailable, mobile } =
     useWorkspace();
   return (
     <>
@@ -2595,7 +2595,7 @@ function SettingsPage() {
           <a className="tw-button tw-secondary" href="/?teacher=1">
             Open mobile app
           </a>
-          <a className="tw-button tw-quiet" href="/">
+          <a className="tw-button tw-quiet" href={mobile ? '/' : '/?view=web'}>
             Replay onboarding
           </a>
         </div>

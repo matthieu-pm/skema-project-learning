@@ -10,16 +10,23 @@
 }
 .teacher-web {
   display: block;
-  min-height: 100vh;
+  height: 100dvh;
+  min-height: 0;
+  padding-bottom: 0;
+  overflow: hidden;
   background: #f8f8f9;
 }
 .teacher-web .tw-web-shell {
-  min-height: 100vh;
+  height: 100%;
+  min-height: 0;
+  overflow: hidden;
   --sidebar-width: 15rem;
   --sidebar-width-icon: 3rem;
 }
 .teacher-web .tw-web-main {
   min-width: 0;
+  min-height: 0;
+  overflow: hidden;
   border-radius: 12px;
   background: #fff;
   box-shadow: 0 0 0 1px #ececf0;
@@ -176,6 +183,7 @@
 }
 .teacher-web .tw-toolbar {
   height: 60px;
+  flex-shrink: 0;
   padding: 0 28px;
   border-color: #eeeef2;
   border-radius: 12px 12px 0 0;
@@ -190,6 +198,10 @@
   color: #8a8a96;
 }
 .teacher-web .tw-content {
+  flex: 1;
+  min-height: 0;
+  overflow: auto;
+  overscroll-behavior: contain;
   width: 100%;
   max-width: 1250px;
   padding: 32px 42px 42px;
