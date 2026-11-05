@@ -97,7 +97,11 @@ export function WebSidebar({
     if (isMobile) setOpenMobile(false);
   };
   return (
-    <Sidebar variant="inset" collapsible="icon" className="tw-shadcn-sidebar">
+    <Sidebar
+      variant="inset"
+      collapsible="icon"
+      className={`tw-shadcn-sidebar${route.page === "editor" ? " tw-editor-sidebar" : ""}`}
+    >
       <SidebarHeader>
         {isMobile && (
           <button

@@ -457,46 +457,87 @@ function StudentPage({ id, navigate }: { id?: string; navigate: Navigate }) {
 }
 function ModulesPage({ navigate }: { navigate: Navigate }) {
   const { lessons } = useWorkspace();
+  const [view, setView] = useState("Review queue");
+  const [studentId, setStudentId] = useState(students[0].id);
+  const student = findStudent(studentId);
+  const assigned = lessons.filter(
+    (l) =>
+      !l.archived &&
+      (l.studentId === studentId || l.publishedEditor?.studentId === studentId),
+  );
   return (
     <>
       <PageHeading
         title="Ongoing modules"
-        description="A learner’s goal stays at the heart of each lesson."
+        description="Review student work or find their assigned lessons."
       />
-      <ReviewQueue navigate={navigate} />
-      {students.map((s) => (
-        <Panel key={s.id}>
-          <StudentLine id={s.id} />
-          {lessons
-            .filter(
-              (l) =>
-                l.studentId === s.id || l.publishedEditor?.studentId === s.id,
-            )
-            .map((l) => (
-              <LessonCard key={l.id} lesson={l} navigate={navigate} />
-            ))}
-          <div className="tw-actions">
-            <Button
-              kind="secondary"
-              onClick={() => navigate({ page: "results", id: s.id })}
-            >
-              Module results
-            </Button>
-            <Button
-              kind="quiet"
-              onClick={() =>
-                navigate({ page: "lessons", id: s.id, tab: "Library" })
-              }
-            >
-              Prepare lesson
-            </Button>
-          </div>
-        </Panel>
-      ))}
+      <div className="tw-module-views" aria-label="Ongoing module views">
+        <Segments
+          items={["Review queue", "Lessons by student"]}
+          value={view}
+          onChange={setView}
+        />
+      </div>
+      <div hidden={view !== "Review queue"}>
+        <ReviewQueue navigate={navigate} />
+      </div>
+      {view === "Lessons by student" && (
+        <>
+          <Panel>
+            <SectionTitle>Lessons by student</SectionTitle>
+            <Select
+              label="Select student"
+              value={studentId}
+              onChange={setStudentId}
+              options={students.map((s) => ({ value: s.id, label: s.name }))}
+            />
+            <StudentLine id={student.id} />
+            <p>{student.goal}</p>
+            {assigned.length ? (
+              assigned.map((lesson) => (
+                <LessonCard
+                  key={lesson.id}
+                  lesson={lesson}
+                  navigate={navigate}
+                />
+              ))
+            ) : (
+              <p className="tw-module-empty">
+                No lessons assigned yet. Prepare a lesson for this student to
+                get started.
+              </p>
+            )}
+            <div className="tw-actions">
+              <Button
+                kind="secondary"
+                onClick={() => navigate({ page: "results", id: student.id })}
+              >
+                Module results
+              </Button>
+              <Button
+                kind="quiet"
+                onClick={() =>
+                  navigate({ page: "lessons", id: student.id, tab: "Library" })
+                }
+              >
+                Prepare lesson
+              </Button>
+            </div>
+          </Panel>
+        </>
+      )}
     </>
   );
 }
-function ResultsPage({ id, selected, navigate }: { id?: string; selected?: string; navigate: Navigate }) {
+function ResultsPage({
+  id,
+  selected,
+  navigate,
+}: {
+  id?: string;
+  selected?: string;
+  navigate: Navigate;
+}) {
   const s = findStudent(id);
   const { lessons, updateLesson, setLessons, setNotice } = useWorkspace();
   const l = lessons.find((l) => l.studentId === s.id);
@@ -508,7 +549,12 @@ function ResultsPage({ id, selected, navigate }: { id?: string; selected?: strin
         description="Review completed blocks and give feedback on each response."
       />
       <StudentLine id={s.id} />
-      <ModuleResults key={`${s.id}-${selected || ""}`} studentId={s.id} selected={selected} navigate={navigate} />
+      <ModuleResults
+        key={`${s.id}-${selected || ""}`}
+        studentId={s.id}
+        selected={selected}
+        navigate={navigate}
+      />
       <Panel>
         <TextField
           label="Module learning points"

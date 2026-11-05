@@ -1403,3 +1403,22 @@
     width: 14px;
   }
 }
+
+/* The separator occupies one pixel; both footer bands share the same height. */
+.teacher-web {
+  --tw-editor-footer-height: 72px;
+}
+.teacher-web .ce-editor-footer {
+  height: var(--tw-editor-footer-height);
+  min-height: var(--tw-editor-footer-height);
+  box-sizing: border-box;
+  align-items: center;
+  padding-top: 12px;
+  padding-bottom: 12px;
+}
+.teacher-web .tw-editor-sidebar [data-slot="sidebar-footer"] {
+  height: calc(var(--tw-editor-footer-height) - 1px);
+  min-height: calc(var(--tw-editor-footer-height) - 1px);
+  box-sizing: border-box;
+  justify-content: center;
+}

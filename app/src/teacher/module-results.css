@@ -196,3 +196,21 @@
     align-items: flex-start;
   }
 }
+
+/* Keep the two teacher tasks one click apart instead of stacking both lists. */
+.tw-module-views {
+  background: #fff;
+  padding: 10px 0 18px;
+}
+.tw-module-views .tw-segments {
+  margin: 0;
+}
+.teacher-web .tw-module-views {
+  position: sticky;
+  top: 0;
+  z-index: 6;
+}
+.tw-module-empty {
+  color: var(--tw-muted);
+  padding: 16px 0;
+}
