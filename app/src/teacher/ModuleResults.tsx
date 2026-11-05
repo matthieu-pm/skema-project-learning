@@ -509,7 +509,7 @@ export default function ModuleResults({
               );
             }}
           >
-            Share feedback (preview)
+            Share feedback
           </Button>
         </div>
       </Panel>
