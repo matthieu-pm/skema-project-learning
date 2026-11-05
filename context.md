@@ -791,3 +791,6 @@ Published block navigation release: Sites version 11, source 12c10627a7288a712b6
 
 
 Final feedback button label (6 November 2026): Module results uses “Share feedback” without “(preview)”, per user request. Existing contextual simulation notices and browser-local sharing behavior are unchanged. The user authorized committing/pushing the completed branch and opening a ready-for-review pull request to matthieu-pm/skema-project-learning main; no merge is authorized. Production build, 28 runtime hashes and 59 automated tests pass.
+
+
+Final handoff (6 November 2026): button-label change committed as 8c4524eb5dbf65997e97e666c98b0d0229c44bda and pushed to demichong/feat/teacher-course-editor. Opened ready-for-review upstream PR https://github.com/matthieu-pm/skema-project-learning/pull/1 targeting original main; GitHub reports MERGEABLE, and no merge was performed. Vercel reports “Authorization required to deploy.” for its preview check; this is an owner authorization requirement, not an observed application build failure. Separate public review deployment succeeded as Sites version 12, source 5cc876672a780cac19852a1f709aa9b5c7913784, saved version appgprj_6aec12084dfc8191add134139ef2dd4a~appgver_315e452691908191bdf829ae05eb09c0, deployment appgdep_6aed0b6f6f5c8191953c3b3c614987a6. Public URL unchanged: https://mimo-teacher-review.sillyatlas2.chatgpt.site .
