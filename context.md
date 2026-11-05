@@ -674,3 +674,10 @@ The hosted build passed all 28 runtime hashes and four worker tests. Browser ver
 
 
 Direct-link release is live as Sites version 2 (source `70fd74ac18dd9759f67644cc70dc220576bf181a`, deployment `appgdep_6aec16f3fff481919303e3aa9b00d57f`, succeeded). Hosted browser verification opened desktop and mobile editor URLs directly; refreshing the desktop link retained the requested editor entry. Build, 28 runtime hashes, 17 teacher tests, 16 onboarding tests, five routing tests and four worker tests passed. Evidence: `app/qa/course-editor/direct-editor-link.jpg`.
+
+
+### Expanded editor workspace — 5 November 2026
+
+The user requested the working area fill the white workspace, removal of the editor’s ‹ Lessons button, Undo/Redo beside Elements, status beside Teacher view, and Preview lesson / Save changes / Apply changes at the bottom right. Implemented as a full-height web editor below the existing app toolbar, three independently scrolling panels and a pinned action footer. Existing workspace navigation remains available. The lesson metadata keeps language, level and total minutes, with a single draft/applied status in the canvas header. Phone actions use an app-owned screen portal above navigation/keyboard, hidden whenever another FlowStack screen is current; protected runtime sources remain unchanged.
+
+Published Sites version 3 (source `f746617102633813676bf574236d8609a031a5e8`, deployment `appgdep_6aec4e602248819191f8e4b98a72115b`, succeeded). The same direct review link opens the updated layout. Desktop at 1280×720 measured a 1016×644 editor from the bottom of the app toolbar to the bottom of its white frame. The footer stayed at y=640 while the canvas scrolled to 2160px. Preview, Save changes, Apply dialog/cancel and mobile Undo were checked; phone actions disappear on student preview and reappear on return, and remain above the simulated keyboard. Build, 28 protected hashes and all 42 existing tests passed. Screenshots: `app/qa/course-editor/layout-expanded-web.jpg` and `layout-expanded-mobile.jpg`.

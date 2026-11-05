@@ -1207,3 +1207,156 @@
   padding-left: 2px;
   padding-right: 2px;
 }
+
+/* The editor fills its app-owned workspace; device chrome is unchanged. */
+.ce-heading-title,
+.ce-history,
+.ce-view-status,
+.ce-bottom-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.ce-heading-title {
+  width: 100%;
+  gap: 12px;
+}
+.ce-history {
+  gap: 2px;
+}
+.ce-history .tw-icon-button {
+  width: 28px;
+  height: 30px;
+}
+.ce-view-status {
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+.ce-canvas-label {
+  align-items: center;
+  gap: 10px;
+}
+.ce-view-status .tw-badge {
+  font-size: 10px;
+}
+.ce-editor-footer {
+  display: flex;
+  justify-content: flex-end;
+  flex: none;
+  padding: 14px 20px 17px;
+  border-top: 1px solid var(--tw-line);
+  background: #fff;
+}
+.ce-bottom-actions {
+  gap: 8px;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+.ce-bottom-actions .tw-button {
+  min-height: 36px;
+  padding: 7px 12px;
+  font-size: 12px;
+  white-space: nowrap;
+  width: auto;
+  min-width: 0;
+}
+.teacher-web .tw-content.tw-editor-content {
+  padding: 0;
+  max-width: none;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+.teacher-web .tw-editor-content > .ce-editor {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+.teacher-web .tw-editor-content .ce-layout {
+  flex: 1;
+  min-height: 0;
+  align-items: stretch;
+  border: 0;
+  border-radius: 0;
+  overflow: hidden;
+}
+.teacher-web .tw-editor-content :is(.ce-elements, .ce-canvas, .ce-properties) {
+  min-height: 0;
+  height: 100%;
+  max-height: none;
+  position: static;
+  overflow: auto;
+  overscroll-behavior: contain;
+  border-radius: 0;
+}
+.teacher-web .tw-editor-content .ce-elements > .ce-panel-heading,
+.teacher-web .tw-editor-content .ce-properties > .ce-tabs {
+  position: sticky;
+  top: 0;
+  z-index: 4;
+  background: #fff;
+}
+.teacher-web .tw-editor-content .ce-canvas-label {
+  position: sticky;
+  top: 0;
+  z-index: 4;
+  background: #f7f7fa;
+}
+.teacher-web .tw-editor-content .ce-mobile-panels {
+  flex: none;
+  margin: 0;
+  border-radius: 0;
+}
+.ce-editor > .ce-warning {
+  flex: none;
+  max-height: 120px;
+  overflow: auto;
+  margin: 10px;
+}
+.teacher-mobile .tw-content.tw-editor-content {
+  padding: 0 0
+    calc(var(--flow-footer-height) + var(--mobile-safe-area-height) + 105px);
+}
+.teacher-mobile .ce-mobile-panels {
+  margin: 0;
+  border-radius: 0;
+}
+.teacher-mobile .ce-layout {
+  border-radius: 0;
+}
+.ce-phone-actions {
+  position: absolute;
+  left: 0;
+  right: 0;
+  z-index: 15;
+  height: auto;
+  min-height: 0;
+  padding: 11px 12px 14px;
+  box-shadow: 0 -3px 12px #25153908;
+}
+.ce-phone-actions .ce-bottom-actions {
+  width: 100%;
+  flex-wrap: nowrap;
+}
+.ce-phone-actions .tw-button {
+  flex: 1;
+  padding: 7px 5px;
+  font-size: 11px;
+  min-width: 0;
+}
+@media (max-width: 600px) {
+  .teacher-web .ce-editor-footer {
+    padding: 12px 10px 15px;
+  }
+  .teacher-web .ce-bottom-actions {
+    width: 100%;
+    flex-wrap: nowrap;
+  }
+  .teacher-web .ce-bottom-actions .tw-button {
+    flex: 1;
+    font-size: 11px;
+    padding: 7px 5px;
+  }
+}

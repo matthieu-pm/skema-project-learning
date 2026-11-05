@@ -7,7 +7,14 @@ import {
   type ReactNode,
 } from "react";
 import * as Dialog from "@radix-ui/react-dialog";
-import { BottomSheet, useKeyboard } from "../mobile";
+import { createPortal } from "react-dom";
+import {
+  BottomSheet,
+  useKeyboard,
+  useKeyboardInsets,
+  useScreenPortal,
+  useFlow,
+} from "../mobile";
 import {
   Badge,
   Button,
@@ -44,6 +51,35 @@ import {
 } from "./course";
 import { writeDraft } from "./course-storage";
 import "./course-editor.css";
+
+function EditorActions({ children }: { children: ReactNode }) {
+  const { mobile } = useWorkspace();
+  return mobile ? (
+    <MobileEditorActions>{children}</MobileEditorActions>
+  ) : (
+    <footer className="ce-editor-footer" aria-label="Lesson actions">
+      {children}
+    </footer>
+  );
+}
+function MobileEditorActions({ children }: { children: ReactNode }) {
+  const flow = useFlow();
+  const screenId = useRef(flow.current.id);
+  const { screenRef } = useScreenPortal();
+  const { bottomInset } = useKeyboardInsets();
+  // Portaled controls must not remain active on a previous FlowStack screen.
+  if (flow.current.id !== screenId.current || !screenRef.current) return null;
+  return createPortal(
+    <footer
+      className="teacher-workspace ce-editor-footer ce-phone-actions"
+      aria-label="Lesson actions"
+      style={{ bottom: bottomInset + 70 }}
+    >
+      {children}
+    </footer>,
+    screenRef.current,
+  );
+}
 
 function EditorDialog({
   title,
@@ -663,52 +699,6 @@ function Editor({ lesson, navigate }: { lesson: Lesson; navigate: Navigate }) {
       className={`ce-editor ${dragging ? "ce-dragging" : ""}`}
       onKeyDown={shortcuts}
     >
-      <header className="ce-editor-toolbar">
-        <div className="ce-toolbar-start">
-          <Button
-            kind="quiet"
-            icon="back"
-            onClick={() => navigate({ page: "lessons", tab: "Library" })}
-          >
-            Lessons
-          </Button>
-          <button
-            className="tw-icon-button"
-            aria-label="Undo"
-            title="Undo (⌘/Ctrl Z)"
-            disabled={!histories.past.length}
-            onClick={() => undo()}
-          >
-            <Icon name="undo" />
-          </button>
-          <button
-            className="tw-icon-button"
-            aria-label="Redo"
-            title="Redo (⌘/Ctrl Shift Z)"
-            disabled={!histories.future.length}
-            onClick={() => undo(true)}
-          >
-            <Icon name="redo" />
-          </button>
-        </div>
-        <div className="ce-top-actions">
-          <Badge tone={applied ? "green" : "orange"}>{status}</Badge>
-          <Button kind="secondary" onClick={() => open("preview")}>
-            Preview lesson
-          </Button>
-          <Button kind="secondary" onClick={() => save()}>
-            Save changes
-          </Button>
-          <Button
-            onClick={() => {
-              setErrors([]);
-              open("apply");
-            }}
-          >
-            Apply changes
-          </Button>
-        </div>
-      </header>
       {errors.length > 0 && !modal && (
         <div className="ce-warning" role="alert">
           {errors.map((s) => (
@@ -733,8 +723,34 @@ function Editor({ lesson, navigate }: { lesson: Lesson; navigate: Navigate }) {
       <div className="ce-layout" data-mobile-panel={mobilePanel}>
         <aside className="ce-elements">
           <div className="ce-panel-heading">
-            <h2>Elements</h2>
-            <small>Select to add</small>
+            <div className="ce-heading-title">
+              <h2>Elements</h2>
+              <div
+                className="ce-history"
+                role="group"
+                aria-label="Edit history"
+              >
+                {" "}
+                <button
+                  className="tw-icon-button"
+                  aria-label="Undo"
+                  title="Undo (⌘/Ctrl Z)"
+                  disabled={!histories.past.length}
+                  onClick={() => undo()}
+                >
+                  <Icon name="undo" />
+                </button>
+                <button
+                  className="tw-icon-button"
+                  aria-label="Redo"
+                  title="Redo (⌘/Ctrl Shift Z)"
+                  disabled={!histories.future.length}
+                  onClick={() => undo(true)}
+                >
+                  <Icon name="redo" />
+                </button>
+              </div>
+            </div>
           </div>
           <div className="ce-tabs">
             {["Modules", "Teach", "Practise", "Templates"].map((t) => (
@@ -862,7 +878,10 @@ function Editor({ lesson, navigate }: { lesson: Lesson; navigate: Navigate }) {
         <main className="ce-canvas">
           <div className="ce-canvas-label">
             <span>Course editor</span>
-            <span>Teacher view</span>
+            <span className="ce-view-status">
+              <span>Teacher view</span>
+              <Badge tone={applied ? "green" : "orange"}>{status}</Badge>
+            </span>
           </div>
           <div className="ce-lesson-paper">
             <div className="ce-lesson-heading">
@@ -874,9 +893,6 @@ function Editor({ lesson, navigate }: { lesson: Lesson; navigate: Navigate }) {
                   <Icon name="clock" size={14} />
                   {totalMinutes(c)} min
                 </span>
-                <Badge tone={applied ? "green" : "orange"}>
-                  {applied ? "Applied" : "Draft"}
-                </Badge>
               </div>
               <p>{c.goal || "Add a learning goal in Lesson properties."}</p>
             </div>
@@ -1011,6 +1027,25 @@ function Editor({ lesson, navigate }: { lesson: Lesson; navigate: Navigate }) {
           deleteBlock={deleteBlock}
         />
       </div>
+      <EditorActions>
+        {" "}
+        <div className="ce-bottom-actions">
+          <Button kind="secondary" onClick={() => open("preview")}>
+            Preview lesson
+          </Button>
+          <Button kind="secondary" onClick={() => save()}>
+            Save changes
+          </Button>
+          <Button
+            onClick={() => {
+              setErrors([]);
+              open("apply");
+            }}
+          >
+            Apply changes
+          </Button>
+        </div>
+      </EditorActions>
       {modal && (
         <EditorDialog
           title={

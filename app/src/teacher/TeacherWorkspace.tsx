@@ -172,7 +172,7 @@ function screenFor(route: Route): FlowScreen {
     render: (flow) => (
       <MobileScroll className="tw-mobile-scroll">
         <main
-          className="tw-content"
+          className={`tw-content${route.page === "editor" ? " tw-editor-content" : ""}`}
           inert={flow.current.id !== screenId}
           aria-hidden={flow.current.id !== screenId}
         >
@@ -253,7 +253,10 @@ export default function TeacherWorkspace({
                 back={back}
                 canGoBack={history.length > 0}
               />
-              <div key={JSON.stringify(route)} className="tw-content">
+              <div
+                key={JSON.stringify(route)}
+                className={`tw-content${route.page === "editor" ? " tw-editor-content" : ""}`}
+              >
                 <TeacherPage route={route} navigate={navigate} back={back} />
               </div>
             </SidebarInset>

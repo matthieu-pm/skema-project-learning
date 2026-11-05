@@ -42,3 +42,10 @@ At the user’s subsequent request, published an independent public Sites review
 Added safe `flow`/`lesson` initial routing in the shared workspace. `?teacher=1&view=web&flow=editor&lesson=cafe` and its mobile variant open the example editor directly. `flow=lessons` opens the library, `flow=preview&lesson=cafe` opens the student preview. Unknown lesson IDs fall back to the library and unsupported action-like flows cannot trigger save/apply/share. Normal onboarding and default teacher entry are unchanged.
 
 Sites version 2 deployment succeeded. Verified hosted desktop editor entry and refresh, plus phone editor entry, with no onboarding/menu interactions. Automated verification: 17 teacher tests (including two new entry tests), 16 onboarding, five routing, four worker tests, build and 28 protected runtime hashes passed. Screenshot: `direct-editor-link.jpg`.
+
+
+## Expanded workspace layout — 5 November 2026
+
+Applied the five requested placement/space changes, preserving existing functionality. Web fills the app-owned white frame with independently scrolling panels and pinned bottom-right actions. At 1280×720 the editor is 1016×644 below the toolbar; footer y=640 remains unchanged while the canvas scrolls. Undo/Redo sits beside Elements; no editor Lessons button remains; a single status badge is beside Teacher view. Existing lesson metadata retains language/level/time.
+
+Checked desktop Preview, Save changes and Apply dialog/cancel, mobile Undo, keyboard-aware footer placement and footer removal/restoration when navigating to/from student preview. Shared public desktop and phone entry render the updated layout. Production build, all 28 protected runtime hashes, 17 teacher tests, 16 onboarding tests, five routing tests and four worker tests passed. Sites version 3 deployment succeeded. Screenshots: `layout-expanded-web.jpg`, `layout-expanded-mobile.jpg`. No audit-recommended data-loss/media fixes were included in this layout-only change; those remain outstanding.
