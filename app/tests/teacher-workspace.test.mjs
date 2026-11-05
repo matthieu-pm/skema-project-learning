@@ -194,3 +194,45 @@ test("review entry ignores unsupported actions and sends unavailable browser-loc
       { page: "students" },
     );
 });
+
+test("module feedback sharing is scoped to completed blocks and keeps submitted work immutable", async () => {
+  const { moduleResults, shareModuleFeedback } = await import("../src/teacher/module-results.ts");
+  const result = moduleResults[0];
+  const before = structuredClone(result);
+  const book = {
+    [result.id]: {
+      "vocab-recall": { draft: "  Watch the article before a vowel.  " },
+      "vocab-pairs": { draft: "Great matching!", shared: "Great matching!", sharedAt: "earlier" },
+      "not-a-submitted-block": { draft: "Do not share this" },
+    },
+    "lucas-listening-1": { "listening-written": { draft: "Another student's private draft" } },
+  };
+  const shared = shareModuleFeedback(result, book, "now");
+  assert.equal(shared[result.id]["vocab-recall"].shared, "Watch the article before a vowel.");
+  assert.equal(shared[result.id]["vocab-recall"].sharedAt, "now");
+  assert.equal(shared[result.id]["vocab-pairs"].sharedAt, "earlier");
+  assert.equal(shared[result.id]["not-a-submitted-block"].shared, undefined);
+  assert.equal(shared["lucas-listening-1"]["listening-written"].shared, undefined);
+  assert.equal(book[result.id]["vocab-recall"].shared, undefined);
+  assert.deepEqual(result, before);
+  const edited = { ...shared, [result.id]: { ...shared[result.id], "vocab-recall": { ...shared[result.id]["vocab-recall"], draft: "Try again" } } };
+  assert.equal(edited[result.id]["vocab-recall"].shared, "Watch the article before a vowel.");
+});
+
+test("feedback storage restores drafts and shared snapshots, rejects corrupt data without overwriting it", async () => {
+  const { readFeedback, feedbackStorageKey } = await import("../src/teacher/module-results.ts");
+  const book = { "lea-vocabulary-1": { "vocab-recall": { draft: "Keep trying", shared: "Well done", sharedAt: "now" } } };
+  assert.deepEqual(readFeedback({ getItem: (key) => { assert.equal(key, feedbackStorageKey); return JSON.stringify(book); } }), book);
+  assert.deepEqual(readFeedback({ getItem: () => null }), {});
+  for (const raw of ["broken", "null", "[]", '{"r":null}', '{"r":{"b":{"draft":7}}}', '{"r":{"b":{"draft":"ok","shared":false}}}']) {
+    assert.throws(() => readFeedback({ getItem: () => raw }));
+  }
+  assert.throws(() => readFeedback({ getItem: () => { throw new Error("Storage blocked"); } }));
+});
+
+test("results deep links select a known student and unknown students return to ongoing modules", async () => {
+  const { teacherEntryRoute } = await import("../src/teacher/entry-route.ts");
+  assert.deepEqual(teacherEntryRoute("?flow=results&student=lea", []), { page: "results", id: "lea" });
+  assert.deepEqual(teacherEntryRoute("?flow=results&student=unknown", []), { page: "modules" });
+  assert.deepEqual(teacherEntryRoute("?flow=modules", []), { page: "modules" });
+});

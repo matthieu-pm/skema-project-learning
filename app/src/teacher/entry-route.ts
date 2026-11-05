@@ -10,6 +10,13 @@ export function teacherEntryRoute(search: string, lessonIds: string[]): Route {
       ? { page: flow === "editor" ? "editor" : "lesson-preview", id: lesson }
       : { page: "lessons", tab: "Library" };
   }
+  if (flow === "modules") return { page: "modules" };
+  if (flow === "results") {
+    const student = params.get("student") || "lea";
+    return ["lea", "lucas", "maya", "noah"].includes(student)
+      ? { page: "results", id: student }
+      : { page: "modules" };
+  }
   if (flow === "lessons") return { page: "lessons", tab: "Library" };
   if (flow === "schedule" || flow === "profile" || flow === "students")
     return { page: flow };

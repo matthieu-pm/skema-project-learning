@@ -1,0 +1,19 @@
+.mr-results { min-width: 0; }
+.mr-heading { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; margin-bottom: 16px; font-size: 13px; color: #65616e; }
+.mr-results h2 { font-size: 20px; line-height: 1.3; }
+.mr-results h3 { margin: 0 0 8px; font-size: 14px; }
+.mr-content, .mr-response { padding: 16px; border-radius: 12px; margin: 16px 0; background: #f7f6f9; }
+.mr-response { background: #f2f0ff; border: 1px solid #e3def9; }
+.mr-results p { line-height: 1.6; overflow-wrap: anywhere; }
+.mr-content p, .mr-response p, .mr-preserve { white-space: pre-wrap; }
+.mr-muted { color: #65616e; font-size: 13px; }
+.mr-evaluation { font-weight: 700; }
+.mr-evaluation.correct { color: #216443; }
+.mr-evaluation.incorrect, .mr-error { color: #a12d37; }
+.mr-recording { font-weight: 700; }
+.mr-block .tw-field { margin-top: 20px; }
+.mr-results details { font-size: 14px; }
+.mr-results summary { cursor: pointer; font-weight: 600; }
+.mr-feedback-actions [role="status"]:empty { display: none; }
+.teacher-mobile .mr-heading { font-size: 12px; }
+.teacher-mobile .mr-content, .teacher-mobile .mr-response { padding: 12px; }

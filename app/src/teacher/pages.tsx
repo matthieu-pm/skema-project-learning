@@ -1,3 +1,4 @@
+import ModuleResults from "./ModuleResults";
 import {
   cloneCourse,
   createBlock,
@@ -501,26 +502,11 @@ function ResultsPage({ id, navigate }: { id?: string; navigate: Navigate }) {
   return (
     <>
       <PageHeading
-        title="A useful next step"
-        description="Review what worked, then adjust the learner’s module."
+        title="Module results"
+        description="Review completed blocks and give feedback on each response."
       />
       <StudentLine id={s.id} />
-      <Panel>
-        <Badge tone="green">Teacher observations</Badge>
-        <h2>Confidence is growing</h2>
-        <p>
-          The learner tried the main activity independently. Spontaneous
-          follow-up questions still need support.
-        </p>
-        <div className="tw-detail-row">
-          <span>Completed activity</span>
-          <strong>Guided role-play</strong>
-        </div>
-        <div className="tw-detail-row">
-          <span>Next focus</span>
-          <strong>{l?.outcome || s.focus}</strong>
-        </div>
-      </Panel>
+      <ModuleResults key={s.id} studentId={s.id} />
       <Panel>
         <TextField
           label="Module learning points"
