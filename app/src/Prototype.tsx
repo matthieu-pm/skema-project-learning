@@ -1,3 +1,5 @@
+import FreeLessonConfirmation from "./FreeLessonConfirmation";
+import { isFreeLesson, lessonPriceLabel } from "./lesson-settings";
 import {
   createContext,
   lazy,
@@ -385,7 +387,7 @@ function Header({ step }: { step: Step }) {
     </nav>
   );
 }
-function Footer({ step }: { step: Step }) {
+function Footer({ step, inline = false }: { step: Step; inline?: boolean }) {
   const flow = useSetupFlow(),
     keyboard = useKeyboard(),
     {
@@ -464,7 +466,8 @@ function Footer({ step }: { step: Step }) {
     notifications: "Not now",
     widget: "Not now",
     "teacher-review": "Finish verification later",
-    "identity-intro": "Finish this later",
+    "identity-intro": "Finish verification later",
+    "teacher-lessons": "Set duration and price later",
     "persona-link": "Use a document instead",
   };
   const label: Partial<Record<Step, string>> = {
@@ -501,9 +504,10 @@ function Footer({ step }: { step: Step }) {
           time: a.time,
         } as Record<string, unknown>
       )[step]);
+  if (step === "account" && !inline) return null;
   if (step === "account")
     return (
-      <div className="actions two-actions account-actions">
+      <div className="actions two-actions account-actions account-inline-actions">
         <button
           className="primary"
           disabled={a.accountMethod !== "email" || !emailValid(a.email)}
@@ -551,6 +555,10 @@ function Footer({ step }: { step: Step }) {
                 identityPreviewComplete: false,
               });
               flow.replace(screens["identity-details"]);
+              return;
+            }
+            if (step === "teacher-lessons") {
+              advance({ duration: "", rate: "", freeConfirmed: false });
               return;
             }
             if (step === "teacher-review") {
@@ -758,6 +766,7 @@ function Screen({ step }: { step: Step }) {
             <p className="preview-note">
               Local preview only. No account is created or email sent.
             </p>
+            <Footer step="account" inline />
           </>
         )}
         {step === "teacher-profile" && (
@@ -864,7 +873,7 @@ function Screen({ step }: { step: Step }) {
               />
             )}
             <fieldset className="setup-section">
-              <legend>Lesson duration</legend>
+              <legend>Lesson duration (optional)</legend>
               <div className="options setup-compact three-columns">
                 {["30 minutes", "45 minutes", "60 minutes"].map((duration) => (
                   <Choice
@@ -875,26 +884,45 @@ function Screen({ step }: { step: Step }) {
                   />
                 ))}
               </div>
+              <button
+                className="inline-link"
+                onClick={() => update({ duration: "" })}
+              >
+                Set duration later
+              </button>
             </fieldset>
             <Field
-              label={`Price in euros / ${a.duration || "lesson"}`}
+              label={`Price in euros / ${a.duration || "lesson"} (optional)`}
               type="number"
               inputMode="decimal"
-              min="1"
+              min="0"
               max="1000"
               step="0.5"
               value={a.rate}
               placeholder="30"
-              onChange={(e) => update({ rate: e.target.value })}
+              onChange={(e) =>
+                update({ rate: e.target.value, freeConfirmed: false })
+              }
             />
-            {a.rate && !(Number(a.rate) > 0 && Number(a.rate) <= 1000) && (
-              <p className="field-error" role="alert">
-                Enter a price above €0 and no more than €1,000.
-              </p>
+            {a.rate &&
+              !(
+                Number.isFinite(Number(a.rate)) &&
+                Number(a.rate) >= 0 &&
+                Number(a.rate) <= 1000
+              ) && (
+                <p className="field-error" role="alert">
+                  Enter a price from €0 to €1,000.
+                </p>
+              )}
+            {isFreeLesson(a.rate) && (
+              <FreeLessonConfirmation
+                confirmed={a.freeConfirmed}
+                onChange={(freeConfirmed) => update({ freeConfirmed })}
+              />
             )}
             <Note>
-              Set a duration and price to continue. Format and location can
-              wait.
+              Leave duration and price blank to decide later. Enter 0 to offer
+              free lessons. Set both before offering bookable lessons.
             </Note>
           </div>
         )}
@@ -1619,8 +1647,9 @@ function Screen({ step }: { step: Step }) {
               {a.format || "Format to decide"}
               {a.city ? ` · ${a.city}` : ""}
             </p>
+            <p>Lesson duration: {a.duration || "Not set"}</p>
             <strong>
-              €{a.rate} / {a.duration}
+              Price per lesson: {lessonPriceLabel(a.rate, a.freeConfirmed)}
             </strong>
             <Note>Your profile remains a draft until you’re ready.</Note>
             <div className="setup-review-edits">
@@ -1954,7 +1983,7 @@ const screens = Object.fromEntries(
       footer: () => <MobileFooter step={step} />,
       footerHeight:
         step === "account"
-          ? 167
+          ? 0
           : [
                 "welcome",
                 "resource",
@@ -1966,6 +1995,7 @@ const screens = Object.fromEntries(
                 "notifications",
                 "widget",
                 "teacher-review",
+                "teacher-lessons",
                 "identity-intro",
                 "persona-link",
               ].includes(step)

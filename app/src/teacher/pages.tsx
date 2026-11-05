@@ -1,3 +1,12 @@
+import LessonSettingsPage from "./LessonSettingsPage";
+import FreeLessonConfirmation from "../FreeLessonConfirmation";
+import {
+  isFreeLesson,
+  lessonDurations,
+  lessonPriceLabel,
+  lessonSettingsReady,
+  validLessonSettings,
+} from "../lesson-settings";
 import ReviewQueue from "./ReviewQueue";
 import ModuleResults from "./ModuleResults";
 import {
@@ -1292,8 +1301,9 @@ function SharePage({ id, navigate }: { id?: string; navigate: Navigate }) {
     </>
   );
 }
-function AvailabilityPage() {
+function AvailabilityPage({ navigate }: { navigate: Navigate }) {
   const {
+    savedProfile,
     availability: a,
     setAvailability,
     availabilitySaved,
@@ -1375,9 +1385,31 @@ function AvailabilityPage() {
             {error}
           </p>
         )}
+        {!lessonSettingsReady(savedProfile) && (
+          <div className="tw-callout">
+            <p>
+              Set your lesson duration and price before publishing availability
+              for new bookings. Existing bookings are preserved.
+            </p>
+            <Button
+              kind="secondary"
+              onClick={() => navigate({ page: "lesson-settings" })}
+            >
+              Set lesson settings
+            </Button>
+          </div>
+        )}
         <Button
-          disabled={a.zone !== "Europe/Paris"}
+          disabled={
+            a.zone !== "Europe/Paris" || !lessonSettingsReady(savedProfile)
+          }
           onClick={() => {
+            if (!lessonSettingsReady(savedProfile)) {
+              setError(
+                "Set your lesson duration and price before publishing availability.",
+              );
+              return;
+            }
             if (!a.days.length || !a.start || !a.end || a.start >= a.end) {
               setError(
                 "Choose at least one day and an end time after the start time.",
@@ -1397,7 +1429,8 @@ function AvailabilityPage() {
   );
 }
 function SessionPage({ id, navigate }: { id?: string; navigate: Navigate }) {
-  const { sessions, lessons, attempt, updateSession } = useWorkspace();
+  const { sessions, lessons, attempt, updateSession, savedProfile } =
+    useWorkspace();
   const s = sessions.find((s) => s.id === id)!;
   if (!s) return null;
   const l = s.lessonSnapshot || lessons.find((l) => l.id === s.lessonId);
@@ -1465,10 +1498,28 @@ function SessionPage({ id, navigate }: { id?: string; navigate: Navigate }) {
               </Button>
             </div>
           )}
+          {s.status === "Requested" &&
+            !s.pending &&
+            !lessonSettingsReady(savedProfile) && (
+              <div className="tw-callout">
+                <p>
+                  Set your lesson duration and price before confirming a new
+                  meeting.
+                </p>
+                <Button
+                  kind="secondary"
+                  onClick={() => navigate({ page: "lesson-settings" })}
+                >
+                  Set lesson settings
+                </Button>
+              </div>
+            )}
           {s.status === "Requested" && !s.pending && (
             <div className="tw-actions">
               <Button
+                disabled={!lessonSettingsReady(savedProfile)}
                 onClick={() => {
+                  if (!lessonSettingsReady(savedProfile)) return;
                   if (overlaps(sessions, s.date, s.time, s.duration, s.id)) {
                     navigate({ page: "reschedule", id: s.id });
                     return;
@@ -2232,27 +2283,45 @@ function ProfilePage({
         <div className="tw-profile-facts">
           <span>
             <Icon name="video" />
-            {p.format === "Either" ? "Online & in person" : p.format}
+            {p.format === "Either"
+              ? "Online & in person"
+              : p.format || "Format not set"}
           </span>
           {p.format !== "Online" && (
             <span>
               <Icon name="pin" />
-              {p.city}
+              {p.city || "City not set"}
             </span>
           )}
           <span>
             <Icon name="clock" />
-            {p.duration}
+            {p.duration || "Duration not set"}
           </span>
-          <strong>€{p.rate} / lesson</strong>
+          <strong>Price: {lessonPriceLabel(p.rate, p.freeConfirmed)}</strong>
         </div>
         {!preview && (
-          <Button
-            kind="secondary"
-            onClick={() => navigate({ page: "profile-edit" })}
-          >
-            Edit teaching profile
-          </Button>
+          <>
+            <div className="tw-actions">
+              <Button
+                kind="secondary"
+                onClick={() => navigate({ page: "profile-edit" })}
+              >
+                Edit teaching profile
+              </Button>
+              <Button
+                kind="secondary"
+                onClick={() => navigate({ page: "lesson-settings" })}
+              >
+                Lesson settings
+              </Button>
+            </div>
+            {!lessonSettingsReady(p) && (
+              <p className="tw-subtle">
+                Duration or price is not set. You can prepare lessons now and
+                complete these settings before offering bookings.
+              </p>
+            )}
+          </>
         )}
       </Panel>
       {!preview && (
@@ -2303,7 +2372,13 @@ function ProfilePage({
   );
 }
 function ProfileEditPage({ navigate }: { navigate: Navigate }) {
-  const { profile: p, setProfile, setSavedProfile, attempt } = useWorkspace();
+  const {
+    profile: p,
+    setProfile,
+    setSavedProfile,
+    setAvailabilitySaved,
+    attempt,
+  } = useWorkspace();
   const [preview, setPreview] = useState(false);
   const update = (patch: Partial<typeof p>) => {
     setProfile((v) => ({ ...v, ...patch }));
@@ -2314,9 +2389,7 @@ function ProfileEditPage({ navigate }: { navigate: Navigate }) {
     p.languages.trim() &&
     p.levels.trim() &&
     p.approach.trim().length >= 5 &&
-    Number(p.rate) > 0 &&
-    Number(p.rate) <= 1000 &&
-    (p.format === "Online" || p.city.trim());
+    validLessonSettings(p);
   return (
     <>
       <PageHeading
@@ -2332,17 +2405,19 @@ function ProfileEditPage({ navigate }: { navigate: Navigate }) {
             </p>
             <blockquote>{p.approach}</blockquote>
             <p>
-              {p.format} · {p.duration} · €{p.rate}
+              {p.format || "Format not set"} ·{" "}
+              {p.duration || "Duration not set"} ·{" "}
+              {lessonPriceLabel(p.rate, p.freeConfirmed)}
             </p>
             {p.format !== "Online" && <p>{p.city}</p>}
             <div className="tw-actions">
               <Button
                 onClick={() => {
                   if (
-                    attempt(
-                      () => setSavedProfile({ ...p }),
-                      "Teaching profile updated in this preview. Existing booking terms are preserved.",
-                    )
+                    attempt(() => {
+                      setSavedProfile({ ...p });
+                      if (!lessonSettingsReady(p)) setAvailabilitySaved(false);
+                    }, "Teaching profile updated in this preview. Existing booking terms are preserved.")
                   )
                     navigate({ page: "profile" });
                 }}
@@ -2382,8 +2457,15 @@ function ProfileEditPage({ navigate }: { navigate: Navigate }) {
             <Select
               label="Meeting format"
               value={p.format}
-              options={["Online", "In person", "Either"]}
-              onChange={(format) => update({ format })}
+              options={[
+                { value: "", label: "Not set" },
+                "Online",
+                "In person",
+                "Either",
+              ]}
+              onChange={(format) =>
+                update({ format, ...(format === "Online" ? { city: "" } : {}) })
+              }
             />
             {p.format !== "Online" && (
               <TextField
@@ -2394,20 +2476,30 @@ function ProfileEditPage({ navigate }: { navigate: Navigate }) {
             )}
             <div className="tw-form-pair">
               <Select
-                label="Lesson duration"
+                label="Lesson duration (optional)"
                 value={p.duration}
-                options={["30 minutes", "45 minutes", "60 minutes"]}
+                options={[{ value: "", label: "Not set" }, ...lessonDurations]}
                 onChange={(duration) => update({ duration })}
               />
               <TextField
-                label="Rate in euros"
+                label="Price per lesson in euros (optional)"
                 value={p.rate}
                 type="number"
-                min="1"
+                min="0"
                 max="1000"
-                onChange={(rate) => update({ rate })}
+                onChange={(rate) => update({ rate, freeConfirmed: false })}
               />
             </div>
+            {isFreeLesson(p.rate) && (
+              <FreeLessonConfirmation
+                confirmed={p.freeConfirmed}
+                onChange={(freeConfirmed) => update({ freeConfirmed })}
+              />
+            )}
+            <p className="tw-subtle">
+              Duration and price can stay unset while you prepare. Confirm €0 if
+              you want to offer free lessons.
+            </p>
             <Button disabled={!valid} onClick={() => setPreview(true)}>
               Review teaching profile
             </Button>
@@ -2814,7 +2906,7 @@ export function TeacherPage({
     case "schedule":
       return <CalendarPage navigate={navigate} />;
     case "availability":
-      return <AvailabilityPage />;
+      return <AvailabilityPage navigate={navigate} />;
     case "session":
       return <SessionPage id={r.id} navigate={navigate} />;
     case "reschedule":
@@ -2835,6 +2927,8 @@ export function TeacherPage({
       return <ProfilePage navigate={navigate} />;
     case "profile-preview":
       return <ProfilePage navigate={navigate} preview />;
+    case "lesson-settings":
+      return <LessonSettingsPage navigate={navigate} />;
     case "profile-edit":
       return <ProfileEditPage navigate={navigate} />;
     case "settings":

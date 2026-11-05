@@ -69,6 +69,7 @@ export type Profile = {
   city: string;
   duration: string;
   rate: string;
+  freeConfirmed: boolean;
   identity: boolean;
 };
 export type Route = { page: string; id?: string; tab?: string };
@@ -313,10 +314,11 @@ export function initialProfile(a?: Answers): Profile {
     approach:
       a?.approach ||
       "Practical conversations, thoughtful feedback, and lessons that feel like you.",
-    format: a?.format || "Either",
-    city: a?.city || "Paris, France",
-    duration: a?.duration || "30 minutes",
-    rate: a?.rate || "30",
+    format: a ? a.format : "Either",
+    city: a ? a.city : "Paris, France",
+    duration: a ? a.duration : "30 minutes",
+    rate: a ? a.rate : "30",
+    freeConfirmed: a?.freeConfirmed || false,
     identity: a?.identityPreviewComplete || false,
   };
 }

@@ -66,6 +66,7 @@ const titles: Record<string, string> = {
   share: "Share lesson",
   profile: "Profile",
   "profile-edit": "Edit profile",
+  "lesson-settings": "Lesson settings",
   "profile-preview": "Teaching profile",
   settings: "Account settings",
   help: "Help",

@@ -69,7 +69,7 @@ test("teacher setup reaches review in eight screens with profile, subjects and l
   assert.ok(!route.includes("age"));
   assert.ok(!route.includes("guardian"));
 });
-test("meeting preferences remain optional while grouped teacher duration and price remain required", () => {
+test("meeting preferences, duration and price can be deferred independently", () => {
   for (const format of ["Online", "In person", "Either", ""]) {
     assert.equal(
       validStep(
@@ -83,9 +83,9 @@ test("meeting preferences remain optional while grouped teacher duration and pri
   }
   assert.equal(
     validStep("teacher-lessons", answers({ duration: "45 minutes" })),
-    false,
+    true,
   );
-  assert.equal(validStep("teacher-lessons", answers({ rate: "30" })), false);
+  assert.equal(validStep("teacher-lessons", answers({ rate: "30" })), true);
 });
 test("under-18 route collects guardian details before verification and checks a distinct email", () => {
   const a = answers({ role: "learner", age: "Under 18" });
@@ -117,7 +117,6 @@ test("grouped required fields, email, code, price and identity checks reject mis
     "level",
     "teacher-profile",
     "teacher-subjects",
-    "teacher-lessons",
     "teacher-review",
     "learner-goal",
     "identity-details",
@@ -442,7 +441,6 @@ test("teacher review cannot bypass missing required details after an edit or Bac
     { approach: "a" },
     { teachingLanguages: [] },
     { teachingLevels: [] },
-    { duration: "" },
     { rate: "0" },
   ])
     assert.equal(validStep("teacher-review", { ...valid, ...patch }), false);
@@ -466,5 +464,19 @@ test("teacher progress separates eight setup screens from the optional identity 
   assert.equal(
     setupProgress(answers({ role: "learner" }), "learner-ready").percent,
     100,
+  );
+});
+
+test("free lessons require explicit confirmation while unset pricing remains an optional draft", () => {
+  assert.equal(validStep("teacher-lessons", initialAnswers), true);
+  const free = answers({ duration: "45 minutes", rate: "0" });
+  assert.equal(validStep("teacher-lessons", free), false);
+  assert.equal(
+    validStep("teacher-lessons", { ...free, freeConfirmed: true }),
+    true,
+  );
+  assert.equal(
+    validStep("teacher-lessons", answers({ rate: "-1", freeConfirmed: true })),
+    false,
   );
 });

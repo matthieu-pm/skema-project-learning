@@ -1,3 +1,4 @@
+import { validLessonSettings } from "./lesson-settings.ts";
 export type Role = "" | "learner" | "teacher";
 export type Answers = {
   role: Role;
@@ -24,6 +25,7 @@ export type Answers = {
   approach: string;
   duration: string;
   rate: string;
+  freeConfirmed: boolean;
   legalName: string;
   dateOfBirth: string;
   country: string;
@@ -58,6 +60,7 @@ export const initialAnswers: Answers = {
   approach: "",
   duration: "",
   rate: "",
+  freeConfirmed: false,
   legalName: "",
   dateOfBirth: "",
   country: "",
@@ -272,12 +275,7 @@ export function validStep(step: Step, a: Answers): boolean {
     case "teacher-subjects":
       return a.teachingLanguages.length > 0 && a.teachingLevels.length > 0;
     case "teacher-lessons":
-      return (
-        !!a.duration &&
-        Number.isFinite(Number(a.rate)) &&
-        Number(a.rate) > 0 &&
-        Number(a.rate) <= 1000
-      );
+      return validLessonSettings(a);
     case "learner-goal":
       return !!a.topic && a.personalGoal.trim().length >= 3;
     case "identity-details":
@@ -317,7 +315,11 @@ export function validStep(step: Step, a: Answers): boolean {
     case "duration":
       return !!a.duration;
     case "rate":
-      return Number(a.rate) > 0 && Number(a.rate) <= 1000;
+      return validLessonSettings({
+        duration: "",
+        rate: a.rate,
+        freeConfirmed: a.freeConfirmed,
+      });
     case "legal-name":
       return a.legalName.trim().length >= 3;
     case "date-of-birth":

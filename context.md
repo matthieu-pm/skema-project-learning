@@ -738,3 +738,38 @@ Learner topic, personal goal and optional resource are grouped; format/city/day/
 Verification: production build, all 28 protected runtime hashes, 19 onboarding tests, 26 teacher tests, 5 routing tests and 4 Sites tests pass (54 automated checks). Desktop browser checks cover invalid email/wrong code/change email, Google method switching, profile summary edits without repeated steps, invalid rate/date handling, document/selfie completion and profile transfer. Phone checks cover the grouped teacher forms, deferral directly to the workspace, and learner Google → minor guardian → Persona → two independent language levels → grouped goal/preferences/extras → final summary. Ongoing-module view switching preserves queue search; empty/assigned-student views work. Exact separator alignment was measured in the browser. See `app/qa/streamlined-onboarding/verification.md`. Browser tests used in-app web and phone previews; no real authentication/identity service, physical device or user usability study is connected.
 
 Published streamlined release: Sites version **8**, source `ddbed77b86250a7ee43010ced895b66a199d199c`, saved version `appgprj_6aec12084dfc8191add134139ef2dd4a~appgver_f66673606d0c81918eefd789bd7e7e48`, deployment `appgdep_6aece708ae0481918174c694e5c20237` succeeded. Public onboarding entry: https://mimo-teacher-review.sillyatlas2.chatgpt.site/?view=web . Hosted checks confirmed the initial Choose your path label, both ongoing-module view controls, and equal editor/account divider y=640. Core step counts appear only after choosing a role, avoiding a misleading learner estimate before teachers select their path. Existing public audience, fork-main isolation and original-live-site boundaries are unchanged.
+
+
+### Optional onboarding lesson settings — implemented 5 November 2026
+
+
+Optional lesson settings and free lessons (2026-11-05, latest user direction): duration and price are independently optional during onboarding; leaving them blank means Not set, with no invented defaults in the transferred profile. Set duration and price later clears both, preserves other preferences, and reaches review. Complete them later via Profile → Lesson settings. These are bookable session settings, distinct from module completion estimates. New availability and requested-meeting confirmation require a valid duration and price; existing confirmed bookings remain unchanged. A zero price is allowed only after an explicit free-lesson checkbox confirmation; changing the price resets confirmation. Blank, paid and confirmed-free states stay distinct in review/profile. Account email and Google actions are grouped with the form rather than separated across the fixed footer. Identity deferral says Finish verification later. Preserve all existing validation and protected runtime. Local preview saving is session state, not a connected backend.
+
+# Optional lesson settings — 5 November 2026
+
+## Screen counts
+
+Baseline commit 9578ac9; email, in-person, document-based identity path; one language for the adult learner. Count actual displayed pages, including welcome/role/account and email-code verification. Identity checking is counted separately.
+
+| Teacher flow | Original | Updated |
+| --- | ---: | ---: |
+| Setup through profile review | 18 | 8 |
+| Document-based identity preview | 7 | 5 |
+| Standalone completion page | 1 | 0 |
+| Total | 26 | 13 |
+
+Teacher identity can be deferred: eight screens to the workspace. The terminal verification-ready route still exists in the updated route array but opens the workspace directly rather than showing another completion page. Adult learner equivalent total is 29 → 16, including its retained final summary. Guardian and additional-language branches vary. Free confirmation is inline and adds no page.
+
+## Verification
+
+- Production build, 28 protected runtime hashes, 20 onboarding / 28 teacher / 5 routing / 4 Sites tests passed (57 tests).
+- Desktop: blank settings permit continuation; unconfirmed €0 disables Continue; confirming enables it. Deferring clears the provisional price and review/profile display Not set.
+- Profile → Lesson settings retains missing values, supports independently optional fields, reviews and saves confirmed €0 as Free (€0). Editing paid price and returning to €0 resets confirmation and disables review.
+- Incomplete drafts can be saved. Availability shows a clear recovery action and disables Save availability when price is missing.
+- Phone: email/Google actions form one vertical group with visible separator, inside the source iPhone runtime; no separated bottom-left Google action or overlapping footer.
+- Published version 9 shows Lesson settings and disables review for unconfirmed free pricing.
+- No real authentication, charging, booking service or cross-device profile persistence is connected. Existing sample bookings are preserved. No new live microphone, physical-device or assistive-technology study performed.
+
+## Publication
+
+Version 9: source 7fa660cbaf7337df54ef4f5fa9d36b7991a62e77; saved version appgprj_6aec12084dfc8191add134139ef2dd4a~appgver_9d8c296a136c81918bfefc73628597a4; deployment appgdep_6aecee83223c8191ace3401f0700dbea succeeded. Same public review URL and audience. The original project and fork main remain unchanged.

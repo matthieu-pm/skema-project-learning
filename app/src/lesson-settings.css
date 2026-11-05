@@ -1,0 +1,62 @@
+.lesson-free-confirm {
+  border: 2px solid #e5dff2;
+  border-radius: 12px;
+  padding: 16px;
+  background: #faf8ff;
+  color: #342e3c;
+}
+.lesson-free-confirm h3 {
+  font-size: 16px;
+  margin: 0 0 8px;
+}
+.lesson-free-confirm p {
+  font-size: 14px;
+  line-height: 1.5;
+  margin: 8px 0;
+}
+.lesson-free-check {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  min-height: 48px;
+  padding: 10px;
+  margin-top: 12px;
+  border: 2px solid #d7cee8;
+  border-radius: 10px;
+  text-align: left;
+  font: inherit;
+  font-size: 14px;
+  line-height: 1.4;
+  background: white;
+  color: inherit;
+  cursor: pointer;
+}
+.lesson-free-box {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 22px;
+  height: 22px;
+  border: 2px solid #b2a8c5;
+  border-radius: 5px;
+}
+.lesson-free-box svg {
+  width: 18px;
+  height: 18px;
+}
+.lesson-free-check[aria-checked="true"] {
+  border-color: var(--primary, #8050d6);
+}
+.lesson-free-check[aria-checked="true"] .lesson-free-box {
+  background: var(--primary, #8050d6);
+  color: white;
+  border-color: var(--primary, #8050d6);
+}
+.lesson-free-check:focus-visible {
+  outline: 3px solid #a789dc;
+  outline-offset: 3px;
+}
+.lesson-settings-note {
+  color: #62576f;
+}

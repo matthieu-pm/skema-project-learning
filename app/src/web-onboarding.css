@@ -469,3 +469,4 @@ body:has(.web-onboarding) #root {
 .web-onboarding .setup-group .setup-note {
   padding: 12px;
 }
+.web-onboarding:has([data-web-step="account"]) .web-setup-main { padding-bottom:40px; }
