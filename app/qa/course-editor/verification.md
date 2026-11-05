@@ -35,3 +35,10 @@ Screenshots: `desktop-editor.jpg`, `student-preview.jpg`, `iphone-editor.jpg`, `
 ## Hosted teammate review — 5 November 2026
 
 At the user’s subsequent request, published an independent public Sites review copy at https://mimo-teacher-review.sillyatlas2.chatgpt.site . User explicitly chose Anyone with the link. Version 1 deployment succeeded; fresh retained-checkout build, 28 protected hashes and four worker tests passed. Hosted browser checks opened Lessons, the café editor, and a student preview with one block and module context. `hosted-review.jpg` records the published editor. The original repository/live Vercel site and fork main remain unchanged; visitors’ drafts are local to each browser. This supersedes the earlier no-deployment scope for this separate review copy only.
+
+
+## Direct review links — 5 November 2026
+
+Added safe `flow`/`lesson` initial routing in the shared workspace. `?teacher=1&view=web&flow=editor&lesson=cafe` and its mobile variant open the example editor directly. `flow=lessons` opens the library, `flow=preview&lesson=cafe` opens the student preview. Unknown lesson IDs fall back to the library and unsupported action-like flows cannot trigger save/apply/share. Normal onboarding and default teacher entry are unchanged.
+
+Sites version 2 deployment succeeded. Verified hosted desktop editor entry and refresh, plus phone editor entry, with no onboarding/menu interactions. Automated verification: 17 teacher tests (including two new entry tests), 16 onboarding, five routing, four worker tests, build and 28 protected runtime hashes passed. Screenshot: `direct-editor-link.jpg`.

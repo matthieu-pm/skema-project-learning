@@ -666,3 +666,11 @@ The user requested access from teammates’ own laptops and explicitly selected 
 Sites project ID: `appgprj_6aec12084dfc8191add134139ef2dd4a`. Published version 1, source commit `b80c74b6ffb49325613104a9addbb47df7b1ceef`, deployment `appgdep_6aec1271486481919f1b207d5ca674f8` succeeded. The separate retained app checkout is `../mimo-review-site`, whose `.openai/hosting.json` owns this Site identity. Do not put its ID into the original app manifest or create a duplicate Site. Update this Site through its own source workflow when requested; the GitHub feature branch does not automatically deploy it.
 
 The hosted build passed all 28 runtime hashes and four worker tests. Browser verification opened the public teacher workspace, lesson library, café editor and a one-block student preview. Screenshot: `app/qa/course-editor/hosted-review.jpg`. The public review link works independently of the local preview server/laptop.
+
+
+### Direct review links — 5 November 2026
+
+`app/src/teacher/entry-route.ts` resolves safe initial teacher screens for both web and mobile. Share the Course Editor directly at https://mimo-teacher-review.sillyatlas2.chatgpt.site/?teacher=1&view=web&flow=editor&lesson=cafe . Use `flow=lessons` for the lesson library or `flow=preview&lesson=cafe` for student preview. The original `?teacher=1` entry still opens Students and normal onboarding is unchanged. Unavailable local lesson IDs open the library; links never publish, save or send anything. Two teacher regression tests cover valid entry, mobile/default behavior and unsupported routes/unknown lesson IDs.
+
+
+Direct-link release is live as Sites version 2 (source `70fd74ac18dd9759f67644cc70dc220576bf181a`, deployment `appgdep_6aec16f3fff481919303e3aa9b00d57f`, succeeded). Hosted browser verification opened desktop and mobile editor URLs directly; refreshing the desktop link retained the requested editor entry. Build, 28 runtime hashes, 17 teacher tests, 16 onboarding tests, five routing tests and four worker tests passed. Evidence: `app/qa/course-editor/direct-editor-link.jpg`.

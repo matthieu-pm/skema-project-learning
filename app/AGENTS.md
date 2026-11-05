@@ -144,3 +144,6 @@ Teacher course editor update (2026-11-05, user-approved): distinguish the six la
 
 
 Teammate sharing update (2026-11-05): the user subsequently authorized a separate review deployment and selected Anyone with the link. Public review: https://mimo-teacher-review.sillyatlas2.chatgpt.site/?teacher=1&view=web . Preserve the original Vercel site and unmerged fork main. The Site identity and retained publication checkout are recorded in `context.md`; use those for future review-site updates. Browser-local drafts are independent for every visitor.
+
+
+Review deep links (2026-11-05): `?teacher=1&flow=editor&lesson=cafe` opens the example course/module editor directly; add `view=web` or `view=mobile` for a specific presentation. `flow=lessons` opens the library, `flow=preview&lesson=cafe` opens the student preview, and primary teacher tabs also support direct entry. These are initial screen selections only, never save/apply/share actions. Unknown lesson IDs open the library because browser-local drafts are not shared across devices. Preserve default onboarding and default teacher entry when no flow is provided.

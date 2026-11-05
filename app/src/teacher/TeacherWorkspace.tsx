@@ -1,3 +1,4 @@
+import { teacherEntryRoute } from "./entry-route";
 import { useEffect, useState } from "react";
 import {
   FlowStack,
@@ -198,16 +199,22 @@ export default function TeacherWorkspace({
   mobile?: boolean;
   answers?: Answers;
 }) {
+  const state = useWorkspaceState(answers);
+  const [entryRoute] = useState(() =>
+    teacherEntryRoute(
+      window.location.search,
+      state.lessons.map((l) => l.id),
+    ),
+  );
   const [mobileRoot, setMobileRootState] = useState({
-    route: { page: "students" } as Route,
+    route: entryRoute,
     key: 0,
   });
   const setMobileRoot = (route: Route) => {
     keyboard.hide();
     setMobileRootState((v) => ({ route, key: v.key + 1 }));
   };
-  const state = useWorkspaceState(answers);
-  const [route, setRoute] = useState<Route>({ page: "students" }),
+  const [route, setRoute] = useState<Route>(entryRoute),
     [history, setHistory] = useState<Route[]>([]);
   const keyboard = useKeyboard();
   const navigate: Navigate = (r, replace = false) => {

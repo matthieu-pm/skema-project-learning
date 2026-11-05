@@ -114,9 +114,19 @@ test("deep screens retain the architecture parent tab", () => {
 });
 
 test("calendar ranges follow Monday weeks, leap years, month ends and year boundaries", async () => {
-  const { calendarDates, moveCalendar } = await import("../src/teacher/calendar.ts");
+  const { calendarDates, moveCalendar } = await import(
+    "../src/teacher/calendar.ts"
+  );
   assert.deepEqual(calendarDates("2026-10-10", "Day"), ["2026-10-10"]);
-  assert.deepEqual(calendarDates("2026-10-10", "Week"), ["2026-10-05", "2026-10-06", "2026-10-07", "2026-10-08", "2026-10-09", "2026-10-10", "2026-10-11"]);
+  assert.deepEqual(calendarDates("2026-10-10", "Week"), [
+    "2026-10-05",
+    "2026-10-06",
+    "2026-10-07",
+    "2026-10-08",
+    "2026-10-09",
+    "2026-10-10",
+    "2026-10-11",
+  ]);
   assert.equal(calendarDates("2026-10-10", "Month").length, 35);
   assert.equal(calendarDates("2026-11-10", "Month").length, 42);
   assert.ok(calendarDates("2024-02-15", "Month").includes("2024-02-29"));
@@ -130,10 +140,57 @@ test("calendar ranges follow Monday weeks, leap years, month ends and year bound
 test("overlapping calendar events remain individually accessible and adjacent sessions reuse space", async () => {
   const { sessionColumns } = await import("../src/teacher/calendar.ts");
   const source = initialSessions()[0];
-  const entries = sessionColumns([{ ...source, id: "a", time: "14:00" }, { ...source, id: "b", time: "14:15" }, { ...source, id: "c", time: "14:45" }]);
+  const entries = sessionColumns([
+    { ...source, id: "a", time: "14:00" },
+    { ...source, id: "b", time: "14:15" },
+    { ...source, id: "c", time: "14:45" },
+  ]);
   assert.equal(entries[0].columns, 2);
   assert.equal(entries[1].columns, 2);
   assert.notEqual(entries[0].column, entries[1].column);
   assert.equal(entries[2].columns, 1);
   assert.equal(source.time, "14:00");
+});
+
+test("review links open the editor, preview or library without changing the default entry", async () => {
+  const { teacherEntryRoute } = await import("../src/teacher/entry-route.ts");
+  const ids = ["cafe", "travel"];
+  assert.deepEqual(
+    teacherEntryRoute("?teacher=1&view=web&flow=editor&lesson=cafe", ids),
+    { page: "editor", id: "cafe" },
+  );
+  assert.deepEqual(
+    teacherEntryRoute("?teacher=1&view=mobile&flow=editor", ids),
+    { page: "editor", id: "cafe" },
+  );
+  assert.deepEqual(
+    teacherEntryRoute("?teacher=1&flow=preview&lesson=travel", ids),
+    { page: "lesson-preview", id: "travel" },
+  );
+  assert.deepEqual(teacherEntryRoute("?teacher=1&flow=lessons", ids), {
+    page: "lessons",
+    tab: "Library",
+  });
+  assert.deepEqual(teacherEntryRoute("?teacher=1", ids), { page: "students" });
+});
+
+test("review entry ignores unsupported actions and sends unavailable browser-local lessons to the library", async () => {
+  const { teacherEntryRoute } = await import("../src/teacher/entry-route.ts");
+  assert.deepEqual(
+    teacherEntryRoute("?flow=editor&lesson=someone-elses-local-draft", [
+      "cafe",
+    ]),
+    { page: "lessons", tab: "Library" },
+  );
+  for (const flow of [
+    "share",
+    "delete",
+    "apply",
+    "https://example.com",
+    "unknown",
+  ])
+    assert.deepEqual(
+      teacherEntryRoute(`?flow=${encodeURIComponent(flow)}`, ["cafe"]),
+      { page: "students" },
+    );
 });
