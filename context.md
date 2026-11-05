@@ -657,3 +657,12 @@ Vocabulary recall, practice flashcards, matching, sorting, sentence tiles, quizz
 `course.ts` holds typed content, legacy conversion, cloning, validation, assessment and immutable outline moves. `CourseContent.tsx` renders content/practice, `CourseProperties.tsx` configures it, and `CourseEditor.tsx` composes authoring/preview/apply. `course-storage.ts` stores explicit saved drafts, applied snapshots and own templates in localStorage, media in IndexedDB (20 MB/file); errors keep the in-memory draft and offer retry. There is no cross-device storage or backend. Later edits do not mutate applied material. Existing learner adaptation and session snapshots retain independent copies and exclude private notes. Source fixture lessons without the new model remain editable via conversion.
 
 Verification details and limitations are recorded in `app/qa/course-editor/verification.md`. This section supersedes earlier statements that all teacher lesson drafts reset on reload; unrelated workspace features remain in-memory simulations.
+
+
+### Shared teammate review site — published 5 November 2026
+
+The user requested access from teammates’ own laptops and explicitly selected **Anyone with the link**. A separate public Sites review copy is live at https://mimo-teacher-review.sillyatlas2.chatgpt.site . Teacher desktop entry: `/?teacher=1&view=web`; mobile preview: `/?teacher=1&view=mobile`. It is independent of the original Vercel live site and the fork’s unmerged main branch. Each visitor’s saved drafts/media remain in their own browser; there is no collaborative synchronization.
+
+Sites project ID: `appgprj_6aec12084dfc8191add134139ef2dd4a`. Published version 1, source commit `b80c74b6ffb49325613104a9addbb47df7b1ceef`, deployment `appgdep_6aec1271486481919f1b207d5ca674f8` succeeded. The separate retained app checkout is `../mimo-review-site`, whose `.openai/hosting.json` owns this Site identity. Do not put its ID into the original app manifest or create a duplicate Site. Update this Site through its own source workflow when requested; the GitHub feature branch does not automatically deploy it.
+
+The hosted build passed all 28 runtime hashes and four worker tests. Browser verification opened the public teacher workspace, lesson library, café editor and a one-block student preview. Screenshot: `app/qa/course-editor/hosted-review.jpg`. The public review link works independently of the local preview server/laptop.
