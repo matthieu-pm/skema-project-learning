@@ -60,7 +60,7 @@ const titles: Record<string, string> = {
   recap: "Lesson recap",
   "recap-preview": "Review recap",
   lessons: "Lessons",
-  editor: "Course editor",
+  editor: "Module editor",
   "lesson-preview": "Learner preview",
   "ai-review": "Review AI draft",
   share: "Share lesson",
@@ -88,11 +88,15 @@ function Toolbar({
     <header className="tw-toolbar">
       <div className="tw-toolbar-left">
         {!mobile && <SidebarTrigger />}
-        {canGoBack && (
+        {(canGoBack || route.page === "editor") && (
           <button
             className="tw-icon-button"
-            aria-label="Go back"
-            onClick={back}
+            aria-label={route.page === "editor" ? "Back to lessons" : "Go back"}
+            onClick={() =>
+              route.page === "editor"
+                ? navigate({ page: "lessons", tab: "Library" }, true)
+                : back()
+            }
           >
             <Icon name="back" />
           </button>

@@ -1360,3 +1360,46 @@
     padding: 7px 5px;
   }
 }
+
+.ce-editor-footer {
+  justify-content: space-between;
+  gap: 12px;
+}
+.ce-footer-back {
+  flex: none;
+}
+.ce-footer-back .tw-button {
+  min-height: 36px;
+  padding: 7px 12px;
+  font-size: 12px;
+}
+.ce-bottom-actions {
+  margin-left: auto;
+  min-width: 0;
+}
+.ce-phone-actions .ce-bottom-actions {
+  width: auto;
+  flex: 1;
+}
+.ce-phone-actions .ce-footer-back .tw-button {
+  gap: 4px;
+  padding: 7px 6px;
+  font-size: 11px;
+}
+.ce-phone-actions .ce-footer-back .tw-button > svg {
+  width: 14px;
+}
+@media (max-width: 600px) {
+  .teacher-web .ce-bottom-actions {
+    width: auto;
+    flex: 1;
+  }
+  .teacher-web .ce-footer-back .tw-button {
+    gap: 4px;
+    padding: 7px 6px;
+    font-size: 11px;
+  }
+  .teacher-web .ce-footer-back .tw-button > svg {
+    width: 14px;
+  }
+}

@@ -877,7 +877,7 @@ function Editor({ lesson, navigate }: { lesson: Lesson; navigate: Navigate }) {
         </aside>
         <main className="ce-canvas">
           <div className="ce-canvas-label">
-            <span>Course editor</span>
+            <span>Module editor</span>
             <span className="ce-view-status">
               <span>Teacher view</span>
               <Badge tone={applied ? "green" : "orange"}>{status}</Badge>
@@ -1028,7 +1028,15 @@ function Editor({ lesson, navigate }: { lesson: Lesson; navigate: Navigate }) {
         />
       </div>
       <EditorActions>
-        {" "}
+        <div className="ce-footer-back">
+          <Button
+            kind="secondary"
+            icon="back"
+            onClick={() => navigate({ page: "lessons", tab: "Library" }, true)}
+          >
+            Back
+          </Button>
+        </div>
         <div className="ce-bottom-actions">
           <Button kind="secondary" onClick={() => open("preview")}>
             Preview lesson
