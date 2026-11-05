@@ -9,6 +9,10 @@ export type CompletedBlock = {
   correct?: boolean;
   recording?: { transcript: string; seconds: number };
 };
+export function canReviewBlock(block: CompletedBlock): boolean {
+  return block.type.startsWith("Practise · ") &&
+    (block.response !== undefined || block.recording !== undefined);
+}
 export type ModuleResult = {
   id: string;
   studentId: string;
@@ -85,7 +89,7 @@ export function shareModuleFeedback(result: ModuleResult, book: FeedbackBook, no
   const rows = { ...book[result.id] };
   for (const block of result.blocks) {
     const value = rows[block.id];
-    if (value?.draft.trim() && value.draft.trim() !== value.shared) {
+    if (canReviewBlock(block) && value?.draft.trim() && value.draft.trim() !== value.shared) {
       rows[block.id] = { ...value, shared: value.draft.trim(), sharedAt: now };
     }
   }

@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Badge, Button, Panel, Select, TextField, useWorkspace } from "./components";
-import { feedbackStorageKey, moduleResults, readFeedback, shareModuleFeedback, type FeedbackBook } from "./module-results";
+import { canReviewBlock, feedbackStorageKey, moduleResults, readFeedback, shareModuleFeedback, type FeedbackBook } from "./module-results";
 import "./module-results.css";
 
 export default function ModuleResults({ studentId }: { studentId: string }) {
@@ -29,8 +29,9 @@ export default function ModuleResults({ studentId }: { studentId: string }) {
   };
   if (!result) return <Panel><h2>No completed blocks yet</h2><p>Completed blocks and student responses will appear here, ready for your feedback.</p><p className="mr-muted">This prototype uses sample submissions. New lessons do not generate student results automatically.</p></Panel>;
   const rows = book[result.id] || {};
-  const pending = result.blocks.filter((b) => rows[b.id]?.draft.trim() && rows[b.id]?.draft.trim() !== rows[b.id]?.shared).length;
-  const shared = result.blocks.filter((b) => rows[b.id]?.shared).length;
+  const reviewable = result.blocks.filter(canReviewBlock);
+  const pending = reviewable.filter((b) => rows[b.id]?.draft.trim() && rows[b.id]?.draft.trim() !== rows[b.id]?.shared).length;
+  const shared = reviewable.filter((b) => rows[b.id]?.shared).length;
   return <div className="mr-results">
     <Panel>
       <div className="mr-heading"><Badge tone="lilac">Sample student work</Badge><span>{result.completedAt}</span></div>
@@ -50,6 +51,7 @@ export default function ModuleResults({ studentId }: { studentId: string }) {
           {block.answer && <><p className={`mr-evaluation ${block.correct ? "correct" : "incorrect"}`}>{block.correct ? "✓ Correct" : "✕ Incorrect"}</p><h3>Teacher-provided answer</h3><p>{block.answer}</p></>}
           {!block.answer && (block.response || block.recording) && <Badge tone="orange">Teacher review</Badge>}
         </div>
+        {canReviewBlock(block) && <>
         <TextField label={`Feedback · ${block.title}`} multiline value={feedback.draft} placeholder="What went well? What should the student try next?" onChange={(draft) => {
           const next = { ...book, [result.id]: { ...rows, [block.id]: { ...feedback, draft } } };
           setBook(next);
@@ -57,6 +59,7 @@ export default function ModuleResults({ studentId }: { studentId: string }) {
         }} />
         <p className="mr-muted">{feedback.shared ? (changed ? "Edited draft · previous feedback shared in preview" : "Shared in preview") : "Private draft · not shared"}</p>
         {feedback.shared && changed && <details><summary>Previously shared feedback</summary><p className="mr-preserve">{feedback.shared}</p></details>}
+        </>}
       </Panel>;
     })}
     <Panel className="mr-feedback-actions">

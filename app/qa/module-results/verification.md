@@ -11,3 +11,7 @@
 - Unit checks cover feedback across different students/submissions, invalid saved data without overwrite, immutable submissions and existing shared snapshots, and deep links.
 
 Limitations: fictional submission fixtures, browser-local feedback, simulated sharing only; no real student delivery or playback of student recording files. Offline/storage failure messages are implemented; storage exceptions tested at the reader boundary, not failure-injected in the browser. New editor lessons do not automatically create completed submissions. Existing lesson/source/live-site boundaries remain unchanged.
+
+## Teaching-block refinement
+
+Feedback fields and draft/shared labels are removed from teaching-only blocks, with viewed content retained. Browser check on vocabulary results confirmed zero teaching-block textareas and the practice feedback textarea still present. The sharing test now includes an old teaching-block draft and confirms it cannot be shared. Production build, 28 runtime hashes, 20 teacher tests and 4 Sites tests pass for this revision.

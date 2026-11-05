@@ -202,6 +202,7 @@ test("module feedback sharing is scoped to completed blocks and keeps submitted 
   const book = {
     [result.id]: {
       "vocab-recall": { draft: "  Watch the article before a vowel.  " },
+      "vocab-teach": { draft: "Legacy teaching-block draft" },
       "vocab-pairs": { draft: "Great matching!", shared: "Great matching!", sharedAt: "earlier" },
       "not-a-submitted-block": { draft: "Do not share this" },
     },
@@ -210,6 +211,7 @@ test("module feedback sharing is scoped to completed blocks and keeps submitted 
   const shared = shareModuleFeedback(result, book, "now");
   assert.equal(shared[result.id]["vocab-recall"].shared, "Watch the article before a vowel.");
   assert.equal(shared[result.id]["vocab-recall"].sharedAt, "now");
+  assert.equal(shared[result.id]["vocab-teach"].shared, undefined);
   assert.equal(shared[result.id]["vocab-pairs"].sharedAt, "earlier");
   assert.equal(shared[result.id]["not-a-submitted-block"].shared, undefined);
   assert.equal(shared["lucas-listening-1"]["listening-written"].shared, undefined);
