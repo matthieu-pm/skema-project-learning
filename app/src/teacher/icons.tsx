@@ -26,6 +26,13 @@ import {
   MoreVerticalIcon,
   ArrowUpDownIcon,
   Upload01Icon,
+  Undo02Icon,
+  Redo02Icon,
+  DragDropVerticalIcon,
+  Image01Icon,
+  HeadphonesIcon,
+  File01Icon,
+  TextFontIcon,
 } from "@hugeicons/core-free-icons";
 import type { SVGProps } from "react";
 
@@ -56,6 +63,13 @@ const icons: Record<string, IconSvgElement> = {
   more: MoreVerticalIcon,
   expand: ArrowUpDownIcon,
   upload: Upload01Icon,
+  undo: Undo02Icon,
+  redo: Redo02Icon,
+  grip: DragDropVerticalIcon,
+  image: Image01Icon,
+  audio: HeadphonesIcon,
+  document: File01Icon,
+  text: TextFontIcon,
 };
 type Props = Omit<SVGProps<SVGSVGElement>, "strokeWidth"> & {
   size?: number;

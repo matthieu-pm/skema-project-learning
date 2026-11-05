@@ -14,7 +14,7 @@
     "build": "tsc && vite build && node scripts/prepare-sites-build.mjs",
     "test:onboarding": "node --test tests/onboarding.test.mjs",
     "test:routing": "node --test tests/device-routing.test.mjs",
-    "test:teacher": "node --test tests/teacher-workspace.test.mjs"
+    "test:teacher": "node --test tests/teacher-workspace.test.mjs tests/course-editor.test.mjs"
   },
   "dependencies": {
     "@fontsource/nunito": "^5.3.0",
