@@ -1,3 +1,4 @@
+import ReviewQueue from "./ReviewQueue";
 import ModuleResults from "./ModuleResults";
 import {
   cloneCourse,
@@ -462,6 +463,7 @@ function ModulesPage({ navigate }: { navigate: Navigate }) {
         title="Ongoing modules"
         description="A learner’s goal stays at the heart of each lesson."
       />
+      <ReviewQueue navigate={navigate} />
       {students.map((s) => (
         <Panel key={s.id}>
           <StudentLine id={s.id} />
@@ -494,7 +496,7 @@ function ModulesPage({ navigate }: { navigate: Navigate }) {
     </>
   );
 }
-function ResultsPage({ id, navigate }: { id?: string; navigate: Navigate }) {
+function ResultsPage({ id, selected, navigate }: { id?: string; selected?: string; navigate: Navigate }) {
   const s = findStudent(id);
   const { lessons, updateLesson, setLessons, setNotice } = useWorkspace();
   const l = lessons.find((l) => l.studentId === s.id);
@@ -506,7 +508,7 @@ function ResultsPage({ id, navigate }: { id?: string; navigate: Navigate }) {
         description="Review completed blocks and give feedback on each response."
       />
       <StudentLine id={s.id} />
-      <ModuleResults key={s.id} studentId={s.id} />
+      <ModuleResults key={`${s.id}-${selected || ""}`} studentId={s.id} selected={selected} navigate={navigate} />
       <Panel>
         <TextField
           label="Module learning points"
@@ -2746,7 +2748,7 @@ export function TeacherPage({
     case "modules":
       return <ModulesPage navigate={navigate} />;
     case "results":
-      return <ResultsPage id={r.id} navigate={navigate} />;
+      return <ResultsPage id={r.id} selected={r.tab} navigate={navigate} />;
     case "messages":
       return <MessagesPage id={r.id} navigate={navigate} />;
     case "submission":

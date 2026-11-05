@@ -238,3 +238,89 @@ test("results deep links select a known student and unknown students return to o
   assert.deepEqual(teacherEntryRoute("?flow=results&student=unknown", []), { page: "modules" });
   assert.deepEqual(teacherEntryRoute("?flow=modules", []), { page: "modules" });
 });
+
+test("structured feedback, assessment and annotations are shared without private teaching notes", async () => {
+  const { shareModuleFeedback, moduleResults } = await import("../src/teacher/module-results.ts");
+  const { isPending } = await import("../src/teacher/review.ts");
+  const result = moduleResults.find(r => r.id === "lea-speaking-1");
+  const block = result.blocks[0];
+  const value = { draft: "", review: { strength: "Clear message", nextStep: "Try ordering tea", privateNote: "Never send this note", criteria: [{id:"task",label:"Task completion",rating:"Meets task"}], annotations:[{id:"a",kind:"audio",quote:"",correction:"",note:"Pause here",at:2}] } };
+  assert.equal(isPending(value), true);
+  const shared = shareModuleFeedback(result,{[result.id]:{[block.id]:value}},"now")[result.id][block.id];
+  assert.ok(shared.shared.includes("Clear message"));
+  assert.ok(shared.shared.includes("0:02"));
+  assert.ok(shared.shared.includes("Task completion: Meets task"));
+  assert.ok(!JSON.stringify(shared.sharedReview).includes("Never send"));
+  assert.ok(!shared.shared.includes("Never send"));
+  assert.equal(shared.review.privateNote,"Never send this note");
+  assert.equal(isPending(shared),false);
+  assert.equal(isPending({...shared,review:{...shared.review,privateNote:"Changed private note"}}),false);
+  assert.equal(isPending({...shared,review:{...shared.review,nextStep:"A changed next step"}}),true);
+  assert.equal(isPending({draft:"",review:{privateNote:"Only a private note"}}),false);
+});
+
+test("review queue status follows complete reviewed feedback and distinguishes sample revisions", async () => {
+  const { moduleResults, shareModuleFeedback, canReviewBlock } = await import("../src/teacher/module-results.ts");
+  const { reviewStatus, remainingReviews } = await import("../src/teacher/review.ts");
+  const result = moduleResults[0];
+  assert.equal(reviewStatus(result,{}),"Awaiting review");
+  assert.equal(remainingReviews(result,{}),2);
+  const book = {[result.id]: Object.fromEntries(result.blocks.filter(canReviewBlock).map(b=>[b.id,{draft:"Reviewed this response"}]))};
+  const shared = shareModuleFeedback(result,book,"now");
+  assert.equal(reviewStatus(result,shared),"Feedback shared");
+  assert.equal(remainingReviews(result,shared),0);
+  const changed = structuredClone(shared); changed[result.id]["vocab-recall"].draft = "Changed feedback";
+  assert.equal(reviewStatus(result,changed),"Awaiting review");
+  assert.equal(remainingReviews(result,changed),1);
+  assert.equal(reviewStatus(moduleResults.find(r=>r.revision),{}),"Revision submitted");
+});
+
+test("audio and writing annotations validate evidence and recording bounds", async () => {
+  const { validateAnnotation } = await import("../src/teacher/review.ts");
+  const b = {id:"b",title:"Respond",type:"Practise · Written response",prompt:"Write",response:"Je veux un café."};
+  const a = {id:"a",kind:"writing",quote:"Je veux",correction:"Je voudrais",note:"A polite request"};
+  assert.equal(validateAnnotation(a,b),"");
+  assert.ok(validateAnnotation({...a,quote:"missing words"},b));
+  assert.ok(validateAnnotation({...a,correction:"",note:""},b));
+  const recording = {...b,recording:{seconds:6,transcript:"Hi"}};
+  for (const at of [-1,7,NaN]) assert.ok(validateAnnotation({...a,kind:"audio",at},recording));
+  assert.equal(validateAnnotation({...a,kind:"audio",at:6},recording),"");
+});
+
+test("follow-up practice creates an independent student draft and preserves the submission", async () => {
+  const { moduleResults } = await import("../src/teacher/module-results.ts");
+  const { followUpLesson } = await import("../src/teacher/review.ts");
+  const { courseIssues } = await import("../src/teacher/course.ts");
+  const source = moduleResults[0], before = structuredClone(source);
+  const lesson = followUpLesson(source,source.blocks[1],students[0],"Use articles before vowels","Write two new café requests.","Written response","new-followup");
+  assert.equal(lesson.studentId,"lea"); assert.equal(lesson.status,"Draft");
+  assert.equal(lesson.course.modules[0].type,"Vocabulary");
+  assert.equal(lesson.course.modules[0].blocks[0].purpose,"Practise");
+  assert.equal(lesson.course.modules[0].blocks[0].text,"Write two new café requests.");
+  assert.equal(lesson.notes,""); assert.deepEqual(courseIssues(lesson.course),[]);
+  lesson.course.modules[0].blocks[0].text = "A later edit";
+  assert.deepEqual(source,before);
+});
+
+test("feedback reader rejects malformed optional review records", async () => {
+  const { readFeedback } = await import("../src/teacher/module-results.ts");
+  for(const review of [[],{strength:7},{criteria:[{id:"x",label:"Task",rating:"made up"}]},{annotations:[{id:"a",kind:"writing",quote:1,correction:"ok",note:""}]}]) {
+    assert.throws(()=>readFeedback({getItem:()=>JSON.stringify({r:{b:{draft:"",review}}})}));
+  }
+});
+
+test("reusing submitted activities retains their assessed format and original keys in independent blocks", async () => {
+  const { moduleResults, canReviewBlock } = await import("../src/teacher/module-results.ts");
+  const { reusePractice } = await import("../src/teacher/review.ts");
+  const { blockIssues, answerKey } = await import("../src/teacher/course.ts");
+  for (const block of moduleResults.flatMap(r=>r.blocks).filter(canReviewBlock)) {
+    const before = structuredClone(block), copy = reusePractice(block);
+    assert.deepEqual(blockIssues(copy), [], block.id);
+    assert.notEqual(copy.id, block.id);
+    if (copy.format === "Vocabulary recall") assert.equal(answerKey(copy),block.answer);
+    else if (copy.format === "Quiz") assert.equal(copy.answer,"3:15");
+    else if (copy.format === "Matching pairs") assert.equal(copy.pairs.length,3);
+    else if (copy.answer) assert.equal(copy.answer,block.answer);
+    copy.text = "Later edits"; assert.deepEqual(block,before);
+  }
+});
