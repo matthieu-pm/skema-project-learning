@@ -556,3 +556,25 @@ test("student publication requires saved terms but draft templates do not", asyn
   assert.deepEqual(lessonPublicationIssues({ ...free, rate: "30" }, true), []);
   assert.equal(lessonPublicationIssues({ ...free, rate: "-1" }, true).length, 1);
 });
+
+
+test("block navigation skips viewed teaching content, drafts and shared feedback", async () => {
+  const { blockReviewLabel, nextUnreviewedBlock } = await import("../src/teacher/review.ts");
+  const { moduleResults } = await import("../src/teacher/module-results.ts");
+  const result = moduleResults.find((r) => r.id === "lea-vocabulary-1");
+  const [teach, recall, pairs] = result.blocks;
+  assert.equal(blockReviewLabel(teach), "Viewed");
+  assert.equal(blockReviewLabel(recall), "Unreviewed");
+  assert.equal(blockReviewLabel(recall, { draft: "", review: { privateNote: "Private only" } }), "Unreviewed");
+  assert.equal(nextUnreviewedBlock(result, {}, teach.id), recall.id);
+  assert.equal(nextUnreviewedBlock(result, {}, recall.id), pairs.id);
+  assert.equal(nextUnreviewedBlock(result, {}, pairs.id), recall.id);
+  const rows = { [recall.id]: { draft: "Try the article again." } };
+  assert.equal(blockReviewLabel(recall, rows[recall.id]), "Feedback draft");
+  assert.equal(nextUnreviewedBlock(result, rows, pairs.id), undefined);
+  rows[pairs.id] = { draft: "Well done", shared: "Well done" };
+  assert.equal(blockReviewLabel(pairs, rows[pairs.id]), "Feedback shared");
+  assert.equal(nextUnreviewedBlock(result, rows, teach.id), undefined);
+  assert.equal(blockReviewLabel(pairs, { draft: "Revised feedback", shared: "Earlier feedback" }), "Edited draft");
+  assert.equal(nextUnreviewedBlock({ ...result, blocks: [] }, {}, ""), undefined);
+});

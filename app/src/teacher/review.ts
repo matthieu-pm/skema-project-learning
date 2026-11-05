@@ -264,3 +264,23 @@ export function followUpLesson(
     archived: false,
   };
 }
+
+
+export function blockReviewLabel(block: CompletedBlock, value?: BlockFeedback): string {
+  if (!canReviewBlock(block)) return "Viewed";
+  if (value?.shared) return isPending(value) ? "Edited draft" : "Feedback shared";
+  return value && feedbackText(value) ? "Feedback draft" : "Unreviewed";
+}
+
+export function nextUnreviewedBlock(
+  result: ModuleResult,
+  rows: Record<string, BlockFeedback>,
+  currentId: string,
+): string | undefined {
+  const current = result.blocks.findIndex((b) => b.id === currentId);
+  for (let offset = 1; offset < result.blocks.length; offset++) {
+    const block = result.blocks[(Math.max(current, 0) + offset) % result.blocks.length];
+    if (blockReviewLabel(block, rows[block.id]) === "Unreviewed") return block.id;
+  }
+  return undefined;
+}

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   Badge,
   Button,
@@ -20,6 +20,8 @@ import {
   type ModuleResult,
 } from "./module-results";
 import {
+  blockReviewLabel,
+  nextUnreviewedBlock,
   commentStorageKey,
   defaultComments,
   feedbackText,
@@ -184,6 +186,9 @@ export default function ModuleResults({
       return defaultComments;
     }
   });
+  const [blockSelection, setBlockSelection] = useState<{ result: string; block: string }>();
+  const contentRef = useRef<HTMLDivElement>(null);
+  const headingRef = useRef<HTMLHeadingElement>(null);
   const [mediaBusy, setMediaBusy] = useState<Record<string, boolean>>({});
   const { offline } = useWorkspace();
   const result = results.find((r) => r.id === selected) || results[0];
@@ -215,6 +220,13 @@ export default function ModuleResults({
     setBook(next);
     save(next, "Feedback draft saved in this browser.");
   };
+  const activeBlock = result?.blocks.find((b) =>
+    blockSelection?.result === result.id && b.id === blockSelection.block
+  ) || result?.blocks[0];
+  useEffect(() => {
+    contentRef.current?.querySelectorAll("audio").forEach((audio) => audio.pause());
+    if (blockSelection) headingRef.current?.focus({ preventScroll: true });
+  }, [result?.id, activeBlock?.id]);
   if (!result)
     return (
       <Panel>
@@ -234,13 +246,22 @@ export default function ModuleResults({
   const pending = reviewable.filter((b) => isPending(rows[b.id])).length,
     shared = reviewable.filter((b) => rows[b.id]?.shared).length;
   const student = students.find((s) => s.id === studentId)!;
+  const activeIndex = result.blocks.findIndex((b) => b.id === activeBlock?.id);
+  const unreviewed = reviewable.filter((b) => blockReviewLabel(b, rows[b.id]) === "Unreviewed").length;
+  const nextUnreviewed = nextUnreviewedBlock(result, rows, activeBlock?.id || "");
+  const busy = Object.values(mediaBusy).some(Boolean);
+  const chooseBlock = (id: string) => {
+    if (!busy) setBlockSelection({ result: result.id, block: id });
+  };
   return (
-    <div className="mr-results">
-      <Panel>
+    <div className="mr-results" ref={contentRef}>
+      <Panel className="mr-module-context">
         <div className="mr-heading">
           <Badge tone="lilac">Sample student work</Badge>
           <span>Submitted {result.completedAt}</span>
         </div>
+        {busy && <p role="status">Finish or cancel the audio recording before switching blocks or modules.</p>}
+        <fieldset className="mr-module-select" disabled={busy}>
         <Select
           label="Completed module"
           value={result.id}
@@ -253,6 +274,7 @@ export default function ModuleResults({
             label: `${r.type} · ${r.module}`,
           }))}
         />
+        </fieldset>
         <h2>{result.module}</h2>
         <p>
           {result.lesson} · {result.blocks.length} completed blocks
@@ -266,6 +288,8 @@ export default function ModuleResults({
         >
           {reviewStatus(result, book)}
         </Badge>
+        <details>
+        <summary>Learning goals and review context</summary>
         <p>
           <strong>Student goal:</strong> {student.goal}
         </p>
@@ -282,13 +306,35 @@ export default function ModuleResults({
           Drafts stay private in this browser. Sharing and submission history
           are simulated.
         </p>
+        </details>
       </Panel>
+      {result.blocks.length > 0 && (
+        <nav className="mr-block-nav" aria-label="Completed block navigation">
+          <div className="mr-block-nav-heading">
+            <strong>Block {activeIndex + 1} of {result.blocks.length}</strong>
+            <span>{unreviewed} unreviewed · {pending} ready to share · {shared} shared</span>
+          </div>
+          <div className="mr-block-nav-controls">
+            <Button kind="secondary" disabled={busy || activeIndex <= 0} onClick={() => chooseBlock(result.blocks[activeIndex - 1].id)}>Previous block</Button>
+            <fieldset disabled={busy}>
+              <Select label="Jump to block" value={activeBlock?.id || ""} onChange={chooseBlock}
+                options={result.blocks.map((b, i) => ({ value: b.id, label: `${i + 1}. ${b.title} — ${blockReviewLabel(b, rows[b.id])}` }))} />
+            </fieldset>
+            <Button kind="secondary" disabled={busy || activeIndex >= result.blocks.length - 1} onClick={() => chooseBlock(result.blocks[activeIndex + 1].id)}>Next block</Button>
+            <Button disabled={busy || !nextUnreviewed} onClick={() => nextUnreviewed && chooseBlock(nextUnreviewed)}>Next unreviewed</Button>
+          </div>
+          <p className="mr-muted" role="status">
+            {busy ? "Finish or cancel recording before navigating." : unreviewed === 0 ? "No unreviewed responses. Draft feedback may still need sharing." : !nextUnreviewed && blockReviewLabel(activeBlock!, rows[activeBlock!.id]) === "Unreviewed" ? "This is the last unreviewed response." : "Unreviewed means no student-facing feedback yet. Draft feedback stays private until shared."}
+          </p>
+        </nav>
+      )}
       {result.blocks.map((block, index) => {
         const feedback = rows[block.id] || { draft: "" },
           changed = isPending(feedback);
         const openResponse = canReviewBlock(block) && !block.answer;
         return (
-          <Panel key={`${result.id}-${block.id}`} className="mr-block">
+          <div key={`${result.id}-${block.id}`} hidden={activeBlock?.id !== block.id} className="mr-block-shell" role="region" aria-labelledby={`mr-heading-${result.id}-${block.id}`}>
+          <Panel className="mr-block">
             <div className="mr-heading">
               <span>
                 Block {index + 1} · {block.type}
@@ -297,7 +343,7 @@ export default function ModuleResults({
                 {canReviewBlock(block) ? "Submitted" : "Viewed"}
               </Badge>
             </div>
-            <h2>{block.title}</h2>
+            <h2 id={`mr-heading-${result.id}-${block.id}`} tabIndex={-1} ref={activeBlock?.id === block.id ? headingRef : undefined}>{block.title}</h2>
             <div className="mr-content">
               <h3>Block content</h3>
               <p>{block.prompt}</p>
@@ -401,6 +447,7 @@ export default function ModuleResults({
               </>
             )}
           </Panel>
+          </div>
         );
       })}
       <Panel className="mr-feedback-actions">
