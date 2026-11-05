@@ -32,3 +32,21 @@ export function lessonPriceLabel(rate: string, freeConfirmed = false): string {
       : "€0 — confirmation needed"
     : `€${rate}`;
 }
+
+// Templates remain reusable drafts; only student-facing publication needs terms.
+export function lessonPublicationIssues(
+  value: LessonSettings,
+  forStudent: boolean,
+): string[] {
+  if (!forStudent || lessonSettingsReady(value)) return [];
+  const issues: string[] = [];
+  if (!lessonDurations.includes(value.duration))
+    issues.push("Set your lesson duration in Edit teaching profile.");
+  if (!value.rate.trim())
+    issues.push("Set your price per lesson in Edit teaching profile.");
+  else if (isFreeLesson(value.rate) && !value.freeConfirmed)
+    issues.push("Confirm your free lesson price in Edit teaching profile.");
+  else if (!validLessonSettings({ ...value, duration: "30 minutes" }, true))
+    issues.push("Enter a price from €0 to €1,000 in Edit teaching profile.");
+  return issues;
+}

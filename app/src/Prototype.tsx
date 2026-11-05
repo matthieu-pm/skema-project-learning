@@ -922,7 +922,7 @@ function Screen({ step }: { step: Step }) {
             )}
             <Note>
               Leave duration and price blank to decide later. Enter 0 to offer
-              free lessons. Set both before offering bookable lessons.
+              free lessons. Set both before publishing a lesson.
             </Note>
           </div>
         )}

@@ -795,3 +795,15 @@
 .tw-shadcn-sidebar a, .tw-account-menu a { color: inherit; text-decoration: none; }
 .tw-shadcn-sidebar [data-slot="sidebar-header"] { position: relative; }
 .tw-shadcn-sidebar .tw-sidebar-close { position: absolute; right: 8px; top: 12px; width: 32px; height: 32px; display: grid; place-items: center; z-index: 2; }
+
+/* Account content is portalled outside workspace tokens; keep a solid surface. */
+[data-slot="dropdown-menu-content"].tw-account-menu {
+  background: #fff;
+  color: #242329;
+  opacity: 1;
+  z-index: 160;
+}
+.tw-account-menu [data-slot="dropdown-menu-item"][data-highlighted] {
+  background: #f1edff;
+  color: #38236e;
+}

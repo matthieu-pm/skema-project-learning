@@ -24,6 +24,7 @@ import {
   useWorkspace,
   type Navigate,
 } from "./components";
+import { lessonPublicationIssues, lessonPriceLabel } from "../lesson-settings";
 import { students, type Lesson } from "./model";
 import { BlockSummary, StudentBlock } from "./CourseContent";
 import { CourseProperties } from "./CourseProperties";
@@ -250,6 +251,7 @@ function Editor({ lesson, navigate }: { lesson: Lesson; navigate: Navigate }) {
     editorHistories,
     setEditorHistories,
     offline,
+    savedProfile,
   } = useWorkspace();
   const keyboard = useKeyboard(),
     c = useMemo(() => fromLesson(lesson), [lesson]);
@@ -437,16 +439,16 @@ function Editor({ lesson, navigate }: { lesson: Lesson; navigate: Navigate }) {
       setErrors([
         "You’re offline in this simulation. Reconnect in Account settings, then apply. Your draft is still editable.",
       ]);
-      return;
+      return false;
     }
-    const issues = apply ? courseIssues(c) : [];
+    const issues = apply ? [...courseIssues(c), ...lessonPublicationIssues(savedProfile, !!recipient)] : [];
     if (apply && !recipient && !asTemplate)
       issues.push("Select a student or save this lesson as a template.");
     if (apply && asTemplate && !templateName.trim())
       issues.push("Give your template a name.");
     if (issues.length) {
       setErrors(issues);
-      return;
+      return false;
     }
     const now = new Date().toISOString();
     const next: Lesson = {
@@ -484,7 +486,7 @@ function Editor({ lesson, navigate }: { lesson: Lesson; navigate: Navigate }) {
       setErrors([
         "Changes could not be saved on this device. Free up browser storage and try Save changes again. Your edits are still here.",
       ]);
-      return;
+      return false;
     }
     updateLesson(lesson.id, next);
     setTemplates(nextTemplates);
@@ -498,6 +500,7 @@ function Editor({ lesson, navigate }: { lesson: Lesson; navigate: Navigate }) {
       setNotice(
         "Changes saved on this device. The applied lesson is unchanged.",
       );
+    return true;
   };
   const useTemplate = (content: Course) => {
     const course = cloneCourse(content),
@@ -1133,6 +1136,18 @@ function Editor({ lesson, navigate }: { lesson: Lesson; navigate: Navigate }) {
                 ]}
                 onChange={setRecipient}
               />
+              {recipient && (
+                <div className="ce-info">
+                  <strong>Lesson details</strong>
+                  <p>{savedProfile.duration || "Duration not set"} · {lessonPriceLabel(savedProfile.rate, savedProfile.freeConfirmed)} per lesson</p>
+                  {lessonPublicationIssues(savedProfile, true).length > 0 && <>
+                    <p>Set duration and price before publishing for a student. Your draft and templates can still be saved.</p>
+                    <Button kind="secondary" onClick={() => {
+                      if (save()) navigate({ page: "profile-edit", id: lesson.id, tab: "return-to-editor" });
+                    }}>Edit teaching profile</Button>
+                  </>}
+                </div>
+              )}
               <label className="ce-checkbox">
                 <input
                   type="checkbox"

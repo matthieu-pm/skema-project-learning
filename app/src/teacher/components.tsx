@@ -1,4 +1,4 @@
-import type { ReactNode } from "react";
+import { useId, type ReactNode } from "react";
 import { KeyboardInput, KeyboardTextarea, useKeyboard } from "../mobile";
 import { students, type Route } from "./model";
 import { useWorkspace } from "./context";
@@ -15,6 +15,7 @@ export function TextField({
   placeholder,
   min,
   max,
+  error,
 }: {
   label: string;
   value: string;
@@ -24,7 +25,9 @@ export function TextField({
   placeholder?: string;
   min?: string;
   max?: string;
+  error?: string;
 }) {
+  const errorId = useId();
   const { mobile } = useWorkspace();
   const keyboard = useKeyboard();
   const props = {
@@ -33,6 +36,8 @@ export function TextField({
       onChange(e.target.value),
     placeholder,
     "aria-label": label,
+    "aria-invalid": !!error,
+    "aria-describedby": error ? errorId : undefined,
     onBlur: () => {
       if (mobile) keyboard.hide();
     },
@@ -51,6 +56,7 @@ export function TextField({
       ) : (
         <input {...props} type={type} min={min} max={max} />
       )}
+      {error && <span id={errorId} className="tw-error" role="alert">{error}</span>}
     </label>
   );
 }

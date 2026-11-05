@@ -543,3 +543,16 @@ test("onboarding deferral keeps real profile settings unset rather than copying 
   assert.equal(free.freeConfirmed, true);
   assert.equal(initialProfile().rate, "30");
 });
+
+
+test("student publication requires saved terms but draft templates do not", async () => {
+  const { lessonPublicationIssues } = await import("../src/lesson-settings.ts");
+  const empty = { duration: "", rate: "", freeConfirmed: false };
+  assert.equal(lessonPublicationIssues(empty, true).length, 2);
+  assert.deepEqual(lessonPublicationIssues(empty, false), []);
+  const free = { duration: "45 minutes", rate: "0", freeConfirmed: false };
+  assert.match(lessonPublicationIssues(free, true)[0], /Confirm/);
+  assert.deepEqual(lessonPublicationIssues({ ...free, freeConfirmed: true }, true), []);
+  assert.deepEqual(lessonPublicationIssues({ ...free, rate: "30" }, true), []);
+  assert.equal(lessonPublicationIssues({ ...free, rate: "-1" }, true).length, 1);
+});
