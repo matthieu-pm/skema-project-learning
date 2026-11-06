@@ -173,7 +173,11 @@ function screenFor(route: Route): FlowScreen {
     ),
     footerHeight: 70,
     footer: () => <MobileTabNavigation route={route} />,
-    render: (flow) => (
+    render: (flow) => route.page === "lesson-preview" ? (
+      <main className="tw-content tw-preview-content" inert={flow.current.id !== screenId} aria-hidden={flow.current.id !== screenId}>
+        <TeacherPage route={route} navigate={(r, replace) => replace ? flow.replace(screenFor(r)) : flow.push(screenFor(r))} back={flow.pop} />
+      </main>
+    ) : (
       <MobileScroll className="tw-mobile-scroll">
         <main
           className={`tw-content${route.page === "editor" ? " tw-editor-content" : ""}`}

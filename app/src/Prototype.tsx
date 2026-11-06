@@ -1,3 +1,4 @@
+import LocationField from "./LocationField";
 import FreeLessonConfirmation from "./FreeLessonConfirmation";
 import { isFreeLesson, lessonPriceLabel } from "./lesson-settings";
 import {
@@ -608,7 +609,7 @@ function Footer({ step, inline = false }: { step: Step; inline?: boolean }) {
 }
 function Screen({ step }: { step: Step }) {
   const setup = useSetup(),
-    { answers: a, update, error, setError, resendAt, setResendAt } = setup;
+    { answers: a, update, error, setError, resendAt, setResendAt, web } = setup;
   const flow = useSetupFlow(),
     keyboard = useKeyboard(),
     { isKeyboardVisible } = useKeyboardInsets();
@@ -865,12 +866,7 @@ function Screen({ step }: { step: Step }) {
               </button>
             </fieldset>
             {a.format && a.format !== "Online" && (
-              <Field
-                label="City or neighbourhood (optional)"
-                value={a.city}
-                placeholder="Paris, France"
-                onChange={(e) => update({ city: e.target.value })}
-              />
+              <LocationField label="City or neighbourhood (optional)" mobile={!web} value={a.city} onChange={(city) => update({ city })} allowLocation={a.role === "teacher"} />
             )}
             <fieldset className="setup-section">
               <legend>Lesson duration (optional)</legend>
@@ -993,11 +989,7 @@ function Screen({ step }: { step: Step }) {
               </button>
             </fieldset>
             {a.format && a.format !== "Online" && (
-              <Field
-                label="City or neighbourhood (optional)"
-                value={a.city}
-                onChange={(e) => update({ city: e.target.value })}
-              />
+              <LocationField label="City or neighbourhood (optional)" mobile={!web} value={a.city} onChange={(city) => update({ city })} allowLocation={a.role === "teacher"} />
             )}
             <fieldset className="setup-section">
               <legend>Days that usually work</legend>
@@ -1442,15 +1434,9 @@ function Screen({ step }: { step: Step }) {
           single(["In person", "Online", "Either"], "format")}
         {step === "city" && (
           <>
-            <Field
-              label="City or neighbourhood"
-              placeholder="Paris, France"
-              value={a.city}
-              onChange={(e) => update({ city: e.target.value })}
-            />
+            <LocationField label="City or neighbourhood (optional)" mobile={!web} value={a.city} onChange={(city) => update({ city })} allowLocation={a.role === "teacher"} />
             <Note>
-              No location permission needed. Just choose somewhere that works
-              for you.
+              Type a city or neighbourhood, or choose a suggestion. You can decide later.
             </Note>
           </>
         )}

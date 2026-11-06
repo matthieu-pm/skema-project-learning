@@ -1,3 +1,4 @@
+import LocationField from "../LocationField";
 import FreeLessonConfirmation from "../FreeLessonConfirmation";
 import {
   isFreeLesson,
@@ -11,6 +12,7 @@ import ReviewQueue from "./ReviewQueue";
 import ModuleResults from "./ModuleResults";
 import {
   cloneCourse,
+  fromLesson,
   createBlock,
   createModule,
   coursePatch,
@@ -1012,19 +1014,17 @@ function LessonPreview({
   navigate: Navigate;
   sessionId?: string;
 }) {
-  const { lessons, sessions, updateLesson, attempt } = useWorkspace();
+  const { mobile, lessons, sessions, updateLesson, attempt } = useWorkspace();
   const l =
     (sessionId
       ? sessions.find((s) => s.id === sessionId)?.lessonSnapshot
       : undefined) || lessons.find((l) => l.id === id)!;
   if (!l) return null;
-  if (l.course)
+  if (l.course || mobile)
     return (
-      <>
-        <LessonPlayer course={l.course} />
-        <p className="tw-subtle">
-          Student preview · Private teaching notes are excluded.
-        </p>
+      <div className="ce-preview-screen">
+        <LessonPlayer course={l.course || fromLesson(l)} fitMobile />
+        {!mobile && <p className="tw-subtle">Student preview · Private teaching notes are excluded.</p>}
         <Button
           kind="secondary"
           onClick={() =>
@@ -1037,7 +1037,7 @@ function LessonPreview({
         >
           {sessionId ? "Back to session" : "Back to editor"}
         </Button>
-      </>
+      </div>
     );
   return (
     <>
@@ -2334,6 +2334,7 @@ function ProfileEditPage({
   returnLessonId?: string;
 }) {
   const {
+    mobile,
     profile: p,
     setProfile,
     setSavedProfile,
@@ -2435,11 +2436,7 @@ function ProfileEditPage({
               }
             />
             {p.format !== "Online" && (
-              <TextField
-                label="City"
-                value={p.city}
-                onChange={(city) => update({ city })}
-              />
+              <LocationField mobile={mobile} value={p.city} onChange={(city) => update({ city })} />
             )}
             <div className="tw-form-pair">
               <Select
