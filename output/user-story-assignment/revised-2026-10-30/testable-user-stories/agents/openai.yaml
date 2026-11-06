@@ -1,0 +1,4 @@
+interface:
+  display_name: "Testable User Stories"
+  short_description: "Write and review stories with rules and BDD tests"
+  default_prompt: "Use $testable-user-stories to write a source-grounded user story with business rules, acceptance criteria, acceptance tests, and a critical review."

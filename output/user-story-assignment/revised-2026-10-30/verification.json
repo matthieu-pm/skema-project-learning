@@ -1,0 +1,15 @@
+{
+  "pdf_pages": 19,
+  "all_pdf_pages_visually_checked": true,
+  "page_url": "https://chatgpt.com/space/page_dbf373c75c6481918fcc10ba7590eef0",
+  "page_readback": "matches revised source apart from whitespace",
+  "page_visual_preview": "not independently inspected",
+  "skill_structure_validation": "passed",
+  "zip_integrity_and_installed_file_match": "passed",
+  "zip_files": 6,
+  "gherkin_syntax_validation": "6 feature blocks parsed successfully",
+  "different_story_test": "T04 before/after same-session skill application and self-review",
+  "application_tests": "not executed",
+  "authorship": "Part 1 labeled AI-assisted; blind human-versus-AI conditions not claimed",
+  "reflection": "suggested first-person draft"
+}

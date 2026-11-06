@@ -1,0 +1,202 @@
+{
+  "features": [
+    {
+      "key": "CONTEXT",
+      "col": 0,
+      "title": "Resource search",
+      "refs": "CTX01–CTX02",
+      "context": true
+    },
+    {
+      "key": "F01",
+      "col": 1,
+      "title": "Teaching profile",
+      "refs": "T01 · T07"
+    },
+    {
+      "key": "F02",
+      "col": 2,
+      "title": "Learner goal brief",
+      "refs": "T02 · T08"
+    },
+    {
+      "key": "F03",
+      "col": 3,
+      "title": "Reusable lessons",
+      "refs": "T03 · T09 · T13"
+    },
+    {
+      "key": "F04",
+      "col": 4,
+      "title": "Lesson approval",
+      "refs": "T04 · T10 · T14"
+    },
+    {
+      "key": "F05",
+      "col": 5,
+      "title": "Teaching workspace",
+      "refs": "T05 · T11"
+    },
+    {
+      "key": "F06",
+      "col": 6,
+      "title": "Session recap",
+      "refs": "T06 · T12"
+    }
+  ],
+  "enablers": [
+    {
+      "key": "EN07",
+      "col": 0,
+      "row": 0,
+      "title": "Validate preparation effort",
+      "links": "CTX01–02 · F02–F06",
+      "body": "Observe how Gilbert finds materials, prepares and follows up. Establish a baseline before claiming that the workflow saves time.",
+      "check": "Compare the same teaching task before and after; record effort and teacher control.",
+      "source": "Steps 01, 03–07 · workload + experience"
+    },
+    {
+      "key": "EN01",
+      "col": 1,
+      "row": 0,
+      "title": "Profile draft storage",
+      "links": "F01 · T01, T07",
+      "body": "Store and retrieve the teacher’s offer and revisions. Keep a draft distinct from a live profile; simulated checks cannot grant approval.",
+      "check": "Reopen the saved offer and verify it matches the teacher’s edits.",
+      "source": "Step 02 · offer + simulated checks"
+    },
+    {
+      "key": "EN02",
+      "col": 2,
+      "row": 0,
+      "title": "Learner-linked brief access",
+      "links": "F02 · T02, T08",
+      "body": "Link each concise brief to the correct teacher and learner. Make the goal, level and current difficulty available for preparation.",
+      "check": "Open the correct brief; deny access from an unrelated teacher.",
+      "source": "Step 03 · desired outcome + difficulty"
+    },
+    {
+      "key": "EN03",
+      "col": 3,
+      "row": 0,
+      "title": "Reusable lesson data model",
+      "links": "F03 · T03, T09",
+      "body": "Separate a reusable source from its learner-specific editable version. Keep the source and the teacher’s method intact during adaptation.",
+      "check": "Adapt one lesson and confirm that its reusable original is unchanged.",
+      "source": "Step 04 · reuse + personalization"
+    },
+    {
+      "key": "EN04",
+      "col": 4,
+      "row": 0,
+      "title": "Approval and version states",
+      "links": "F04 · T04, T10",
+      "body": "Track draft and approved versions. Require review of the current content; changed or unreviewed drafts cannot be shared as approved.",
+      "check": "Edit an approved version and confirm that review is required again.",
+      "source": "Step 05 · standards + unshared drafts"
+    },
+    {
+      "key": "EN05",
+      "col": 5,
+      "row": 0,
+      "title": "Session and material linkage",
+      "links": "F05 · T05, T11",
+      "body": "Open the right learner’s reviewed plan for the session. Support changes while teaching without losing the current lesson context.",
+      "check": "Change the plan during a session and retain the correct learner and materials.",
+      "source": "Step 06 · personal lesson + flexible plan"
+    },
+    {
+      "key": "EN06",
+      "col": 6,
+      "row": 0,
+      "title": "Reviewed recap delivery",
+      "links": "F06 · T06, T12",
+      "body": "Link the recap draft to its session and learner. Record the teacher’s review and the result of an explicit sharing action.",
+      "check": "A failed send stays unsent; a successful share reaches only the intended learner.",
+      "source": "Step 07 · approved recap + next focus"
+    },
+    {
+      "key": "EN08",
+      "col": 3,
+      "row": 2,
+      "span": 2,
+      "title": "Optional AI integration and evaluation",
+      "links": "F03–F04 · T13–T14",
+      "body": "Keep suggested content separate from the lesson until Gilbert chooses it. Evaluate relevance and accuracy; provide edit, reject and manual paths.",
+      "check": "Try an unsuitable suggestion and an unavailable AI service. Neither bypasses approval or blocks manual preparation.",
+      "source": "Step 05 · optional AI + teacher judgment"
+    }
+  ],
+  "nfrs": [
+    {
+      "key": "NFR01",
+      "title": "Accessibility",
+      "links": "F01–F06 · steps 02–07",
+      "body": "Gilbert can read, navigate, edit, review and share with keyboard and assistive technology. Focus, labels and errors remain clear.",
+      "check": "Complete profile → brief → lesson → approval → recap using keyboard and screen reader."
+    },
+    {
+      "key": "NFR02",
+      "title": "Low-effort usability",
+      "links": "CTX01–02 · F01–F06 · steps 01–07",
+      "body": "Briefs, lesson edits and recaps stay concise. Reuse reduces repeated entry while Gilbert keeps his method and final judgment.",
+      "check": "Observe Gilbert’s full task; compare preparation and follow-up effort with the EN07 baseline."
+    },
+    {
+      "key": "NFR03",
+      "title": "Performance during teaching",
+      "links": "F02–F06 · steps 03–07",
+      "body": "Opening the brief or plan, editing content and confirming actions stays responsive enough to preserve attention during the lesson.",
+      "check": "Measure these actions on agreed devices and network conditions; set targets after baseline testing."
+    },
+    {
+      "key": "NFR04",
+      "title": "Web and mobile consistency",
+      "links": "F01–F06 · steps 02–07",
+      "body": "The same offer, goal, lesson version and approval meaning remain usable on both journey touchpoints. Small screens do not hide controls.",
+      "check": "Run the same core task in web and phone layouts, including zoom and keyboard-open states."
+    },
+    {
+      "key": "NFR05",
+      "title": "Draft and version reliability",
+      "links": "F01 · F03–F04 · F06 · steps 02, 04–05, 07",
+      "body": "Acknowledged saves recover after refresh or disruption. Reuse preserves originals; approved content and sharing status remain accurate.",
+      "check": "Interrupt edits and sharing, reload and retry; verify recovered content and no duplicate share."
+    },
+    {
+      "key": "NFR06",
+      "title": "Privacy and data minimization",
+      "links": "F01–F06 · steps 02–07",
+      "body": "Only intended teaching-profile content is public. Learner briefs, lesson drafts and recaps remain limited to their intended use and recipients.",
+      "check": "Inspect profile and learner-facing outputs for unintended private data; check stored and logged fields."
+    },
+    {
+      "key": "NFR07",
+      "title": "Authorization and isolation",
+      "links": "F01–F06 · steps 02–07",
+      "body": "Teachers can change only their own offer and access only authorized learners, lessons and recaps. Recipients are checked at sharing time.",
+      "check": "Attempt cross-teacher reads, edits and recap delivery; each unauthorized request must be denied."
+    },
+    {
+      "key": "NFR08",
+      "title": "Human control and transparency",
+      "links": "F03–F06 · steps 04–07",
+      "body": "AI remains optional and recognizable. Gilbert can edit or reject suggestions, adapt the plan and approve the exact version before sharing.",
+      "check": "Follow manual and AI paths; verify that no suggestion or unreviewed draft is automatically shared."
+    },
+    {
+      "key": "NFR09",
+      "title": "Availability and recovery",
+      "links": "F03–F06 · steps 04–07",
+      "body": "Optional AI failure does not block manual preparation or access to saved material. Failed sharing gives a clear outcome and retry path.",
+      "check": "Disable optional services and interrupt delivery; verify manual work and draft recovery remain available."
+    },
+    {
+      "key": "NFR10",
+      "title": "Maintainability and verification",
+      "links": "F01–F06 · steps 02–07",
+      "body": "Web and mobile use consistent rules for learner linkage, reusable versions, approval and recap delivery as the product changes.",
+      "check": "Run shared rule checks for source preservation, approval invalidation, access and intended-recipient delivery."
+    }
+  ]
+}

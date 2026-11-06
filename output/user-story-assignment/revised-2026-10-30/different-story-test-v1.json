@@ -1,0 +1,44 @@
+{
+  "run": "Mimo T04 skill application before refinement",
+  "method": "Same-session application of the installed skill; not an independent model evaluation or product test",
+  "prompt": "Use testable-user-stories to write one specification for Mimo T04 Approve a checked lesson. Teacher map stage Lesson preparation, activity Approve the lesson, feature Lesson approval. Original story: As a teacher, I want to review and approve a lesson version so that it meets my standards and unreviewed drafts remain unshared. Source: FigJam nodes 589:3865 and 602:4039. Sources say changed or unreviewed drafts cannot be shared as approved. Keep AI optional. Separate confirmed planning rules from proposals. Provide business rules, criteria, Gherkin tests, edge cases and INVEST.",
+  "output": {
+    "id": "MIMO-T04-TEST-V1",
+    "title": "Approve a checked lesson",
+    "story": "As a Mimo teacher, I want to review and approve a prepared lesson so that only material I have checked becomes approved.",
+    "context": "Lesson preparation -> Approve the lesson -> Lesson approval. Approval is separate from sharing and must work without AI.",
+    "rules": [
+      "TBR-01 [Source-backed proposal] A teacher explicitly reviews and approves a lesson version.",
+      "TBR-02 [Source-backed proposal] Changed or unreviewed drafts cannot be shared as approved.",
+      "TBR-03 [Source-backed proposal] Teachers access only authorized lessons; AI assistance remains optional."
+    ],
+    "criteria": [
+      "TAC-01 The teacher can open a preview showing the lesson title, intended outcome and activities.",
+      "TAC-02 Approving a reviewed draft changes its status to Approved without sharing it.",
+      "TAC-03 Changing approved content returns the lesson to Draft and requires review again.",
+      "TAC-04 An unrelated teacher cannot approve the lesson."
+    ],
+    "gherkin": "Feature: Approve a checked Mimo lesson\n  @TAC01 @TAC02\n  Scenario: Approve a reviewed lesson\n    Given Gilbert can access draft lesson D1\n    And he has reviewed its title, outcome and activities\n    When he approves D1\n    Then D1 is marked Approved\n    And D1 has not been shared\n\n  @TAC03\n  Scenario: Edit approved content\n    Given D1 is Approved\n    When Gilbert changes one activity\n    Then D1 returns to Draft\n    And review is required again\n\n  @TAC04\n  Scenario: Deny an unrelated teacher\n    Given teacher X has no access to D1\n    When X requests approval of D1\n    Then approval is denied\n    And D1 is unchanged",
+    "edge_questions": [
+      "What makes a lesson ready for approval? The board does not define mandatory fields.",
+      "What happens if approval cannot be saved?",
+      "Can another editor change a lesson while Gilbert reviews it?"
+    ],
+    "invest": "Independent user outcome but dependent on prepared content and access. Negotiable preview UI. Valuable teacher control. Estimation and sprint size need team discussion. Tests cover the listed criteria, with unresolved edge behavior."
+  },
+  "evaluation": {
+    "works": [
+      "BR/AC/test separation is preserved.",
+      "Approval is explicit and sharing is separate.",
+      "Editing invalidates approval.",
+      "Unknown field requirements stay open."
+    ],
+    "weaknesses": [
+      "TAC-02 and the success test do not identify the reviewed revision; a stale review could approve unseen content.",
+      "The no-review path is implied by a rule but has no explicit rejection criterion/test.",
+      "The output asks about approval-save failure but gives no specified result or acknowledgement boundary.",
+      "The manual path is stated in context without an explicit AI-unavailable acceptance example."
+    ],
+    "refinement": "Require lifecycle review for state-changing stories: named revision, state-before/action/state-after, stale or absent review, acknowledgement failure and relevant optional-service fallback. Label newly proposed mechanics."
+  }
+}

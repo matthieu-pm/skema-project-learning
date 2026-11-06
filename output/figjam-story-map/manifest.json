@@ -1,0 +1,382 @@
+{
+  "date": "2026-10-16",
+  "fileKey": "AYNNAqQDARTmwlsa6AYHsd",
+  "sectionId": "568:3620",
+  "url": "https://www.figma.com/board/AYNNAqQDARTmwlsa6AYHsd?node-id=568-3620",
+  "sourceReference": "/Users/matthieu/Downloads/IMG_0111.HEIC",
+  "format": "Persona activity rows, yellow user stories, orange enablers, blue solid release boundaries and dashed MMF separators, release name/goal cards, and separate NFR lane",
+  "counts": {
+    "features": 8,
+    "stories": 26,
+    "enablers": 13,
+    "nfrs": 10,
+    "total": 57,
+    "mmfs": 7,
+    "releases": 3
+  },
+  "mmfs": [
+    {
+      "id": "582:3620",
+      "mmf": 1,
+      "slice": "R1",
+      "y": 920,
+      "h": 838,
+      "storyCount": 9,
+      "enablerCount": 4
+    },
+    {
+      "id": "582:3676",
+      "mmf": 2,
+      "slice": "R1",
+      "y": 1822,
+      "h": 838,
+      "storyCount": 5,
+      "enablerCount": 3
+    },
+    {
+      "id": "582:3712",
+      "mmf": 3,
+      "slice": "R1",
+      "y": 2724,
+      "h": 808,
+      "storyCount": 6,
+      "enablerCount": 3
+    },
+    {
+      "id": "582:3752",
+      "mmf": 4,
+      "slice": "R2",
+      "y": 3596,
+      "h": 494,
+      "storyCount": 2,
+      "enablerCount": 0
+    },
+    {
+      "id": "582:3764",
+      "mmf": 5,
+      "slice": "R2",
+      "y": 4154,
+      "h": 722,
+      "storyCount": 2,
+      "enablerCount": 1
+    },
+    {
+      "id": "582:3780",
+      "mmf": 6,
+      "slice": "R3",
+      "y": 4940,
+      "h": 692,
+      "storyCount": 1,
+      "enablerCount": 1
+    },
+    {
+      "id": "582:3792",
+      "mmf": 7,
+      "slice": "R3",
+      "y": 5696,
+      "h": 692,
+      "storyCount": 1,
+      "enablerCount": 1
+    }
+  ],
+  "stories": [
+    {
+      "id": "582:3621",
+      "code": "US01",
+      "feature": 1,
+      "mmf": 1,
+      "url": "https://linear.app/skema/issue/SKE-13/us01-enter-through-an-account-and-guardian-appropriate-path"
+    },
+    {
+      "id": "582:3625",
+      "code": "US02",
+      "feature": 1,
+      "mmf": 1,
+      "url": "https://linear.app/skema/issue/SKE-14/us02-set-languages-levels-and-a-practical-goal"
+    },
+    {
+      "id": "582:3629",
+      "code": "US03",
+      "feature": 1,
+      "mmf": 1,
+      "url": "https://linear.app/skema/issue/SKE-15/us03-set-flexible-meeting-and-notification-preferences"
+    },
+    {
+      "id": "582:3633",
+      "code": "US04",
+      "feature": 2,
+      "mmf": 1,
+      "url": "https://linear.app/skema/issue/SKE-16/us04-create-and-review-a-teaching-profile"
+    },
+    {
+      "id": "582:3637",
+      "code": "US05",
+      "feature": 2,
+      "mmf": 1,
+      "url": "https://linear.app/skema/issue/SKE-17/us05-complete-or-defer-a-separate-identity-check"
+    },
+    {
+      "id": "582:3641",
+      "code": "US06",
+      "feature": 2,
+      "mmf": 1,
+      "url": "https://linear.app/skema/issue/SKE-18/us06-set-teaching-availability"
+    },
+    {
+      "id": "582:3645",
+      "code": "US08",
+      "feature": 3,
+      "mmf": 1,
+      "url": "https://linear.app/skema/issue/SKE-20/us08-filter-suitable-teachers"
+    },
+    {
+      "id": "582:3649",
+      "code": "US09",
+      "feature": 3,
+      "mmf": 1,
+      "url": "https://linear.app/skema/issue/SKE-21/us09-inspect-and-choose-a-teacher"
+    },
+    {
+      "id": "582:3653",
+      "code": "US10",
+      "feature": 3,
+      "mmf": 1,
+      "url": "https://linear.app/skema/issue/SKE-22/us10-send-a-goal-brief-to-my-chosen-teacher"
+    },
+    {
+      "id": "582:3677",
+      "code": "US11",
+      "feature": 4,
+      "mmf": 2,
+      "url": "https://linear.app/skema/issue/SKE-23/us11-book-and-confirm-one-lesson"
+    },
+    {
+      "id": "582:3681",
+      "code": "US12",
+      "feature": 4,
+      "mmf": 2,
+      "url": "https://linear.app/skema/issue/SKE-24/us12-reschedule-or-cancel-a-session"
+    },
+    {
+      "id": "582:3685",
+      "code": "US13",
+      "feature": 4,
+      "mmf": 2,
+      "url": "https://linear.app/skema/issue/SKE-25/us13-report-a-no-show-or-session-issue"
+    },
+    {
+      "id": "582:3689",
+      "code": "US14",
+      "feature": 5,
+      "mmf": 2,
+      "url": "https://linear.app/skema/issue/SKE-26/us14-prepare-a-learner-specific-modular-lesson"
+    },
+    {
+      "id": "582:3693",
+      "code": "US16",
+      "feature": 5,
+      "mmf": 2,
+      "url": "https://linear.app/skema/issue/SKE-28/us16-preview-approve-and-share-a-lesson"
+    },
+    {
+      "id": "582:3713",
+      "code": "US18",
+      "feature": 6,
+      "mmf": 3,
+      "url": "https://linear.app/skema/issue/SKE-30/us18-message-my-teaching-partner"
+    },
+    {
+      "id": "582:3717",
+      "code": "US19",
+      "feature": 6,
+      "mmf": 3,
+      "url": "https://linear.app/skema/issue/SKE-31/us19-join-and-teach-an-online-lesson"
+    },
+    {
+      "id": "582:3721",
+      "code": "US20",
+      "feature": 6,
+      "mmf": 3,
+      "url": "https://linear.app/skema/issue/SKE-32/us20-arrange-and-complete-an-in-person-lesson"
+    },
+    {
+      "id": "582:3725",
+      "code": "US21",
+      "feature": 7,
+      "mmf": 3,
+      "url": "https://linear.app/skema/issue/SKE-33/us21-share-a-teacher-approved-recap"
+    },
+    {
+      "id": "582:3729",
+      "code": "US24",
+      "feature": 8,
+      "mmf": 3,
+      "url": "https://linear.app/skema/issue/SKE-36/us24-manage-profile-and-personal-data"
+    },
+    {
+      "id": "582:3733",
+      "code": "US25",
+      "feature": 8,
+      "mmf": 3,
+      "url": "https://linear.app/skema/issue/SKE-37/us25-report-or-block-unsafe-interaction"
+    },
+    {
+      "id": "582:3753",
+      "code": "US15",
+      "feature": 5,
+      "mmf": 4,
+      "url": "https://linear.app/skema/issue/SKE-27/us15-reuse-and-adapt-a-saved-lesson"
+    },
+    {
+      "id": "582:3757",
+      "code": "US22",
+      "feature": 7,
+      "mmf": 4,
+      "url": "https://linear.app/skema/issue/SKE-34/us22-submit-and-review-optional-practice"
+    },
+    {
+      "id": "582:3765",
+      "code": "US23",
+      "feature": 7,
+      "mmf": 5,
+      "url": "https://linear.app/skema/issue/SKE-35/us23-review-progress-toward-my-goal"
+    },
+    {
+      "id": "582:3769",
+      "code": "US26",
+      "feature": 8,
+      "mmf": 5,
+      "url": "https://linear.app/skema/issue/SKE-38/us26-inspect-earnings-and-payout-status"
+    },
+    {
+      "id": "582:3781",
+      "code": "US17",
+      "feature": 5,
+      "mmf": 6,
+      "url": "https://linear.app/skema/issue/SKE-29/us17-review-an-optional-ai-lesson-draft"
+    },
+    {
+      "id": "582:3793",
+      "code": "US07",
+      "feature": 2,
+      "mmf": 7,
+      "url": "https://linear.app/skema/issue/SKE-19/us07-connect-an-external-calendar"
+    }
+  ],
+  "enablers": [
+    {
+      "id": "582:3657",
+      "code": "EN01",
+      "mmf": 1,
+      "url": "https://linear.app/skema/issue/SKE-49/en01-validate-the-core-tutoring-workflow-and-establish-measurement"
+    },
+    {
+      "id": "582:3661",
+      "code": "EN02",
+      "mmf": 1,
+      "url": "https://linear.app/skema/issue/SKE-50/en02-define-safeguarding-guardian-authority-and-data-handling-policies"
+    },
+    {
+      "id": "582:3665",
+      "code": "EN04",
+      "mmf": 1,
+      "url": "https://linear.app/skema/issue/SKE-52/en04-establish-shared-domain-persistence-and-authorization-foundations"
+    },
+    {
+      "id": "582:3669",
+      "code": "EN05",
+      "mmf": 1,
+      "url": "https://linear.app/skema/issue/SKE-53/en05-integrate-production-account-guardian-and-identity-handoffs"
+    },
+    {
+      "id": "582:3697",
+      "code": "EN03",
+      "mmf": 2,
+      "url": "https://linear.app/skema/issue/SKE-51/en03-define-commercial-rules-and-evaluate-paymentpayout-providers"
+    },
+    {
+      "id": "582:3701",
+      "code": "EN06",
+      "mmf": 2,
+      "url": "https://linear.app/skema/issue/SKE-54/en06-build-private-material-storage-and-permission-safe-sharing"
+    },
+    {
+      "id": "582:3705",
+      "code": "EN07",
+      "mmf": 2,
+      "url": "https://linear.app/skema/issue/SKE-55/en07-implement-consistent-scheduling-and-bookingpayment-orchestration"
+    },
+    {
+      "id": "582:3737",
+      "code": "EN08",
+      "mmf": 3,
+      "url": "https://linear.app/skema/issue/SKE-56/en08-establish-messaging-reminders-and-one-to-one-video-delivery"
+    },
+    {
+      "id": "582:3741",
+      "code": "EN09",
+      "mmf": 3,
+      "url": "https://linear.app/skema/issue/SKE-57/en09-set-up-delivery-environments-monitoring-and-recovery-procedures"
+    },
+    {
+      "id": "582:3745",
+      "code": "EN10",
+      "mmf": 3,
+      "url": "https://linear.app/skema/issue/SKE-58/en10-establish-accessibility-compatibility-and-end-to-end-verification"
+    },
+    {
+      "id": "582:3773",
+      "code": "EN13",
+      "mmf": 5,
+      "url": "https://linear.app/skema/issue/SKE-61/en13-implement-payout-ledger-provider-handoff-and-reconciliation"
+    },
+    {
+      "id": "582:3785",
+      "code": "EN11",
+      "mmf": 6,
+      "url": "https://linear.app/skema/issue/SKE-59/en11-evaluate-and-integrate-optional-ai-with-teacher-review-controls"
+    },
+    {
+      "id": "582:3797",
+      "code": "EN12",
+      "mmf": 7,
+      "url": "https://linear.app/skema/issue/SKE-60/en12-implement-optional-calendar-synchronization-and-conflict-recovery"
+    }
+  ],
+  "nfrSectionId": "583:3773",
+  "nfrCards": [
+    "583:3777",
+    "583:3781",
+    "583:3785",
+    "583:3789",
+    "583:3793",
+    "583:3797",
+    "583:3801",
+    "583:3805",
+    "583:3809",
+    "583:3813"
+  ],
+  "releases": [
+    {
+      "name": "583:3737",
+      "goal": "583:3741",
+      "icon": "583:3744"
+    },
+    {
+      "name": "583:3749",
+      "goal": "583:3753",
+      "icon": "583:3756"
+    },
+    {
+      "name": "583:3761",
+      "goal": "583:3765",
+      "icon": "583:3768"
+    }
+  ],
+  "verification": {
+    "missingLinks": 0,
+    "sectionOverflow": 0,
+    "siblingTextOverlap": 0,
+    "linearEnablerBodiesReadBack": 13
+  }
+}

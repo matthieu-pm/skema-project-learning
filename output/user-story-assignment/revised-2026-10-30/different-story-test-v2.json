@@ -1,0 +1,39 @@
+{
+  "run": "T04 application after skill refinement",
+  "method": "Same-session application and manual specification review; no independent evaluator and no software tests executed",
+  "prompt": "Use testable-user-stories to write one specification for Mimo T04 Approve a checked lesson. Teacher map stage Lesson preparation, activity Approve the lesson, feature Lesson approval. Original story: As a teacher, I want to review and approve a lesson version so that it meets my standards and unreviewed drafts remain unshared. Source: FigJam nodes 589:3865 and 602:4039. Sources say changed or unreviewed drafts cannot be shared as approved. Keep AI optional. Separate confirmed planning rules from proposals. Provide business rules, criteria, Gherkin tests, edge cases and INVEST.",
+  "output": {
+    "id": "MIMO-T04-TEST-V2",
+    "title": "Approve the lesson version I reviewed",
+    "context": "Teacher map Lesson preparation -> Approve the lesson -> F05 Lesson approval; proposed R1. Different from the main T03 adaptation story.",
+    "story": "As a Mimo teacher, I want to review and approve a specific prepared lesson version so that only content I have checked is treated as approved.",
+    "preconditions": "Gilbert has access to learner-linked draft D1 revision r1. AI is optional. Approval and sharing are separate actions.",
+    "rules": [
+      "TBR-01 [Source-backed planning rule] Current content requires teacher review; changed or unreviewed drafts cannot be shared as approved (602:4039).",
+      "TBR-02 [Source-backed planning rule] The teacher can edit and reject content; AI is optional (568:4173).",
+      "TBR-03 [Source-backed proposed service rule] Only an authorized teacher may approve the lesson (authorization lane of 568:4173).",
+      "TBR-04 [Proposed mechanics] Approval records the reviewed content revision; only an acknowledged approval changes the displayed stored status. This operationalizes the board rule and needs team agreement.",
+      "TBR-05 [Scope decision] Approval does not itself send the lesson. Sharing and completeness policy remain separate."
+    ],
+    "criteria": [
+      "TAC-01 The authorized teacher sees the learner, title, outcome, activities and content revision in the review preview.",
+      "TAC-02 After the teacher reviews current revision r1 and confirms approval, an acknowledged save marks r1 Approved without sharing. This works when AI is unavailable.",
+      "TAC-03 If no review exists, or current content differs from the reviewed revision, approval is rejected; the current version remains Draft and the teacher is asked to review it.",
+      "TAC-04 Editing approved content produces an unapproved current version; it cannot use the previous approval and requires review again.",
+      "TAC-05 If storing approval is rejected, the stored version stays Draft, the teacher sees that approval was not saved, and current content remains available to review or retry. No false success is shown.",
+      "TAC-06 An unrelated teacher cannot preview private lesson content or approve it, including through a direct request; the lesson remains unchanged."
+    ],
+    "gherkin": "Feature: Approve only the reviewed Mimo lesson version\n  Background:\n    Given Gilbert is authorized for learner Lea and draft D1 revision r1\n    And D1 is titled \"Hotel check-in\"\n    And its outcome is \"Ask whether breakfast is included\"\n    And it has an activity \"Practise checking in\"\n\n  @TAC01 @TAC02\n  Scenario: Review and approve without AI\n    Given AI is unavailable\n    When Gilbert opens the review preview for D1 revision r1\n    Then the preview shows Lea, the title, outcome, activity and revision r1\n    When Gilbert marks r1 reviewed and confirms approval\n    And storage acknowledges approval of r1\n    Then r1 is Approved\n    And no lesson has been sent to Lea\n\n  @TAC03\n  Scenario: Reject approval without review\n    Given Gilbert has not reviewed r1\n    When he requests approval of r1\n    Then approval is rejected and r1 remains Draft\n    And he is asked to review r1\n\n  @TAC03\n  Scenario: Reject a stale review\n    Given Gilbert reviewed r1\n    And current content has changed to revision r2\n    When he confirms approval using the r1 review\n    Then r2 remains Draft and approval is rejected\n    And he is asked to review r2\n\n  @TAC04\n  Scenario: Invalidate approval after editing\n    Given r1 has acknowledged Approved status\n    When Gilbert changes the activity to \"Practise a late check-out\"\n    Then the current version is unapproved and requires review again\n    And it cannot be shared as approved using the r1 approval\n\n  @TAC05\n  Scenario: Reject an approval save\n    Given Gilbert has reviewed r1\n    When he confirms approval and storage rejects the save\n    Then stored r1 remains Draft and no success is shown\n    And the current lesson content remains available\n    And Gilbert sees that approval was not saved\n\n  @TAC06\n  Scenario: Deny another teacher\n    Given teacher X has no access to D1\n    When X directly requests its preview and approval\n    Then both requests are denied without private content\n    And D1 remains unchanged",
+    "questions": [
+      "Which content fields define a new reviewable revision, including teacher-private notes?",
+      "What lesson-completeness checks, if any, should block approval? No rule is established by the board.",
+      "What happens to a previously shared approved snapshot after later edits? This is outside the approval story.",
+      "How should repeated approval confirmations and approval retries be handled? No technology is prescribed."
+    ],
+    "invest": "Independent outcome with draft/access/storage dependencies; negotiable UI and revision mechanics; valuable teacher control; estimable and small only after team refinement; observable criteria mapped to scenarios."
+  },
+  "evaluation": {
+    "observed": "All six criteria have concrete scenarios. The stale and missing-review cases are now explicit, the manual path has an AI-unavailable scenario, and storage rejection preserves the Draft boundary. Completeness rules remain unresolved rather than invented.",
+    "limits": "A same-session specification review demonstrates the refinement on one different story. It does not establish general reliability or working backend behavior. Version mechanics and completeness policy still need human agreement."
+  }
+}

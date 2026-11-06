@@ -1,0 +1,1085 @@
+{
+  "stories": [
+    [
+      1,
+      1,
+      "Enter through an account and guardian-appropriate path",
+      "learner or guardian",
+      "use the appropriate account and age path",
+      "start setup with clear responsibility",
+      [
+        "Email and Google choices disclose the current simulation; production entry authenticates before private data is shown.",
+        "Under-18 learner collects a distinct guardian email and reaches guardian handoff before learning preferences; adult/teacher paths skip that branch.",
+        "Wrong-code and provider-switch recovery preserve appropriate drafts and clear stale verification."
+      ],
+      "Frontend simulation; production authentication, eligibility and guardian consent need policy and implementation.",
+      "R1"
+    ],
+    [
+      1,
+      2,
+      "Set languages, levels and a practical goal",
+      "learner",
+      "set my languages, level per language and a concrete outcome",
+      "receive a relevant lesson",
+      [
+        "Each selected language has A1–C2 or unsure; removing one clears its level only.",
+        "A specific academic, everyday or professional goal can be reviewed and edited; optional material can be skipped.",
+        "Back preserves answers and the final brief reflects the selected languages/levels."
+      ],
+      "Implemented onboarding in memory; no persistent learner brief or teacher delivery.",
+      "R1"
+    ],
+    [
+      1,
+      3,
+      "Set flexible meeting and notification preferences",
+      "learner",
+      "choose online/in-person, location and availability flexibly",
+      "find lessons that fit my life",
+      [
+        "Online skips city; in-person/either asks for city rather than home address.",
+        "Days/times can be deferred and summaries display flexible values.",
+        "Notifications are optional; no forced daily target, streak or widget installation."
+      ],
+      "Local preference and notification previews; no real notification permission/service.",
+      "R1"
+    ],
+    [
+      2,
+      4,
+      "Create and review a teaching profile",
+      "teacher",
+      "present my approach, languages, levels, format and price",
+      "help learners assess fit",
+      [
+        "Edit name, optional media, languages/levels, short approach, duration, format and rate.",
+        "Preview learner-facing fields before deliberate publication; legal identity stays excluded.",
+        "Public details transfer from setup to Students / Schedule / Lessons / Profile."
+      ],
+      "Local profile draft/edit/preview exists; production publication and validated commercial rules are proposed.",
+      "R1"
+    ],
+    [
+      2,
+      5,
+      "Complete or defer a separate identity check",
+      "teacher or adult guardian",
+      "understand and control a private identity step",
+      "know what has actually been verified",
+      [
+        "Sample-document/Persona previews are clearly identified; finish later remains available.",
+        "Guardian uses adult details and returns to learner setup; identity status is separate from teaching qualifications.",
+        "Production provider handoff, data handling and status wording require decisions; no minimum teaching age is invented."
+      ],
+      "Identity preview only; no provider connection, consent record or real ID processing.",
+      "R1"
+    ],
+    [
+      2,
+      6,
+      "Set teaching availability",
+      "teacher",
+      "define and edit available slots",
+      "offer realistic lesson times",
+      [
+        "Show time zone and date-specific UTC offset; handle overlaps and unavailable slots.",
+        "Changing availability preserves confirmed bookings and reports conflicts.",
+        "Production time-zone support includes daylight-saving transitions and learner-local display."
+      ],
+      "Teacher frontend availability supports Europe/Paris only; production scheduling/time-zone coverage proposed.",
+      "R1"
+    ],
+    [
+      2,
+      7,
+      "Connect an external calendar",
+      "teacher",
+      "optionally connect my calendar",
+      "reduce conflicting commitments",
+      [
+        "Explain requested permissions and connect only after explicit action.",
+        "Sync conflict/busy states without exposing private event details.",
+        "Disconnect and provider failures retain manual scheduling; stale data is visible."
+      ],
+      "Proposed integration; Google/Outlook provider and sync policy undecided.",
+      "R3"
+    ],
+    [
+      3,
+      8,
+      "Filter suitable teachers",
+      "learner",
+      "filter teachers by my goal, language, level, format and availability",
+      "make a manageable shortlist",
+      [
+        "Filters visibly change results and can be cleared independently.",
+        "Price and meeting format are comparable; empty results offer filter adjustment.",
+        "Loading/failure has retry and preserves filter choices; no automatic assignment."
+      ],
+      "Proposed learner discovery beyond onboarding summary.",
+      "R1"
+    ],
+    [
+      3,
+      9,
+      "Inspect and choose a teacher",
+      "learner",
+      "review a teacher's approach, offer and availability",
+      "choose someone I feel comfortable learning with",
+      [
+        "Show language/level, approach, format, duration and full price when agreed.",
+        "Learner explicitly chooses and can return to alternatives.",
+        "Trust information distinguishes identity from qualifications; no public ratings added without a decision."
+      ],
+      "Proposed learner profile/discovery flow; public-trust presentation unresolved.",
+      "R1"
+    ],
+    [
+      3,
+      10,
+      "Send a goal brief to my chosen teacher",
+      "learner",
+      "share my outcome and relevant resources with one teacher",
+      "help them prepare without a long form",
+      [
+        "Prefill from setup and allow edits before sending.",
+        "Confirm recipient, outcome, level and optional resources in preview.",
+        "Failed delivery preserves draft and never displays sent until confirmed."
+      ],
+      "Proposed learner delivery; teacher workspace currently reads fictional goals.",
+      "R1"
+    ],
+    [
+      4,
+      11,
+      "Book and confirm one lesson",
+      "learner and chosen teacher",
+      "agree a slot, format and complete price",
+      "know whether one lesson is confirmed",
+      [
+        "Recheck slot availability before confirmation and reject concurrent conflicts.",
+        "Show agreed cancellation/payment terms before commitment; pending payment stays distinct from failed or confirmed.",
+        "Retries cannot duplicate reservation or charge; confirmation reaches both parties only after durable success."
+      ],
+      "Teacher requests/conflicts simulated. Learner checkout, providers, prices/fees and cancellation/refund policy are open.",
+      "R1"
+    ],
+    [
+      4,
+      12,
+      "Reschedule or cancel a session",
+      "learner or teacher",
+      "request a change with a clear outcome",
+      "manage disruption without uncertainty",
+      [
+        "Reschedule retains original time until the other party accepts a conflict-free replacement.",
+        "Decline/failure preserves the original booking and shows a retry or alternative.",
+        "Cancellation shows applicable agreed terms before confirmation and updates both parties; no placeholder 24-hour rule becomes policy."
+      ],
+      "Teacher change/cancel simulations exist; shared state and commercial policy proposed.",
+      "R1"
+    ],
+    [
+      4,
+      13,
+      "Report a no-show or session issue",
+      "learner or teacher",
+      "record what happened and see a next step",
+      "resolve a missed session fairly",
+      [
+        "Attach issue to the correct session and describe the problem privately.",
+        "Show received/pending/resolved state with an actionable next step.",
+        "Report does not automatically decide blame, charge a fee or promise compensation."
+      ],
+      "Teacher local no-show/report preview exists; support process and policy unresolved.",
+      "R1"
+    ],
+    [
+      5,
+      14,
+      "Prepare a learner-specific modular lesson",
+      "teacher",
+      "turn the learner's brief into short editable activity blocks",
+      "prepare a useful lesson with less administration",
+      [
+        "Read learner goal, level and relevant history before editing.",
+        "Create/edit/reorder blocks around an explicit practical outcome and preview learner view.",
+        "Save a draft separately from approved/shared state; private teaching notes never enter learner preview."
+      ],
+      "Local module editor/learner sample context exists; durable saves proposed.",
+      "R1"
+    ],
+    [
+      5,
+      15,
+      "Reuse and adapt a saved lesson",
+      "teacher",
+      "clone and adapt saved material for one learner",
+      "avoid preparing everything from scratch",
+      [
+        "Search/inspect library or template and create a learner-specific copy.",
+        "Edits never overwrite reusable source or completed-session lesson snapshots.",
+        "Adapted copy returns to draft and requires approval before sharing."
+      ],
+      "Library, template adaptation and snapshot protections exist in memory; persistent library proposed.",
+      "R2"
+    ],
+    [
+      5,
+      16,
+      "Preview, approve and share a lesson",
+      "teacher",
+      "check and deliberately share the approved learner version",
+      "stay accountable for the lesson content",
+      [
+        "Require approval, learner preview and explicit recipient selection before share.",
+        "Sharing exposes only learner-facing content and selected resources.",
+        "Failed delivery preserves approved draft; only successful delivery marks it shared."
+      ],
+      "Approval/share and private-note exclusion simulated locally; no real learner delivery.",
+      "R1"
+    ],
+    [
+      5,
+      17,
+      "Review an optional AI lesson draft",
+      "teacher",
+      "edit, apply or discard suggested material",
+      "keep creative and evaluation control",
+      [
+        "AI is optional and generated content is clearly labeled.",
+        "Teacher can edit/discard and must approve before sharing or final evaluation.",
+        "Unavailable/inaccurate AI leaves manual editing and existing drafts intact; no automatic publication."
+      ],
+      "Labeled sample generation only; real AI and data-processing policy proposed.",
+      "R3"
+    ],
+    [
+      6,
+      18,
+      "Message my teaching partner",
+      "learner or teacher",
+      "exchange private session-related messages",
+      "coordinate without fragmented tools",
+      [
+        "Conversation is restricted to the intended learner-teacher relationship.",
+        "Show sending/sent/failed states and retry without duplicated messages.",
+        "Failed drafts survive retry; users can reach reporting/blocking controls."
+      ],
+      "Teacher fictional conversation and retry simulation; real delivery/access control proposed.",
+      "R1"
+    ],
+    [
+      6,
+      19,
+      "Join and teach an online lesson",
+      "learner and teacher",
+      "join the confirmed one-to-one session with prepared materials",
+      "practise a concrete outcome together",
+      [
+        "Lobby shows correct partner/session and purpose-specific microphone/camera choices.",
+        "Disconnect/rejoin has visible recovery without duplicate session creation.",
+        "Teacher can use approved materials and private notes; recording/transcription is not enabled by default."
+      ],
+      "Teacher lobby/session simulation; no real video provider or learner call flow.",
+      "R1"
+    ],
+    [
+      6,
+      20,
+      "Arrange and complete an in-person lesson",
+      "learner and teacher",
+      "review agreed meeting details and lesson materials",
+      "meet with clear expectations",
+      [
+        "Show agreed time, location and format privately to authorized participants.",
+        "Expose safeguarding/reporting and change/cancellation paths before meeting.",
+        "Session completion can lead to teacher recap; safe-meeting and minor policies must be agreed before launch."
+      ],
+      "In-person product flow proposed; sample booking details do not establish safeguarding policy.",
+      "R1"
+    ],
+    [
+      7,
+      21,
+      "Share a teacher-approved recap",
+      "teacher and learner",
+      "review and share a concise recap and next step",
+      "carry the lesson into real life",
+      [
+        "Teacher edits and approves learner-facing recap before explicit sharing.",
+        "Private notes and unapproved generated content stay excluded.",
+        "Correct recipient previews the final version; failure keeps draft and successful delivery is explicit."
+      ],
+      "Teacher recap editor/preview/local sharing exists; persistent learner delivery proposed.",
+      "R1"
+    ],
+    [
+      7,
+      22,
+      "Submit and review optional practice",
+      "learner and teacher",
+      "exchange goal-relevant practice and personal feedback",
+      "improve between sessions without a forced routine",
+      [
+        "Learner can choose optional practice, inspect instructions/resources and submit a response.",
+        "Failed submission preserves work; teacher reviews and deliberately shares feedback.",
+        "Teacher controls final evaluation; no daily quota, streak or mandatory AI."
+      ],
+      "Teacher sample submission review exists; learner submission and real delivery proposed.",
+      "R2"
+    ],
+    [
+      7,
+      23,
+      "Review progress toward my goal",
+      "learner and teacher",
+      "see learning points and agreed next steps",
+      "understand practical improvement",
+      [
+        "Show goal-related feedback and learning points from relevant sessions/modules.",
+        "Teacher can edit learning points after reviewing results; distinguish evidence from suggestions.",
+        "Progress stays private; no public ranking or unvalidated improvement claims."
+      ],
+      "Teacher sample results and learning-point editing exist; learner progress and longitudinal data proposed.",
+      "R2"
+    ],
+    [
+      8,
+      24,
+      "Manage profile and personal data",
+      "learner or teacher",
+      "control my profile, preferences and stored data",
+      "understand and manage my account",
+      [
+        "Separate public profile from legal identity, messages, notes and learning records.",
+        "Explain permissions and offer clear account/data request states; deletion/export needs an agreed retention policy.",
+        "Production account access and recovery authorize the correct role; sample settings never imply real deletion."
+      ],
+      "Teacher public profile/account previews local; real auth, export, deletion and retention proposed.",
+      "R1"
+    ],
+    [
+      8,
+      25,
+      "Report or block unsafe interaction",
+      "learner, guardian or teacher",
+      "report a concern and stop unwanted contact",
+      "retain control of my safety",
+      [
+        "Reporting is private, tied to relevant interaction and gives receipt/next step.",
+        "Blocking prevents new unwanted contact under agreed safeguarding policy without exposing the reporter.",
+        "Minor/guardian authority, urgent escalation and in-person safeguards require explicit policy before production."
+      ],
+      "Proposed reporting/blocking service; identity preview alone does not establish safety.",
+      "R1"
+    ],
+    [
+      8,
+      26,
+      "Inspect earnings and payout status",
+      "teacher",
+      "see eligible earnings, deductions and payout state",
+      "understand what I will receive",
+      [
+        "Show agreed gross/net amounts, fees and eligible sessions transparently.",
+        "Distinguish setup needed, pending, paid and failed; pending never triggers another transfer.",
+        "Provider handoff, timing, refunds and initiation policy are agreed before real money flows."
+      ],
+      "Conceptual teacher payout/status preview only; provider, fees, timing and policy open.",
+      "R2"
+    ]
+  ],
+  "enablers": [
+    [
+      "EN01 · Validate the core tutoring workflow and establish measurement baselines",
+      "Exploration",
+      "R1",
+      [
+        1,
+        3,
+        5,
+        7
+      ],
+      [
+        2,
+        9,
+        10
+      ],
+      "Resolve the highest-risk assumptions before treating the proposed slices as a delivery commitment.",
+      [
+        "Produce a test plan for learner teacher-choice/booking intent and teacher brief→lesson→recap tasks, including teachers who prefer minimal/printable tools.",
+        "Record task completion, preparation effort, errors and qualitative evidence without pooling inconsistent interview denominators.",
+        "Publish findings, baseline definitions and a continue/change/stop recommendation; separate observed results from hypotheses."
+      ],
+      "Research synthesis and interactive simulations exist; new validation results and success thresholds are not established."
+    ],
+    [
+      "EN02 · Define safeguarding, guardian authority and data-handling policies",
+      "Policy / exploration",
+      "R1",
+      [
+        1,
+        2,
+        6,
+        8
+      ],
+      [
+        6,
+        7,
+        9
+      ],
+      "Make the unresolved safety and privacy decisions that production account, identity and meeting flows depend on.",
+      [
+        "Create a reviewed decision register for eligibility, guardian authority/consent, reporting/escalation, blocking and safe in-person meetings.",
+        "Define public/private fields, identity-provider data boundaries, retention/export/deletion and explicit recording/transcription consent; recording remains off by default.",
+        "Link each decision to affected stories and record unresolved launch gates; identity checks must not be represented as proof of teaching quality or guaranteed safety."
+      ],
+      "Policies remain open; identity/guardian previews do not record real consent or establish legal compliance."
+    ],
+    [
+      "EN03 · Define commercial rules and evaluate payment/payout providers",
+      "Policy / exploration",
+      "R1; extends to R2 payouts",
+      [
+        2,
+        4,
+        8
+      ],
+      [
+        5,
+        8,
+        9
+      ],
+      "Give booking, cancellation and earnings flows an explicit commercial contract and provider boundary.",
+      [
+        "Document price/fee display, cancellation/refund/no-show handling, teacher compensation and dispute responsibilities for review.",
+        "Evaluate payment/payout provider capabilities, failure states, callbacks and reconciliation in a sandbox; record the selection rationale and open questions.",
+        "Define payout eligibility, fees, timing and initiation policy before R2 money movement; no placeholder price or cancellation window becomes policy."
+      ],
+      "No real provider or commercial policy is agreed; this issue enables decisions and sandbox evidence, not real financial transactions."
+    ],
+    [
+      "EN04 · Establish shared domain, persistence and authorization foundations",
+      "Architecture",
+      "R1",
+      [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8
+      ],
+      [
+        5,
+        6,
+        7,
+        10
+      ],
+      "Provide durable, role-scoped state behind the current web/mobile simulations.",
+      [
+        "Document entities and lifecycle transitions for learner/guardian/teacher, goals, lessons/versions, sessions, messages, recaps and submissions.",
+        "Implement a versioned storage/API boundary with server-side ownership/role checks, migrations and isolated synthetic fixtures.",
+        "Demonstrate a saved draft surviving refresh and authorized retrieval, cross-account access rejection, immutable completed-session snapshots and consistency across web/mobile clients."
+      ],
+      "Current state is React memory and resets on reload; backend/storage choice remains open."
+    ],
+    [
+      "EN05 · Integrate production account, guardian and identity handoffs",
+      "Technical integration",
+      "R1",
+      [
+        1,
+        2,
+        8
+      ],
+      [
+        6,
+        7,
+        9
+      ],
+      "Replace sample account and identity paths with explicit authenticated/provider states once policy is agreed.",
+      [
+        "Choose and document authentication/session recovery and identity handoff contracts; keep identity status distinct from qualifications and profile publication.",
+        "Implement provider success, pending, failure, deferral and return routing without leaking legal identity into public profile or client logs.",
+        "Verify learner/adult/guardian/teacher branches and stale-provider-state clearing using sandbox accounts; guardian authority must follow EN02 decisions."
+      ],
+      "Email, Google and Persona/document flows are local simulations. Provider selection is not predetermined."
+    ],
+    [
+      "EN06 · Build private material storage and permission-safe sharing",
+      "Technical infrastructure",
+      "R1",
+      [
+        1,
+        5,
+        6,
+        7
+      ],
+      [
+        3,
+        5,
+        6,
+        7
+      ],
+      "Support real learning resources and deliberate sharing without exposing private drafts or notes.",
+      [
+        "Define accepted file types, size limits, ownership, retention, safe preview/download and processing safeguards before uploads use real storage.",
+        "Implement authorized upload/replacement/removal and recipient-scoped access with observable pending/failed/success states.",
+        "Test cross-account access denial, failed upload/send recovery, private-note exclusion, revoked access and preservation of reusable originals."
+      ],
+      "Local object URLs and sample materials exist; a production storage/delivery service is not connected."
+    ],
+    [
+      "EN07 · Implement consistent scheduling and booking/payment orchestration",
+      "Architecture / technical integration",
+      "R1",
+      [
+        2,
+        4,
+        8
+      ],
+      [
+        4,
+        5,
+        8,
+        10
+      ],
+      "Make concurrent booking and provider retries safe and keep both participants aligned.",
+      [
+        "Specify a session/payment state machine and time-zone/DST model with conflict checks and atomic slot reservation.",
+        "Implement idempotent booking/payment commands, provider callback handling and reconciliation for pending, confirmed, failed and canceled outcomes using sandbox services.",
+        "Verify concurrent requests produce at most one confirmed reservation/charge, retry does not duplicate effects, and replacement acceptance preserves the original booking until success."
+      ],
+      "Teacher booking conflicts and replacement acceptance are local simulations; production terms/provider behavior depend on EN03."
+    ],
+    [
+      "EN08 · Establish messaging, reminders and one-to-one video delivery",
+      "Technical integration",
+      "R1",
+      [
+        4,
+        6,
+        7
+      ],
+      [
+        3,
+        5,
+        6,
+        8,
+        9
+      ],
+      "Supply the delivery channels needed for confirmed sessions, communication and teacher-approved follow-up.",
+      [
+        "Evaluate/select channel and video boundaries without automatic recording; document purpose-specific permissions and session membership checks.",
+        "Implement durable message/reminder/recap delivery states, safe retry, recipient scoping and notification preferences.",
+        "Exercise undelivered messages, duplicate callbacks, camera/microphone denial and call disconnect/rejoin; manually prepared materials remain accessible when optional services fail."
+      ],
+      "Conversations, lobby and teaching are fictional local flows. No real messaging, notifications or video provider is connected."
+    ],
+    [
+      "EN09 · Set up delivery environments, monitoring and recovery procedures",
+      "Infrastructure",
+      "R1",
+      [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8
+      ],
+      [
+        3,
+        5,
+        7,
+        8,
+        10
+      ],
+      "Make production changes deployable, diagnosable and recoverable with explicit evidence.",
+      [
+        "Document environment separation, configuration/secrets ownership, migration/deployment checks and rollback paths; preserve protected mobile runtime boundaries.",
+        "Add redacted diagnostics and actionable monitoring for critical booking/share/provider failures; define proposed SLO/RTO/RPO after business/dependency review.",
+        "Demonstrate restore/reconciliation and outage handling in an isolated environment, plus a measured representative load/performance baseline."
+      ],
+      "A frontend build/deployment workflow exists; production backend monitoring, backups, restore and capacity evidence do not. Numeric service targets remain proposals."
+    ],
+    [
+      "EN10 · Establish accessibility, compatibility and end-to-end verification gates",
+      "Quality infrastructure",
+      "R1",
+      [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8
+      ],
+      [
+        1,
+        2,
+        3,
+        4,
+        5,
+        9,
+        10
+      ],
+      "Turn the quality requirements into repeatable evidence across the shared learner/teacher journey.",
+      [
+        "Define a supported browser/device/input/time-zone matrix and representative learner, guardian and teacher scenarios using synthetic data.",
+        "Add meaningful checks for keyboard/screen-reader paths, zoom/reduced motion, private-note exclusion, approval/share, booking conflicts and failed-send recovery; preserve existing runtime integrity checks.",
+        "Run the core brief→chosen teacher→booking→approved lesson→session→recap path and publish results/known gaps; proposed accessibility and performance targets require measured evidence."
+      ],
+      "Existing dated local tests and phone previews are partial evidence, not an accessibility certification, physical-device audit or production-flow verification."
+    ],
+    [
+      "EN11 · Evaluate and integrate optional AI with teacher review controls",
+      "Exploration / technical integration",
+      "R3",
+      [
+        5,
+        7
+      ],
+      [
+        6,
+        8,
+        9,
+        10
+      ],
+      "Establish whether real AI assistance improves preparation while retaining teacher responsibility.",
+      [
+        "Define permitted data inputs, provider boundary and a representative evaluation set for factual accuracy, level appropriateness, practical relevance and harmful/inappropriate output.",
+        "Implement labeled draft generation with edit/apply/discard, teacher approval and a tested manual fallback for timeout or unusable output.",
+        "Compare preparation effort and correction burden with manual work; record a release recommendation and prohibit unapproved sharing/final evaluation."
+      ],
+      "Current AI produces labeled sample content only. Advanced AI remains optional and outside the core R1 dependency chain."
+    ],
+    [
+      "EN12 · Implement optional calendar synchronization and conflict recovery",
+      "Technical integration",
+      "R3",
+      [
+        2,
+        4
+      ],
+      [
+        4,
+        5,
+        6,
+        8
+      ],
+      "Support optional calendar connections without making manual availability depend on a provider.",
+      [
+        "Select/document provider permissions, busy/free data minimization, sync direction and source-of-truth rules.",
+        "Implement connection/disconnection, incremental sync, duplicate-event handling and date-specific time-zone/DST conversion.",
+        "Test revoked access, stale data and provider outages; show sync state, preserve confirmed bookings and retain manual scheduling."
+      ],
+      "External calendar integration is proposed; Google/Outlook are ideas rather than selected providers."
+    ],
+    [
+      "EN13 · Implement payout ledger, provider handoff and reconciliation",
+      "Architecture / technical integration",
+      "R2",
+      [
+        8
+      ],
+      [
+        5,
+        6,
+        7,
+        8,
+        9
+      ],
+      "Provide trustworthy teacher earnings and payout state after the commercial rules are agreed.",
+      [
+        "Implement a session-to-earnings ledger with agreed fee/refund adjustments, eligibility rules and traceable gross/net amounts.",
+        "Integrate payout setup/status with scoped provider access, idempotent transfer requests and callback reconciliation using sandbox funds only.",
+        "Verify pending status cannot trigger a second transfer and failed/reversed outcomes preserve an actionable audit trail without leaking financial details."
+      ],
+      "Payouts are conceptual previews; provider, fees, timing and initiation policy remain open until EN03 is resolved."
+    ]
+  ],
+  "enablerDeps": {
+    "1": [],
+    "2": [],
+    "3": [],
+    "4": [],
+    "5": [
+      2,
+      4
+    ],
+    "6": [
+      2,
+      4
+    ],
+    "7": [
+      3,
+      4,
+      5
+    ],
+    "8": [
+      2,
+      4,
+      5
+    ],
+    "9": [],
+    "10": [],
+    "11": [
+      2,
+      4,
+      6
+    ],
+    "12": [
+      4,
+      7
+    ],
+    "13": [
+      3,
+      4,
+      5,
+      7
+    ]
+  },
+  "enablerLinks": [
+    {
+      "text": "Backlog\nEN13 · Implement payout ledger, provider handoff and reconciliation",
+      "href": "/skema/issue/SKE-61/en13-implement-payout-ledger-provider-handoff-and-reconciliation"
+    },
+    {
+      "text": "Backlog\nEN12 · Implement optional calendar synchronization and conflict recovery",
+      "href": "/skema/issue/SKE-60/en12-implement-optional-calendar-synchronization-and-conflict-recovery"
+    },
+    {
+      "text": "Backlog\nEN11 · Evaluate and integrate optional AI with teacher review controls",
+      "href": "/skema/issue/SKE-59/en11-evaluate-and-integrate-optional-ai-with-teacher-review-controls"
+    },
+    {
+      "text": "Backlog\nEN10 · Establish accessibility, compatibility and end-to-end verification gates",
+      "href": "/skema/issue/SKE-58/en10-establish-accessibility-compatibility-and-end-to-end-verification"
+    },
+    {
+      "text": "Backlog\nEN09 · Set up delivery environments, monitoring and recovery procedures",
+      "href": "/skema/issue/SKE-57/en09-set-up-delivery-environments-monitoring-and-recovery-procedures"
+    },
+    {
+      "text": "Backlog\nEN08 · Establish messaging, reminders and one-to-one video delivery",
+      "href": "/skema/issue/SKE-56/en08-establish-messaging-reminders-and-one-to-one-video-delivery"
+    },
+    {
+      "text": "Backlog\nEN07 · Implement consistent scheduling and booking/payment orchestration",
+      "href": "/skema/issue/SKE-55/en07-implement-consistent-scheduling-and-bookingpayment-orchestration"
+    },
+    {
+      "text": "Backlog\nEN06 · Build private material storage and permission-safe sharing",
+      "href": "/skema/issue/SKE-54/en06-build-private-material-storage-and-permission-safe-sharing"
+    },
+    {
+      "text": "Backlog\nEN05 · Integrate production account, guardian and identity handoffs",
+      "href": "/skema/issue/SKE-53/en05-integrate-production-account-guardian-and-identity-handoffs"
+    },
+    {
+      "text": "Backlog\nEN04 · Establish shared domain, persistence and authorization foundations",
+      "href": "/skema/issue/SKE-52/en04-establish-shared-domain-persistence-and-authorization-foundations"
+    },
+    {
+      "text": "Backlog\nEN03 · Define commercial rules and evaluate payment/payout providers",
+      "href": "/skema/issue/SKE-51/en03-define-commercial-rules-and-evaluate-paymentpayout-providers"
+    },
+    {
+      "text": "Backlog\nEN02 · Define safeguarding, guardian authority and data-handling policies",
+      "href": "/skema/issue/SKE-50/en02-define-safeguarding-guardian-authority-and-data-handling-policies"
+    },
+    {
+      "text": "Backlog\nEN01 · Validate the core tutoring workflow and establish measurement baselines",
+      "href": "/skema/issue/SKE-49/en01-validate-the-core-tutoring-workflow-and-establish-measurement"
+    }
+  ],
+  "features": [
+    {
+      "f": 1,
+      "title": "F01 · Learner setup and practical goals",
+      "children": [
+        {
+          "text": "Backlog\nUS03 · Set flexible meeting and notification preferences",
+          "href": "/skema/issue/SKE-15/us03-set-flexible-meeting-and-notification-preferences"
+        },
+        {
+          "text": "Backlog\nUS02 · Set languages, levels and a practical goal",
+          "href": "/skema/issue/SKE-14/us02-set-languages-levels-and-a-practical-goal"
+        },
+        {
+          "text": "Backlog\nUS01 · Enter through an account and guardian-appropriate path",
+          "href": "/skema/issue/SKE-13/us01-enter-through-an-account-and-guardian-appropriate-path"
+        }
+      ]
+    },
+    {
+      "f": 2,
+      "title": "F02 · Teacher profile and availability",
+      "children": [
+        {
+          "text": "Backlog\nUS07 · Connect an external calendar",
+          "href": "/skema/issue/SKE-19/us07-connect-an-external-calendar"
+        },
+        {
+          "text": "Backlog\nUS06 · Set teaching availability",
+          "href": "/skema/issue/SKE-18/us06-set-teaching-availability"
+        },
+        {
+          "text": "Backlog\nUS05 · Complete or defer a separate identity check",
+          "href": "/skema/issue/SKE-17/us05-complete-or-defer-a-separate-identity-check"
+        },
+        {
+          "text": "Backlog\nUS04 · Create and review a teaching profile",
+          "href": "/skema/issue/SKE-16/us04-create-and-review-a-teaching-profile"
+        }
+      ]
+    },
+    {
+      "f": 3,
+      "title": "F03 · Learner-controlled teacher discovery",
+      "children": [
+        {
+          "text": "Backlog\nUS10 · Send a goal brief to my chosen teacher",
+          "href": "/skema/issue/SKE-22/us10-send-a-goal-brief-to-my-chosen-teacher"
+        },
+        {
+          "text": "Backlog\nUS09 · Inspect and choose a teacher",
+          "href": "/skema/issue/SKE-21/us09-inspect-and-choose-a-teacher"
+        },
+        {
+          "text": "Backlog\nUS08 · Filter suitable teachers",
+          "href": "/skema/issue/SKE-20/us08-filter-suitable-teachers"
+        }
+      ]
+    },
+    {
+      "f": 4,
+      "title": "F04 · Booking and session management",
+      "children": [
+        {
+          "text": "Backlog\nUS13 · Report a no-show or session issue",
+          "href": "/skema/issue/SKE-25/us13-report-a-no-show-or-session-issue"
+        },
+        {
+          "text": "Backlog\nUS12 · Reschedule or cancel a session",
+          "href": "/skema/issue/SKE-24/us12-reschedule-or-cancel-a-session"
+        },
+        {
+          "text": "Backlog\nUS11 · Book and confirm one lesson",
+          "href": "/skema/issue/SKE-23/us11-book-and-confirm-one-lesson"
+        }
+      ]
+    },
+    {
+      "f": 5,
+      "title": "F05 · Short editable lesson preparation",
+      "children": [
+        {
+          "text": "Backlog\nUS17 · Review an optional AI lesson draft",
+          "href": "/skema/issue/SKE-29/us17-review-an-optional-ai-lesson-draft"
+        },
+        {
+          "text": "Backlog\nUS16 · Preview, approve and share a lesson",
+          "href": "/skema/issue/SKE-28/us16-preview-approve-and-share-a-lesson"
+        },
+        {
+          "text": "Backlog\nUS15 · Reuse and adapt a saved lesson",
+          "href": "/skema/issue/SKE-27/us15-reuse-and-adapt-a-saved-lesson"
+        },
+        {
+          "text": "Backlog\nUS14 · Prepare a learner-specific modular lesson",
+          "href": "/skema/issue/SKE-26/us14-prepare-a-learner-specific-modular-lesson"
+        }
+      ]
+    },
+    {
+      "f": 6,
+      "title": "F06 · Private communication and one-to-one teaching",
+      "children": [
+        {
+          "text": "Backlog\nUS20 · Arrange and complete an in-person lesson",
+          "href": "/skema/issue/SKE-32/us20-arrange-and-complete-an-in-person-lesson"
+        },
+        {
+          "text": "Backlog\nUS19 · Join and teach an online lesson",
+          "href": "/skema/issue/SKE-31/us19-join-and-teach-an-online-lesson"
+        },
+        {
+          "text": "Backlog\nUS18 · Message my teaching partner",
+          "href": "/skema/issue/SKE-30/us18-message-my-teaching-partner"
+        }
+      ]
+    },
+    {
+      "f": 7,
+      "title": "F07 · Private feedback, recap and optional practice",
+      "children": [
+        {
+          "text": "Backlog\nUS23 · Review progress toward my goal",
+          "href": "/skema/issue/SKE-35/us23-review-progress-toward-my-goal"
+        },
+        {
+          "text": "Backlog\nUS22 · Submit and review optional practice",
+          "href": "/skema/issue/SKE-34/us22-submit-and-review-optional-practice"
+        },
+        {
+          "text": "Backlog\nUS21 · Share a teacher-approved recap",
+          "href": "/skema/issue/SKE-33/us21-share-a-teacher-approved-recap"
+        }
+      ]
+    },
+    {
+      "f": 8,
+      "title": "F08 · Account, privacy, safety and earnings control",
+      "children": [
+        {
+          "text": "Backlog\nUS26 · Inspect earnings and payout status",
+          "href": "/skema/issue/SKE-38/us26-inspect-earnings-and-payout-status"
+        },
+        {
+          "text": "Backlog\nUS25 · Report or block unsafe interaction",
+          "href": "/skema/issue/SKE-37/us25-report-or-block-unsafe-interaction"
+        },
+        {
+          "text": "Backlog\nUS24 · Manage profile and personal data",
+          "href": "/skema/issue/SKE-36/us24-manage-profile-and-personal-data"
+        }
+      ]
+    }
+  ],
+  "featureUrls": {
+    "1": "https://linear.app/skema/issue/SKE-5/f01-learner-setup-and-practical-goals",
+    "2": "https://linear.app/skema/issue/SKE-6/f02-teacher-profile-and-availability",
+    "3": "https://linear.app/skema/issue/SKE-7/f03-learner-controlled-teacher-discovery",
+    "4": "https://linear.app/skema/issue/SKE-8/f04-booking-and-session-management",
+    "5": "https://linear.app/skema/issue/SKE-9/f05-short-editable-lesson-preparation",
+    "6": "https://linear.app/skema/issue/SKE-10/f06-private-communication-and-one-to-one-teaching",
+    "7": "https://linear.app/skema/issue/SKE-11/f07-private-feedback-recap-and-optional-practice",
+    "8": "https://linear.app/skema/issue/SKE-12/f08-account-privacy-safety-and-earnings-control"
+  },
+  "nfrData": [
+    [
+      "NFR01 · Accessibility and assistive technology",
+      "All learner/teacher flows, web and phone preview",
+      "Proposed acceptance: target WCAG 2.2 AA. Every core flow is keyboard operable with visible focus, programmatic names/status/errors, non-colour-only selection and logical reading order. Support text zoom and reduced motion; touch controls remain usable.",
+      "Audit automated findings plus manual keyboard, screen-reader, 200% zoom and reduced-motion scenarios across setup, editor, calendar, dialogs and failure paths.",
+      "Current interface needs measured audit; no conformance claim. Must be validated before production R1."
+    ],
+    [
+      "NFR02 · Usability and manageable setup",
+      "F01–F08",
+      "Users can complete one meaningful action per setup screen, go Back without losing answers, skip optional steps and recover from errors with an actionable next step. Teacher lesson preparation remains short/modular and does not require long-form authoring.",
+      "Run representative learner, guardian and teacher tasks. Record completion, time, errors and preparation effort versus current methods; establish targets after baseline research.",
+      "Prototype behavior exists; user testing and quantitative thresholds are not established. Proposed R1 gate."
+    ],
+    [
+      "NFR03 · Performance and interaction responsiveness",
+      "Web/mobile setup, workspace and content",
+      "Starting targets for review: usable core screen within 3 seconds on an agreed mid-range mobile/network test profile; visible control response within 100 ms excluding provider completion. Large optional media/AI must not block navigation or manual editing.",
+      "Define device, network and p95 measurement window before testing; measure load/interaction traces with representative resources and long lesson/calendar data. Track regressions against the recorded baseline.",
+      "Targets are proposals, not measured results or commitments. Prototype/local and deployed production performance are separate."
+    ],
+    [
+      "NFR04 · Browser, viewport and time-zone compatibility",
+      "F01–F08",
+      "Core tasks remain usable on agreed current Safari/Chrome/Firefox/Edge and representative iOS/Android viewports, keyboard-open states and text zoom. No clipped primary actions or unintended horizontal overflow. Scheduling handles agreed time zones and daylight-saving changes.",
+      "Publish support matrix and run representative physical-device/browser tasks including narrow layouts, orientation, long content, keyboard dismissal and DST transition booking.",
+      "Phone previews are browser simulations, not native binaries. Current availability supports Europe/Paris only; physical-device and wider zone coverage need validation."
+    ],
+    [
+      "NFR05 · Reliability, durable drafts and transaction integrity",
+      "F04–F07, F08 payouts",
+      "Acknowledged saved drafts survive refresh/network failure in production. Unsent work never appears shared. Concurrent slot requests and repeated retries create at most one confirmed booking, charge, message or payout. Reusable originals and completed-session snapshots remain intact.",
+      "Fault-injection tests for offline/reconnect/refresh, duplicate callbacks, concurrent bookings and interrupted sends. Verify durable state, idempotency and preserved originals; reconcile provider outcomes.",
+      "Current state is in memory and resets on reload. Local simulations are not evidence of durable recovery. Production R1 gate before booking/payment."
+    ],
+    [
+      "NFR06 · Privacy, data minimization and consent",
+      "F01, F05–F08; all private data",
+      "Public profile excludes legal identity, private notes and confidential learning data. Only intended recipients see shared materials. Collect only purpose-relevant information; request permissions in context. Recording/transcription is off by default. Retention, export/deletion and guardian authority require explicit decisions.",
+      "Inspect field/recipient matrix, learner previews and data flows; test private-note exclusion and consent/permission states. Review proposed retention and minor-data handling before any real collection.",
+      "No legal-compliance certification is asserted. Prototype uses fictional/sample flows; production data policy is open."
+    ],
+    [
+      "NFR07 · Security and role-based access control",
+      "Production accounts, messages, lessons, bookings, identity and payouts",
+      "Authenticate before private access; authorize learner/teacher/guardian roles server-side for every private operation. Protect data in transit/storage using supported platform controls; keep secrets and identity data out of client bundles/logs; reject cross-account object access.",
+      "Threat-model production data paths; test unauthenticated/cross-role/cross-account access, session recovery and secret/log exposure. Resolve material findings before real private data or money flows.",
+      "No backend or production authentication exists today. Provider choice, account recovery and guardian permissions remain open; this is a proposed R1 gate."
+    ],
+    [
+      "NFR08 · Availability, provider failure and recovery",
+      "Production booking, sharing, video and payment dependencies",
+      "Core manual preparation remains available when optional AI/calendar providers fail. Show actionable degraded/pending states; retry safely without false success. Define monitoring, recovery objectives and backup/restore rules before release.",
+      "Exercise provider outage/timeouts and restore drills; verify draft integrity and status reconciliation. Set SLO, RTO and RPO after dependency design and business review.",
+      "99.9% availability is an optional starting proposal only, not an SLA or current capability. No production service/backup exists."
+    ],
+    [
+      "NFR09 · Transparency and human control",
+      "F01–F08, especially AI/identity/sharing",
+      "Clearly distinguish simulations from real operations and draft/pending/approved/shared/failed states. Teacher can edit/discard AI and controls final evaluation/publication. Learner explicitly chooses teacher; users confirm recipients and meaningful commitments.",
+      "Inspect all success, pending, failure and AI-unavailable paths. Verify no automatic matching, unapproved sharing, hidden recording or claim that identity checks establish teaching quality.",
+      "Current prototype labels and manual fallback are source evidence, not a full audit. Proposed R1 gate; real AI-specific verification accompanies R3."
+    ],
+    [
+      "NFR10 · Maintainability, observability and capacity",
+      "Shared web/mobile domain and future services",
+      "Keep shared domain rules consistent across web/mobile and providers. Protect runtime boundaries; cover guardian branching, visibility, conflicts, snapshots and retries with meaningful regression tests. Production diagnostics use redacted identifiers and reveal actionable failures without private content.",
+      "Run relevant existing checks for each change; trace a booking→approved lesson→recap scenario and failure paths. Establish expected usage/load envelope, then load-test against the agreed SLO; capacity is not assumed from sample fixtures.",
+      "No scale target is agreed and no production load test exists. Current local tests/build records are dated evidence; future service gates require fresh validation."
+    ]
+  ],
+  "nfrLinks": [
+    {
+      "text": "Backlog\nNFR10 · Maintainability, observability and capacity",
+      "href": "/skema/issue/SKE-48/nfr10-maintainability-observability-and-capacity"
+    },
+    {
+      "text": "Backlog\nNFR09 · Transparency and human control",
+      "href": "/skema/issue/SKE-47/nfr09-transparency-and-human-control"
+    },
+    {
+      "text": "Backlog\nNFR08 · Availability, provider failure and recovery",
+      "href": "/skema/issue/SKE-46/nfr08-availability-provider-failure-and-recovery"
+    },
+    {
+      "text": "Backlog\nNFR07 · Security and role-based access control",
+      "href": "/skema/issue/SKE-45/nfr07-security-and-role-based-access-control"
+    },
+    {
+      "text": "Backlog\nNFR06 · Privacy, data minimization and consent",
+      "href": "/skema/issue/SKE-44/nfr06-privacy-data-minimization-and-consent"
+    },
+    {
+      "text": "Backlog\nNFR05 · Reliability, durable drafts and transaction integrity",
+      "href": "/skema/issue/SKE-43/nfr05-reliability-durable-drafts-and-transaction-integrity"
+    },
+    {
+      "text": "Backlog\nNFR04 · Browser, viewport and time-zone compatibility",
+      "href": "/skema/issue/SKE-42/nfr04-browser-viewport-and-time-zone-compatibility"
+    },
+    {
+      "text": "Backlog\nNFR03 · Performance and interaction responsiveness",
+      "href": "/skema/issue/SKE-41/nfr03-performance-and-interaction-responsiveness"
+    },
+    {
+      "text": "Backlog\nNFR02 · Usability and manageable setup",
+      "href": "/skema/issue/SKE-40/nfr02-usability-and-manageable-setup"
+    },
+    {
+      "text": "Backlog\nNFR01 · Accessibility and assistive technology",
+      "href": "/skema/issue/SKE-39/nfr01-accessibility-and-assistive-technology"
+    }
+  ],
+  "documentUrl": "https://linear.app/skema/document/story-map-learner-and-teacher-journeys-6efeb5107d31"
+}

@@ -1,0 +1,36 @@
+{
+  "status": "passed",
+  "checks": [
+    {
+      "section": "Part 1 Tests edge cases and questions",
+      "feature": "Adapt a reusable lesson for one learner",
+      "scenarios": 3
+    },
+    {
+      "section": "Part 2 AI test scenarios and uncertainties",
+      "feature": "Create a personalized Mimo lesson draft",
+      "scenarios": 4
+    },
+    {
+      "section": "Final improved acceptance tests",
+      "feature": "Adapt and save one learner-specific Mimo draft",
+      "scenarios": 4
+    },
+    {
+      "section": "Final failures coverage and open decisions",
+      "feature": "Recover or deny draft actions",
+      "scenarios": 4
+    },
+    {
+      "section": "Part 3 Different story test before refinement",
+      "feature": "Approve a checked Mimo lesson",
+      "scenarios": 3
+    },
+    {
+      "section": "Part 3 Refined test output",
+      "feature": "Approve only the reviewed Mimo lesson version",
+      "scenarios": 6
+    }
+  ],
+  "scope": "Syntax only; no step definitions or product behavior executed."
+}

@@ -1,0 +1,489 @@
+Mimo · Story map
+
+Planning baseline · 16 October 2026. SKEMA workspace / SKEMA team (SKE). 8 features, 26 child user stories, 10 non-functional requirements and 13 enablers; 57 Backlog issues.
+
+
+
+
+FigJam · Reference-format story map
+
+Open the editable story map in FigJam
+
+Uses the supplied classroom format: learner/teacher activity rows, yellow user stories, orange enablers, blue release boundaries, seven proposed MMFs, release name/goal cards and a separate NFR lane. All 57 items link to their Linear issues. The seven MMFs are proposed planning cuts, not an approved roadmap.Product outcome
+
+A learner practises a concrete language goal with a teacher they choose. The teacher prepares a short editable lesson and manages follow-up with less administration. These are hypotheses to validate, not demonstrated impact.
+
+Activity backbone and release slices
+
+Read activities left to right and slices top to bottom. Feature links open parent issues; story links open child issues with user value, acceptance criteria, current implementation boundary and proposed slice. Horizontal scrolling may be needed for the full map.
+
+Layer
+
+	
+
+Start
+
+	
+
+Offer
+
+	
+
+Choose
+
+	
+
+Arrange
+
+	
+
+Prepare
+
+	
+
+Meet
+
+	
+
+Continue
+
+	
+
+Stay in control
+
+
+
+
+Feature
+
+	
+
+F01
+
+	
+
+F02
+
+	
+
+F03
+
+	
+
+F04
+
+	
+
+F05
+
+	
+
+F06
+
+	
+
+F07
+
+	
+
+F08
+
+
+
+
+Learner activity
+
+	
+
+Set a practical goal
+
+	
+
+Understand offers
+
+	
+
+Choose my teacher
+
+	
+
+Book/change a lesson
+
+	
+
+Share context
+
+	
+
+Practise with my teacher
+
+	
+
+Use feedback
+
+	
+
+Manage privacy/safety
+
+
+
+
+Teacher activity
+
+	
+
+Read learner needs
+
+	
+
+Set profile/availability
+
+	
+
+Present teaching fit
+
+	
+
+Manage a session
+
+	
+
+Adapt/approve a lesson
+
+	
+
+Teach one learner
+
+	
+
+Review/share recap
+
+	
+
+Manage profile/earnings
+
+
+
+
+R1
+
+	
+
+US01, US02, US03
+
+	
+
+US04, US05, US06
+
+	
+
+US08, US09, US10
+
+	
+
+US11, US12, US13
+
+	
+
+US14, US16
+
+	
+
+US18, US19, US20
+
+	
+
+US21
+
+	
+
+US24, US25
+
+
+
+
+R2
+
+	
+
+—
+
+	
+
+—
+
+	
+
+—
+
+	
+
+—
+
+	
+
+US15
+
+	
+
+—
+
+	
+
+US22, US23
+
+	
+
+US26
+
+
+
+
+R3
+
+	
+
+—
+
+	
+
+US07
+
+	
+
+—
+
+	
+
+—
+
+	
+
+US17
+
+	
+
+—
+
+	
+
+—
+
+	
+
+—
+
+R1 · Core tutoring: an end-to-end chosen-teacher lesson, including manual preparation, session management, safety and private recap. Production account, booking/payment and teaching services remain to be built.
+
+R2 · Reduce repeated work: reusable lessons, optional practice/progress and production earnings/payouts after commercial policy is agreed.
+
+R3 · Optional assistance: external calendars and teacher-controlled AI. Core tutoring must remain usable without these.
+
+These slices are planning proposals, not committed releases, sprint assignments, deadlines or estimates. Existing simulations are not marked Done.
+
+Feature and story index
+F01 · Learner setup and practical goals
+
+US01 · Enter through an account and guardian-appropriate path — learner or guardian; R1.
+
+US02 · Set languages, levels and a practical goal — learner; R1.
+
+US03 · Set flexible meeting and notification preferences — learner; R1.
+
+F02 · Teacher profile and availability
+
+US04 · Create and review a teaching profile — teacher; R1.
+
+US05 · Complete or defer a separate identity check — teacher or adult guardian; R1.
+
+US06 · Set teaching availability — teacher; R1.
+
+US07 · Connect an external calendar — teacher; R3.
+
+F03 · Learner-controlled teacher discovery
+
+US08 · Filter suitable teachers — learner; R1.
+
+US09 · Inspect and choose a teacher — learner; R1.
+
+US10 · Send a goal brief to my chosen teacher — learner; R1.
+
+F04 · Booking and session management
+
+US11 · Book and confirm one lesson — learner and chosen teacher; R1.
+
+US12 · Reschedule or cancel a session — learner or teacher; R1.
+
+US13 · Report a no-show or session issue — learner or teacher; R1.
+
+F05 · Short editable lesson preparation
+
+US14 · Prepare a learner-specific modular lesson — teacher; R1.
+
+US15 · Reuse and adapt a saved lesson — teacher; R2.
+
+US16 · Preview, approve and share a lesson — teacher; R1.
+
+US17 · Review an optional AI lesson draft — teacher; R3.
+
+F06 · Private communication and one-to-one teaching
+
+US18 · Message my teaching partner — learner or teacher; R1.
+
+US19 · Join and teach an online lesson — learner and teacher; R1.
+
+US20 · Arrange and complete an in-person lesson — learner and teacher; R1.
+
+F07 · Private feedback, recap and optional practice
+
+US21 · Share a teacher-approved recap — teacher and learner; R1.
+
+US22 · Submit and review optional practice — learner and teacher; R2.
+
+US23 · Review progress toward my goal — learner and teacher; R2.
+
+F08 · Account, privacy, safety and earnings control
+
+US24 · Manage profile and personal data — learner or teacher; R1.
+
+US25 · Report or block unsafe interaction — learner, guardian or teacher; R1.
+
+US26 · Inspect earnings and payout status — teacher; R2.
+
+Cross-cutting non-functional requirements
+
+All features must satisfy applicable quality gates. These issues specify proposed acceptance and verification methods; numeric targets such as 3 seconds, 100 ms or 99.9% are starting proposals, not measured results or commitments.
+
+NFR01 · Accessibility and assistive technology — All learner/teacher flows, web and phone preview.
+
+NFR02 · Usability and manageable setup — F01–F08.
+
+NFR03 · Performance and interaction responsiveness — Web/mobile setup, workspace and content.
+
+NFR04 · Browser, viewport and time-zone compatibility — F01–F08.
+
+NFR05 · Reliability, durable drafts and transaction integrity — F04–F07, F08 payouts.
+
+NFR06 · Privacy, data minimization and consent — F01, F05–F08; all private data.
+
+NFR07 · Security and role-based access control — Production accounts, messages, lessons, bookings, identity and payouts.
+
+NFR08 · Availability, provider failure and recovery — Production booking, sharing, video and payment dependencies.
+
+NFR09 · Transparency and human control — F01–F08, especially AI/identity/sharing.
+
+NFR10 · Maintainability, observability and capacity — Shared web/mobile domain and future services.
+
+Dependencies and open decisions
+
+F01 learner brief + F02 teacher profile/availability enable F03 discovery.
+
+F03 explicit teacher choice + agreed commercial/safeguarding policies enable F04 booking.
+
+F01 learner goal and F04 session context inform F05 preparation; approval/share is deliberate.
+
+F04 session + F05 approved materials enable F06 teaching, then F07 private recap and optional practice.
+
+F08 and the NFRs apply throughout; production gates cannot be skipped because a frontend simulation exists.
+
+Decide prices/fees, cancellation/refunds/no-shows, compensation, payouts, age eligibility, guardian authority/consent, safe meetings, reporting escalation, retention/deletion and recording consent before relevant real operations. No placeholder financial rule becomes policy.
+
+Scope and evidence
+
+Onboarding and the teacher Students / Schedule / Lessons / Profile workspace exist as local frontend simulations. The teacher workspace includes fictional scheduling, messages, modular lessons, AI drafts, submissions, feedback and recaps. Learner discovery/booking and all real accounts, payments, identity, video, AI, storage and synchronization are proposed. Reload resets edits; phone previews are not native binaries.
+
+Exactly one learner and one chosen teacher per session; online or in person. Teacher retains final evaluation and publication control. Feedback stays private. Exclude automatic assignment, groups, social feeds, public leaderboards, friend-following, daily obligations, streaks and long-form courses. Public ratings/trust presentation remains unresolved. Identity checks do not establish teaching qualifications or guarantee safety. Recording/transcription is not on by default.
+
+Sources
+
+Current project context — local working copy read for this map; remote source may differ until committed.
+
+Research, personas, scope and user journeys — qualitative synthesis and illustrative scenarios.
+
+Start & Setup.
+
+Goal-based flows and additional teacher flows — original proposed labels are historical; current frontend simulations are distinguished above.
+
+Verification for this artifact checks saved content, counts and issue hierarchy. It does not establish usability, production readiness or feature completion.
+
+Enablers · supporting work
+
+Added 16 October 2026. Enablers describe research, policy decisions, architecture, integrations and infrastructure needed to deliver the features and satisfy the NFRs. All 13 are Backlog; slices remain proposals.
+
+EN01 · Validate the core tutoring workflow and establish measurement baselines
+
+Exploration · R1. Resolve the highest-risk assumptions before treating the proposed slices as a delivery commitment.
+
+Enables F01, F03, F05, F07. Supports NFR02, NFR09, NFR10. Can begin independently.
+
+EN02 · Define safeguarding, guardian authority and data-handling policies
+
+Policy / exploration · R1. Make the unresolved safety and privacy decisions that production account, identity and meeting flows depend on.
+
+Enables F01, F02, F06, F08. Supports NFR06, NFR07, NFR09. Can begin independently.
+
+EN03 · Define commercial rules and evaluate payment/payout providers
+
+Policy / exploration · R1; extends to R2 payouts. Give booking, cancellation and earnings flows an explicit commercial contract and provider boundary.
+
+Enables F02, F04, F08. Supports NFR05, NFR08, NFR09. Can begin independently.
+
+EN04 · Establish shared domain, persistence and authorization foundations
+
+Architecture · R1. Provide durable, role-scoped state behind the current web/mobile simulations.
+
+Enables F01, F02, F03, F04, F05, F06, F07, F08. Supports NFR05, NFR06, NFR07, NFR10. Can begin independently.
+
+EN05 · Integrate production account, guardian and identity handoffs
+
+Technical integration · R1. Replace sample account and identity paths with explicit authenticated/provider states once policy is agreed.
+
+Enables F01, F02, F08. Supports NFR06, NFR07, NFR09. Sequencing: EN02, EN04.
+
+EN06 · Build private material storage and permission-safe sharing
+
+Technical infrastructure · R1. Support real learning resources and deliberate sharing without exposing private drafts or notes.
+
+Enables F01, F05, F06, F07. Supports NFR03, NFR05, NFR06, NFR07. Sequencing: EN02, EN04.
+
+EN07 · Implement consistent scheduling and booking/payment orchestration
+
+Architecture / technical integration · R1. Make concurrent booking and provider retries safe and keep both participants aligned.
+
+Enables F02, F04, F08. Supports NFR04, NFR05, NFR08, NFR10. Sequencing: EN03, EN04, EN05.
+
+EN08 · Establish messaging, reminders and one-to-one video delivery
+
+Technical integration · R1. Supply the delivery channels needed for confirmed sessions, communication and teacher-approved follow-up.
+
+Enables F04, F06, F07. Supports NFR03, NFR05, NFR06, NFR08, NFR09. Sequencing: EN02, EN04, EN05.
+
+EN09 · Set up delivery environments, monitoring and recovery procedures
+
+Infrastructure · R1. Make production changes deployable, diagnosable and recoverable with explicit evidence.
+
+Enables F01, F02, F03, F04, F05, F06, F07, F08. Supports NFR03, NFR05, NFR07, NFR08, NFR10. Can begin independently.
+
+EN10 · Establish accessibility, compatibility and end-to-end verification gates
+
+Quality infrastructure · R1. Turn the quality requirements into repeatable evidence across the shared learner/teacher journey.
+
+Enables F01, F02, F03, F04, F05, F06, F07, F08. Supports NFR01, NFR02, NFR03, NFR04, NFR05, NFR09, NFR10. Can begin independently.
+
+EN11 · Evaluate and integrate optional AI with teacher review controls
+
+Exploration / technical integration · R3. Establish whether real AI assistance improves preparation while retaining teacher responsibility.
+
+Enables F05, F07. Supports NFR06, NFR08, NFR09, NFR10. Sequencing: EN02, EN04, EN06.
+
+EN12 · Implement optional calendar synchronization and conflict recovery
+
+Technical integration · R3. Support optional calendar connections without making manual availability depend on a provider.
+
+Enables F02, F04. Supports NFR04, NFR05, NFR06, NFR08. Sequencing: EN04, EN07.
+
+EN13 · Implement payout ledger, provider handoff and reconciliation
+
+Architecture / technical integration · R2. Provide trustworthy teacher earnings and payout state after the commercial rules are agreed.
+
+Enables F08. Supports NFR05, NFR06, NFR07, NFR08, NFR09. Sequencing: EN03, EN04, EN05, EN07.

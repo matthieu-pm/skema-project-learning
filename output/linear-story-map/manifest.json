@@ -1,0 +1,274 @@
+{
+  "date": "2026-10-16",
+  "workspace": "SKEMA",
+  "team": "SKEMA",
+  "teamKey": "SKE",
+  "projectUrl": "https://linear.app/skema/project/mimo-story-mapping-890746230a6b/overview",
+  "documentUrl": "https://linear.app/skema/document/story-map-learner-and-teacher-journeys-6efeb5107d31",
+  "counts": {
+    "features": 8,
+    "userStories": 26,
+    "nonFunctionalRequirements": 10,
+    "totalIssues": 57,
+    "enablers": 13
+  },
+  "status": "Backlog",
+  "features": [
+    {
+      "f": 1,
+      "title": "F01 · Learner setup and practical goals",
+      "children": [
+        {
+          "text": "Backlog\nUS03 · Set flexible meeting and notification preferences",
+          "href": "/skema/issue/SKE-15/us03-set-flexible-meeting-and-notification-preferences"
+        },
+        {
+          "text": "Backlog\nUS02 · Set languages, levels and a practical goal",
+          "href": "/skema/issue/SKE-14/us02-set-languages-levels-and-a-practical-goal"
+        },
+        {
+          "text": "Backlog\nUS01 · Enter through an account and guardian-appropriate path",
+          "href": "/skema/issue/SKE-13/us01-enter-through-an-account-and-guardian-appropriate-path"
+        }
+      ]
+    },
+    {
+      "f": 2,
+      "title": "F02 · Teacher profile and availability",
+      "children": [
+        {
+          "text": "Backlog\nUS07 · Connect an external calendar",
+          "href": "/skema/issue/SKE-19/us07-connect-an-external-calendar"
+        },
+        {
+          "text": "Backlog\nUS06 · Set teaching availability",
+          "href": "/skema/issue/SKE-18/us06-set-teaching-availability"
+        },
+        {
+          "text": "Backlog\nUS05 · Complete or defer a separate identity check",
+          "href": "/skema/issue/SKE-17/us05-complete-or-defer-a-separate-identity-check"
+        },
+        {
+          "text": "Backlog\nUS04 · Create and review a teaching profile",
+          "href": "/skema/issue/SKE-16/us04-create-and-review-a-teaching-profile"
+        }
+      ]
+    },
+    {
+      "f": 3,
+      "title": "F03 · Learner-controlled teacher discovery",
+      "children": [
+        {
+          "text": "Backlog\nUS10 · Send a goal brief to my chosen teacher",
+          "href": "/skema/issue/SKE-22/us10-send-a-goal-brief-to-my-chosen-teacher"
+        },
+        {
+          "text": "Backlog\nUS09 · Inspect and choose a teacher",
+          "href": "/skema/issue/SKE-21/us09-inspect-and-choose-a-teacher"
+        },
+        {
+          "text": "Backlog\nUS08 · Filter suitable teachers",
+          "href": "/skema/issue/SKE-20/us08-filter-suitable-teachers"
+        }
+      ]
+    },
+    {
+      "f": 4,
+      "title": "F04 · Booking and session management",
+      "children": [
+        {
+          "text": "Backlog\nUS13 · Report a no-show or session issue",
+          "href": "/skema/issue/SKE-25/us13-report-a-no-show-or-session-issue"
+        },
+        {
+          "text": "Backlog\nUS12 · Reschedule or cancel a session",
+          "href": "/skema/issue/SKE-24/us12-reschedule-or-cancel-a-session"
+        },
+        {
+          "text": "Backlog\nUS11 · Book and confirm one lesson",
+          "href": "/skema/issue/SKE-23/us11-book-and-confirm-one-lesson"
+        }
+      ]
+    },
+    {
+      "f": 5,
+      "title": "F05 · Short editable lesson preparation",
+      "children": [
+        {
+          "text": "Backlog\nUS17 · Review an optional AI lesson draft",
+          "href": "/skema/issue/SKE-29/us17-review-an-optional-ai-lesson-draft"
+        },
+        {
+          "text": "Backlog\nUS16 · Preview, approve and share a lesson",
+          "href": "/skema/issue/SKE-28/us16-preview-approve-and-share-a-lesson"
+        },
+        {
+          "text": "Backlog\nUS15 · Reuse and adapt a saved lesson",
+          "href": "/skema/issue/SKE-27/us15-reuse-and-adapt-a-saved-lesson"
+        },
+        {
+          "text": "Backlog\nUS14 · Prepare a learner-specific modular lesson",
+          "href": "/skema/issue/SKE-26/us14-prepare-a-learner-specific-modular-lesson"
+        }
+      ]
+    },
+    {
+      "f": 6,
+      "title": "F06 · Private communication and one-to-one teaching",
+      "children": [
+        {
+          "text": "Backlog\nUS20 · Arrange and complete an in-person lesson",
+          "href": "/skema/issue/SKE-32/us20-arrange-and-complete-an-in-person-lesson"
+        },
+        {
+          "text": "Backlog\nUS19 · Join and teach an online lesson",
+          "href": "/skema/issue/SKE-31/us19-join-and-teach-an-online-lesson"
+        },
+        {
+          "text": "Backlog\nUS18 · Message my teaching partner",
+          "href": "/skema/issue/SKE-30/us18-message-my-teaching-partner"
+        }
+      ]
+    },
+    {
+      "f": 7,
+      "title": "F07 · Private feedback, recap and optional practice",
+      "children": [
+        {
+          "text": "Backlog\nUS23 · Review progress toward my goal",
+          "href": "/skema/issue/SKE-35/us23-review-progress-toward-my-goal"
+        },
+        {
+          "text": "Backlog\nUS22 · Submit and review optional practice",
+          "href": "/skema/issue/SKE-34/us22-submit-and-review-optional-practice"
+        },
+        {
+          "text": "Backlog\nUS21 · Share a teacher-approved recap",
+          "href": "/skema/issue/SKE-33/us21-share-a-teacher-approved-recap"
+        }
+      ]
+    },
+    {
+      "f": 8,
+      "title": "F08 · Account, privacy, safety and earnings control",
+      "children": [
+        {
+          "text": "Backlog\nUS26 · Inspect earnings and payout status",
+          "href": "/skema/issue/SKE-38/us26-inspect-earnings-and-payout-status"
+        },
+        {
+          "text": "Backlog\nUS25 · Report or block unsafe interaction",
+          "href": "/skema/issue/SKE-37/us25-report-or-block-unsafe-interaction"
+        },
+        {
+          "text": "Backlog\nUS24 · Manage profile and personal data",
+          "href": "/skema/issue/SKE-36/us24-manage-profile-and-personal-data"
+        }
+      ]
+    }
+  ],
+  "requirements": [
+    {
+      "text": "Backlog\nNFR10 · Maintainability, observability and capacity",
+      "href": "/skema/issue/SKE-48/nfr10-maintainability-observability-and-capacity"
+    },
+    {
+      "text": "Backlog\nNFR09 · Transparency and human control",
+      "href": "/skema/issue/SKE-47/nfr09-transparency-and-human-control"
+    },
+    {
+      "text": "Backlog\nNFR08 · Availability, provider failure and recovery",
+      "href": "/skema/issue/SKE-46/nfr08-availability-provider-failure-and-recovery"
+    },
+    {
+      "text": "Backlog\nNFR07 · Security and role-based access control",
+      "href": "/skema/issue/SKE-45/nfr07-security-and-role-based-access-control"
+    },
+    {
+      "text": "Backlog\nNFR06 · Privacy, data minimization and consent",
+      "href": "/skema/issue/SKE-44/nfr06-privacy-data-minimization-and-consent"
+    },
+    {
+      "text": "Backlog\nNFR05 · Reliability, durable drafts and transaction integrity",
+      "href": "/skema/issue/SKE-43/nfr05-reliability-durable-drafts-and-transaction-integrity"
+    },
+    {
+      "text": "Backlog\nNFR04 · Browser, viewport and time-zone compatibility",
+      "href": "/skema/issue/SKE-42/nfr04-browser-viewport-and-time-zone-compatibility"
+    },
+    {
+      "text": "Backlog\nNFR03 · Performance and interaction responsiveness",
+      "href": "/skema/issue/SKE-41/nfr03-performance-and-interaction-responsiveness"
+    },
+    {
+      "text": "Backlog\nNFR02 · Usability and manageable setup",
+      "href": "/skema/issue/SKE-40/nfr02-usability-and-manageable-setup"
+    },
+    {
+      "text": "Backlog\nNFR01 · Accessibility and assistive technology",
+      "href": "/skema/issue/SKE-39/nfr01-accessibility-and-assistive-technology"
+    }
+  ],
+  "verification": {
+    "featureParents": 8,
+    "storyBodies": 26,
+    "requirementBodies": 10,
+    "documentReload": true,
+    "enablerBodies": 13
+  },
+  "enablers": [
+    {
+      "text": "Backlog\nEN13 · Implement payout ledger, provider handoff and reconciliation",
+      "href": "/skema/issue/SKE-61/en13-implement-payout-ledger-provider-handoff-and-reconciliation"
+    },
+    {
+      "text": "Backlog\nEN12 · Implement optional calendar synchronization and conflict recovery",
+      "href": "/skema/issue/SKE-60/en12-implement-optional-calendar-synchronization-and-conflict-recovery"
+    },
+    {
+      "text": "Backlog\nEN11 · Evaluate and integrate optional AI with teacher review controls",
+      "href": "/skema/issue/SKE-59/en11-evaluate-and-integrate-optional-ai-with-teacher-review-controls"
+    },
+    {
+      "text": "Backlog\nEN10 · Establish accessibility, compatibility and end-to-end verification gates",
+      "href": "/skema/issue/SKE-58/en10-establish-accessibility-compatibility-and-end-to-end-verification"
+    },
+    {
+      "text": "Backlog\nEN09 · Set up delivery environments, monitoring and recovery procedures",
+      "href": "/skema/issue/SKE-57/en09-set-up-delivery-environments-monitoring-and-recovery-procedures"
+    },
+    {
+      "text": "Backlog\nEN08 · Establish messaging, reminders and one-to-one video delivery",
+      "href": "/skema/issue/SKE-56/en08-establish-messaging-reminders-and-one-to-one-video-delivery"
+    },
+    {
+      "text": "Backlog\nEN07 · Implement consistent scheduling and booking/payment orchestration",
+      "href": "/skema/issue/SKE-55/en07-implement-consistent-scheduling-and-bookingpayment-orchestration"
+    },
+    {
+      "text": "Backlog\nEN06 · Build private material storage and permission-safe sharing",
+      "href": "/skema/issue/SKE-54/en06-build-private-material-storage-and-permission-safe-sharing"
+    },
+    {
+      "text": "Backlog\nEN05 · Integrate production account, guardian and identity handoffs",
+      "href": "/skema/issue/SKE-53/en05-integrate-production-account-guardian-and-identity-handoffs"
+    },
+    {
+      "text": "Backlog\nEN04 · Establish shared domain, persistence and authorization foundations",
+      "href": "/skema/issue/SKE-52/en04-establish-shared-domain-persistence-and-authorization-foundations"
+    },
+    {
+      "text": "Backlog\nEN03 · Define commercial rules and evaluate payment/payout providers",
+      "href": "/skema/issue/SKE-51/en03-define-commercial-rules-and-evaluate-paymentpayout-providers"
+    },
+    {
+      "text": "Backlog\nEN02 · Define safeguarding, guardian authority and data-handling policies",
+      "href": "/skema/issue/SKE-50/en02-define-safeguarding-guardian-authority-and-data-handling-policies"
+    },
+    {
+      "text": "Backlog\nEN01 · Validate the core tutoring workflow and establish measurement baselines",
+      "href": "/skema/issue/SKE-49/en01-validate-the-core-tutoring-workflow-and-establish-measurement"
+    }
+  ],
+  "figjamUrl": "https://www.figma.com/board/AYNNAqQDARTmwlsa6AYHsd?node-id=568-3620"
+}

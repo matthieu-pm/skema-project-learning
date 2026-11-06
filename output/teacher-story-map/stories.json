@@ -1,0 +1,136 @@
+{
+  "source": "https://www.figma.com/board/AYNNAqQDARTmwlsa6AYHsd?node-id=372-2151",
+  "target": "https://www.figma.com/board/AYNNAqQDARTmwlsa6AYHsd?node-id=568-4173",
+  "stories": [
+    {
+      "key": "CTX01",
+      "row": 0,
+      "col": 0,
+      "title": "Find an existing starting point",
+      "story": "As a teacher, I want to search my existing resources so that I can find material suited to the learner.",
+      "source": "01 · action",
+      "context": true
+    },
+    {
+      "key": "T01",
+      "row": 0,
+      "col": 1,
+      "title": "Describe my teaching offer",
+      "story": "As a teacher, I want to create a profile describing my teaching offer so that I can explain how I teach.",
+      "source": "02 · action + experience"
+    },
+    {
+      "key": "T02",
+      "row": 0,
+      "col": 2,
+      "title": "Understand the desired outcome",
+      "story": "As a teacher, I want to read the learner’s brief so that I can understand what the lesson should help them do.",
+      "source": "03 · action"
+    },
+    {
+      "key": "T03",
+      "row": 0,
+      "col": 3,
+      "title": "Adapt one reusable lesson",
+      "story": "As a teacher, I want to adapt a reusable lesson to the learner’s level and goal so that I can prepare without starting over.",
+      "source": "04 · action + experience"
+    },
+    {
+      "key": "T04",
+      "row": 0,
+      "col": 4,
+      "title": "Approve a checked lesson",
+      "story": "As a teacher, I want to review and approve a lesson version so that it meets my standards and unreviewed drafts remain unshared.",
+      "source": "05 · action + experience"
+    },
+    {
+      "key": "T05",
+      "row": 0,
+      "col": 5,
+      "title": "Teach toward the learner’s goal",
+      "story": "As a teacher, I want to teach one personal lesson focused on the learner’s goal so that the session supports a useful outcome.",
+      "source": "06 · action"
+    },
+    {
+      "key": "T06",
+      "row": 0,
+      "col": 6,
+      "title": "Share an approved recap",
+      "story": "As a teacher, I want to approve and share a recap of the session so that the learner has a clear record of what we covered.",
+      "source": "07 · action"
+    },
+    {
+      "key": "CTX02",
+      "row": 1,
+      "col": 0,
+      "title": "Check whether material fits",
+      "story": "As a teacher, I want to judge whether existing material suits this learner so that I can choose a useful starting point.",
+      "source": "01 · action + experience",
+      "context": true
+    },
+    {
+      "key": "T07",
+      "row": 1,
+      "col": 1,
+      "title": "Keep control of my offer",
+      "story": "As a teacher, I want to revise how my teaching offer is presented so that the profile reflects my own approach.",
+      "source": "02 · experience"
+    },
+    {
+      "key": "T08",
+      "row": 1,
+      "col": 2,
+      "title": "Identify the current difficulty",
+      "story": "As a teacher, I want the brief to explain what is difficult now so that I can focus preparation without extra administration.",
+      "source": "03 · experience"
+    },
+    {
+      "key": "T09",
+      "row": 1,
+      "col": 3,
+      "title": "Preserve my teaching method",
+      "story": "As a teacher, I want to change reused material to fit my method so that reuse still produces a personal lesson.",
+      "source": "04 · experience"
+    },
+    {
+      "key": "T10",
+      "row": 1,
+      "col": 4,
+      "title": "Correct unsuitable content",
+      "story": "As a teacher, I want to change unsuitable content or use my own material so that I can approve a lesson I trust.",
+      "source": "05 · experience"
+    },
+    {
+      "key": "T11",
+      "row": 1,
+      "col": 5,
+      "title": "Change the plan as we teach",
+      "story": "As a teacher, I want to adapt the plan during the session so that the tools support the conversation and my judgment.",
+      "source": "06 · experience"
+    },
+    {
+      "key": "T12",
+      "row": 1,
+      "col": 6,
+      "title": "Make the next focus clear",
+      "story": "As a teacher, I want the recap to show what to work on next so that follow-up stays useful without rewriting everything.",
+      "source": "07 · experience"
+    },
+    {
+      "key": "T13",
+      "row": 2,
+      "col": 3,
+      "title": "Use suggestions by choice",
+      "story": "As a teacher, I want to use suggestions only when helpful so that assistance supports my lesson preparation and stays optional.",
+      "source": "05 · optional AI + control"
+    },
+    {
+      "key": "T14",
+      "row": 2,
+      "col": 4,
+      "title": "Review every AI suggestion",
+      "story": "As a teacher, I want to change or reject an AI suggestion so that only material I have checked can enter the approved lesson.",
+      "source": "05 · experience + draft boundary"
+    }
+  ]
+}
