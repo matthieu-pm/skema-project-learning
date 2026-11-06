@@ -445,6 +445,8 @@ The web workspace now fills a `100dvh` frame with a stationary sidebar and toolb
 
 Rendered checks at 1280×720 and 390×844 confirmed content scroll movement while document scroll stayed at zero and the toolbar remained at its original top position (8px desktop, 0px narrow web). The narrow content pane reaches the viewport bottom. Build and all 28 protected runtime hashes passed. Captures are in `app/qa/workspace-scroll/`.
 
+On 6 November 2026, the teacher web toolbar avatar was removed. The sidebar account avatar and teaching profile avatar retain their own placements. Verified on the local Profile screen. The production build and all 28 protected runtime hashes passed.
+
 ### Device-based entry — implemented 16 October 2026
 
 Opening `/` or `/?teacher=1` now selects mobile for phone/tablet user agents (including desktop-mode iPads), then browser mobile hints or a compact coarse-pointer fallback; other browsers select web. Explicit `view=web` / `view=mobile` override detection. `app/src/device-entry.ts` resolves this before importing the existing main entry, sets `data-app-view` on the document and uses `history.replaceState` to preserve the path, other query parameters and hash without reloading or adding a Back entry. The selected view stays fixed during resize/orientation changes. App-owned HTML hides the runtime root immediately for web, so the phone cannot flash while the lazy web screen loads. Protected runtime sources and hashes are unchanged. Preview-switch and replay links explicitly retain their intended view; landing CTAs to `/` inherit device detection.
