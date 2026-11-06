@@ -1422,3 +1422,24 @@
   box-sizing: border-box;
   justify-content: center;
 }
+
+/* Phone lesson preview owns a bounded activity viewport, above teacher navigation. */
+.teacher-mobile .tw-preview-content {
+  height: 100%; min-height: 0; min-width: 0;
+  padding: 8px 12px calc(var(--flow-footer-height) + var(--mobile-safe-area-height) + 8px);
+  overflow: hidden;
+}
+.teacher-mobile .ce-preview-screen { height: 100%; min-height: 0; display: flex; flex-direction: column; gap: 8px; }
+.teacher-mobile .ce-preview-screen > .tw-button { align-self: flex-start; flex-shrink: 0; }
+.teacher-mobile .ce-mobile-player { display: flex; flex-direction: column; flex: 1; min-height: 0; min-width: 0; width: 100%; margin: 0; max-width: none; }
+.ce-mobile-player .ce-student-heading { flex-shrink: 0; padding: 10px 12px; gap: 4px; }
+.ce-mobile-player .ce-student-heading h3 { font-size: 16px; overflow-wrap: anywhere; }
+.ce-player-body { position: relative; flex: 1; min-height: 0; min-width: 0; }
+.ce-mobile-player .ce-student-block { padding: 14px 12px; overflow-wrap: anywhere; min-width: 0; }
+.ce-mobile-player .ce-student-navigation { flex-shrink: 0; padding: 8px 10px; margin: 0; border-top: 1px solid var(--tw-line); background: #fff; }
+.ce-mobile-player .ce-simulation { flex-shrink: 0; padding: 4px 10px 6px; font-size: 11px; }
+.ce-mobile-player .ce-student-block :is(img,video,audio,iframe) { max-width: 100%; }
+.ce-mobile-player[data-keyboard="true"] > .ce-student-heading,
+.ce-mobile-player[data-keyboard="true"] > .ce-student-navigation,
+.ce-mobile-player[data-keyboard="true"] > .ce-simulation,
+.ce-preview-screen:has(.ce-mobile-player[data-keyboard="true"]) > .tw-button { display: none; }

@@ -10,6 +10,7 @@ import * as Dialog from "@radix-ui/react-dialog";
 import { createPortal } from "react-dom";
 import {
   BottomSheet,
+  MobileScroll,
   useKeyboard,
   useKeyboardInsets,
   useScreenPortal,
@@ -139,16 +140,43 @@ function EditorDialog({
     </Dialog.Root>
   );
 }
-export function LessonPlayer({ course: c }: { course: Course }) {
+export function LessonPlayer({ course: c, fitMobile = false }: { course: Course; fitMobile?: boolean }) {
+  const { mobile } = useWorkspace();
+  const { isKeyboardVisible, keyboardHeight } = useKeyboardInsets();
+  const activityRef = useRef<HTMLDivElement>(null);
+  const compact = mobile && fitMobile;
   const [step, setStep] = useState(0),
     [finished, setFinished] = useState(false);
   const sequence = c.modules.flatMap((m) =>
     m.blocks.map((b) => ({ module: m, block: b })),
   );
   const current = sequence[step];
+  useEffect(() => {
+    if (!compact || !isKeyboardVisible) return;
+    const frame = requestAnimationFrame(() => {
+      const scroll = activityRef.current?.querySelector<HTMLElement>(".mobile-scroll");
+      const input = document.activeElement;
+      if (!scroll || !(input instanceof HTMLElement) || !scroll.contains(input)) return;
+      const viewport = scroll.getBoundingClientRect(), field = input.getBoundingClientRect();
+      const scale = viewport.height ? scroll.clientHeight / viewport.height : 1;
+      if (field.bottom > viewport.bottom - 10) scroll.scrollTop += (field.bottom - viewport.bottom + 10) * scale;
+      else if (field.top < viewport.top + 10) scroll.scrollTop -= (viewport.top - field.top + 10) * scale;
+    });
+    return () => cancelAnimationFrame(frame);
+  }, [compact, isKeyboardVisible, keyboardHeight, step]);
   if (!current) return <p>Add a block to preview this lesson.</p>;
+  const activity = finished ? (
+    <div className="ce-finished">
+      <Icon name="check" size={48} />
+      <h2>Lesson complete</h2>
+      <p>Take one useful phrase into your next conversation.</p>
+      <Button kind="secondary" onClick={() => { setFinished(false); setStep(0); }}>
+        Restart preview
+      </Button>
+    </div>
+  ) : <StudentBlock key={current.block.id} block={current.block} language={c.language} />;
   return (
-    <div className="ce-student-preview">
+    <div className={`ce-student-preview${compact ? " ce-mobile-player" : ""}`} data-keyboard={isKeyboardVisible}>
       <div className="ce-student-heading">
         <small>
           {c.language} · {c.level} · {totalMinutes(c)} min
@@ -172,28 +200,11 @@ export function LessonPlayer({ course: c }: { course: Course }) {
           in this module
         </small>
       </div>
-      {finished ? (
-        <div className="ce-finished">
-          <Icon name="check" size={48} />
-          <h2>Lesson complete</h2>
-          <p>Take one useful phrase into your next conversation.</p>
-          <Button
-            kind="secondary"
-            onClick={() => {
-              setFinished(false);
-              setStep(0);
-            }}
-          >
-            Restart preview
-          </Button>
+      {compact ? (
+        <div className="ce-player-body" ref={activityRef}>
+          <MobileScroll key={current.block.id} className="ce-player-scroll">{activity}</MobileScroll>
         </div>
-      ) : (
-        <StudentBlock
-          key={current.block.id}
-          block={current.block}
-          language={c.language}
-        />
-      )}
+      ) : activity}
       {!finished && (
         <div className="ce-student-navigation">
           <Button
