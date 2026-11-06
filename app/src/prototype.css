@@ -133,3 +133,32 @@
 .sample-account>div{min-width:0;overflow-wrap:anywhere}
 .sample-account strong{display:block;font-size:16px}
 .sample-account div>span{display:block;font-size:14px;color:#777;margin-top:4px}
+
+/* Related setup decisions share a page; each group stays short and clearly labeled. */
+.updated-onboarding .setup-group { display:flex; flex-direction:column; gap:18px; }
+.updated-onboarding .setup-section { min-width:0; border:0; margin:0; padding:0; }
+.updated-onboarding .setup-section legend { font-size:16px; font-weight:800; margin-bottom:10px; padding:0; }
+.updated-onboarding .setup-group .setup-field { margin:0; }
+.updated-onboarding .setup-group .setup-note { margin:0; }
+.updated-onboarding .setup-compact { display:grid; gap:8px; }
+.updated-onboarding .setup-compact.two-columns { grid-template-columns:repeat(2,minmax(0,1fr)); }
+.updated-onboarding .setup-compact.three-columns { grid-template-columns:repeat(3,minmax(0,1fr)); }
+.updated-onboarding .setup-compact .choice { min-height:48px; padding:9px 10px; gap:6px; }
+.updated-onboarding .setup-compact .choice strong { font-size:14px; line-height:1.25; }
+.updated-onboarding .setup-compact .checkbox { width:19px; height:19px; border-radius:5px; }
+.updated-onboarding .setup-compact .checkbox svg { width:16px; height:16px; }
+.updated-onboarding .setup-optional { border:2px solid var(--line); border-radius:12px; padding:12px; font-size:14px; }
+.updated-onboarding .setup-optional summary { font-weight:750; cursor:pointer; }
+.updated-onboarding .setup-optional[open] summary { margin-bottom:14px; }
+.updated-onboarding .setup-optional .widget-illustration { margin:16px auto 0; max-width:100%; }
+.updated-onboarding .setup-review-edits { display:flex; flex-direction:column; align-items:flex-start; gap:8px; margin-top:18px; }
+.updated-onboarding .setup-content[data-step=account] .account-intro { padding:0; margin:0 0 18px; }
+.updated-onboarding .setup-content[data-step=account] .account-intro .mascot { width:76px; height:86px; }
+.updated-onboarding .setup-content[data-step=account] .account-intro h1 { margin:10px 0 8px; font-size:24px; }
+.updated-onboarding .setup-content[data-step=account] .account-intro p { margin:0; }
+.updated-onboarding .setup-group + .field-error { margin-top:14px; }
+.updated-onboarding .setup-step-count { font-size:12px; color:#777; min-width:34px; text-align:right; }
+.updated-onboarding .actions.account-inline-actions { position:static; inset:auto; display:flex; flex-direction:column; gap:12px; padding:16px 0 0; background:transparent; border:0; box-shadow:none; min-height:0; }
+.updated-onboarding .actions.account-inline-actions > .primary,
+.updated-onboarding .actions.account-inline-actions > .secondary { width:100%; order:initial; margin:0; min-width:0; }
+.updated-onboarding .actions.account-inline-actions .account-divider { display:block; order:initial; text-align:center; font-size:13px; color:#777; }

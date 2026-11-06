@@ -23,9 +23,9 @@ test('desktop entry hides the phone before the lazy web screen loads', async ({ 
   }
   await expect(page.getByTestId('web-onboarding-current')).toBeVisible();
   await page.getByRole('button', { name: 'Get started', exact: true }).click();
-  await expect(page.getByTestId('web-onboarding-current')).toHaveAttribute('data-web-step', 'greeting');
+  await expect(page.getByTestId('web-onboarding-current')).toHaveAttribute('data-web-step', 'role');
   await page.setViewportSize({ width: 390, height: 844 });
-  await expect(page.getByTestId('web-onboarding-current')).toHaveAttribute('data-web-step', 'greeting');
+  await expect(page.getByTestId('web-onboarding-current')).toHaveAttribute('data-web-step', 'role');
   await page.getByRole('link', { name: 'Try the mobile preview' }).click();
   await expect(page.locator('html')).toHaveAttribute('data-app-view', 'mobile');
   await expect(page.locator('.phone-stage')).toBeVisible();

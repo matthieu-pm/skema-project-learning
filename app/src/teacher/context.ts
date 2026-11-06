@@ -1,3 +1,5 @@
+import { readLibrary, restoreLessons } from "./course-storage";
+import type { CourseTemplate, Course } from "./course";
 import { createContext, useContext, useState } from "react";
 import { initialAnswers, type Answers } from "../onboarding";
 import {
@@ -9,7 +11,15 @@ import {
   type Route,
 } from "./model";
 export function useWorkspaceState(a?: Answers) {
-  const [lessons, setLessons] = useState(initialLessons),
+  const [templates, setTemplates] = useState<CourseTemplate[]>(
+    () => readLibrary().templates,
+  );
+  const [editorHistories, setEditorHistories] = useState<
+    Record<string, { past: Course[]; future: Course[] }>
+  >({});
+  const [lessons, setLessons] = useState(() =>
+      restoreLessons(initialLessons()),
+    ),
     [sessions, setSessions] = useState(() =>
       initialSessions().map((s) =>
         s.status === "Completed"
@@ -72,7 +82,24 @@ export function useWorkspaceState(a?: Answers) {
     }),
     [availabilitySaved, setAvailabilitySaved] = useState(false);
   const updateLesson = (id: string, patch: Partial<Lesson>) =>
-    setLessons((ls) => ls.map((l) => (l.id === id ? { ...l, ...patch } : l)));
+    setLessons((ls) =>
+      ls.map((l) => {
+        if (l.id !== id) return l;
+        // Existing learning-point/profile flows can still edit lesson metadata.
+        const course =
+          patch.course ||
+          (l.course
+            ? {
+                ...l.course,
+                title: patch.title ?? l.course.title,
+                goal: patch.outcome ?? l.course.goal,
+                language: patch.language ?? l.course.language,
+                level: patch.level ?? l.course.level,
+              }
+            : undefined);
+        return { ...l, ...patch, ...(course ? { course } : {}) };
+      }),
+    );
   const updateSession = (id: string, patch: Partial<Session>) =>
     setSessions((ss) => ss.map((s) => (s.id === id ? { ...s, ...patch } : s)));
   const attempt = (success: () => void, label: string) => {
@@ -87,6 +114,10 @@ export function useWorkspaceState(a?: Answers) {
     return true;
   };
   return {
+    templates,
+    setTemplates,
+    editorHistories,
+    setEditorHistories,
     sessionDrafts,
     setSessionDrafts,
     identityDraft,

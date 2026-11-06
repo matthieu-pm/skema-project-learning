@@ -1,107 +1,394 @@
-export type Role = '' | 'learner' | 'teacher';
+import { validLessonSettings } from "./lesson-settings.ts";
+export type Role = "" | "learner" | "teacher";
 export type Answers = {
-  role: Role; accountMethod: 'email' | 'google'; email: string; age: string; guardianEmail: string; guardianReady: boolean;
-  code: string; verified: boolean; learningLanguages: string[]; learningLevels: Record<string,string>; topic: string;
-  personalGoal: string; format: string; city: string;
-  days: string[]; time: string; notifications: boolean; widget: boolean;
-  name: string; teachingLanguages: string[]; teachingLevels: string[]; approach: string;
-  duration: string; rate: string; legalName: string; dateOfBirth: string; country: string;
-  documentType: string; documentReady: boolean; selfieReady: boolean; identityPreviewComplete: boolean; identityMethod: 'document' | 'persona';
+  role: Role;
+  accountMethod: "email" | "google";
+  email: string;
+  age: string;
+  guardianEmail: string;
+  guardianReady: boolean;
+  code: string;
+  verified: boolean;
+  learningLanguages: string[];
+  learningLevels: Record<string, string>;
+  topic: string;
+  personalGoal: string;
+  format: string;
+  city: string;
+  days: string[];
+  time: string;
+  notifications: boolean;
+  widget: boolean;
+  name: string;
+  teachingLanguages: string[];
+  teachingLevels: string[];
+  approach: string;
+  duration: string;
+  rate: string;
+  freeConfirmed: boolean;
+  legalName: string;
+  dateOfBirth: string;
+  country: string;
+  documentType: string;
+  documentReady: boolean;
+  selfieReady: boolean;
+  identityPreviewComplete: boolean;
+  identityMethod: "document" | "persona";
 };
 export const initialAnswers: Answers = {
-  role:'', accountMethod:'email', email:'', age:'', guardianEmail:'', guardianReady:false, code:'', verified:false,
-  learningLanguages:[], learningLevels:{}, topic:'', personalGoal:'', format:'', city:'',
-  days:[], time:'', notifications:false, widget:false, name:'', teachingLanguages:[],
-  teachingLevels:[], approach:'', duration:'', rate:'', legalName:'', dateOfBirth:'', country:'',
-  documentType:'', documentReady:false, selfieReady:false, identityPreviewComplete:false, identityMethod:'document',
+  role: "",
+  accountMethod: "email",
+  email: "",
+  age: "",
+  guardianEmail: "",
+  guardianReady: false,
+  code: "",
+  verified: false,
+  learningLanguages: [],
+  learningLevels: {},
+  topic: "",
+  personalGoal: "",
+  format: "",
+  city: "",
+  days: [],
+  time: "",
+  notifications: false,
+  widget: false,
+  name: "",
+  teachingLanguages: [],
+  teachingLevels: [],
+  approach: "",
+  duration: "",
+  rate: "",
+  freeConfirmed: false,
+  legalName: "",
+  dateOfBirth: "",
+  country: "",
+  documentType: "",
+  documentReady: false,
+  selfieReady: false,
+  identityPreviewComplete: false,
+  identityMethod: "document",
 };
-export const languageChoices = ['Spanish','French','German','Italian','English','Japanese'] as const;
-const languageLevelSteps = languageChoices.map(language=>`level-${language}` as const);
-export function toggleLearningLanguage(a: Answers, language: string): Partial<Answers> {
-  const selected=a.learningLanguages.includes(language);
-  const learningLevels={...a.learningLevels};
-  if(selected)delete learningLevels[language];
-  return {learningLanguages:selected?a.learningLanguages.filter(value=>value!==language):[...a.learningLanguages,language],learningLevels};
+export const languageChoices = [
+  "Spanish",
+  "French",
+  "German",
+  "Italian",
+  "English",
+  "Japanese",
+] as const;
+const languageLevelSteps = languageChoices.map(
+  (language) => `level-${language}` as const,
+);
+export function toggleLearningLanguage(
+  a: Answers,
+  language: string,
+): Partial<Answers> {
+  const selected = a.learningLanguages.includes(language);
+  const learningLevels = { ...a.learningLevels };
+  if (selected) delete learningLevels[language];
+  return {
+    learningLanguages: selected
+      ? a.learningLanguages.filter((value) => value !== language)
+      : [...a.learningLanguages, language],
+    learningLevels,
+  };
 }
-export const sharedSteps = ['welcome','greeting','role','setup-intro','account'] as const;
-export const identitySteps = ['identity-intro','legal-name','date-of-birth','country','document-type','document','selfie'] as const;
-export const needsGuardian = (a: Answers) => a.role==='learner' && a.age==='Under 18';
-export const clearedIdentity = {legalName:'',dateOfBirth:'',country:'',documentType:'',documentReady:false,selfieReady:false,identityPreviewComplete:false,identityMethod:'document' as const};
+export const sharedSteps = ["welcome", "role", "account"] as const;
+export const identitySteps = [
+  "identity-intro",
+  "identity-details",
+  "document-details",
+  "document",
+  "selfie",
+] as const;
+export const needsGuardian = (a: Answers) =>
+  a.role === "learner" && a.age === "Under 18";
+export const clearedIdentity = {
+  legalName: "",
+  dateOfBirth: "",
+  country: "",
+  documentType: "",
+  documentReady: false,
+  selfieReady: false,
+  identityPreviewComplete: false,
+  identityMethod: "document" as const,
+};
 export function changeAge(a: Answers, age: string): Partial<Answers> {
-  return a.age===age ? {age} : {age,guardianEmail:'',guardianReady:false,...clearedIdentity};
+  return a.age === age
+    ? { age }
+    : { age, guardianEmail: "", guardianReady: false, ...clearedIdentity };
 }
-export const verificationExit = (a: Answers): Step => a.role==='teacher'?'teacher-draft':needsGuardian(a)?'language':'learner-ready';
-export const learnerSteps = ['language','level','topic','personal-goal','resource','encouragement','format','city','days','time','notifications','widget','benefits',...identitySteps,'learner-ready'] as const;
-export const teacherSteps = ['teacher-intro','name','photo','teaching-languages','teaching-levels','approach','format','city','duration','rate','teacher-review',...identitySteps,'verification-ready'] as const;
-export const stepIds = [...sharedSteps,'email','google-connect','age','guardian','guardian-handoff','verify',...learnerSteps,...teacherSteps,...languageLevelSteps,'persona-link','teacher-draft'] as const;
-export type Step = typeof stepIds[number];
-export const emailValid = (value: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value.trim());
+export const verificationExit = (a: Answers): Step =>
+  a.role === "teacher"
+    ? "teacher-draft"
+    : needsGuardian(a)
+      ? "language"
+      : "learner-ready";
+export const learnerSteps = [
+  "language",
+  "level",
+  "learner-goal",
+  "learner-preferences",
+  "extras",
+  ...identitySteps,
+  "learner-ready",
+] as const;
+export const teacherSteps = [
+  "teacher-profile",
+  "teacher-subjects",
+  "teacher-lessons",
+  "teacher-review",
+  ...identitySteps,
+  "verification-ready",
+] as const;
+export const stepIds = [
+  ...sharedSteps,
+  "email",
+  "google-connect",
+  "age",
+  "guardian",
+  "guardian-handoff",
+  "verify",
+  ...learnerSteps,
+  ...teacherSteps,
+  "email",
+  "topic",
+  "personal-goal",
+  "resource",
+  "format",
+  "city",
+  "days",
+  "time",
+  "notifications",
+  "widget",
+  "benefits",
+  "name",
+  "photo",
+  "teaching-languages",
+  "teaching-levels",
+  "approach",
+  "duration",
+  "rate",
+  "legal-name",
+  "date-of-birth",
+  "country",
+  "document-type",
+  ...languageLevelSteps,
+  "persona-link",
+  "teacher-draft",
+] as const;
+export type Step = (typeof stepIds)[number];
+export const emailValid = (value: string) =>
+  /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value.trim());
 export function routeFor(a: Answers): Step[] {
-  const branch = a.role === 'teacher' ? teacherSteps : learnerSteps;
-  const ageSteps: Step[] = a.role==='teacher'?[]:['age',...(a.age==='Under 18'?['guardian' as const]:[])];
-  const verificationSteps: Step[] = a.identityMethod==='persona'?['identity-intro','persona-link']:[...identitySteps];
-  const guardianVerification: Step[] = needsGuardian(a)?['guardian-handoff',...verificationSteps]:[];
-  const remainingSteps = branch.filter(s=>(s!=='city'||a.format!=='Online') &&
-    (!needsGuardian(a)||!identitySteps.some(identityStep=>identityStep===s)));
-  const accountSteps: Step[] = a.accountMethod==='google'?['google-connect']:['email'];
-  const codeSteps: Step[] = a.accountMethod==='google'?[]:['verify'];
-  return [...sharedSteps, ...accountSteps, ...ageSteps, ...codeSteps, ...guardianVerification, ...remainingSteps.flatMap(s=>!needsGuardian(a)&&a.identityMethod==='persona'&&identitySteps.some(identityStep=>identityStep===s)?(s==='identity-intro'?verificationSteps:[]):s==='level'&&a.learningLanguages.length?a.learningLanguages.map(language=>`level-${language}` as Step):[s])];
+  const branch = a.role === "teacher" ? teacherSteps : learnerSteps;
+  const ageSteps: Step[] =
+    a.role === "teacher"
+      ? []
+      : ["age", ...(a.age === "Under 18" ? ["guardian" as const] : [])];
+  const verificationSteps: Step[] =
+    a.identityMethod === "persona"
+      ? ["identity-intro", "persona-link"]
+      : [...identitySteps];
+  const guardianVerification: Step[] = needsGuardian(a)
+    ? ["guardian-handoff", ...verificationSteps]
+    : [];
+  const remainingSteps = branch.filter(
+    (s) =>
+      !needsGuardian(a) ||
+      !identitySteps.some((identityStep) => identityStep === s),
+  );
+  const accountSteps: Step[] =
+    a.accountMethod === "google" ? ["google-connect"] : [];
+  const codeSteps: Step[] = a.accountMethod === "google" ? [] : ["verify"];
+  return [
+    ...sharedSteps,
+    ...accountSteps,
+    ...ageSteps,
+    ...codeSteps,
+    ...guardianVerification,
+    ...remainingSteps.flatMap((s) =>
+      !needsGuardian(a) &&
+      a.identityMethod === "persona" &&
+      identitySteps.some((identityStep) => identityStep === s)
+        ? s === "identity-intro"
+          ? verificationSteps
+          : []
+        : s === "level" && a.learningLanguages.length
+          ? a.learningLanguages.map((language) => `level-${language}` as Step)
+          : [s],
+    ),
+  ];
+}
+export function setupProgress(a: Answers, step: Step) {
+  const route = routeFor(a);
+  const identity =
+    step === "persona-link" || identitySteps.some((value) => value === step);
+  const sequence =
+    a.role === "teacher"
+      ? identity
+        ? route.filter(
+            (value) =>
+              value === "persona-link" ||
+              identitySteps.some((item) => item === value),
+          )
+        : route.slice(0, route.indexOf("teacher-review") + 1)
+      : route;
+  const index = Math.max(0, sequence.indexOf(step));
+  const total = Math.max(1, sequence.length);
+  const finished = [
+    "teacher-draft",
+    "verification-ready",
+    "learner-ready",
+  ].includes(step);
+  return {
+    index,
+    total,
+    percent: finished
+      ? 100
+      : Math.round((index / Math.max(1, total - 1)) * 100),
+    optionalIdentity: a.role === "teacher" && identity,
+  };
 }
 export function nextStep(step: Step, a: Answers): Step | null {
-  const route = routeFor(a), index = route.indexOf(step);
-  return index < 0 ? null : route[index+1] ?? null;
+  const route = routeFor(a),
+    index = route.indexOf(step);
+  return index < 0 ? null : (route[index + 1] ?? null);
 }
-export function validStep(step: Step,a: Answers): boolean {
-  if(step.startsWith('level-'))return !!a.learningLevels[step.slice(6)];
-  switch(step) {
-    case 'role': return !!a.role;
-    case 'email': return emailValid(a.email);
-    case 'age': return !!a.age;
-    case 'guardian': return emailValid(a.guardianEmail) && a.guardianEmail.trim().toLowerCase()!==a.email.trim().toLowerCase();
-    case 'verify': return /^\d{6}$/.test(a.code);
-    case 'language': return a.learningLanguages.length>0;
-    case 'level': return a.learningLanguages.length>0 && a.learningLanguages.every(language=>!!a.learningLevels[language]);
-    case 'topic': return !!a.topic;
-    case 'personal-goal': return a.personalGoal.trim().length>=3;
-    case 'name': return a.name.trim().length>=2;
-    case 'teaching-languages': return a.teachingLanguages.length>0;
-    case 'teaching-levels': return a.teachingLevels.length>0;
-    case 'approach': return a.approach.trim().length>=5;
-    case 'duration': return !!a.duration;
-    case 'rate': return Number(a.rate)>0 && Number(a.rate)<=1000;
-    case 'legal-name': return a.legalName.trim().length>=3;
-    case 'date-of-birth': return dateOfBirthValid(a.dateOfBirth);
-    case 'country': return a.country.trim().length>=2;
-    case 'document-type': return !!a.documentType;
-    case 'document': return a.documentReady;
-    case 'selfie': return a.selfieReady;
-    default: return true;
+export function validStep(step: Step, a: Answers): boolean {
+  if (step.startsWith("level-")) return !!a.learningLevels[step.slice(6)];
+  switch (step) {
+    case "role":
+      return !!a.role;
+    case "account":
+      return a.accountMethod === "google" || emailValid(a.email);
+    case "teacher-review":
+      return (
+        validStep("teacher-profile", a) &&
+        validStep("teacher-subjects", a) &&
+        validStep("teacher-lessons", a)
+      );
+    case "teacher-profile":
+      return a.name.trim().length >= 2 && a.approach.trim().length >= 5;
+    case "teacher-subjects":
+      return a.teachingLanguages.length > 0 && a.teachingLevels.length > 0;
+    case "teacher-lessons":
+      return validLessonSettings(a);
+    case "learner-goal":
+      return !!a.topic && a.personalGoal.trim().length >= 3;
+    case "identity-details":
+      return a.legalName.trim().length >= 3 && dateOfBirthValid(a.dateOfBirth);
+    case "document-details":
+      return a.country.trim().length >= 2 && !!a.documentType;
+    case "email":
+      return emailValid(a.email);
+    case "age":
+      return !!a.age;
+    case "guardian":
+      return (
+        emailValid(a.guardianEmail) &&
+        a.guardianEmail.trim().toLowerCase() !== a.email.trim().toLowerCase()
+      );
+    case "verify":
+      return /^\d{6}$/.test(a.code);
+    case "language":
+      return a.learningLanguages.length > 0;
+    case "level":
+      return (
+        a.learningLanguages.length > 0 &&
+        a.learningLanguages.every((language) => !!a.learningLevels[language])
+      );
+    case "topic":
+      return !!a.topic;
+    case "personal-goal":
+      return a.personalGoal.trim().length >= 3;
+    case "name":
+      return a.name.trim().length >= 2;
+    case "teaching-languages":
+      return a.teachingLanguages.length > 0;
+    case "teaching-levels":
+      return a.teachingLevels.length > 0;
+    case "approach":
+      return a.approach.trim().length >= 5;
+    case "duration":
+      return !!a.duration;
+    case "rate":
+      return validLessonSettings({
+        duration: "",
+        rate: a.rate,
+        freeConfirmed: a.freeConfirmed,
+      });
+    case "legal-name":
+      return a.legalName.trim().length >= 3;
+    case "date-of-birth":
+      return dateOfBirthValid(a.dateOfBirth);
+    case "country":
+      return a.country.trim().length >= 2;
+    case "document-type":
+      return !!a.documentType;
+    case "document":
+      return a.documentReady;
+    case "selfie":
+      return a.selfieReady;
+    default:
+      return true;
   }
 }
 export const levelChoices = [
-  ['A1','I’m just starting out'],['A2','I can manage simple, everyday conversations'],
-  ['B1','I can talk about familiar topics'],['B2','I can discuss a range of topics'],
-  ['C1','I can express complex ideas'],['C2','I feel comfortable in almost any conversation'],
+  ["A1", "I’m just starting out"],
+  ["A2", "I can manage simple, everyday conversations"],
+  ["B1", "I can talk about familiar topics"],
+  ["B2", "I can discuss a range of topics"],
+  ["C1", "I can express complex ideas"],
+  ["C2", "I feel comfortable in almost any conversation"],
 ] as const;
 
 // Keep date entry local to the verification preview, in explicit day/month/year order.
 export function formatDateOfBirth(value: string): string {
-  return value.replace(/\D/g,'').slice(0,8).replace(/^(\d{2})(\d)/,'$1/$2').replace(/^(\d{2}\/\d{2})(\d)/,'$1/$2');
+  return value
+    .replace(/\D/g, "")
+    .slice(0, 8)
+    .replace(/^(\d{2})(\d)/, "$1/$2")
+    .replace(/^(\d{2}\/\d{2})(\d)/, "$1/$2");
 }
 export function dateOfBirthValid(value: string, today = new Date()): boolean {
   const match = /^(\d{2})\/(\d{2})\/(\d{4})$/.exec(value);
-  if(!match)return false;
-  const [,dayText,monthText,yearText]=match;
-  const day=Number(dayText),month=Number(monthText),year=Number(yearText);
-  if(year<1 || month<1 || month>12 || day<1)return false;
-  const leap=year%4===0 && (year%100!==0 || year%400===0);
-  const days=[31,leap?29:28,31,30,31,30,31,31,30,31,30,31];
-  if(day>days[month-1])return false;
-  return year*10000+month*100+day <= today.getFullYear()*10000+(today.getMonth()+1)*100+today.getDate();
+  if (!match) return false;
+  const [, dayText, monthText, yearText] = match;
+  const day = Number(dayText),
+    month = Number(monthText),
+    year = Number(yearText);
+  if (year < 1 || month < 1 || month > 12 || day < 1) return false;
+  const leap = year % 4 === 0 && (year % 100 !== 0 || year % 400 === 0);
+  const days = [31, leap ? 29 : 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+  if (day > days[month - 1]) return false;
+  return (
+    year * 10000 + month * 100 + day <=
+    today.getFullYear() * 10000 + (today.getMonth() + 1) * 100 + today.getDate()
+  );
 }
 
 // Switching providers must not carry a previous account's verification forward.
-export function changeAccountMethod(a: Answers, accountMethod: Answers['accountMethod']): Partial<Answers> {
-  return a.accountMethod===accountMethod?{accountMethod}:{accountMethod,email:'',code:'',verified:false,guardianEmail:'',guardianReady:false,...clearedIdentity};
+export function changeAccountMethod(
+  a: Answers,
+  accountMethod: Answers["accountMethod"],
+): Partial<Answers> {
+  return a.accountMethod === accountMethod
+    ? { accountMethod }
+    : {
+        accountMethod,
+        email: "",
+        code: "",
+        verified: false,
+        guardianEmail: "",
+        guardianReady: false,
+        ...clearedIdentity,
+      };
 }
-export const sampleGoogleAccount = {email:'alex@example.com',code:'',verified:true} as const;
+export const sampleGoogleAccount = {
+  email: "alex@example.com",
+  code: "",
+  verified: true,
+} as const;

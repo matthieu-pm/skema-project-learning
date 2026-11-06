@@ -1,3 +1,5 @@
+import { courseIssues, cloneCourse } from "./course.ts";
+import type { Course, AppliedCourse } from "./course.ts";
 import type { Answers } from "../onboarding";
 export type Student = {
   id: string;
@@ -18,6 +20,10 @@ export type Block = {
   minutes: number;
 };
 export type Lesson = {
+  course?: Course;
+  savedEditor?: Course;
+  savedAt?: string;
+  publishedEditor?: AppliedCourse;
   id: string;
   title: string;
   outcome: string;
@@ -39,7 +45,11 @@ export type Session = {
   duration: number;
   format: "Online" | "In person";
   status:
-    "Confirmed" | "Requested" | "Completed" | "Cancelled" | "Issue recorded";
+    | "Confirmed"
+    | "Requested"
+    | "Completed"
+    | "Cancelled"
+    | "Issue recorded";
   lessonId: string;
   pending?: { date: string; time: string };
   notes: string;
@@ -59,6 +69,7 @@ export type Profile = {
   city: string;
   duration: string;
   rate: string;
+  freeConfirmed: boolean;
   identity: boolean;
 };
 export type Route = { page: string; id?: string; tab?: string };
@@ -303,14 +314,16 @@ export function initialProfile(a?: Answers): Profile {
     approach:
       a?.approach ||
       "Practical conversations, thoughtful feedback, and lessons that feel like you.",
-    format: a?.format || "Either",
-    city: a?.city || "Paris, France",
-    duration: a?.duration || "30 minutes",
-    rate: a?.rate || "30",
+    format: a ? a.format : "Either",
+    city: a ? a.city : "Paris, France",
+    duration: a ? a.duration : "30 minutes",
+    rate: a ? a.rate : "30",
+    freeConfirmed: a?.freeConfirmed || false,
     identity: a?.identityPreviewComplete || false,
   };
 }
 export function lessonValid(l: Lesson) {
+  if (l.course) return courseIssues(l.course).length === 0;
   return (
     l.title.trim().length >= 3 &&
     l.outcome.trim().length >= 5 &&
@@ -377,6 +390,7 @@ export const primaryTab = (r: Route) =>
         : "profile";
 export function learnerMaterial(lesson: Lesson) {
   return {
+    ...(lesson.course ? { course: structuredClone(lesson.course) } : {}),
     title: lesson.title,
     outcome: lesson.outcome,
     language: lesson.language,
@@ -393,6 +407,17 @@ export function adaptLesson(lesson: Lesson, student: Student): Lesson {
   return {
     ...lesson,
     id: uid(),
+    course: lesson.course
+      ? {
+          ...cloneCourse(lesson.course),
+          language: student.language,
+          level: student.level,
+          goal: student.goal,
+        }
+      : undefined,
+    savedEditor: undefined,
+    publishedEditor: undefined,
+    savedAt: undefined,
     sourceId: lesson.id,
     studentId: student.id,
     language: student.language,

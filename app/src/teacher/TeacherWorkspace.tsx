@@ -1,3 +1,4 @@
+import { teacherEntryRoute } from "./entry-route";
 import { useEffect, useState } from "react";
 import {
   FlowStack,
@@ -87,11 +88,15 @@ function Toolbar({
     <header className="tw-toolbar">
       <div className="tw-toolbar-left">
         {!mobile && <SidebarTrigger />}
-        {canGoBack && (
+        {(canGoBack || route.page === "editor") && (
           <button
             className="tw-icon-button"
-            aria-label="Go back"
-            onClick={back}
+            aria-label={route.page === "editor" ? "Back to lessons" : "Go back"}
+            onClick={() =>
+              route.page === "editor"
+                ? navigate({ page: "lessons", tab: "Library" }, true)
+                : back()
+            }
           >
             <Icon name="back" />
           </button>
@@ -171,7 +176,7 @@ function screenFor(route: Route): FlowScreen {
     render: (flow) => (
       <MobileScroll className="tw-mobile-scroll">
         <main
-          className="tw-content"
+          className={`tw-content${route.page === "editor" ? " tw-editor-content" : ""}`}
           inert={flow.current.id !== screenId}
           aria-hidden={flow.current.id !== screenId}
         >
@@ -198,16 +203,22 @@ export default function TeacherWorkspace({
   mobile?: boolean;
   answers?: Answers;
 }) {
+  const state = useWorkspaceState(answers);
+  const [entryRoute] = useState(() =>
+    teacherEntryRoute(
+      window.location.search,
+      state.lessons.map((l) => l.id),
+    ),
+  );
   const [mobileRoot, setMobileRootState] = useState({
-    route: { page: "students" } as Route,
+    route: entryRoute,
     key: 0,
   });
   const setMobileRoot = (route: Route) => {
     keyboard.hide();
     setMobileRootState((v) => ({ route, key: v.key + 1 }));
   };
-  const state = useWorkspaceState(answers);
-  const [route, setRoute] = useState<Route>({ page: "students" }),
+  const [route, setRoute] = useState<Route>(entryRoute),
     [history, setHistory] = useState<Route[]>([]);
   const keyboard = useKeyboard();
   const navigate: Navigate = (r, replace = false) => {
@@ -246,7 +257,10 @@ export default function TeacherWorkspace({
                 back={back}
                 canGoBack={history.length > 0}
               />
-              <div key={JSON.stringify(route)} className="tw-content">
+              <div
+                key={JSON.stringify(route)}
+                className={`tw-content${route.page === "editor" ? " tw-editor-content" : ""}`}
+              >
                 <TeacherPage route={route} navigate={navigate} back={back} />
               </div>
             </SidebarInset>

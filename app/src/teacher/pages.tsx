@@ -1,3 +1,24 @@
+import FreeLessonConfirmation from "../FreeLessonConfirmation";
+import {
+  isFreeLesson,
+  lessonDurations,
+  lessonPriceLabel,
+  lessonPublicationIssues,
+  lessonSettingsReady,
+  validLessonSettings,
+} from "../lesson-settings";
+import ReviewQueue from "./ReviewQueue";
+import ModuleResults from "./ModuleResults";
+import {
+  cloneCourse,
+  createBlock,
+  createModule,
+  coursePatch,
+  readyTemplates,
+  totalMinutes,
+  type Course,
+} from "./course";
+import CourseEditor, { LessonPlayer } from "./CourseEditor";
 import { useState, type ReactNode } from "react";
 import { CalendarPage } from "./CalendarPage";
 import {
@@ -290,10 +311,7 @@ function StudentsPage({ navigate }: { navigate: Navigate }) {
             <h2>Make your next lesson yours.</h2>
             <p>Start with a reusable idea. Adapt it for one person.</p>
             <span className="tw-library-count">
-              {
-                lessons.filter((l) => !l.studentId && !l.archived)
-                  .length
-              }{" "}
+              {lessons.filter((l) => !l.studentId && !l.archived).length}{" "}
               reusable lessons in your library
             </span>
             <Button
@@ -372,11 +390,17 @@ function StudentPage({ id, navigate }: { id?: string; navigate: Navigate }) {
           </Panel>
           <SectionTitle>Ongoing modules</SectionTitle>
           {lessons
-            .filter((l) => l.studentId === s.id)
+            .filter(
+              (l) =>
+                l.studentId === s.id || l.publishedEditor?.studentId === s.id,
+            )
             .map((l) => (
               <LessonCard key={l.id} lesson={l} navigate={navigate} />
             ))}
-          {!lessons.some((l) => l.studentId === s.id) && (
+          {!lessons.some(
+            (l) =>
+              l.studentId === s.id || l.publishedEditor?.studentId === s.id,
+          ) && (
             <Panel>
               <p>
                 No learner-specific lesson yet. Start with a saved lesson and
@@ -442,42 +466,87 @@ function StudentPage({ id, navigate }: { id?: string; navigate: Navigate }) {
 }
 function ModulesPage({ navigate }: { navigate: Navigate }) {
   const { lessons } = useWorkspace();
+  const [view, setView] = useState("Review queue");
+  const [studentId, setStudentId] = useState(students[0].id);
+  const student = findStudent(studentId);
+  const assigned = lessons.filter(
+    (l) =>
+      !l.archived &&
+      (l.studentId === studentId || l.publishedEditor?.studentId === studentId),
+  );
   return (
     <>
       <PageHeading
         title="Ongoing modules"
-        description="A learner’s goal stays at the heart of each lesson."
+        description="Review student work or find their assigned lessons."
       />
-      {students.map((s) => (
-        <Panel key={s.id}>
-          <StudentLine id={s.id} />
-          {lessons
-            .filter((l) => l.studentId === s.id)
-            .map((l) => (
-              <LessonCard key={l.id} lesson={l} navigate={navigate} />
-            ))}
-          <div className="tw-actions">
-            <Button
-              kind="secondary"
-              onClick={() => navigate({ page: "results", id: s.id })}
-            >
-              Module results
-            </Button>
-            <Button
-              kind="quiet"
-              onClick={() =>
-                navigate({ page: "lessons", id: s.id, tab: "Library" })
-              }
-            >
-              Prepare lesson
-            </Button>
-          </div>
-        </Panel>
-      ))}
+      <div className="tw-module-views" aria-label="Ongoing module views">
+        <Segments
+          items={["Review queue", "Lessons by student"]}
+          value={view}
+          onChange={setView}
+        />
+      </div>
+      <div hidden={view !== "Review queue"}>
+        <ReviewQueue navigate={navigate} />
+      </div>
+      {view === "Lessons by student" && (
+        <>
+          <Panel>
+            <SectionTitle>Lessons by student</SectionTitle>
+            <Select
+              label="Select student"
+              value={studentId}
+              onChange={setStudentId}
+              options={students.map((s) => ({ value: s.id, label: s.name }))}
+            />
+            <StudentLine id={student.id} />
+            <p>{student.goal}</p>
+            {assigned.length ? (
+              assigned.map((lesson) => (
+                <LessonCard
+                  key={lesson.id}
+                  lesson={lesson}
+                  navigate={navigate}
+                />
+              ))
+            ) : (
+              <p className="tw-module-empty">
+                No lessons assigned yet. Prepare a lesson for this student to
+                get started.
+              </p>
+            )}
+            <div className="tw-actions">
+              <Button
+                kind="secondary"
+                onClick={() => navigate({ page: "results", id: student.id })}
+              >
+                Module results
+              </Button>
+              <Button
+                kind="quiet"
+                onClick={() =>
+                  navigate({ page: "lessons", id: student.id, tab: "Library" })
+                }
+              >
+                Prepare lesson
+              </Button>
+            </div>
+          </Panel>
+        </>
+      )}
     </>
   );
 }
-function ResultsPage({ id, navigate }: { id?: string; navigate: Navigate }) {
+function ResultsPage({
+  id,
+  selected,
+  navigate,
+}: {
+  id?: string;
+  selected?: string;
+  navigate: Navigate;
+}) {
   const s = findStudent(id);
   const { lessons, updateLesson, setLessons, setNotice } = useWorkspace();
   const l = lessons.find((l) => l.studentId === s.id);
@@ -485,26 +554,16 @@ function ResultsPage({ id, navigate }: { id?: string; navigate: Navigate }) {
   return (
     <>
       <PageHeading
-        title="A useful next step"
-        description="Review what worked, then adjust the learner’s module."
+        title="Module results"
+        description="Review completed blocks and give feedback on each response."
       />
       <StudentLine id={s.id} />
-      <Panel>
-        <Badge tone="green">Teacher observations</Badge>
-        <h2>Confidence is growing</h2>
-        <p>
-          The learner tried the main activity independently. Spontaneous
-          follow-up questions still need support.
-        </p>
-        <div className="tw-detail-row">
-          <span>Completed activity</span>
-          <strong>Guided role-play</strong>
-        </div>
-        <div className="tw-detail-row">
-          <span>Next focus</span>
-          <strong>{l?.outcome || s.focus}</strong>
-        </div>
-      </Panel>
+      <ModuleResults
+        key={`${s.id}-${selected || ""}`}
+        studentId={s.id}
+        selected={selected}
+        navigate={navigate}
+      />
       <Panel>
         <TextField
           label="Module learning points"
@@ -726,7 +785,8 @@ function LessonCard({
   lesson: Lesson;
   navigate: Navigate;
 }) {
-  const s = l.studentId ? findStudent(l.studentId) : null;
+  const recipient = l.publishedEditor?.studentId || l.studentId;
+  const s = recipient ? findStudent(recipient) : null;
   return (
     <article className="tw-lesson-card">
       <div
@@ -760,8 +820,14 @@ function LessonCard({
         <p>{l.outcome}</p>
         <div className="tw-lesson-footer">
           <span>
-            {l.blocks.length} blocks ·{" "}
-            {l.blocks.reduce((n, b) => n + b.minutes, 0)} min
+            {l.course
+              ? `${l.course.modules.length} modules · ${l.course.modules.reduce((n, m) => n + m.blocks.length, 0)} blocks`
+              : `${l.blocks.length} blocks`}{" "}
+            ·{" "}
+            {l.course
+              ? totalMinutes(l.course)
+              : l.blocks.reduce((n, b) => n + b.minutes, 0)}{" "}
+            min
             {s ? ` · ${s.name.split(" ")[0]}` : ""}
           </span>
           <button
@@ -783,21 +849,29 @@ function LessonsPage({
   route: Route;
   navigate: Navigate;
 }) {
-  const { lessons, setLessons, updateLesson, setNotice } = useWorkspace();
+  const {
+    lessons,
+    setLessons,
+    updateLesson,
+    setNotice,
+    templates: savedTemplates,
+  } = useWorkspace();
   const [tab, setTab] = useState(route.tab || "Library"),
     [query, setQuery] = useState("");
   const learner = route.id ? findStudent(route.id) : null;
-  const create = (template?: string) => {
+  const create = (template?: Course) => {
     const id = uid();
+    const course = template ? cloneCourse(template) : undefined;
     setLessons((ls) => [
       ...ls,
       {
         id,
-        title: template || "",
+        title: course?.title || "",
         outcome: learner?.goal || "",
         language: learner?.language || "French",
         level: learner?.level || "A2",
-        blocks: template ? makeBlocks() : [],
+        blocks: [],
+        ...(course ? coursePatch(course) : {}),
         notes: "",
         studentId: learner?.id,
         status: "Draft",
@@ -847,22 +921,23 @@ function LessonsPage({
             </div>
           </div>
           <div className="tw-lesson-grid">
-            {[
-              "Everyday conversation",
-              "Listening with confidence",
-              "An idea worth sharing",
-            ].map((title, i) => (
-              <Panel key={title} className="tw-template-card">
+            {[...readyTemplates(), ...savedTemplates].map((template, i) => (
+              <Panel key={template.id} className="tw-template-card">
                 <span
-                  className={`tw-template-icon ${["peach", "blue", "lilac"][i]}`}
+                  className={`tw-template-icon ${["peach", "blue", "lilac"][i % 3]}`}
                 >
-                  <Icon name={["message", "book", "spark"][i]} size={30} />
+                  <Icon name="book" size={30} />
                 </span>
-                <h2>{title}</h2>
-                <p>
-                  Warm-up, useful words, a role-play, and a moment to reflect.
-                </p>
-                <Button kind="secondary" onClick={() => create(title)}>
+                <Badge>
+                  {template.own ? "Your template" : "Ready-made"} ·{" "}
+                  {template.level}
+                </Badge>
+                <h2>{template.name}</h2>
+                <p>{template.content.goal}</p>
+                <Button
+                  kind="secondary"
+                  onClick={() => create(template.content)}
+                >
                   Use template
                 </Button>
               </Panel>
@@ -926,237 +1001,7 @@ function LessonsPage({
   );
 }
 function EditorPage({ id, navigate }: { id?: string; navigate: Navigate }) {
-  const { lessons, updateLesson, attempt } = useWorkspace();
-  const l = lessons.find((l) => l.id === id)!;
-  if (!l)
-    return (
-      <Empty
-        title="Lesson unavailable"
-        description="Return to the library to choose a lesson."
-      />
-    );
-  const edit = (patch: Partial<Lesson>) =>
-    updateLesson(l.id, { ...patch, status: "Draft" });
-  const changeBlock = (bid: string, patch: Partial<Lesson["blocks"][number]>) =>
-    edit({
-      blocks: l.blocks.map((b) => (b.id === bid ? { ...b, ...patch } : b)),
-    });
-  return (
-    <>
-      <PageHeading
-        title={l.title || "Your next useful lesson"}
-        description={
-          l.studentId
-            ? `A personal version for ${findStudent(l.studentId).name}. The reusable original is preserved.`
-            : "A reusable lesson. Save it first; share it only when you choose."
-        }
-        action={
-          <Badge tone={l.status === "Draft" ? "orange" : "green"}>
-            {l.status}
-          </Badge>
-        }
-      />
-      {l.studentId && (
-        <Panel className="tw-brief">
-          <StudentLine id={l.studentId} />
-          <p>“{findStudent(l.studentId).goal}”</p>
-        </Panel>
-      )}
-      <div className="tw-editor-layout">
-        <div>
-          <Panel>
-            <TextField
-              label="Lesson title"
-              value={l.title}
-              onChange={(v) => edit({ title: v })}
-            />
-            <TextField
-              label="One clear outcome"
-              value={l.outcome}
-              onChange={(v) => edit({ outcome: v })}
-              multiline
-            />
-            <div className="tw-form-pair">
-              <Select
-                label="Language"
-                value={l.language}
-                options={[
-                  "French",
-                  "English",
-                  "Spanish",
-                  "German",
-                  "Italian",
-                  "Japanese",
-                ]}
-                onChange={(v) => edit({ language: v })}
-              />
-              <Select
-                label="Level"
-                value={l.level}
-                options={["A1", "A2", "B1", "B2", "C1", "C2"]}
-                onChange={(v) => edit({ level: v })}
-              />
-            </div>
-          </Panel>
-          <SectionTitle>
-            Short activity blocks{" "}
-            <span className="tw-count">{l.blocks.length}</span>
-          </SectionTitle>
-          {l.blocks.map((b, i) => (
-            <Panel className="tw-block" key={b.id}>
-              <div className="tw-block-heading">
-                <span className="tw-block-number">
-                  {String(i + 1).padStart(2, "0")}
-                </span>
-                <strong>{b.type}</strong>
-                <div className="tw-block-tools">
-                  <button
-                    aria-label={`Move ${b.title || "block"} up`}
-                    disabled={i === 0}
-                    onClick={() => {
-                      const blocks = [...l.blocks];
-                      [blocks[i - 1], blocks[i]] = [blocks[i], blocks[i - 1]];
-                      edit({ blocks });
-                    }}
-                  >
-                    <Icon name="up" size={16}/>
-                  </button>
-                  <button
-                    aria-label={`Move ${b.title || "block"} down`}
-                    disabled={i === l.blocks.length - 1}
-                    onClick={() => {
-                      const blocks = [...l.blocks];
-                      [blocks[i + 1], blocks[i]] = [blocks[i], blocks[i + 1]];
-                      edit({ blocks });
-                    }}
-                  >
-                    <Icon name="down" size={16}/>
-                  </button>
-                  <button
-                    aria-label={`Remove ${b.title || "block"}`}
-                    onClick={() =>
-                      edit({ blocks: l.blocks.filter((x) => x.id !== b.id) })
-                    }
-                  >
-                    <Icon name="close" size={16}/>
-                  </button>
-                </div>
-              </div>
-              <div className="tw-form-pair">
-                <Select
-                  label={`Activity type ${i + 1}`}
-                  value={b.type}
-                  options={[
-                    "Warm-up",
-                    "Vocabulary",
-                    "Role-play",
-                    "Listening",
-                    "Speaking",
-                    "Reflection",
-                  ]}
-                  onChange={(v) => changeBlock(b.id, { type: v })}
-                />
-                <TextField
-                  label={`Minutes ${i + 1}`}
-                  type="number"
-                  min="1"
-                  max="60"
-                  value={String(b.minutes)}
-                  onChange={(v) => changeBlock(b.id, { minutes: Number(v) })}
-                />
-              </div>
-              <TextField
-                label={`Block title ${i + 1}`}
-                value={b.title}
-                onChange={(v) => changeBlock(b.id, { title: v })}
-              />
-              <TextField
-                label={`Learner instructions ${i + 1}`}
-                value={b.content}
-                onChange={(v) => changeBlock(b.id, { content: v })}
-                multiline
-              />
-            </Panel>
-          ))}
-          <Button
-            kind="secondary"
-            icon="plus"
-            onClick={() =>
-              edit({
-                blocks: [
-                  ...l.blocks,
-                  {
-                    id: uid(),
-                    type: "Speaking",
-                    title: "",
-                    content: "",
-                    minutes: 5,
-                  },
-                ],
-              })
-            }
-          >
-            Add activity block
-          </Button>
-          <Panel className="tw-private-notes">
-            <TextField
-              label="Private teaching notes"
-              value={l.notes}
-              onChange={(v) => edit({ notes: v })}
-              multiline
-            />
-            <p className="tw-subtle">
-              Only for you. Excluded from the learner preview and shared
-              material.
-            </p>
-          </Panel>
-        </div>
-        <aside className="tw-editor-aside">
-          <Panel>
-            <Icon name="clock" />
-            <h2>
-              {l.blocks.reduce((n, b) => n + b.minutes, 0)} minutes of
-              possibility
-            </h2>
-            <p>{l.blocks.length} small activities around one clear outcome.</p>
-            <Button
-              disabled={!lessonValid(l)}
-              onClick={() => navigate({ page: "lesson-preview", id: l.id })}
-            >
-              Preview learner view
-            </Button>
-            <Button
-              kind="secondary"
-              disabled={!lessonValid(l)}
-              onClick={() =>
-                attempt(() => {}, "Lesson draft saved to your preview library.")
-              }
-            >
-              Save draft
-            </Button>
-          </Panel>
-          <Panel className="tw-ai-panel">
-            <Icon name="spark" />
-            <h2>A little help, if you want it.</h2>
-            <p>
-              Try a sample AI-assisted activity. Review it, change it, or leave
-              it out.
-            </p>
-            <Button
-              kind="secondary"
-              icon="spark"
-              onClick={() => navigate({ page: "ai-review", id: l.id })}
-            >
-              Try optional AI draft
-            </Button>
-            <span className="tw-subtle">
-              Sample content · No AI service connected
-            </span>
-          </Panel>
-        </aside>
-      </div>
-    </>
-  );
+  return <CourseEditor id={id} navigate={navigate} />;
 }
 function LessonPreview({
   id,
@@ -1173,6 +1018,27 @@ function LessonPreview({
       ? sessions.find((s) => s.id === sessionId)?.lessonSnapshot
       : undefined) || lessons.find((l) => l.id === id)!;
   if (!l) return null;
+  if (l.course)
+    return (
+      <>
+        <LessonPlayer course={l.course} />
+        <p className="tw-subtle">
+          Student preview · Private teaching notes are excluded.
+        </p>
+        <Button
+          kind="secondary"
+          onClick={() =>
+            navigate(
+              sessionId
+                ? { page: "session", id: sessionId }
+                : { page: "editor", id: l.id },
+            )
+          }
+        >
+          {sessionId ? "Back to session" : "Back to editor"}
+        </Button>
+      </>
+    );
   return (
     <>
       <PageHeading
@@ -1183,22 +1049,26 @@ function LessonPreview({
             : "Review the reusable lesson before saving."
         }
       />
-      <Panel className="tw-learner-preview">
-        <Badge tone="orange">
-          {l.language} · {l.level}
-        </Badge>
-        <h2>{l.title}</h2>
-        <p>{l.outcome}</p>
-        {l.blocks.map((b, i) => (
-          <section className="tw-preview-block" key={b.id}>
-            <span>
-              {String(i + 1).padStart(2, "0")} · {b.type} · {b.minutes} min
-            </span>
-            <h3>{b.title}</h3>
-            <p className="tw-preserve">{b.content}</p>
-          </section>
-        ))}
-      </Panel>
+      {l.course ? (
+        <LessonPlayer course={l.course} />
+      ) : (
+        <Panel className="tw-learner-preview">
+          <Badge tone="orange">
+            {l.language} · {l.level}
+          </Badge>
+          <h2>{l.title}</h2>
+          <p>{l.outcome}</p>
+          {l.blocks.map((b, i) => (
+            <section className="tw-preview-block" key={b.id}>
+              <span>
+                {String(i + 1).padStart(2, "0")} · {b.type} · {b.minutes} min
+              </span>
+              <h3>{b.title}</h3>
+              <p className="tw-preserve">{b.content}</p>
+            </section>
+          ))}
+        </Panel>
+      )}
       <p className="tw-subtle">
         Private teaching notes are excluded. Nothing is shared by previewing.
       </p>
@@ -1329,17 +1199,38 @@ function AiPage({ id, navigate }: { id?: string; navigate: Navigate }) {
             <Button
               onClick={() => {
                 updateLesson(l.id, {
-                  blocks: [
-                    ...l.blocks,
-                    {
-                      id: uid(),
-                      type: "Role-play",
-                      title: "One more question",
-                      content:
-                        "After ordering, ask for a recommendation. Explain why you would choose it, then ask a follow-up question.",
-                      minutes: 5,
-                    },
-                  ],
+                  ...(l.course
+                    ? coursePatch({
+                        ...l.course,
+                        modules: [
+                          ...l.course.modules,
+                          {
+                            ...createModule("Speaking"),
+                            title: "One more question",
+                            goal: "Keep a conversation going with a follow-up question.",
+                            blocks: [
+                              {
+                                ...createBlock("Role-play", "Practise"),
+                                title: "One more question",
+                                text: "After ordering, ask for a recommendation. Explain why you would choose it, then ask a follow-up question.",
+                              },
+                            ],
+                          },
+                        ],
+                      })
+                    : {
+                        blocks: [
+                          ...l.blocks,
+                          {
+                            id: uid(),
+                            type: "Role-play",
+                            title: "One more question",
+                            content:
+                              "After ordering, ask for a recommendation. Explain why you would choose it, then ask a follow-up question.",
+                            minutes: 5,
+                          },
+                        ],
+                      }),
                   status: "Draft",
                 });
                 setNotice(
@@ -1363,7 +1254,7 @@ function AiPage({ id, navigate }: { id?: string; navigate: Navigate }) {
   );
 }
 function SharePage({ id, navigate }: { id?: string; navigate: Navigate }) {
-  const { lessons, updateLesson, attempt } = useWorkspace();
+  const { lessons, updateLesson, attempt, savedProfile } = useWorkspace();
   const l = lessons.find((l) => l.id === id)!;
   if (!l || !l.studentId) return null;
   const s = findStudent(l.studentId);
@@ -1381,11 +1272,12 @@ function SharePage({ id, navigate }: { id?: string; navigate: Navigate }) {
           Only the lesson activities are shared. Your private teaching notes
           stay private.
         </p>
+        {lessonPublicationIssues(savedProfile, true).length > 0 && <div className="tw-callout"><p>Set your lesson duration and price before publishing a lesson.</p><Button kind="secondary" onClick={() => navigate({ page: "profile-edit", id: l.id, tab: "return-to-editor" })}>Edit teaching profile</Button></div>}
         <div className="tw-actions">
           <Button
-            disabled={l.status === "Draft" || l.status === "Shared"}
+            disabled={l.status === "Draft" || l.status === "Shared" || !lessonSettingsReady(savedProfile)}
             onClick={() =>
-              attempt(
+              lessonSettingsReady(savedProfile) && attempt(
                 () =>
                   updateLesson(l.id, {
                     status: "Shared",
@@ -1504,7 +1396,7 @@ function AvailabilityPage() {
             }
             attempt(
               () => setAvailabilitySaved(true),
-              "Availability published in this preview. Confirmed bookings are preserved.",
+              "Availability saved in this preview. Confirmed bookings are preserved.",
             );
           }}
         >
@@ -1515,7 +1407,8 @@ function AvailabilityPage() {
   );
 }
 function SessionPage({ id, navigate }: { id?: string; navigate: Navigate }) {
-  const { sessions, lessons, attempt, updateSession } = useWorkspace();
+  const { sessions, lessons, attempt, updateSession } =
+    useWorkspace();
   const s = sessions.find((s) => s.id === id)!;
   if (!s) return null;
   const l = s.lessonSnapshot || lessons.find((l) => l.id === s.lessonId);
@@ -2350,27 +2243,40 @@ function ProfilePage({
         <div className="tw-profile-facts">
           <span>
             <Icon name="video" />
-            {p.format === "Either" ? "Online & in person" : p.format}
+            {p.format === "Either"
+              ? "Online & in person"
+              : p.format || "Format not set"}
           </span>
           {p.format !== "Online" && (
             <span>
               <Icon name="pin" />
-              {p.city}
+              {p.city || "City not set"}
             </span>
           )}
           <span>
             <Icon name="clock" />
-            {p.duration}
+            {p.duration || "Duration not set"}
           </span>
-          <strong>€{p.rate} / lesson</strong>
+          <strong>Price: {lessonPriceLabel(p.rate, p.freeConfirmed)}</strong>
         </div>
         {!preview && (
-          <Button
-            kind="secondary"
-            onClick={() => navigate({ page: "profile-edit" })}
-          >
-            Edit teaching profile
-          </Button>
+          <>
+            <div className="tw-actions">
+              <Button
+                kind="secondary"
+                onClick={() => navigate({ page: "profile-edit" })}
+              >
+                Edit teaching profile
+              </Button>
+
+            </div>
+            {!lessonSettingsReady(p) && (
+              <p className="tw-subtle">
+                Duration or price is not set. You can prepare lessons now and
+                complete these details before publishing a lesson.
+              </p>
+            )}
+          </>
         )}
       </Panel>
       {!preview && (
@@ -2420,8 +2326,19 @@ function ProfilePage({
     </>
   );
 }
-function ProfileEditPage({ navigate }: { navigate: Navigate }) {
-  const { profile: p, setProfile, setSavedProfile, attempt } = useWorkspace();
+function ProfileEditPage({
+  navigate,
+  returnLessonId,
+}: {
+  navigate: Navigate;
+  returnLessonId?: string;
+}) {
+  const {
+    profile: p,
+    setProfile,
+    setSavedProfile,
+    attempt,
+  } = useWorkspace();
   const [preview, setPreview] = useState(false);
   const update = (patch: Partial<typeof p>) => {
     setProfile((v) => ({ ...v, ...patch }));
@@ -2432,15 +2349,21 @@ function ProfileEditPage({ navigate }: { navigate: Navigate }) {
     p.languages.trim() &&
     p.levels.trim() &&
     p.approach.trim().length >= 5 &&
-    Number(p.rate) > 0 &&
-    Number(p.rate) <= 1000 &&
-    (p.format === "Online" || p.city.trim());
+    validLessonSettings(p);
   return (
     <>
       <PageHeading
-        title="Help learners picture a lesson with you."
+        title="Edit teaching profile"
         description="Teaching details are separate from your legal identity."
       />
+      {returnLessonId && (
+        <div className="tw-callout">
+          <p>Your lesson draft is saved. Set duration and price, then save your profile to return to the editor.</p>
+          <Button kind="secondary" onClick={() => navigate({ page: "editor", id: returnLessonId })}>
+            Return to lesson
+          </Button>
+        </div>
+      )}
       <Panel>
         {preview ? (
           <>
@@ -2450,19 +2373,20 @@ function ProfileEditPage({ navigate }: { navigate: Navigate }) {
             </p>
             <blockquote>{p.approach}</blockquote>
             <p>
-              {p.format} · {p.duration} · €{p.rate}
+              {p.format || "Format not set"} ·{" "}
+              {p.duration || "Duration not set"} ·{" "}
+              {lessonPriceLabel(p.rate, p.freeConfirmed)}
             </p>
             {p.format !== "Online" && <p>{p.city}</p>}
             <div className="tw-actions">
               <Button
                 onClick={() => {
                   if (
-                    attempt(
-                      () => setSavedProfile({ ...p }),
-                      "Teaching profile updated in this preview. Existing booking terms are preserved.",
-                    )
+                    attempt(() => {
+                      setSavedProfile({ ...p });
+                    }, "Teaching profile updated in this preview. Existing booking terms are preserved.")
                   )
-                    navigate({ page: "profile" });
+                    navigate(returnLessonId ? { page: "editor", id: returnLessonId } : { page: "profile" });
                 }}
               >
                 Save changes
@@ -2500,8 +2424,15 @@ function ProfileEditPage({ navigate }: { navigate: Navigate }) {
             <Select
               label="Meeting format"
               value={p.format}
-              options={["Online", "In person", "Either"]}
-              onChange={(format) => update({ format })}
+              options={[
+                { value: "", label: "Not set" },
+                "Online",
+                "In person",
+                "Either",
+              ]}
+              onChange={(format) =>
+                update({ format, ...(format === "Online" ? { city: "" } : {}) })
+              }
             />
             {p.format !== "Online" && (
               <TextField
@@ -2514,18 +2445,29 @@ function ProfileEditPage({ navigate }: { navigate: Navigate }) {
               <Select
                 label="Lesson duration"
                 value={p.duration}
-                options={["30 minutes", "45 minutes", "60 minutes"]}
+                options={[{ value: "", label: "Not set" }, ...lessonDurations]}
                 onChange={(duration) => update({ duration })}
               />
               <TextField
-                label="Rate in euros"
+                label="Price per lesson in euros"
+                error={p.rate.trim() && (!Number.isFinite(Number(p.rate)) || Number(p.rate) < 0 || Number(p.rate) > 1000) ? "Enter a price from €0 to €1,000, or leave it blank to decide later." : undefined}
                 value={p.rate}
                 type="number"
-                min="1"
+                min="0"
                 max="1000"
-                onChange={(rate) => update({ rate })}
+                onChange={(rate) => update({ rate, freeConfirmed: false })}
               />
             </div>
+            {isFreeLesson(p.rate) && (
+              <FreeLessonConfirmation
+                confirmed={p.freeConfirmed}
+                onChange={(freeConfirmed) => update({ freeConfirmed })}
+              />
+            )}
+            <p className="tw-subtle">
+              Required before publishing a lesson. You can save your profile with
+              these fields blank. Enter 0 and confirm to offer free lessons.
+            </p>
             <Button disabled={!valid} onClick={() => setPreview(true)}>
               Review teaching profile
             </Button>
@@ -2595,7 +2537,10 @@ function SettingsPage() {
           <a className="tw-button tw-secondary" href="/?teacher=1&view=mobile">
             Open mobile app
           </a>
-          <a className="tw-button tw-quiet" href={mobile ? '/?view=mobile' : '/?view=web'}>
+          <a
+            className="tw-button tw-quiet"
+            href={mobile ? "/?view=mobile" : "/?view=web"}
+          >
             Replay onboarding
           </a>
         </div>
@@ -2909,7 +2854,7 @@ export function TeacherPage({
     case "modules":
       return <ModulesPage navigate={navigate} />;
     case "results":
-      return <ResultsPage id={r.id} navigate={navigate} />;
+      return <ResultsPage id={r.id} selected={r.tab} navigate={navigate} />;
     case "messages":
       return <MessagesPage id={r.id} navigate={navigate} />;
     case "submission":
@@ -2951,7 +2896,7 @@ export function TeacherPage({
     case "profile-preview":
       return <ProfilePage navigate={navigate} preview />;
     case "profile-edit":
-      return <ProfileEditPage navigate={navigate} />;
+      return <ProfileEditPage navigate={navigate} returnLessonId={r.tab === "return-to-editor" ? r.id : undefined} />;
     case "settings":
       return <SettingsPage />;
     case "help":
