@@ -16,3 +16,8 @@ Based on original repository main 7358d8e, not the earlier unmerged fork feature
 - Photon public demo is a prototype service without an availability guarantee. UI includes attribution, location-use explanation and manual/retry recovery. No API keys or new paid services required.
 
 Evidence: location-suggestions.jpg, location-no-results.jpg, phone-location-selected.jpg, iphone-preview.jpg, iphone-keyboard.jpg and pixel-preview.jpg.
+
+
+Upstream delivery (6 November 2026): https://github.com/matthieu-pm/skema-project-learning/pull/2 is open from demichong:feat/location-and-mobile-preview. Latest original main 2e84226 (remove web toolbar avatar) was merged into the feature branch and preserved; the production build/runtime check passed after that integration. The contributor still has READ access to original, so no original-main push/merge was attempted.
+
+Published review copy: Sites version 14, source da8df6904418983f6156511bd3647bb1e15197a7, saved version appgprj_6aec12084dfc8191add134139ef2dd4a~appgver_dd41f96c6f348191b63b6f6680c17f5a, deployment appgdep_6aedac5e4d148191b769706dff31690c succeeded. Same public URL/audience. Saved version 13 was superseded before deployment so the current review also preserves the latest original-main toolbar change. The original Vercel PR check requires owner authorization; this separate public review link remains available.
