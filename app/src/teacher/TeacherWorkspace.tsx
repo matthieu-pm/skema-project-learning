@@ -83,7 +83,7 @@ function Toolbar({
   back: () => void;
   canGoBack: boolean;
 }) {
-  const { profile, mobile } = useWorkspace();
+  const { mobile } = useWorkspace();
   return (
     <header className="tw-toolbar">
       <div className="tw-toolbar-left">
@@ -126,11 +126,6 @@ function Toolbar({
           <Icon name="message" />
           <i />
         </button>
-        {!mobile && (
-          <span className="tw-teacher-avatar">
-            {profile.name.slice(0, 1).toUpperCase()}
-          </span>
-        )}
       </div>
     </header>
   );
