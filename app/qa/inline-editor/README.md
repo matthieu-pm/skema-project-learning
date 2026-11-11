@@ -15,3 +15,7 @@ Verification:
 Screenshots: `desktop.png`, `iphone.png`, `pixel.png` (automated browser captures).
 
 The local preview runs on port 4175. An existing server on port 4174 belongs to another worktree and was left intact. No physical-device test, hosted verification, commit, push or deployment was performed. Drafts and media remain browser-local; Apply changes is still an explicit prototype action.
+
+## Production release
+
+The user subsequently authorized merge/deployment. PR #4 merged as `3f010d75425450a9a7e4e37c5079b2209e4f7511`; its tree equals tested head `b445383`. Vercel deployment `dpl_2i2rbuB4sjYVY3uNgh2so6s7dJMa` reached Ready in about 18 seconds of build time and owns the stable production domain. Hosted web checks edited vocabulary directly, observed the same value in Properties and restored it with Undo. Hosted iPhone checks edited the title on Canvas, opened/dismissed the keyboard and measured 393px content/scroll widths. No browser warning/error logs appeared on either inspected page. Temporary edits were restored without saving or applying. Captures: `production-desktop.png`, `production-iphone.png`. Physical hardware and all other hosted flows were not re-tested. This release evidence remains a local follow-up to the merged implementation.

@@ -1,3 +1,4 @@
+import AvailabilityPage from "./AvailabilityPage";
 import LocationField from "../LocationField";
 import FreeLessonConfirmation from "../FreeLessonConfirmation";
 import ProfilePortrait from "../ProfilePortrait";
@@ -1299,110 +1300,6 @@ function SharePage({ id, navigate }: { id?: string; navigate: Navigate }) {
             Review learner version
           </Button>
         </div>
-      </Panel>
-    </>
-  );
-}
-function AvailabilityPage() {
-  const {
-    availability: a,
-    setAvailability,
-    availabilitySaved,
-    setAvailabilitySaved,
-    attempt,
-  } = useWorkspace();
-  const [error, setError] = useState("");
-  const change = (patch: Partial<typeof a>) => {
-    setAvailability((v) => ({ ...v, ...patch }));
-    setAvailabilitySaved(false);
-    setError("");
-  };
-  return (
-    <>
-      <PageHeading
-        title="Teach when it works for you."
-        description="Choose your open hours. Existing bookings stay reserved."
-      />
-      <Panel>
-        <Select
-          label="Time zone"
-          value={a.zone}
-          options={[
-            "Europe/Paris",
-            "Europe/London",
-            "America/New_York",
-            "Asia/Tokyo",
-          ]}
-          onChange={(zone) => change({ zone })}
-        />
-        {a.zone !== "Europe/Paris" && (
-          <p className="tw-error" role="alert">
-            This preview supports Europe/Paris. Switch back before saving; no
-            time-zone conversion service is connected.
-          </p>
-        )}
-        <h2>Your teaching days</h2>
-        <div className="tw-day-options">
-          {["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"].map((day) => (
-            <button
-              key={day}
-              className={a.days.includes(day) ? "selected" : ""}
-              aria-pressed={a.days.includes(day)}
-              onClick={() =>
-                change({
-                  days: a.days.includes(day)
-                    ? a.days.filter((d) => d !== day)
-                    : [...a.days, day],
-                })
-              }
-            >
-              {day}
-            </button>
-          ))}
-        </div>
-        <div className="tw-form-pair">
-          <TextField
-            label="Start time"
-            type="time"
-            value={a.start}
-            onChange={(start) => change({ start })}
-          />
-          <TextField
-            label="End time"
-            type="time"
-            value={a.end}
-            onChange={(end) => change({ end })}
-          />
-        </div>
-        <div className="tw-callout">
-          <Icon name="calendar" />
-          <p>
-            Confirmed sessions are reserved automatically within these hours.
-            Removing an open day does not cancel an existing booking.
-          </p>
-        </div>
-        {error && (
-          <p className="tw-error" role="alert">
-            {error}
-          </p>
-        )}
-        <Button
-          disabled={a.zone !== "Europe/Paris"}
-          onClick={() => {
-            if (!a.days.length || !a.start || !a.end || a.start >= a.end) {
-              setError(
-                "Choose at least one day and an end time after the start time.",
-              );
-              return;
-            }
-            attempt(
-              () => setAvailabilitySaved(true),
-              "Availability saved in this preview. Confirmed bookings are preserved.",
-            );
-          }}
-        >
-          {availabilitySaved ? "Availability saved" : "Save availability"}
-        </Button>
       </Panel>
     </>
   );

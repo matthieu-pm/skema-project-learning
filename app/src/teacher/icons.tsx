@@ -1,6 +1,7 @@
 import { HugeiconsIcon, type IconSvgElement } from "@hugeicons/react";
 import {
   UserGroupIcon,
+  Copy01Icon,
   Calendar03Icon,
   BookOpen01Icon,
   UserCircleIcon,
@@ -38,6 +39,7 @@ import type { SVGProps } from "react";
 
 const icons: Record<string, IconSvgElement> = {
   students: UserGroupIcon,
+  copy: Copy01Icon,
   calendar: Calendar03Icon,
   book: BookOpen01Icon,
   person: UserCircleIcon,
