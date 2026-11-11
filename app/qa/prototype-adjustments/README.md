@@ -42,3 +42,10 @@ Teaching-profile saving retains the existing preview/session-state behavior. Les
 - Local editor: `http://localhost:4175/?teacher=1&view=web&flow=editor&lesson=cafe`
 
 New logic lives in `src/TeacherLanguagePicker.tsx` and `src/teacher/lesson-use.ts`, with onboarding/profile/editor integration and atomic persistence in `src/teacher/course-storage.ts`. New coverage lives in `tests/prototype-adjustments.test.mjs` and `tests/prototype-adjustments.spec.ts`.
+
+
+## Production release follow-up
+
+The user subsequently authorized commit, push and deployment. Implementation commit [`c1d9057`](https://github.com/matthieu-pm/skema-project-learning/commit/c1d9057aec9d8d3f3e9f59111510086f82627a9c) is pushed on `dev/prototype-feedback-adjustments`. That exact Git SHA was deployed directly to production, without merging main, as `dpl_7a76R3bCX9Y4CxTtyWiXemv8zCpQ`. Vercel reports Ready, no alias error, and [the production domain](https://skema-project-learning.vercel.app) assigned. Fresh release checks again passed 96 unit/worker tests, all 37 production-browser tests, build and all 28 protected runtime hashes.
+
+Hosted desktop checks verified the current labels, both choices initially unchecked, disabled initial primary action, independent conditional fields, snapshot notice and combined primary label. Hosted iPhone checks verified the editor labels, default Use lesson dialog and cancellation. Neither page emitted browser warnings/errors. No assignment/template was submitted; all persistence/simulation limitations above still apply. Captures: [production desktop](production-desktop.jpg) and [production iPhone](production-iphone.jpg).
