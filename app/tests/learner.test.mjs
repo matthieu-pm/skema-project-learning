@@ -7,6 +7,7 @@ import {
 import {
   bookingStorageKey, readBookings, instantBook, cancelBooking, saveReview,
 } from "../src/learner/storage.ts";
+import { publicLessonsForTeacher } from "../src/learner/public-lessons.ts";
 
 const now = new Date("2026-11-11T08:00:00Z");
 function harness(seed = []) {
@@ -30,6 +31,22 @@ test("catalog ratings equal the complete visible review list and new teachers ha
   assert.equal(ratingSummary(gilbert).count, gilbert.reviews.length);
   assert.equal(ratingSummary(gilbert).average, 14 / 3);
   assert.deepEqual(ratingSummary(teachers.find((t) => !t.reviews.length)), { average: null, count: 0 });
+});
+
+test("public lesson outlines belong only to their teacher and their published totals match the curriculum", () => {
+  const lessons = publicLessonsForTeacher("gilbert");
+  assert.equal(lessons.length, 1);
+  const lesson = lessons[0];
+  assert.equal(lesson.teacherId, "gilbert");
+  assert.equal(lesson.modules.length, 6);
+  assert.equal(new Set(lesson.modules.map(module => module.id)).size, lesson.modules.length);
+  assert.equal(lesson.modules.reduce((total, module) => total + module.minutes, 0), lesson.minutes);
+  assert.equal(lesson.minutes, 30);
+  assert.equal(lesson.modules.reduce((total, module) => total + module.blockCount, 0), 9);
+  for (const teacher of teachers.filter(teacher => teacher.id !== "gilbert")) {
+    assert.deepEqual(publicLessonsForTeacher(teacher.id), []);
+  }
+  assert.deepEqual(publicLessonsForTeacher("unknown-teacher"), []);
 });
 
 test("Today and Tomorrow use Europe/Paris dates, including DST changes and UTC day boundaries", () => {

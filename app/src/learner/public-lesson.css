@@ -1,0 +1,100 @@
+.public-lesson-details { width: 100%; min-width: 0; display: flex; flex-direction: column; gap: 28px; }
+.pld-back { display: flex; }
+.pld-hero { display: grid; grid-template-columns: minmax(0, 1fr) 210px; align-items: center; gap: 32px; }
+.pld-introduction { display: flex; flex-direction: column; align-items: flex-start; gap: 14px; min-width: 0; }
+.learner-workspace .pld-introduction h1 { max-width: 21ch; font-size: 32px; line-height: 1.15; font-weight: 600; letter-spacing: -1.1px; text-wrap: balance; }
+.pld-meta, .pld-byline { display: flex; align-items: center; flex-wrap: wrap; gap: 6px; color: #737373; font-size: 13px; line-height: 1.6; }
+.pld-cover { position: relative; display: flex; align-items: center; justify-content: center; gap: 10px; min-height: 148px; padding: 24px; border: 1px solid #ededed; border-radius: 8px; background: #fafafa; color: #525252; overflow: hidden; }
+.pld-cover-level { position: absolute; inset-block-start: 12px; inset-inline-end: 14px; color: #737373; font-size: 12px; }
+.pld-cover-greeting { font-size: 20px; font-weight: 500; letter-spacing: -.5px; }
+.pld-cover > img { display: block; flex: none; }
+.pld-layout { display: grid; grid-template-columns: minmax(0, 1fr) minmax(240px, 300px); align-items: start; gap: 24px; min-width: 0; }
+.learner-workspace .pld-content { padding: 0; min-width: 0; }
+.pld-tabs { display: flex; align-items: center; gap: 24px; min-width: 0; padding-inline: 24px; border-bottom: 1px solid #e5e5e5; }
+.pld-tabs > button { min-height: 52px; padding: 14px 0; border: 0; border-bottom: 2px solid transparent; border-radius: 0; background: transparent; color: #737373; font-size: 13px; line-height: 1.4; font-weight: 400; }
+.pld-tabs > button[aria-selected="true"] { border-bottom-color: #171717; color: #171717; font-weight: 500; }
+.pld-tabpanel { min-width: 0; padding: 26px 24px 28px; }
+.pld-tabpanel[hidden] { display: none; }
+.learner-workspace .pld-tabpanel h2 { margin: 0 0 16px; font-size: 21px; line-height: 1.3; letter-spacing: -.5px; font-weight: 600; }
+.pld-overview > p { max-width: 62ch; color: #666; font-size: 14px; line-height: 1.75; }
+.pld-outcomes { display: flex; flex-direction: column; gap: 15px; list-style: none; margin: 24px 0 0; padding: 0; }
+.pld-outcomes > li { display: flex; align-items: flex-start; gap: 10px; color: #525252; font-size: 14px; line-height: 1.6; }
+.pld-outcomes > li > svg { flex: none; margin-top: 3px; color: #525252; }
+.pld-modules { list-style: none; margin: 6px 0 0; padding: 0; }
+.learner-workspace .pld-curriculum-total { color: #737373; font-size: 13px; line-height: 1.6; margin-bottom: 10px; }
+.pld-modules > li + li { border-top: 1px solid #ededed; }
+.pld-module-row { display: flex; align-items: center; gap: 12px; min-width: 0; min-height: 70px; padding: 14px 0; }
+.pld-module-number { flex: none; width: 22px; color: #a3a3a3; font-size: 12px; font-variant-numeric: tabular-nums; }
+.pld-module-name { flex: 1; min-width: 0; }
+.pld-module-name > strong { display: block; color: #171717; font-size: 14px; line-height: 1.5; font-weight: 500; }
+.pld-module-name > span { display: block; margin-top: 3px; color: #737373; font-size: 12px; line-height: 1.5; }
+.pld-module-duration { flex: none; color: #737373; font-size: 12px; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.pld-module-icon-space { flex: none; width: 16px; }
+.pld-module-preview > summary { cursor: pointer; list-style: none; border-radius: 4px; }
+.pld-module-preview > summary::-webkit-details-marker { display: none; }
+.pld-module-preview[open] > summary > svg { transform: rotate(180deg); }
+.pld-preview-block { display: flex; align-items: center; gap: 9px; margin: 0 0 17px 34px; padding: 12px; border: 1px solid #ededed; border-radius: 6px; color: #666; background: #fafafa; font-size: 12px; line-height: 1.5; }
+.public-lesson-details :is(summary, [role="tabpanel"]):focus-visible { outline: 2px solid #171717; outline-offset: 4px; }
+.pld-booking { min-width: 0; }
+.learner-workspace .pld-booking-card { display: flex; flex-direction: column; gap: 20px; padding: 24px; }
+.learner-workspace .pld-booking-card > h2 { margin: 0; font-size: 14px; line-height: 1.5; font-weight: 500; letter-spacing: 0; }
+.pld-price { display: flex; align-items: baseline; flex-wrap: wrap; gap: 6px; }
+.pld-price > strong { color: #171717; font-size: 28px; line-height: 1.2; font-weight: 600; letter-spacing: -.8px; font-variant-numeric: tabular-nums; }
+.pld-price > span { color: #737373; font-size: 12px; white-space: nowrap; }
+.pld-booking-facts { display: grid; gap: 10px; margin: 0; padding: 18px 0 0; border-top: 1px solid #ededed; }
+.pld-booking-facts > div { display: flex; align-items: baseline; justify-content: space-between; gap: 16px; font-size: 12px; line-height: 1.6; }
+.pld-booking-facts dt { color: #737373; }
+.pld-booking-facts dd { margin: 0; color: #525252; text-align: right; font-variant-numeric: tabular-nums; }
+.pld-booking-actions { display: flex; flex-direction: column; gap: 10px; }
+.pld-booking-actions .lw-button { width: 100%; }
+@media (hover: hover) and (pointer: fine) {
+  .pld-tabs > button:hover { color: #171717; }
+  .pld-module-preview > summary:hover { background: #fafafa; }
+}
+@media (max-width: 1080px) {
+  .pld-layout { grid-template-columns: minmax(0, 1fr) 240px; gap: 20px; }
+  .pld-hero { grid-template-columns: minmax(0, 1fr) 170px; gap: 24px; }
+  .pld-cover { gap: 6px; padding-inline: 12px; }
+  .pld-cover-greeting { font-size: 18px; }
+}
+@media (max-width: 850px) {
+  .pld-layout { grid-template-columns: 1fr; }
+  .pld-booking { position: static; order: -1; }
+  .learner-workspace .pld-booking-card { display: grid; grid-template-columns: minmax(0, 1fr) minmax(180px, 1fr); gap: 14px 24px; }
+  .pld-booking-card > h2, .pld-booking-card > .pld-price, .pld-booking-card > .pld-booking-facts { grid-column: 1; }
+  .pld-booking-actions { grid-column: 2; grid-row: 1 / 4; align-self: center; }
+}
+@media (max-width: 560px) {
+  .public-lesson-details { gap: 24px; }
+  .pld-hero { grid-template-columns: minmax(0, 1fr) 86px; align-items: start; gap: 14px; }
+  .learner-workspace .pld-introduction h1 { font-size: 26px; line-height: 1.2; letter-spacing: -.7px; }
+  .pld-meta, .pld-byline { gap: 5px; font-size: 12px; }
+  .pld-cover { flex-direction: column; gap: 0; min-height: 112px; padding: 28px 8px 12px; border-radius: 6px; }
+  .pld-cover-level { inset-block-start: 8px; inset-inline-end: 10px; font-size: 11px; }
+  .pld-cover-greeting { font-size: 14px; letter-spacing: -.3px; }
+  .learner-workspace .pld-booking-card { display: flex; gap: 18px; padding: 20px; }
+  .pld-booking-facts { padding-top: 14px; }
+  .pld-tabs { gap: 24px; padding-inline: 20px; }
+  .pld-tabpanel { padding: 24px 20px; }
+  .learner-workspace .pld-tabpanel h2 { font-size: 20px; }
+  .pld-module-row { gap: 9px; }
+  .pld-module-number { width: 20px; }
+  .pld-preview-block { margin-inline-start: 29px; padding: 10px; }
+}
+.learner-mobile .public-lesson-details { gap: 24px; }
+.learner-mobile .pld-hero { grid-template-columns: minmax(0, 1fr) 86px; align-items: start; gap: 14px; }
+.learner-mobile .pld-introduction h1 { font-size: 26px; line-height: 1.2; letter-spacing: -.7px; }
+.learner-mobile .pld-meta, .learner-mobile .pld-byline { gap: 5px; font-size: 12px; }
+.learner-mobile .pld-cover { flex-direction: column; gap: 0; min-height: 112px; padding: 28px 8px 12px; border-radius: 6px; }
+.learner-mobile .pld-cover-level { inset-block-start: 8px; inset-inline-end: 10px; font-size: 11px; }
+.learner-mobile .pld-cover-greeting { font-size: 14px; letter-spacing: -.3px; }
+.learner-mobile .pld-layout { grid-template-columns: 1fr; }
+.learner-mobile .pld-booking { position: static; order: -1; }
+.learner-mobile .pld-booking-card { display: flex; gap: 18px; padding: 20px; }
+.learner-mobile .pld-booking-facts { padding-top: 14px; }
+.learner-mobile .pld-tabs { gap: 24px; padding-inline: 20px; }
+.learner-mobile .pld-tabpanel { padding: 24px 20px; }
+.learner-mobile .pld-tabpanel h2 { font-size: 20px; }
+.learner-mobile .pld-module-row { gap: 9px; }
+.learner-mobile .pld-module-number { width: 20px; }
+.learner-mobile .pld-preview-block { margin-inline-start: 29px; padding: 10px; }
