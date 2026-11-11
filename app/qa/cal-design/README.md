@@ -19,3 +19,7 @@ Validation passed:
 Images here are dated local evidence, not visual regression baselines. `desktop-booking.png` and `phone-booking.png` use a fixed 29 November browser-test clock to exercise a month boundary; search/profile captures use the test's current clock. The phone booking capture can show the time list at its current scroll position; actions remain reachable by scrolling. Earlier captures under `qa/usability-feedback/` were preserved.
 
 Limits: physical devices, exhaustive editor/review interactions, and hosted deployments were not tested. Browser-local storage is not shared scheduling infrastructure. No commit, push or deployment occurred.
+
+## Production release follow-up
+
+PR #3 merged on 11 November 2026. The first hosted release exposed a Vite CSS extraction-order difference: a shared CSS dependency loaded before per-workspace base styles. `WorkspaceDesign.tsx` mounts the scoped design after those base styles. `npm run test:production` now builds and serves the real output; all 12 checks passed, including learner/teacher desktop/phone surface precedence and the learner flows. `production-desktop-booking.png` and `production-phone-booking.png` capture this built local output. Earlier images are retained as dated evidence.

@@ -15,7 +15,7 @@ import { TeacherPage } from "./pages";
 import "./shadcn.css";
 import "./teacher.css";
 import "./uxcel.css";
-import "../workspace-design.css";
+import WorkspaceDesign from "../WorkspaceDesign";
 import { SidebarProvider, SidebarInset, SidebarTrigger } from "./ui/sidebar";
 import { WebSidebar } from "./WebSidebar";
 const tabs = [
@@ -241,6 +241,7 @@ export default function TeacherWorkspace({
       <div
         className={`teacher-workspace ${mobile ? "teacher-mobile" : "teacher-web"}`}
       >
+        <WorkspaceDesign />
         {mobile ? (
           <FlowStack
             key={mobileRoot.key}
