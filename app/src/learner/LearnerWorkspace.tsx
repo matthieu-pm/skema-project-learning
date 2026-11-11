@@ -10,11 +10,13 @@ import { WorkspaceSidebar } from "../WorkspaceSidebar";
 import { CountryText } from "../CountryFlag";
 import PublicLessonDetails from "./PublicLessonDetails";
 import { publicLessons, publicLessonsForTeacher } from "./public-lessons";
+import LessonPreparation, { PreparationSummary } from "./LessonPreparation";
+import { preparationForBooking, preparationForLesson } from "./preparation";
 import { SidebarInset, SidebarProvider, SidebarTrigger, useSidebar } from "../teacher/ui/sidebar";
 import "./learner.css";
 
 type Category = "Ongoing" | "Upcoming" | "Past";
-type Page = "home" | "search" | "teacher" | "course" | "reviews" | "book" | "checkout" | "success" | "lessons" | "lesson" | "cancel" | "review" | "messages" | "profile";
+type Page = "home" | "search" | "teacher" | "course" | "reviews" | "book" | "checkout" | "success" | "lessons" | "lesson" | "prepare" | "cancel" | "review" | "messages" | "profile";
 type Route = { page: Page; teacherId?: string; courseId?: string; slotId?: string; format?: LessonFormat; bookingId?: string; category?: Category; replaceBookingId?: string };
 type Navigate = (route: Route, replace?: boolean) => void;
 type State = {
@@ -25,11 +27,11 @@ type State = {
 const Learner = createContext<State>(null!);
 const useLearner = () => useContext(Learner);
 const categories: Category[] = ["Ongoing", "Upcoming", "Past"];
-const titles: Record<Page, string> = { home: "Home", search: "Find a teacher", teacher: "Teacher profile", course: "Lesson overview", reviews: "Teacher reviews", book: "Book a lesson", checkout: "Payment", success: "Booking confirmed", lessons: "Lessons", lesson: "Your lesson", cancel: "Cancel lesson", review: "Leave a review", messages: "Messages", profile: "Profile" };
+const titles: Record<Page, string> = { home: "Home", search: "Find a teacher", teacher: "Teacher profile", course: "Lesson overview", reviews: "Teacher reviews", book: "Book a lesson", checkout: "Payment", success: "Booking confirmed", lessons: "Lessons", lesson: "Your lesson", prepare: "Lesson preparation", cancel: "Cancel lesson", review: "Leave a review", messages: "Messages", profile: "Profile" };
 const mainNav = [ ["home", "Home", "home"], ["lessons", "Lessons", "calendar"], ["search", "Search", "search"], ["profile", "Profile", "person"] ] as const;
 function activeTab(route: Route) {
   if (["teacher", "course", "reviews", "book", "checkout"].includes(route.page)) return "search";
-  if (["success", "lesson", "cancel", "review"].includes(route.page)) return "lessons";
+  if (["success", "lesson", "prepare", "cancel", "review"].includes(route.page)) return "lessons";
   return route.page === "messages" ? "home" : route.page;
 }
 const currency = (value: number) => new Intl.NumberFormat("en-IE", { style: "currency", currency: "EUR", maximumFractionDigits: 0 }).format(value);
@@ -138,7 +140,7 @@ function BookPage({ teacher, route, navigate }: { teacher: Teacher; route: Route
   const [day, setDay] = useState<SearchFilters["day"]>("Any day");
   const open = availableSlots(teacher.id, slots, bookings, now, { formats: [format], day });
   const selected = open.find(slot => slot.id === slotId);
-  return <><Heading title={route.replaceBookingId ? "Choose a new lesson time" : "Choose your lesson"} description={`One-to-one with ${teacher.name}.`} /><div className="lw-two-columns"><Panel className="lw-stack"><TeacherIdentity teacher={teacher} navigate={navigate} /><fieldset><legend>Lesson format</legend><div className="lw-chips">{teacher.formats.map(value => <button key={value} aria-pressed={value === format} onClick={() => { setFormat(value); setSlotId(""); }}>{value}</button>)}</div></fieldset><fieldset><legend>Choose a day</legend><div className="lw-chips">{(["Any day", "Today", "Tomorrow"] as const).map(value => <button key={value} aria-pressed={value === day} onClick={() => { setDay(value); setSlotId(""); }}>{value}</button>)}</div></fieldset><div><h2>Available times</h2><p className="lw-muted">Europe/Paris · {teacher.duration} minutes</p>{open.length ? <div className="lw-slot-grid">{open.map(slot => <button className="lw-slot" key={slot.id} aria-pressed={slot.id === slotId} onClick={() => setSlotId(slot.id)}><span>{dayText(slot.start, now)}</span><strong>{timeText(slot.start)}</strong></button>)}</div> : <Empty title="No open times">Choose another day or format.</Empty>}</div></Panel><Panel className="lw-booking-summary"><h2>Your lesson</h2><p>{teacher.languages.join(" · ")}</p><p>{format}</p>{selected ? <p><strong>{dateText(selected.start)}</strong></p> : <p className="lw-muted">Select an available time</p>}<div className="lw-total"><span>{teacher.duration} minutes</span><strong>{currency(teacher.rate)}</strong></div><Button disabled={!selected} onClick={() => navigate({ page: "checkout", teacherId: teacher.id, slotId, format, replaceBookingId: route.replaceBookingId })}>{route.replaceBookingId ? "Review new time" : "Continue to payment"}</Button></Panel></div></>;
+  return <><Heading title={route.replaceBookingId ? "Choose a new lesson time" : "Choose your lesson"} description={`One-to-one with ${teacher.name}.`} /><div className="lw-two-columns"><Panel className="lw-stack"><TeacherIdentity teacher={teacher} navigate={navigate} /><fieldset><legend>Lesson format</legend><div className="lw-chips">{teacher.formats.map(value => <button key={value} aria-pressed={value === format} onClick={() => { setFormat(value); setSlotId(""); }}>{value}</button>)}</div></fieldset><fieldset><legend>Choose a day</legend><div className="lw-chips">{(["Any day", "Today", "Tomorrow"] as const).map(value => <button key={value} aria-pressed={value === day} onClick={() => { setDay(value); setSlotId(""); }}>{value}</button>)}</div></fieldset><div><h2>Available times</h2><p className="lw-muted">Europe/Paris · {teacher.duration} minutes</p>{open.length ? <div className="lw-slot-grid">{open.map(slot => <button className="lw-slot" key={slot.id} aria-pressed={slot.id === slotId} onClick={() => setSlotId(slot.id)}><span>{dayText(slot.start, now)}</span><strong>{timeText(slot.start)}</strong></button>)}</div> : <Empty title="No open times">Choose another day or format.</Empty>}</div></Panel><Panel className="lw-booking-summary"><h2>Your lesson</h2><p>{teacher.languages.join(" · ")}</p><p>{format}</p>{selected ? <p><strong>{dateText(selected.start)}</strong></p> : <p className="lw-muted">Select an available time</p>}<div className="lw-total"><span>{teacher.duration} minutes</span><strong>{currency(teacher.rate)}</strong></div><Button disabled={!selected} onClick={() => navigate({ page: "checkout", teacherId: teacher.id, slotId, format, replaceBookingId: route.replaceBookingId, courseId: route.courseId })}>{route.replaceBookingId ? "Review new time" : "Continue to payment"}</Button></Panel></div></>;
 }
 function CheckoutPage({ teacher, route, navigate }: { teacher: Teacher; route: Route; navigate: Navigate }) {
   const { slots, now, refresh } = useLearner();
@@ -149,24 +151,24 @@ function CheckoutPage({ teacher, route, navigate }: { teacher: Teacher; route: R
     if (!slot || busy) return;
     setError(""); setBusy(true);
     try {
-      const booking = await instantBook({ teacherId: teacher.id, slotId: slot.id, format: route.format || slot.format, replaceBookingId: route.replaceBookingId, requestId }, slots, { now: new Date(), seed: fixtureBookings(now) });
+      const booking = await instantBook({ teacherId: teacher.id, slotId: slot.id, format: route.format || slot.format, replaceBookingId: route.replaceBookingId, requestId, preparationId: preparationForLesson(teacher.id, route.courseId)?.id }, slots, { now: new Date(), seed: fixtureBookings(now) });
       refresh();
       navigate({ page: "success", bookingId: booking.id }, true);
     } catch (reason) { setError(reason instanceof Error ? reason.message : "We couldn’t book this time. Please choose another slot. You haven’t been charged."); }
     finally { setBusy(false); }
   };
   if (!slot) return <Empty title="Choose another time" action={<Button onClick={() => navigate({ page: "book", teacherId: teacher.id }, true)}>View available times</Button>}>This time is no longer available.</Empty>;
-  return <><Heading title={route.replaceBookingId ? "Review your new time" : "Review and pay"} /><div className="lw-two-columns"><Panel className="lw-stack"><TeacherIdentity teacher={teacher} navigate={navigate} /><div className="lw-checkout-detail"><Icon name="calendar" /><div><strong>{dateText(slot.start)}</strong><p>{teacher.duration} minutes · {route.format || slot.format}</p></div></div>{!route.replaceBookingId && <div><h2>Payment method</h2><div className="lw-payment-method"><Icon name="wallet" /><div><strong>Visa ending in 4242</strong><p>Expires 12/29</p></div><Icon name="check" /></div></div>}<p className="lw-muted">Your booking is confirmed as soon as this time is secured.</p></Panel><Panel className="lw-booking-summary"><h2>{route.replaceBookingId ? "Change your lesson" : "Payment summary"}</h2><p>{teacher.name} · {teacher.duration} minutes</p><div className="lw-total"><span>{route.replaceBookingId ? "Additional amount" : "Total"}</span><strong>{currency(route.replaceBookingId ? 0 : teacher.rate)}</strong></div>{error && <ErrorMessage>{error}</ErrorMessage>}<Button disabled={busy} onClick={confirm}>{busy ? "Securing your time…" : route.replaceBookingId ? "Confirm new time" : `Pay ${currency(teacher.rate)} and book`}</Button>{error && <Button secondary onClick={() => navigate({ page: "book", teacherId: teacher.id, replaceBookingId: route.replaceBookingId }, true)}>Choose another time</Button>}<Button secondary disabled={busy} onClick={() => navigate({ page: "book", teacherId: teacher.id, slotId: slot.id, format: route.format, replaceBookingId: route.replaceBookingId }, true)}>Change time</Button></Panel></div></>;
+  return <><Heading title={route.replaceBookingId ? "Review your new time" : "Review and pay"} /><div className="lw-two-columns"><Panel className="lw-stack"><TeacherIdentity teacher={teacher} navigate={navigate} /><div className="lw-checkout-detail"><Icon name="calendar" /><div><strong>{dateText(slot.start)}</strong><p>{teacher.duration} minutes · {route.format || slot.format}</p></div></div>{!route.replaceBookingId && <div><h2>Payment method</h2><div className="lw-payment-method"><Icon name="wallet" /><div><strong>Visa ending in 4242</strong><p>Expires 12/29</p></div><Icon name="check" /></div></div>}<p className="lw-muted">Your booking is confirmed as soon as this time is secured.</p></Panel><Panel className="lw-booking-summary"><h2>{route.replaceBookingId ? "Change your lesson" : "Payment summary"}</h2><p>{teacher.name} · {teacher.duration} minutes</p><div className="lw-total"><span>{route.replaceBookingId ? "Additional amount" : "Total"}</span><strong>{currency(route.replaceBookingId ? 0 : teacher.rate)}</strong></div>{error && <ErrorMessage>{error}</ErrorMessage>}<Button disabled={busy} onClick={confirm}>{busy ? "Securing your time…" : route.replaceBookingId ? "Confirm new time" : `Pay ${currency(teacher.rate)} and book`}</Button>{error && <Button secondary onClick={() => navigate({ page: "book", teacherId: teacher.id, replaceBookingId: route.replaceBookingId, courseId: route.courseId }, true)}>Choose another time</Button>}<Button secondary disabled={busy} onClick={() => navigate({ page: "book", teacherId: teacher.id, slotId: slot.id, format: route.format, replaceBookingId: route.replaceBookingId, courseId: route.courseId }, true)}>Change time</Button></Panel></div></>;
 }
 function SuccessPage({ route, navigate }: { route: Route; navigate: Navigate }) {
   const { bookings } = useLearner();
   const booking = bookings.find(item => item.id === route.bookingId), teacher = useTeacher(booking?.teacherId);
-  return <Panel className="lw-success"><span className="lw-success-mark"><Icon name="check" size={36} /></span><h1>You’re booked!</h1><p>Your lesson is confirmed and ready in Upcoming lessons.</p>{teacher && booking && <div className="lw-success-booking"><TeacherIdentity teacher={teacher} navigate={navigate} /><p><strong>{dateText(booking.start)}</strong></p><p>{booking.format} · {booking.duration} minutes</p></div>}<Button onClick={() => navigate({ page: "lessons", category: "Upcoming" }, true)}>View upcoming lessons</Button><Button secondary onClick={() => navigate({ page: "search" }, true)}>Find another teacher</Button></Panel>;
+  return <Panel className="lw-success"><span className="lw-success-mark"><Icon name="check" size={36} /></span><h1>You’re booked!</h1><p>Your lesson is confirmed and ready in Upcoming lessons.</p>{teacher && booking && <div className="lw-success-booking"><TeacherIdentity teacher={teacher} navigate={navigate} /><p><strong>{dateText(booking.start)}</strong></p><p>{booking.format} · {booking.duration} minutes</p></div>}<Button onClick={() => navigate({ page: "lessons", category: "Upcoming" }, true)}>View upcoming lessons</Button>{booking && preparationForBooking(booking) && <Button secondary onClick={() => navigate({ page: "prepare", bookingId: booking.id })}>Prepare for lesson</Button>}<Button secondary onClick={() => navigate({ page: "search" }, true)}>Find another teacher</Button></Panel>;
 }
 function LessonCard({ booking, navigate }: { booking: Booking; navigate: Navigate }) {
   const { now } = useLearner(), teacher = useTeacher(booking.teacherId), category = classifyLesson(booking, now);
   if (!teacher || !category) return null;
-  return <Panel className="lw-lesson-card"><div className="lw-lesson-time"><span>{dayText(booking.start, now)}</span><strong>{timeText(booking.start)}</strong><span>{booking.duration} min · {booking.format}</span></div><div className="lw-lesson-info"><TeacherIdentity teacher={teacher} navigate={navigate} /><p>{teacher.languages[0]} conversation</p><p className="lw-muted">{dateText(booking.start)}</p></div><div className="lw-lesson-actions">{category === "Ongoing" ? <Button icon={booking.format === "Online" ? "video" : "pin"} onClick={() => navigate({ page: "lesson", bookingId: booking.id })}>Join lesson</Button> : category === "Upcoming" ? <><Button secondary onClick={() => navigate({ page: "book", teacherId: teacher.id, replaceBookingId: booking.id, format: booking.format })}>Reschedule</Button><Button secondary onClick={() => navigate({ page: "cancel", bookingId: booking.id })}>Cancel</Button></> : <><Button secondary onClick={() => navigate({ page: "review", bookingId: booking.id })}>{booking.review ? "Edit your review" : "Leave a review"}</Button><Button onClick={() => navigate({ page: "book", teacherId: teacher.id, format: booking.format })}>Rebook</Button></>}<button className="lw-text-button" onClick={() => navigate({ page: "lesson", bookingId: booking.id })}>Lesson details <Icon name="arrow" size={16} /></button></div></Panel>;
+  return <Panel className="lw-lesson-card"><div className="lw-lesson-time"><span>{dayText(booking.start, now)}</span><strong>{timeText(booking.start)}</strong><span>{booking.duration} min · {booking.format}</span></div><div className="lw-lesson-info"><TeacherIdentity teacher={teacher} navigate={navigate} /><p>{teacher.languages[0]} conversation</p><p className="lw-muted">{dateText(booking.start)}</p></div><div className="lw-lesson-actions">{category === "Ongoing" ? <Button icon={booking.format === "Online" ? "video" : "pin"} onClick={() => navigate({ page: "lesson", bookingId: booking.id })}>Join lesson</Button> : category === "Upcoming" ? <><Button secondary onClick={() => navigate({ page: "book", teacherId: teacher.id, replaceBookingId: booking.id, format: booking.format })}>Reschedule</Button><Button secondary onClick={() => navigate({ page: "cancel", bookingId: booking.id })}>Cancel</Button></> : <><Button secondary onClick={() => navigate({ page: "review", bookingId: booking.id })}>{booking.review ? "Edit your review" : "Leave a review"}</Button><Button onClick={() => navigate({ page: "book", teacherId: teacher.id, format: booking.format })}>Rebook</Button></>}<button className="lw-text-button" onClick={() => navigate({ page: "lesson", bookingId: booking.id })}>Lesson details <Icon name="arrow" size={16} /></button></div>{category !== "Past" && <PreparationSummary booking={booking} onOpen={() => navigate({ page: "prepare", bookingId: booking.id })} />}</Panel>;
 }
 function LessonsPage({ route, navigate }: { route: Route; navigate: Navigate }) {
   const { bookings, now } = useLearner();
@@ -175,10 +177,28 @@ function LessonsPage({ route, navigate }: { route: Route; navigate: Navigate }) 
   return <><Heading title="Your lessons" description="Your next conversation, and everything you’ve learned so far." action={<Button onClick={() => navigate({ page: "search" })}>Find a teacher</Button>} /><div className="lw-lesson-tabs" role="tablist" aria-label="Lesson status">{categories.map(value => <button key={value} role="tab" aria-selected={category === value} aria-controls="lw-lesson-list" id={`lw-tab-${value}`} onClick={() => setCategory(value)}>{value}<span>{bookings.filter(booking => classifyLesson(booking, now) === value).length}</span></button>)}</div><div id="lw-lesson-list" role="tabpanel" aria-labelledby={`lw-tab-${category}`} className="lw-stack">{matching.length ? matching.map(booking => <LessonCard key={booking.id} booking={booking} navigate={navigate} />) : <Empty title={`No ${category.toLowerCase()} lessons`} action={category !== "Ongoing" ? <Button onClick={() => navigate({ page: "search" })}>Find a teacher</Button> : <Button secondary onClick={() => setCategory("Upcoming")}>See upcoming lessons</Button>}>{category === "Ongoing" ? "Your lesson will appear here when it starts." : category === "Upcoming" ? "Book a time that works for you." : "Completed lessons will appear here."}</Empty>}</div><p className="lw-timezone"><Icon name="clock" size={14} />Times are shown in Europe/Paris. Lessons move between sections as time passes.</p></>;
 }
 function LessonPage({ booking, navigate }: { booking: Booking; navigate: Navigate }) {
-  const { now } = useLearner(), teacher = useTeacher(booking.teacherId)!;
+  const { now, answers } = useLearner(), teacher = useTeacher(booking.teacherId)!;
   const category = classifyLesson(booking, now);
   const [joined, setJoined] = useState(false);
-  return <><Heading title={category === "Ongoing" ? "Your lesson is happening now" : "Lesson details"} /><Panel className="lw-stack"><TeacherIdentity teacher={teacher} navigate={navigate} /><h2>{teacher.languages[0]} conversation</h2><p>{dateText(booking.start)} – {timeText(booking.end)}</p><p>{booking.duration} minutes · {booking.format}</p><span className="lw-status">{category || "Cancelled"}</span>{category === "Ongoing" && (joined ? <div className="lw-live-room"><Icon name="video" size={40} /><h2>You’re in the lesson room</h2><p>Your teacher’s conversation space is ready.</p><Button secondary onClick={() => setJoined(false)}>Leave room</Button></div> : <Button onClick={() => setJoined(true)} icon="video">Join lesson</Button>)}{category === "Upcoming" && <div className="lw-inline-actions"><Button secondary onClick={() => navigate({ page: "book", teacherId: teacher.id, replaceBookingId: booking.id, format: booking.format })}>Reschedule</Button><Button secondary onClick={() => navigate({ page: "cancel", bookingId: booking.id })}>Cancel lesson</Button></div>}{category === "Past" && <div className="lw-inline-actions"><Button onClick={() => navigate({ page: "review", bookingId: booking.id })}>{booking.review ? "Edit your review" : "Leave a review"}</Button><Button secondary onClick={() => navigate({ page: "book", teacherId: teacher.id, format: booking.format })}>Rebook</Button></div>}<Button secondary icon="message" onClick={() => navigate({ page: "messages", teacherId: teacher.id })}>Send a message</Button></Panel></>;
+  const preparation = preparationForBooking(booking);
+  return <>
+    <Heading title={category === "Ongoing" ? "Your lesson is happening now" : "Lesson details"} />
+    <Panel className="lw-stack">
+      <TeacherIdentity teacher={teacher} navigate={navigate} />
+      <h2>{preparation?.course.title || `${teacher.languages[0]} conversation`}</h2>
+      <p>{dateText(booking.start)} – {timeText(booking.end)}</p>
+      <p>{booking.duration} minutes · {booking.format}</p>
+      <span className="lw-status">{category || "Cancelled"}</span>
+      {category === "Ongoing" && (joined ? <div className="lw-live-room"><Icon name="video" size={40} /><h2>You’re in the lesson room</h2><p>Your teacher’s conversation space is ready.</p><Button secondary onClick={() => setJoined(false)}>Leave room</Button></div> : <Button onClick={() => setJoined(true)} icon="video">Join lesson</Button>)}
+      {category === "Upcoming" && <div className="lw-inline-actions"><Button secondary onClick={() => navigate({ page: "book", teacherId: teacher.id, replaceBookingId: booking.id, format: booking.format })}>Reschedule</Button><Button secondary onClick={() => navigate({ page: "cancel", bookingId: booking.id })}>Cancel lesson</Button></div>}
+      {category === "Past" && <div className="lw-inline-actions"><Button onClick={() => navigate({ page: "review", bookingId: booking.id })}>{booking.review ? "Edit your review" : "Leave a review"}</Button><Button secondary onClick={() => navigate({ page: "book", teacherId: teacher.id, format: booking.format })}>Rebook</Button></div>}
+      <Button secondary icon="message" onClick={() => navigate({ page: "messages", teacherId: teacher.id })}>Send a message</Button>
+    </Panel>
+    {booking.status === "confirmed" && <Panel className="lw-stack">
+      <div><h2>Your goal</h2><p>{answers?.personalGoal || answers?.learningGoals.join(" · ") || preparation?.course.goal || "Feel more confident in your next conversation."}</p></div>
+      {preparation ? <PreparationSummary booking={booking} onOpen={() => navigate({ page: "prepare", bookingId: booking.id })} /> : <div><h2>Lesson preparation</h2><p className="lw-muted">Your teacher hasn’t added preparation for this session yet.</p></div>}
+    </Panel>}
+  </>;
 }
 function CancelPage({ booking, navigate }: { booking: Booking; navigate: Navigate }) {
   const { refresh } = useLearner(), teacher = useTeacher(booking.teacherId)!;
@@ -203,17 +223,17 @@ function ProfilePage() {
   const { answers, mobile } = useLearner();
   return <><Heading title="Your learning profile" description="A starting point for lessons that feel like you." /><Panel className="lw-stack"><div className="lw-learner-profile"><LearnerAvatar large name={answers?.name || "Alex"} /><div><h2>{answers?.name || "Alex"}</h2><p className="lw-muted">Learner profile</p></div></div><dl className="lw-facts"><div><dt>Languages</dt><dd>{answers?.learningLanguages.join(", ") || "English"}</dd></div><div><dt>Your goal</dt><dd>{answers?.personalGoal || answers?.learningGoals.join(" · ") || "Feel more confident in everyday conversations."}</dd></div><div><dt>Speaking confidence</dt><dd>{answers?.speakingConfidence || "Not set"}</dd></div><div><dt>Speaking challenges</dt><dd>{[...(answers?.speakingChallenges || []), answers?.challengeDetails].filter(Boolean).join(" · ") || "Not set"}</dd></div><div><dt>Lesson formats</dt><dd>{answers ? learningFormatsFor(answers).join(" and ") || "Flexible" : "Online and In person"}</dd></div><div><dt>Availability</dt><dd>{answers?.days.join(" and ") || "Flexible days"} · {answers?.time || "Flexible times"}</dd></div></dl><a className="lw-text-button" href={`/?view=${mobile ? "mobile" : "web"}`}>Replay onboarding <Icon name="arrow" size={16} /></a></Panel></>;
 }
-function PageContent({ route, navigate, back }: { route: Route; navigate: Navigate; back?: () => void }) {
+function PageContent({ route, navigate, back, screenActive = true }: { route: Route; navigate: Navigate; back?: () => void; screenActive?: boolean }) {
   const { bookings } = useLearner(), teacher = useTeacher(route.teacherId), booking = bookings.find(item => item.id === route.bookingId);
   if (["teacher", "course", "reviews", "book", "checkout"].includes(route.page) && !teacher) return <Empty title="Choose a teacher" action={<Button onClick={() => navigate({ page: "search" }, true)}>Find a teacher</Button>} />;
-  if (["lesson", "cancel", "review"].includes(route.page) && !booking) return <Empty title="Lesson not found" action={<Button onClick={() => navigate({ page: "lessons" }, true)}>View lessons</Button>} />;
+  if (["lesson", "prepare", "cancel", "review"].includes(route.page) && !booking) return <Empty title="Lesson not found" action={<Button onClick={() => navigate({ page: "lessons" }, true)}>View lessons</Button>} />;
   switch (route.page) {
     case "search": return <SearchPage navigate={navigate} />;
     case "teacher": return <TeacherProfile teacher={teacher!} navigate={navigate} />;
     case "course": {
       const lesson = publicLessons.find(item => item.id === route.courseId && item.teacherId === teacher!.id);
       return lesson ? <PublicLessonDetails lesson={lesson} teacher={teacher!}
-        onBook={() => navigate({ page: "book", teacherId: teacher!.id })}
+        onBook={() => navigate({ page: "book", teacherId: teacher!.id, courseId: lesson.id })}
         onMessage={() => navigate({ page: "messages", teacherId: teacher!.id })}
         onBack={back || (() => navigate({ page: "teacher", teacherId: teacher!.id }, true))} />
         : <Empty title="Choose a lesson" action={<Button onClick={() => navigate({ page: "teacher", teacherId: teacher!.id }, true)}>View teacher profile</Button>}>Explore the lessons on this teacher’s profile.</Empty>;
@@ -224,6 +244,7 @@ function PageContent({ route, navigate, back }: { route: Route; navigate: Naviga
     case "success": return <SuccessPage route={route} navigate={navigate} />;
     case "lessons": return <LessonsPage route={route} navigate={navigate} />;
     case "lesson": return <LessonPage booking={booking!} navigate={navigate} />;
+    case "prepare": return <LessonPreparation booking={booking!} screenActive={screenActive} onBack={() => navigate({ page: "lesson", bookingId: booking!.id }, true)} onMessage={() => navigate({ page: "messages", teacherId: booking!.teacherId })} />;
     case "cancel": return <CancelPage booking={booking!} navigate={navigate} />;
     case "review": return <ReviewPage booking={booking!} navigate={navigate} />;
     case "messages": return <MessagesPage teacher={teacher} navigate={navigate} />;
@@ -236,13 +257,14 @@ function screenFor(route: Route): FlowScreen {
   return { id, headerHeight: 60, footerHeight: 70,
     header: flow => <Toolbar route={route} navigate={(next, replace) => replace ? flow.replace(screenFor(next)) : flow.push(screenFor(next))} back={flow.pop} canGoBack={flow.canGoBack} />,
     footer: () => <MobileNavigation route={route} />,
-    render: flow => <MobileScroll className="lw-mobile-scroll"><main className="lw-content" inert={flow.current.id !== id} aria-hidden={flow.current.id !== id}><PageContent route={route} navigate={(next, replace) => replace ? flow.replace(screenFor(next)) : flow.push(screenFor(next))} back={flow.canGoBack ? flow.pop : undefined} /></main></MobileScroll>,
+    render: flow => <MobileScroll className="lw-mobile-scroll"><main className="lw-content" inert={flow.current.id !== id} aria-hidden={flow.current.id !== id}><PageContent route={route} screenActive={flow.current.id === id} navigate={(next, replace) => replace ? flow.replace(screenFor(next)) : flow.push(screenFor(next))} back={flow.canGoBack ? flow.pop : undefined} /></main></MobileScroll>,
   };
 }
 function MobileNavigation({ route }: { route: Route }) { return <Navigation route={route} navigate={useLearner().setRoot} />; }
 function initialRoute(): Route {
   const params = new URLSearchParams(window.location.search);
   const flow = params.get("flow");
+  if (flow === "lesson" || flow === "prepare") return { page: flow, bookingId: params.get("booking") || "sample-ongoing" };
   if (flow === "teacher" || flow === "course") {
     const teacherId = params.get("teacher") || "gilbert";
     if (!teachers.some(teacher => teacher.id === teacherId)) return { page: "search" };

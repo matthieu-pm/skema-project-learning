@@ -49,6 +49,27 @@ test("public lesson outlines belong only to their teacher and their published to
   assert.deepEqual(publicLessonsForTeacher("unknown-teacher"), []);
 });
 
+test("new bookings bind the teacher's preparation and keep it through a reschedule", async () => {
+  const h = harness();
+  const booked = await instantBook(input(), slots, h.options);
+  assert.equal(booked.preparationId, "gilbert-cafe-v1");
+  const next = availableSlots("gilbert", slots, [booked], now, { formats: ["Online"] })[0];
+  const changed = await instantBook(input(next, { replaceBookingId: booked.id }), slots, h.options);
+  assert.equal(changed.id, booked.id);
+  assert.equal(changed.preparationId, booked.preparationId);
+  assert.equal(changed.rate, booked.rate);
+  assert.equal(changed.duration, booked.duration);
+});
+
+test("preparation from another teacher is rejected without writing a booking", async () => {
+  const h = harness();
+  const diego = availableSlots("diego", slots, [], now, { formats: ["Online"] })[0];
+  await assert.rejects(instantBook(input(diego, { preparationId: "gilbert-cafe-v1" }), slots, h.options), /does not belong/);
+  assert.equal(h.values.has(bookingStorageKey), false);
+  const booked = await instantBook(input(diego), slots, h.options);
+  assert.equal(booked.preparationId, undefined);
+});
+
 test("Today and Tomorrow use Europe/Paris dates, including DST changes and UTC day boundaries", () => {
   const late = new Date("2026-11-11T23:15:00Z");
   assert.equal(parisDay(late), "2026-11-12");

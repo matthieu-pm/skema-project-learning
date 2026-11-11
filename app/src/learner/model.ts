@@ -10,6 +10,7 @@ export type Booking = {
   format: LessonFormat; status: "confirmed" | "cancelled"; paymentStatus: "paid";
   rate: number; duration: number; review?: { rating: number; text: string; date: string };
   requestId?: string;
+  preparationId?: string;
 };
 export type SearchFilters = {
   language?: string; formats?: LessonFormat[]; day?: "Any day" | "Today" | "Tomorrow"; query?: string;

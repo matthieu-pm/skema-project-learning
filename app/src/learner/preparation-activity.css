@@ -1,0 +1,58 @@
+.preparation-activity { display: flex; flex-direction: column; gap: 24px; min-width: 0; color: var(--lw-ink, #171717); }
+.preparation-activity :is(p, h2, h3, ul, ol) { margin: 0; }
+.preparation-activity .lpa-heading { display: flex; flex-direction: column; gap: 12px; }
+.preparation-activity .lpa-meta { display: flex; align-items: center; flex-wrap: wrap; gap: 6px; color: var(--lw-muted, #666); font-size: 12px; line-height: 1.5; }
+.learner-workspace .preparation-activity h2 { font-size: 24px; line-height: 1.25; letter-spacing: -.7px; font-weight: 600; }
+.preparation-activity .lpa-instructions { max-width: 64ch; color: var(--lw-muted, #666); font-size: 14px; line-height: 1.7; }
+.preparation-activity .lpa-flashcards { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+.preparation-activity .lpa-flashcard { display: flex; flex-direction: column; align-items: flex-start; gap: 12px; min-width: 0; padding: 24px; background: #fafafa; border: 1px solid var(--lw-line, #e5e5e5); border-radius: 8px; overflow-wrap: anywhere; }
+.learner-workspace .preparation-activity .lpa-flashcard h3 { font-size: 22px; line-height: 1.3; letter-spacing: -.5px; font-weight: 500; }
+.preparation-activity .lpa-flashcard > p { font-size: 14px; line-height: 1.6; }
+.preparation-activity .lpa-flashcard .lpa-pronunciation { color: var(--lw-muted, #666); font-size: 12px; }
+.preparation-activity .lpa-flashcard .lw-button { margin-top: auto; }
+.preparation-activity .lpa-sentence { display: flex; flex-direction: column; gap: 18px; }
+.preparation-activity .lpa-sentence-parts { display: flex; flex-wrap: wrap; gap: 10px; list-style: none; padding: 0; }
+.preparation-activity .lpa-sentence-parts > li { display: flex; flex: 1 1 120px; flex-direction: column; align-items: flex-start; gap: 6px; padding: 16px; border: 1px solid var(--lw-line, #e5e5e5); border-radius: 6px; overflow-wrap: anywhere; }
+.preparation-activity .lpa-sentence-parts strong { font-size: 20px; line-height: 1.4; font-weight: 500; }
+.preparation-activity .lpa-part-role { color: var(--lw-muted, #666); font-size: 12px; line-height: 1.5; }
+.preparation-activity .lpa-part-note { color: var(--lw-muted, #666); font-size: 12px; line-height: 1.6; }
+.preparation-activity .lpa-translation { color: var(--lw-muted, #666); font-size: 14px; line-height: 1.7; }
+.preparation-activity .lpa-clips { display: flex; flex-direction: column; gap: 16px; }
+.preparation-activity .lpa-transcript { min-width: 0; padding: 20px; border: 1px solid var(--lw-line, #e5e5e5); border-radius: 8px; background: #fafafa; }
+.preparation-activity .lpa-transcript-heading { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; margin-bottom: 20px; }
+.learner-workspace .preparation-activity .lpa-transcript h3 { font-size: 14px; line-height: 1.5; font-weight: 500; }
+.preparation-activity .lpa-text-label { display: block; margin-bottom: 8px; color: var(--lw-muted, #666); font-size: 12px; }
+.preparation-activity .lpa-transcript > p { font-size: 18px; line-height: 1.7; white-space: pre-line; overflow-wrap: anywhere; }
+.preparation-activity .lpa-transcript > p + .lpa-text-label { margin-top: 16px; }
+.preparation-activity .lpa-reading { padding: 20px; border-inline-start: 2px solid var(--lw-line, #e5e5e5); }
+.preparation-activity .lpa-reading > p { max-width: 64ch; font-size: 16px; line-height: 1.8; white-space: pre-line; overflow-wrap: anywhere; }
+.preparation-activity .lpa-inputs { display: flex; flex-direction: column; gap: 20px; min-width: 0; padding: 0; border: 0; }
+.preparation-activity .lpa-inputs[disabled] { opacity: .6; }
+.preparation-activity .lpa-inputs .lw-field { max-width: 100%; }
+.preparation-activity .lpa-recall-item { display: flex; flex-direction: column; gap: 16px; min-width: 0; }
+.preparation-activity .lpa-recall-prompt { display: flex; align-items: center; justify-content: center; gap: 16px; min-height: 56px; padding: 16px; border: 1px solid var(--lw-line, #e5e5e5); border-radius: 8px; background: #fafafa; font-size: 18px; line-height: 1.5; }
+.preparation-activity .lpa-recall-prompt > img { display: block; flex: none; max-width: none; }
+.preparation-activity .lpa-hint { color: var(--lw-muted, #666); font-size: 12px; line-height: 1.6; }
+.preparation-activity .lpa-word-bank { display: flex; flex-wrap: wrap; gap: 8px; list-style: none; padding: 0; }
+.preparation-activity .lpa-word-bank > li { padding: 7px 10px; border: 1px solid var(--lw-line, #e5e5e5); border-radius: 6px; color: #525252; background: #fafafa; font-size: 14px; line-height: 1.5; }
+.preparation-activity .lpa-result { display: flex; flex-direction: column; gap: 16px; padding: 20px; border: 1px solid var(--lw-line, #e5e5e5); border-radius: 8px; background: #fafafa; overflow-wrap: anywhere; }
+.learner-workspace .preparation-activity .lpa-result h3 { font-size: 14px; line-height: 1.5; font-weight: 500; }
+.preparation-activity .lpa-result > ul { display: flex; flex-direction: column; gap: 16px; list-style: none; padding: 0; }
+.preparation-activity .lpa-result li { display: flex; flex-direction: column; gap: 8px; font-size: 13px; line-height: 1.6; }
+.preparation-activity .lpa-result li + li { padding-top: 16px; border-top: 1px solid var(--lw-line, #e5e5e5); }
+.preparation-activity .lpa-result-verdict { display: flex; align-items: baseline; gap: 8px; }
+.preparation-activity .lpa-result-verdict > span { flex: none; }
+.preparation-activity .lpa-result-verdict > strong { font-weight: 500; }
+.preparation-activity .lpa-expected { color: var(--lw-muted, #666); }
+.preparation-activity .lpa-actions { display: flex; align-items: center; flex-wrap: wrap; gap: 12px; padding-top: 20px; border-top: 1px solid var(--lw-line, #e5e5e5); }
+.preparation-activity .lpa-actions > .lw-button { flex: none; }
+@media (max-width: 560px) {
+  .preparation-activity .lpa-flashcards { grid-template-columns: minmax(0, 1fr); }
+  .preparation-activity .lpa-flashcard { padding: 20px; }
+  .preparation-activity .lpa-actions { align-items: stretch; flex-direction: column; }
+  .preparation-activity .lpa-actions > .lw-button { width: 100%; }
+}
+.learner-mobile .preparation-activity .lpa-flashcards { grid-template-columns: minmax(0, 1fr); }
+.learner-mobile .preparation-activity .lpa-flashcard { padding: 20px; }
+.learner-mobile .preparation-activity .lpa-actions { align-items: stretch; flex-direction: column; }
+.learner-mobile .preparation-activity .lpa-actions > .lw-button { width: 100%; }

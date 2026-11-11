@@ -1,4 +1,5 @@
 import { availableSlots, fixtureBookings, teachers, type Booking, type LessonFormat, type Slot } from "./model.ts";
+import { preparationForLesson } from "./preparation.ts";
 
 export const bookingStorageKey = "mimo.learner-bookings.v1";
 const lockName = "mimo.learner-bookings.v1";
@@ -17,6 +18,7 @@ function validBooking(value: unknown): value is Booking {
     && Number.isFinite(Date.parse(b.start)) && Number.isFinite(Date.parse(b.end)) && Date.parse(b.start) < Date.parse(b.end)
     && ["Online", "In person"].includes(b.format) && ["confirmed", "cancelled"].includes(b.status) && b.paymentStatus === "paid"
     && Number.isFinite(b.rate) && b.rate >= 0 && Number.isFinite(b.duration) && b.duration > 0
+    && (b.preparationId === undefined || b.preparationId === preparationForLesson(b.teacherId)?.id)
     && (!b.review || (Number.isInteger(b.review.rating) && b.review.rating >= 1 && b.review.rating <= 5 && typeof b.review.text === "string" && Number.isFinite(Date.parse(b.review.date))));
 }
 function read(options: StorageOptions): Booking[] {
@@ -46,7 +48,7 @@ async function exclusive<T>(options: StorageOptions, callback: () => T | Promise
   if (!locks) throw new Error("This browser cannot reserve a time slot. Try another browser.");
   return locks.request(lockName, callback);
 }
-export type BookingInput = { teacherId: string; slotId: string; format: LessonFormat; replaceBookingId?: string; requestId?: string };
+export type BookingInput = { teacherId: string; slotId: string; format: LessonFormat; replaceBookingId?: string; requestId?: string; preparationId?: string };
 export async function instantBook(input: BookingInput, slots: Slot[], options: StorageOptions = {}): Promise<Booking> {
   return exclusive(options, () => {
     const now = options.now ?? new Date();
@@ -60,7 +62,10 @@ export async function instantBook(input: BookingInput, slots: Slot[], options: S
     if (already && !input.replaceBookingId) return already;
     if (!teacher || !slot || !teacher.formats.includes(input.format) || !availableSlots(input.teacherId, slots, bookings.filter((b) => b.id !== previous?.id), now).some((value) => value.id === slot.id)) throw new Error("That time is no longer available. Choose another slot; no payment was taken.");
     if (previous && previous.teacherId !== teacher.id) throw new Error("Choose a new time with the same teacher. Your original booking is unchanged.");
-    const booking: Booking = { id: previous?.id ?? `booking-${globalThis.crypto.randomUUID()}`, teacherId: teacher.id, slotId: slot.id, start: slot.start, end: slot.end, format: slot.format, status: "confirmed", paymentStatus: "paid", rate: previous?.rate ?? teacher.rate, duration: previous?.duration ?? teacher.duration, ...(input.requestId ? { requestId: input.requestId } : {}) };
+    const preparation = preparationForLesson(teacher.id);
+    if (input.preparationId && input.preparationId !== preparation?.id) throw new Error("This preparation does not belong to the selected teacher. Choose the lesson again; no payment was taken.");
+    const preparationId = previous?.preparationId ?? preparation?.id;
+    const booking: Booking = { id: previous?.id ?? `booking-${globalThis.crypto.randomUUID()}`, teacherId: teacher.id, slotId: slot.id, start: slot.start, end: slot.end, format: slot.format, status: "confirmed", paymentStatus: "paid", rate: previous?.rate ?? teacher.rate, duration: previous?.duration ?? teacher.duration, ...(input.requestId ? { requestId: input.requestId } : {}), ...(preparationId ? { preparationId } : {}) };
     write([...bookings.filter((value) => value.id !== booking.id), booking], options);
     return booking;
   });
