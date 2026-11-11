@@ -1,5 +1,6 @@
 import { validLessonSettings } from "./lesson-settings.ts";
 export type Role = "" | "learner" | "teacher";
+export type LearningFormat = "Online" | "In person";
 export type Answers = {
   role: Role;
   accountMethod: "email" | "google";
@@ -12,7 +13,12 @@ export type Answers = {
   learningLanguages: string[];
   learningLevels: Record<string, string>;
   topic: string;
+  learningGoals: string[];
+  speakingConfidence: string;
+  speakingChallenges: string[];
+  challengeDetails: string;
   personalGoal: string;
+  learningFormats: LearningFormat[];
   format: string;
   city: string;
   days: string[];
@@ -47,7 +53,12 @@ export const initialAnswers: Answers = {
   learningLanguages: [],
   learningLevels: {},
   topic: "",
+  learningGoals: [],
+  speakingConfidence: "",
+  speakingChallenges: [],
+  challengeDetails: "",
   personalGoal: "",
+  learningFormats: [],
   format: "",
   city: "",
   days: [],
@@ -78,6 +89,26 @@ export const languageChoices = [
   "English",
   "Japanese",
 ] as const;
+export const learnerFormatChoices = ["Online", "In person"] as const;
+// Normalize older single-format answers at the edge so later learner flows can
+// consume the same list whether one or both meeting formats were selected.
+export function learningFormatsFor(a: Pick<Answers, "learningFormats" | "format">): LearningFormat[] {
+  if (a.learningFormats.length) return [...a.learningFormats];
+  return learnerFormatChoices.filter(
+    (format) => a.format === format || a.format === "Either",
+  );
+}
+export function toggleLearningFormat(a: Answers, format: LearningFormat): Partial<Answers> {
+  const current = learningFormatsFor(a);
+  const learningFormats = current.includes(format)
+    ? current.filter((value) => value !== format)
+    : [...current, format];
+  return {
+    learningFormats,
+    format: "",
+    ...(!learningFormats.includes("In person") ? { city: "" } : {}),
+  };
+}
 const languageLevelSteps = languageChoices.map(
   (language) => `level-${language}` as const,
 );
@@ -129,6 +160,8 @@ export const verificationExit = (a: Answers): Step =>
 export const learnerSteps = [
   "language",
   "level",
+  "learner-confidence",
+  "learner-challenges",
   "learner-goal",
   "learner-preferences",
   "extras",
@@ -277,7 +310,9 @@ export function validStep(step: Step, a: Answers): boolean {
     case "teacher-lessons":
       return validLessonSettings(a);
     case "learner-goal":
-      return !!a.topic && a.personalGoal.trim().length >= 3;
+      return a.learningGoals.length > 0 && (!a.personalGoal.trim() || a.personalGoal.trim().length >= 3);
+    case "learner-confidence":
+      return !!a.speakingConfidence;
     case "identity-details":
       return a.legalName.trim().length >= 3 && dateOfBirthValid(a.dateOfBirth);
     case "document-details":

@@ -5,6 +5,8 @@ import {
   changeAccountMethod,
   sampleGoogleAccount,
   toggleLearningLanguage,
+  learningFormatsFor,
+  toggleLearningFormat,
   identitySteps,
   needsGuardian,
   changeAge,
@@ -17,6 +19,28 @@ import {
   formatDateOfBirth,
 } from "../src/onboarding.ts";
 const answers = (patch) => ({ ...initialAnswers, ...patch });
+
+test("learner confidence names the selected language context and challenges accept presets, text or both", () => {
+  const a = answers({ role: "learner", learningLanguages: ["French"] });
+  assert.equal(nextStep("learner-confidence", a), "learner-challenges");
+  assert.equal(nextStep("learner-challenges", a), "learner-goal");
+  assert.equal(validStep("learner-confidence", a), false);
+  assert.equal(validStep("learner-confidence", { ...a, speakingConfidence: "I’m finding my confidence" }), true);
+  for (const patch of [{}, { speakingChallenges: ["Pronunciation"] }, { challengeDetails: "I freeze when someone replies quickly." }, { speakingChallenges: ["Pronunciation"], challengeDetails: "Fast speech is hard." }]) {
+    assert.equal(validStep("learner-challenges", { ...a, ...patch }), true);
+  }
+});
+
+test("multiple learner goals allow continuation without a written goal and retain every selection", () => {
+  const a = answers({ learningGoals: ["Travel", "Friends & family"] });
+  assert.equal(validStep("learner-goal", initialAnswers), false);
+  assert.equal(validStep("learner-goal", a), true);
+  assert.deepEqual(a.learningGoals, ["Travel", "Friends & family"]);
+  assert.equal(validStep("learner-goal", answers({ personalGoal: "Visit my family" })), false);
+  assert.equal(validStep("learner-goal", answers({ topic: "At work" })), false);
+  assert.equal(validStep("learner-goal", answers({ learningGoals: ["Work"], personalGoal: "a" })), false);
+  assert.equal(validStep("learner-goal", answers({ personalGoal: "a" })), false);
+});
 
 test("learner route groups related decisions and keeps independent language levels and final summary", () => {
   const route = routeFor(
@@ -86,6 +110,40 @@ test("meeting preferences, duration and price can be deferred independently", ()
     true,
   );
   assert.equal(validStep("teacher-lessons", answers({ rate: "30" })), true);
+});
+test("learners can choose either meeting format, both, or defer without losing other answers", () => {
+  let a = answers({ role: "learner", personalGoal: "Order a meal", city: "Paris" });
+  a = { ...a, ...toggleLearningFormat(a, "In person") };
+  assert.deepEqual(learningFormatsFor(a), ["In person"]);
+  assert.equal(a.city, "Paris");
+  a = { ...a, ...toggleLearningFormat(a, "Online") };
+  assert.deepEqual(learningFormatsFor(a), ["In person", "Online"]);
+  assert.equal(a.city, "Paris");
+  assert.equal(validStep("learner-preferences", a), true);
+  a = { ...a, ...toggleLearningFormat(a, "In person") };
+  assert.deepEqual(learningFormatsFor(a), ["Online"]);
+  assert.equal(a.city, "");
+  a = { ...a, ...toggleLearningFormat(a, "Online") };
+  assert.deepEqual(learningFormatsFor(a), []);
+  assert.equal(validStep("learner-preferences", a), true);
+  assert.equal(a.personalGoal, "Order a meal");
+});
+test("legacy learner formats normalize to lists while teacher single-format settings stay unchanged", () => {
+  for (const [format, expected] of [
+    ["Online", ["Online"]],
+    ["In person", ["In person"]],
+    ["Either", ["Online", "In person"]],
+    ["", []],
+  ]) {
+    const a = answers({ role: "teacher", format });
+    assert.deepEqual(learningFormatsFor(a), expected);
+    assert.equal(a.format, format);
+  }
+  const legacy = answers({ role: "learner", format: "Either", city: "Paris" });
+  const updated = { ...legacy, ...toggleLearningFormat(legacy, "Online") };
+  assert.deepEqual(learningFormatsFor(updated), ["In person"]);
+  assert.equal(updated.format, "");
+  assert.equal(updated.city, "Paris");
 });
 test("under-18 route collects guardian details before verification and checks a distinct email", () => {
   const a = answers({ role: "learner", age: "Under 18" });
@@ -161,7 +219,7 @@ test("grouped required fields, email, code, price and identity checks reject mis
   assert.equal(
     validStep(
       "learner-goal",
-      answers({ topic: "At work", personalGoal: "Present my idea." }),
+      answers({ learningGoals: ["Work"], personalGoal: "Present my idea." }),
     ),
     true,
   );
@@ -318,7 +376,7 @@ test("multiple learner languages retain separate level choices and clear deselec
   assert.deepEqual(a.learningLanguages, ["French", "Spanish"]);
   assert.equal(nextStep("language", a), "level-French");
   assert.equal(nextStep("level-French", a), "level-Spanish");
-  assert.equal(nextStep("level-Spanish", a), "learner-goal");
+  assert.equal(nextStep("level-Spanish", a), "learner-confidence");
   assert.equal(validStep("level-French", a), false);
   a = { ...a, learningLevels: { French: "A1", Spanish: "B2" } };
   assert.equal(validStep("level-French", a), true);

@@ -1,6 +1,6 @@
 # Mimo prototype
 
-A local React/TypeScript prototype for one-to-one language learning, with onboarding and an interactive teacher workspace on web and mobile. The Figma Start & Setup flow supplies onboarding content; current teacher screens follow the supplied architecture and FigJam goal flows.
+A local React/TypeScript prototype for one-to-one language learning, with shared desktop/mobile onboarding, learner discovery and instant booking, and an interactive teacher workspace. The learner usability revision uses the [Mimo Students prototype](https://www.figma.com/design/zyO4CpoehoiqFHa8MCAaRr?node-id=9-2) as reference.
 
 ## Run
 
@@ -15,17 +15,27 @@ Explicit onboarding previews (override detection): [web](http://localhost:4173/?
 
 Direct workspace previews: [teacher web](http://localhost:4173/?teacher=1&view=web) and [teacher mobile](http://localhost:4173/?teacher=1&view=mobile).
 
+Learner previews: [desktop search](http://localhost:4173/?learner=1&view=web&flow=search) and [mobile search](http://localhost:4173/?learner=1&view=mobile&flow=search). Use `flow=lessons` or `flow=profile` for the other review entries. Completing learner onboarding opens this workspace with the entered preferences.
+
 ## Flow
 
-- Shared: welcome, Mimo greeting, learner/teacher role, introduction, email, and email-code preview. Learners also choose an age range, with a guardian handoff when under 18. Use **481629**.
-- Learner: one or more languages (no search, with a coming-soon note), a separate CEFR level for each selected language, learning context, personal goal, optional attachment, encouragement, meeting format, optional city/days/time, notifications, an encouraging companion widget, benefits, identity-verification preview, and setup summary. Adult learners verify themselves; under-18 learners hand over to their parent or guardian immediately after email-code verification, before choosing a language. The guardian uses their own identity details. Completing or deferring the guardian check resumes learner preferences; it is not repeated after benefits. Both can finish verification later.
+- Shared: welcome, learner/teacher role, and grouped account entry with email/code or a sample Google route. The email preview code is **481629**. Learners choose an age range, with a guardian handoff when under 18.
+- Learner: one or more languages, independent CEFR levels, language-specific speaking confidence, optional preset/free-text speaking challenges, multiple goals with optional custom details/attachment, Online and/or In person preferences, optional city/days/time, notification/widget choices, optional identity preview, and setup summary. Under-18 learners hand over to their guardian after account confirmation and before language selection. The guardian uses their own identity details; completing or deferring the check resumes learner setup without repeating verification. Learners then choose a teacher directly.
 - Teacher: introduction, display name, optional profile media, teaching languages, levels, approach, meeting format, city, lesson duration, price, profile review, and optional sample identity-verification sequence, including date of birth after legal name. Teachers do not answer the earlier age-range question.
 
 The verification introduction also offers Link Persona ID, a local instant-verification preview with a document fallback. No Persona service is connected.
 
-Each decision or entry has its own screen. Online meetings skip city. Back preserves answers; Replay and reload reset. Existing welcome, greeting, encouragement, notification, widget and benefits screens remain where useful. The subscription and mock placement-score screens have been removed because they do not belong to this tutoring setup.
+Related decisions use grouped forms. City appears when In person is selected. Back preserves onboarding answers; Replay and reload reset onboarding. There are no daily commitments, subscriptions or automatic teacher matching.
 
-All state is local to the current page session. Attachments use local object URLs (20 MB maximum), not network uploads. Email, guardian handoff, identity checks, notifications and widgets are simulations. Teacher discovery, booking, authentication, storage and verification providers are not connected.
+Onboarding stays in page-session memory. Attachments use local object URLs (20 MB maximum), not network uploads. Email, guardian handoff, identity checks, notifications and widgets are simulations. No authentication, payment, verification or shared backend service is connected.
+
+## Learner workspace
+
+Home / Lessons / Search / Profile use shared screens and a consistent mobile footer. Search includes 25 fictional teachers, full linked reviews, neutral unrated teachers, language/format/day filters, next slots, and rating/price/soonest sorting. Teacher profiles put Send a message beside booking. Lessons separate Ongoing / Upcoming / Past by start/end time and show suitable actions and empty states.
+
+Instant booking rechecks available time under a browser Web Lock, then saves directly to success and Upcoming. Bookings and reviews persist in localStorage; tabs on the same browser origin share reservations. Conflicts and storage errors do not report payment success. Cancellation releases the time; failed rescheduling keeps the original booking. This cannot reserve slots across other browsers/devices, and payments, message delivery and video calls remain simulations. Private teaching feedback stays separate from public teacher reviews.
+
+Implementation: `src/learner/`. Verification and the feedback mapping: `qa/usability-feedback/verification.md`.
 
 ## Teacher workspace
 
@@ -59,3 +69,5 @@ The full calendar supports Day, Week and Month, previous/next navigation, status
 `npm run test:onboarding` checks branching, progression and required inputs. `npm run build` checks TypeScript, creates the production build and verifies mobile runtime integrity. Rendered checks and captures are recorded in `design-qa.md` and `qa/step-update/`.
 
 `npm run test:teacher` checks conflicts, adaptation, private lesson snapshots, profile transfer, architecture parent tabs, calendar date boundaries and overlapping-event placement. Teacher flow verification and screenshots are in `qa/teacher-workspace/verification.md`.
+
+`npm run test:learner` checks availability, sorting, review summaries, time categories, reservation races, retries, cancellation, rescheduling and storage failures. `npx playwright test tests/usability-onboarding.spec.ts tests/usability-learner.spec.ts` exercises the desktop and phone usability flows.

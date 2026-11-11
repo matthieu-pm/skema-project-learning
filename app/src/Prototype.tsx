@@ -15,6 +15,7 @@ import {
 import { Icon, CheckIcon } from "./teacher/icons";
 import { createPortal } from "react-dom";
 const TeacherWorkspace = lazy(() => import("./teacher/TeacherWorkspace"));
+const LearnerWorkspace = lazy(() => import("./learner/LearnerWorkspace"));
 const WebOnboarding = lazy(() => import("./WebOnboarding"));
 import {
   FlowStack,
@@ -33,6 +34,9 @@ import {
   sampleGoogleAccount,
   languageChoices,
   toggleLearningLanguage,
+  learnerFormatChoices,
+  learningFormatsFor,
+  toggleLearningFormat,
   needsGuardian,
   changeAge,
   clearedIdentity,
@@ -308,7 +312,9 @@ const headings: Partial<Record<Step, string>> = {
   "teacher-profile": "Your teaching profile",
   "teacher-subjects": "Languages and levels",
   "teacher-lessons": "Your lesson details",
-  "learner-goal": "What would you like to do?",
+  "learner-confidence": "How confident do you feel speaking?",
+  "learner-challenges": "What makes speaking difficult?",
+  "learner-goal": "What would you love to do?",
   "learner-preferences": "When and how would you like to meet?",
   extras: "Make Mimo work for you",
   "identity-details": "Your identity details",
@@ -425,8 +431,7 @@ function Footer({ step, inline = false }: { step: Step; inline?: boolean }) {
   const submit = () => {
     if (!validStep(step, a)) return;
     if (endings.has(step)) {
-      if (a.role === "teacher") openWorkspace();
-      else reset();
+      openWorkspace();
       return;
     }
     if (step === "verify" && a.code !== "481629") {
@@ -458,6 +463,7 @@ function Footer({ step, inline = false }: { step: Step; inline?: boolean }) {
     );
   };
   const optional: Partial<Record<Step, string>> = {
+    "learner-challenges": "Skip for now",
     resource: "Skip for now",
     photo: "Skip for now",
     format: "I’ll choose later",
@@ -492,14 +498,14 @@ function Footer({ step, inline = false }: { step: Step; inline?: boolean }) {
   const endLabel = endings.has(step)
     ? a.role === "teacher"
       ? "Open teaching workspace"
-      : "Replay onboarding"
+      : "Find a teacher"
     : undefined;
   const mainDisabled =
     !validStep(step, a) ||
     (["format", "city", "days", "time"].includes(step) &&
       !(
         {
-          format: a.format,
+          format: a.role === "learner" ? learningFormatsFor(a).length : a.format,
           city: a.city.trim(),
           days: a.days.length,
           time: a.time,
@@ -586,7 +592,8 @@ function Footer({ step, inline = false }: { step: Step; inline?: boolean }) {
             if (step === "resource") setResource(null);
             if (step === "photo") setPhoto(null);
             const clears: Partial<Record<Step, Partial<Answers>>> = {
-              format: { format: "", city: "" },
+              "learner-challenges": { speakingChallenges: [], challengeDetails: "" },
+              format: { format: "", learningFormats: [], city: "" },
               city: { city: "" },
               days: { days: [] },
               time: { time: "" },
@@ -615,12 +622,15 @@ function Screen({ step }: { step: Step }) {
     { isKeyboardVisible } = useKeyboardInsets();
   const active = flow.current.id === step;
   const guardian = needsGuardian(a);
+  const learningFormats = learningFormatsFor(a);
   const isLevel = step === "level" || step.startsWith("level-");
   const levelLanguage = step.startsWith("level-")
     ? step.slice(6)
     : a.learningLanguages[0];
   const heading = isLevel
     ? `How much ${levelLanguage} do you know?`
+    : step === "learner-confidence"
+      ? `How confident do you feel speaking ${a.learningLanguages.join(" or ") || "your chosen language"}?`
     : step === "identity-intro" && guardian
       ? "Let’s verify you, the parent or guardian."
       : headings[step];
@@ -644,7 +654,7 @@ function Screen({ step }: { step: Step }) {
     });
   };
   const toggle = (
-    field: "days" | "teachingLanguages" | "teachingLevels",
+    field: "days" | "teachingLanguages" | "teachingLevels" | "speakingChallenges",
     value: string,
   ) =>
     update({
@@ -922,23 +932,44 @@ function Screen({ step }: { step: Step }) {
             </Note>
           </div>
         )}
+        {step === "learner-confidence" && (
+          <div className="setup-group">
+            <p className="step-description">We’ll use this to help your teacher understand you. There’s no right answer.</p>
+            {single(["I feel comfortable", "I’m finding my confidence"], "speakingConfidence", ["I’m ready to try conversations.", "Speaking can feel difficult."])}
+          </div>
+        )}
+        {step === "learner-challenges" && (
+          <div className="setup-group">
+            <p className="step-description">Choose any that fit, tell us in your own words, or skip this step.</p>
+            <div className="options setup-compact">
+              {["Fear of mistakes", "Finding the right words", "Understanding replies", "Pronunciation"].map(challenge => (
+                <Choice key={challenge} label={challenge} check selected={a.speakingChallenges.includes(challenge)} onClick={() => toggle("speakingChallenges", challenge)} />
+              ))}
+            </div>
+            <Field label="Something else? Tell us in your own words (optional)" multiline maxLength={500} placeholder="What would help you feel more comfortable?" value={a.challengeDetails} onChange={e => update({ challengeDetails: e.target.value })} />
+          </div>
+        )}
         {step === "learner-goal" && (
           <div className="setup-group">
             <fieldset className="setup-section">
-              <legend>What are you learning for?</legend>
+              <legend>Choose all the goals that matter to you</legend>
               <div className="options setup-compact">
-                {["Everyday life", "At work", "For my studies"].map((topic) => (
+                {["Everyday life", "Travel", "Work", "Friends & family", "For my studies"].map((topic) => (
                   <Choice
                     key={topic}
                     label={topic}
-                    selected={a.topic === topic}
-                    onClick={() => update({ topic })}
+                    check
+                    selected={a.learningGoals.includes(topic)}
+                    onClick={() => {
+                      const learningGoals = a.learningGoals.includes(topic) ? a.learningGoals.filter(value => value !== topic) : [...a.learningGoals, topic];
+                      update({ learningGoals, topic: learningGoals[0] || "" });
+                    }}
                   />
                 ))}
               </div>
             </fieldset>
             <Field
-              label="One thing I’d love to do"
+              label="My goal in my own words (optional)"
               multiline
               maxLength={300}
               placeholder={`Order a meal confidently in ${a.learningLanguages[0] || "French"}.`}
@@ -965,30 +996,26 @@ function Screen({ step }: { step: Step }) {
               All preferences are optional. Choose exact lesson times later.
             </p>
             <fieldset className="setup-section">
-              <legend>Meeting format</legend>
-              <div className="options setup-compact three-columns">
-                {["In person", "Online", "Either"].map((format) => (
+              <legend>Meeting format · choose one or both</legend>
+              <div className="options setup-compact two-columns">
+                {learnerFormatChoices.map((format) => (
                   <Choice
                     key={format}
                     label={format}
-                    selected={a.format === format}
-                    onClick={() =>
-                      update({
-                        format,
-                        ...(format === "Online" ? { city: "" } : {}),
-                      })
-                    }
+                    check
+                    selected={learningFormats.includes(format)}
+                    onClick={() => update(toggleLearningFormat(a, format))}
                   />
                 ))}
               </div>
               <button
                 className="inline-link"
-                onClick={() => update({ format: "", city: "" })}
+                onClick={() => update({ learningFormats: [], format: "", city: "" })}
               >
                 Decide later
               </button>
             </fieldset>
-            {a.format && a.format !== "Online" && (
+            {learningFormats.includes("In person") && (
               <LocationField label="City or neighbourhood (optional)" mobile={!web} value={a.city} onChange={(city) => update({ city })} allowLocation={a.role === "teacher"} />
             )}
             <fieldset className="setup-section">
@@ -1431,7 +1458,20 @@ function Screen({ step }: { step: Step }) {
           </p>
         )}
         {step === "format" &&
-          single(["In person", "Online", "Either"], "format")}
+          (a.role === "learner" ? (
+            <div className="options">
+              {learnerFormatChoices.map((format) => (
+                <Choice
+                  key={format}
+                  label={format}
+                  check
+                  selected={learningFormats.includes(format)}
+                  onClick={() => update(toggleLearningFormat(a, format))}
+                />
+              ))}
+              <Note>Choose one or both formats.</Note>
+            </div>
+          ) : single(["In person", "Online", "Either"], "format"))}
         {step === "city" && (
           <>
             <LocationField label="City or neighbourhood (optional)" mobile={!web} value={a.city} onChange={(city) => update({ city })} allowLocation={a.role === "teacher"} />
@@ -1882,11 +1922,14 @@ function Screen({ step }: { step: Step }) {
                     : a.learningLevels[language]}
                 </p>
               ))}
-              <blockquote>{a.personalGoal}</blockquote>
-              <p>{a.topic}</p>
+              {a.personalGoal && <blockquote>{a.personalGoal}</blockquote>}
+              <p>{a.learningGoals.join(" · ") || a.topic}</p>
+              <p>Speaking: {a.speakingConfidence}</p>
+              {a.speakingChallenges.length > 0 && <p>{a.speakingChallenges.join(" · ")}</p>}
+              {a.challengeDetails && <p>{a.challengeDetails}</p>}
               <p>
-                {a.format || "Flexible format"}
-                {a.city ? ` · ${a.city}` : ""}
+                {learningFormats.join(" & ") || "Flexible format"}
+                {learningFormats.includes("In person") && a.city ? ` · ${a.city}` : ""}
               </p>
               <p>
                 {a.days.join(" & ") || "Flexible days"} ·{" "}
@@ -1907,8 +1950,7 @@ function Screen({ step }: { step: Step }) {
               </p>
             </div>
             <Note>
-              No identity verification was submitted. Next comes teacher
-              discovery. You’ve reached the end of this onboarding preview.
+              No identity verification was submitted. Choose your own teacher and explore available lesson times next.
             </Note>
           </>
         )}
@@ -1973,6 +2015,7 @@ const screens = Object.fromEntries(
           : [
                 "welcome",
                 "resource",
+                "learner-challenges",
                 "photo",
                 "format",
                 "city",
@@ -2000,7 +2043,7 @@ export default function Prototype() {
     [resendAt, setResendAt] = useState(0),
     [run, setRun] = useState(0);
   const [workspaceOpen, setWorkspaceOpen] = useState(
-    () => new URLSearchParams(window.location.search).get("teacher") === "1",
+    () => ["teacher", "learner"].some(key => new URLSearchParams(window.location.search).get(key) === "1"),
   );
   const web = new URLSearchParams(window.location.search).get("view") === "web";
   const keyboard = useKeyboard();
@@ -2026,18 +2069,19 @@ export default function Prototype() {
     setRun((r) => r + 1);
   };
   if (workspaceOpen) {
+    const teacher = answers.role === "teacher" || new URLSearchParams(window.location.search).get("teacher") === "1";
     const workspace = (
       <Suspense
         fallback={
           <div role="status" className="teacher-loading">
-            Opening your teaching workspace…
+            Opening your workspace…
           </div>
         }
       >
-        <TeacherWorkspace
+        {teacher ? <TeacherWorkspace
           mobile={!web}
           answers={answers.role === "teacher" ? answers : undefined}
-        />
+        /> : <LearnerWorkspace mobile={!web} answers={answers.role === "learner" ? answers : undefined} />}
       </Suspense>
     );
     return web ? createPortal(workspace, document.body) : workspace;
