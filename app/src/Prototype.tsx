@@ -2,6 +2,7 @@ import "./minimal-foundation.css";
 import LocationField from "./LocationField";
 import { CountryFlag, CountryText } from "./CountryFlag";
 import FreeLessonConfirmation from "./FreeLessonConfirmation";
+import TeacherLanguageSelect, { focusTeachingLanguageError } from "./TeacherLanguageSelect";
 import { isFreeLesson, lessonPriceLabel } from "./lesson-settings";
 import {
   createContext,
@@ -9,6 +10,7 @@ import {
   Suspense,
   useContext,
   useEffect,
+  useId,
   useRef,
   useState,
   type ReactNode,
@@ -38,6 +40,8 @@ import {
   sampleGoogleAccount,
   languageChoices,
   toggleLearningLanguage,
+  teachingLanguageLevelsFor,
+  teachingLanguagesPatch,
   learnerFormatChoices,
   learningFormatsFor,
   toggleLearningFormat,
@@ -195,6 +199,7 @@ function Field({
     multiline ? (
       <textarea
         aria-label={label}
+        aria-describedby={props["aria-describedby"]}
         placeholder={props.placeholder}
         value={props.value}
         maxLength={props.maxLength}
@@ -210,6 +215,7 @@ function Field({
     multiline ? (
       <KeyboardTextarea
         aria-label={label}
+        aria-describedby={props["aria-describedby"]}
         placeholder={props.placeholder}
         value={props.value}
         maxLength={props.maxLength}
@@ -446,7 +452,18 @@ function Footer({ step, inline = false }: { step: Step; inline?: boolean }) {
     if (next) flow.push(screens[next]);
   };
   const submit = () => {
-    if (!validStep(step, a)) return;
+    if (!validStep(step, a)) {
+      if (["teacher-subjects", "teaching-levels"].includes(step)) {
+        keyboard.hide();
+        const levels = teachingLanguageLevelsFor(a);
+        const missing = a.teachingLanguages.find(language => !levels[language]?.length);
+        setError(missing ? `Choose at least one level for ${missing}.` : "Choose at least one teaching language.");
+        requestAnimationFrame(() => focusTeachingLanguageError(
+          document.querySelector('[data-testid="web-onboarding-current"], [data-testid="flow-current"]') ?? document,
+        ));
+      }
+      return;
+    }
     if (endings.has(step)) {
       openWorkspace();
       return;
@@ -518,7 +535,7 @@ function Footer({ step, inline = false }: { step: Step; inline?: boolean }) {
       : "Find a teacher"
     : undefined;
   const mainDisabled =
-    !validStep(step, a) ||
+    (!validStep(step, a) && !["teacher-subjects", "teaching-levels"].includes(step)) ||
     (["format", "city", "days", "time"].includes(step) &&
       !(
         {
@@ -610,7 +627,7 @@ function Footer({ step, inline = false }: { step: Step; inline?: boolean }) {
             if (step === "photo") setPhoto(null);
             const clears: Partial<Record<Step, Partial<Answers>>> = {
               "learner-challenges": { speakingChallenges: [], challengeDetails: "" },
-              format: { format: "", learningFormats: [], city: "" },
+              format: { format: "", learningFormats: [], city: "", formatDeferred: true },
               city: { city: "" },
               days: { days: [] },
               time: { time: "" },
@@ -636,14 +653,34 @@ function Screen({ step }: { step: Step }) {
     { answers: a, update, error, setError, resendAt, setResendAt, web } = setup;
   const flow = useSetupFlow(),
     keyboard = useKeyboard(),
-    { isKeyboardVisible } = useKeyboardInsets();
+    { isKeyboardVisible, keyboardHeight } = useKeyboardInsets();
   const active = flow.current.id === step;
+  const experienceHelpId = useId();
+  useEffect(() => {
+    if (web || !active || step !== "teacher-profile" || !isKeyboardVisible) return;
+    const field = keyboard.focusedElement, scroll = field?.closest<HTMLElement>(".mobile-scroll");
+    if (!field || !scroll) return;
+    const reveal = () => {
+      const rect = field.getBoundingClientRect(), viewport = scroll.getBoundingClientRect();
+      const footer = scroll.closest(".flow-stack")?.querySelector<HTMLElement>(".flow-fixed-footer")?.getBoundingClientRect();
+      const top = viewport.top + 12, bottom = Math.min(viewport.bottom, footer?.top ?? viewport.bottom) - 12;
+      const scale = viewport.height / scroll.clientHeight || 1;
+      const delta = rect.height > bottom - top || rect.top < top ? rect.top - top : Math.max(0, rect.bottom - bottom);
+      if (Math.abs(delta) > 1) scroll.scrollTop += delta / scale;
+    };
+    const observer = new ResizeObserver(reveal);
+    observer.observe(scroll); observer.observe(field);
+    const content = scroll.querySelector(".mobile-scroll-content");
+    if (content) observer.observe(content);
+    const frame = requestAnimationFrame(reveal);
+    return () => { cancelAnimationFrame(frame); observer.disconnect(); };
+  }, [web, active, step, isKeyboardVisible, keyboardHeight, keyboard.focusedElement]);
   const guardian = needsGuardian(a);
   const learningFormats = learningFormatsFor(a);
-  const reviewLevels = [...a.teachingLevels].sort((left, right) => {
-    const order = ["A1", "A2", "B1", "B2", "C1", "C2"];
-    return order.indexOf(left) - order.indexOf(right);
-  });
+  const teachingLevels = teachingLanguageLevelsFor(a);
+  const teachingErrors = error ? Object.fromEntries(a.teachingLanguages.length
+    ? a.teachingLanguages.filter(language => !teachingLevels[language]?.length).map(language => [language, `Choose at least one level for ${language}.`])
+    : [["", "Choose at least one teaching language."]]) : {};
   const isLevel = step === "level" || step.startsWith("level-");
   const levelLanguage = step.startsWith("level-")
     ? step.slice(6)
@@ -655,8 +692,7 @@ function Screen({ step }: { step: Step }) {
     : step === "identity-intro" && guardian
       ? "Let’s verify you, the parent or guardian."
       : headings[step];
-  const [search, setSearch] = useState(""),
-    [now, setNow] = useState(Date.now());
+  const [now, setNow] = useState(Date.now());
   useEffect(() => {
     if (step !== "verify" || !active) return;
     const id = window.setInterval(() => setNow(Date.now()), 1000);
@@ -675,7 +711,7 @@ function Screen({ step }: { step: Step }) {
     });
   };
   const toggle = (
-    field: "days" | "teachingLanguages" | "teachingLevels" | "speakingChallenges",
+    field: "days" | "speakingChallenges",
     value: string,
   ) =>
     update({
@@ -733,8 +769,9 @@ function Screen({ step }: { step: Step }) {
         {step === "welcome" ? (
           <div className="welcome">
             <span className="welcome-brand">mimo</span>
-            <h1>A language.<br />A real connection.</h1>
-            <p>Find your teacher. Build your confidence.</p>
+            <h1>Your lessons.<br />Real connections.</h1>
+            <p>Create lessons you can edit and reuse. Connect with students through in-person or online meetups.</p>
+            <p className="welcome-learner-value">Here to learn? Find your teacher and build your confidence.</p>
           </div>
         ) : step === "account" ? (
           <div className="account-intro">
@@ -833,6 +870,12 @@ function Screen({ step }: { step: Step }) {
                 Add a short description of at least 5 characters.
               </p>
             )}
+            <div className="teaching-experience-field">
+              <Field label="Language teaching experience" multiline maxLength={3000}
+                aria-describedby={experienceHelpId}
+                value={a.teachingExperience ?? ""} onChange={event => update({ teachingExperience: event.target.value })} />
+              <p className="field-help" id={experienceHelpId}>Describe your teaching background, the learners you've worked with, and your approach. Optional.</p>
+            </div>
             <details className="setup-optional">
               <summary>Add a photo or video (optional)</summary>
               <Upload kind="photo" />
@@ -841,35 +884,8 @@ function Screen({ step }: { step: Step }) {
         )}
         {step === "teacher-subjects" && (
           <div className="setup-group">
-            <fieldset className="setup-section">
-              <legend>Languages you teach</legend>
-              <div className="options setup-compact two-columns">
-                {languages.map((language) => (
-                  <Choice
-                    key={language}
-                    label={language}
-                    check
-                    selected={a.teachingLanguages.includes(language)}
-                    onClick={() => toggle("teachingLanguages", language)}
-                  />
-                ))}
-              </div>
-            </fieldset>
-            <fieldset className="setup-section">
-              <legend>Levels you teach</legend>
-              <div className="options setup-compact three-columns">
-                {levelChoices.map(([level]) => (
-                  <Choice
-                    key={level}
-                    label={level}
-                    check
-                    selected={a.teachingLevels.includes(level)}
-                    onClick={() => toggle("teachingLevels", level)}
-                  />
-                ))}
-              </div>
-            </fieldset>
-            <Note>Choose one or more languages and levels.</Note>
+            <TeacherLanguageSelect languages={a.teachingLanguages} levels={teachingLevels} errors={teachingErrors} mobile={!web}
+              onChange={(selected, levels) => { setError(""); update(teachingLanguagesPatch(selected, levels)); }} />
           </div>
         )}
         {step === "teacher-lessons" && (
@@ -885,6 +901,7 @@ function Screen({ step }: { step: Step }) {
                     onClick={() =>
                       update({
                         format,
+                        formatDeferred: false,
                         ...(format === "Online" ? { city: "" } : {}),
                       })
                     }
@@ -892,9 +909,11 @@ function Screen({ step }: { step: Step }) {
                 ))}
               </div>
               <button
-                className="inline-link"
-                onClick={() => update({ format: "", city: "" })}
+                className={`inline-link deferred-choice ${a.formatDeferred ? "is-selected" : ""}`}
+                aria-pressed={!!a.formatDeferred}
+                onClick={() => update({ format: "", city: "", formatDeferred: true })}
               >
+                <span className="deferred-choice-check" aria-hidden="true">{a.formatDeferred && <Icon name="check" size={14} />}</span>
                 Decide later
               </button>
             </fieldset>
@@ -1032,9 +1051,11 @@ function Screen({ step }: { step: Step }) {
                 ))}
               </div>
               <button
-                className="inline-link"
-                onClick={() => update({ learningFormats: [], format: "", city: "" })}
+                className={`inline-link deferred-choice ${a.formatDeferred ? "is-selected" : ""}`}
+                aria-pressed={!!a.formatDeferred}
+                onClick={() => update({ learningFormats: [], format: "", city: "", formatDeferred: true })}
               >
+                <span className="deferred-choice-check" aria-hidden="true">{a.formatDeferred && <Icon name="check" size={14} />}</span>
                 Decide later
               </button>
             </fieldset>
@@ -1315,73 +1336,24 @@ function Screen({ step }: { step: Step }) {
             </button>
           </>
         )}
-        {(step === "language" || step === "teaching-languages") && (
+        {step === "language" && (
           <>
-            {step === "teaching-languages" ? (
-              <>
-                <p className="step-description">
-                  Your language. Your way of teaching. Choose one or more.
-                </p>
-                <Field
-                  label="Search languages"
-                  type="search"
-                  placeholder="Search by name"
-                  value={search}
-                  onChange={(e) => setSearch(e.target.value)}
-                />
-              </>
-            ) : (
-              <p className="step-description">Choose one or more.</p>
-            )}
+            <p className="step-description">Choose one or more.</p>
             <div className="options languages">
-              {languages
-                .filter(
-                  (l) =>
-                    step === "language" ||
-                    l.toLowerCase().includes(search.toLowerCase()),
-                )
-                .map((language) => (
-                  <Choice
-                    key={language}
-                    label={language}
-                    icon={flags[languages.indexOf(language)]}
-                    check
-                    selected={
-                      step === "language"
-                        ? a.learningLanguages.includes(language)
-                        : a.teachingLanguages.includes(language)
-                    }
-                    onClick={() => {
-                      keyboard.hide();
-                      step === "language"
-                        ? update(toggleLearningLanguage(a, language))
-                        : toggle("teachingLanguages", language);
-                    }}
-                  />
-                ))}
+              {languages.map((language) => <Choice key={language} label={language}
+                icon={flags[languages.indexOf(language)]} check
+                selected={a.learningLanguages.includes(language)}
+                onClick={() => { keyboard.hide(); update(toggleLearningLanguage(a, language)); }} />)}
             </div>
-            {step === "language" ? (
-              <div className="languages-coming-soon">
-                <div className="coming-soon-pet">
-                  <img
-                    className="mascot"
-                    src={asset("luma-coming-soon")}
-                    alt="Luma looking ahead to new languages"
-                    draggable={false}
-                  />
-                </div>
-                <div>
-                  <strong>More languages</strong>
-                  <span>Coming soon!</span>
-                </div>
-              </div>
-            ) : (
-              !languages.some((l) =>
-                l.toLowerCase().includes(search.toLowerCase()),
-              ) && <Note>No matching language. Try another name.</Note>
-            )}
+            <div className="languages-coming-soon">
+              <div className="coming-soon-pet"><img className="mascot" src={asset("luma-coming-soon")} alt="Luma looking ahead to new languages" draggable={false} /></div>
+              <div><strong>More languages</strong><span>Coming soon!</span></div>
+            </div>
           </>
         )}
+        {["teaching-languages", "teaching-levels"].includes(step) && <TeacherLanguageSelect
+          languages={a.teachingLanguages} levels={teachingLevels} errors={teachingErrors} mobile={!web}
+          onChange={(selected, levels) => { setError(""); update(teachingLanguagesPatch(selected, levels)); }} />}
         {isLevel && (
           <div className="options level-options">
             {levelChoices.map(([level, description]) => (
@@ -1593,34 +1565,6 @@ function Screen({ step }: { step: Step }) {
             onChange={(e) => update({ name: e.target.value })}
           />
         )}
-        {step === "teaching-levels" && (
-          <>
-            <p className="step-description">
-              Choose all the levels you’re comfortable teaching.
-            </p>
-            <div className="options teaching-level-options">
-              {levelChoices.map(([level], i) => (
-                <Choice
-                  key={level}
-                  label={level}
-                  description={
-                    [
-                      "Beginner",
-                      "Elementary",
-                      "Intermediate",
-                      "Upper intermediate",
-                      "Advanced",
-                      "Proficient",
-                    ][i]
-                  }
-                  check
-                  selected={a.teachingLevels.includes(level)}
-                  onClick={() => toggle("teachingLevels", level)}
-                />
-              ))}
-            </div>
-          </>
-        )}
         {step === "approach" && (
           <>
             <Field
@@ -1675,6 +1619,7 @@ function Screen({ step }: { step: Step }) {
                 <SharedButton variant="ghost" size="sm" className="teacher-review-edit" aria-label="Edit profile" onClick={() => editTeacherSection("teacher-profile")}>Edit</SharedButton>
               </div>
               <p className="teacher-review-approach">{a.approach || "Add a short introduction to your teaching."}</p>
+              {a.teachingExperience?.trim() && <div className="teacher-review-experience"><h3>Language teaching experience</h3><p>{a.teachingExperience}</p></div>}
             </section>
 
             <section className="teacher-review-section" aria-labelledby="teacher-review-languages-heading">
@@ -1683,8 +1628,7 @@ function Screen({ step }: { step: Step }) {
                 <SharedButton variant="ghost" size="sm" className="teacher-review-edit" aria-label="Edit languages and levels" onClick={() => editTeacherSection("teacher-subjects")}>Edit</SharedButton>
               </div>
               <dl className="teacher-review-details">
-                <div><dt>Teaching languages</dt><dd>{a.teachingLanguages.join(" · ") || "Not set"}</dd></div>
-                <div><dt>Levels</dt><dd>{reviewLevels.join(" · ") || "Not set"}</dd></div>
+                {a.teachingLanguages.length ? a.teachingLanguages.map(language => <div key={language}><dt>{language}</dt><dd>{teachingLevels[language]?.join(" · ") || "Choose a level"}</dd></div>) : <div><dt>Teaching languages</dt><dd>Not set</dd></div>}
               </dl>
             </section>
 
@@ -1722,8 +1666,8 @@ function Screen({ step }: { step: Step }) {
         )}
         {step === "identity-intro" && (
           <>
-            <div className="options">
-              <div className="info-card">
+            <div className="verification-information">
+              <div>
                 <strong>
                   {a.role === "teacher"
                     ? "Verify before accepting bookings"
@@ -1737,7 +1681,7 @@ function Screen({ step }: { step: Step }) {
                     : "Your identity document won’t appear on your public profile."}
                 </p>
               </div>
-              <div className="info-card">
+              <div>
                 <strong>
                   {a.role === "teacher"
                     ? "Identity, not qualifications"

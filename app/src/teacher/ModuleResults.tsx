@@ -62,7 +62,7 @@ function FollowUp({
       <summary>Prepare follow-up practice</summary>
       <p>
         Prepare an editable draft for {student.name.split(" ")[0]}. Review it in
-        the Module editor before applying changes.
+        the Lesson editor before using the lesson.
       </p>
       <TextField
         label="Follow-up learning goal"
@@ -117,7 +117,7 @@ function FollowUp({
             );
             setLessons((ls) => [...ls, lesson]);
             setNotice(
-              "Follow-up draft saved for this student. Review it before applying changes.",
+              "Follow-up draft saved for this student. Review it before using the lesson.",
             );
             navigate({ page: "editor", id: lesson.id });
           } catch {

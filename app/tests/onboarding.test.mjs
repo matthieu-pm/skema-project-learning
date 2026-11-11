@@ -5,6 +5,10 @@ import {
   changeAccountMethod,
   sampleGoogleAccount,
   toggleLearningLanguage,
+  teachingLanguageLevelsFor,
+  teachingLanguagesPatch,
+  toggleTeachingLanguage,
+  toggleTeachingLevel,
   learningFormatsFor,
   toggleLearningFormat,
   identitySteps,
@@ -19,6 +23,66 @@ import {
   formatDateOfBirth,
 } from "../src/onboarding.ts";
 const answers = (patch) => ({ ...initialAnswers, ...patch });
+
+test("legacy teacher levels migrate per selected language without mutating saved answers", () => {
+  const legacy = answers({ teachingLanguages: ["French", "English"], teachingLevels: ["B2", "A1", "A1"] });
+  delete legacy.teachingLanguageLevels;
+  const original = structuredClone(legacy);
+  assert.deepEqual(teachingLanguageLevelsFor(legacy), { French: ["A1", "B2"], English: ["A1", "B2"] });
+  assert.equal(validStep("teacher-subjects", legacy), true);
+  assert.deepEqual(legacy, original);
+  // Empty default mappings also read earlier in-session/global-level state safely.
+  assert.deepEqual(teachingLanguageLevelsFor({ ...legacy, teachingLanguageLevels: {} }), { French: ["A1", "B2"], English: ["A1", "B2"] });
+});
+
+test("each teaching language requires its own levels and explicit empty values never inherit another language's levels", () => {
+  const current = answers({ teachingLanguages: ["French", "English"], teachingLevels: ["A1", "C1"],
+    teachingLanguageLevels: { French: ["A1"], English: [] } });
+  assert.equal(validStep("teacher-subjects", current), false);
+  assert.equal(validStep("teaching-levels", current), false);
+  assert.deepEqual(teachingLanguageLevelsFor(current), { French: ["A1"], English: [] });
+  assert.equal(validStep("teacher-subjects", { ...current, teachingLanguageLevels: { French: ["A1"], English: ["C1"] } }), true);
+  assert.equal(validStep("teacher-subjects", { ...current, teachingLanguageLevels: { French: ["A1"] } }), false);
+  assert.equal(validStep("teacher-subjects", answers({ teachingLanguages: [], teachingLevels: ["A1"] })), false);
+});
+
+test("teacher language edits preserve other levels, prevent duplicates and prune only removed selections", () => {
+  let current = answers(teachingLanguagesPatch(["French", "English", "French"], { French: ["B2", "A1", "A1"], English: ["C1"], German: ["B1"] }));
+  assert.deepEqual(current.teachingLanguages, ["French", "English"]);
+  assert.deepEqual(current.teachingLanguageLevels, { French: ["A1", "B2"], English: ["C1"] });
+  assert.deepEqual(current.teachingLevels, ["A1", "B2", "C1"]);
+  current = { ...current, ...toggleTeachingLanguage(current, "French") };
+  assert.deepEqual(current.teachingLanguageLevels, { English: ["C1"] });
+  assert.deepEqual(current.teachingLevels, ["C1"]);
+  current = { ...current, ...toggleTeachingLanguage(current, "German") };
+  assert.deepEqual(current.teachingLanguageLevels, { English: ["C1"], German: [] });
+  assert.equal(validStep("teacher-subjects", current), false);
+  current = { ...current, ...toggleTeachingLevel(current, "German", "A2") };
+  assert.deepEqual(current.teachingLanguageLevels, { English: ["C1"], German: ["A2"] });
+  assert.equal(validStep("teacher-subjects", current), true);
+  current = { ...current, ...toggleTeachingLevel(current, "German", "A2") };
+  assert.deepEqual(current.teachingLanguageLevels, { English: ["C1"], German: [] });
+  assert.deepEqual(toggleTeachingLevel(current, "French", "B1"), {});
+});
+
+test("teaching experience stays optional, editable and clearable without changing required profile values", () => {
+  const profile = answers({ name: "Camille", approach: "Practical conversation, at your pace.", teachingExperience: "" });
+  for (const teachingExperience of ["", "I teach adult beginners and conversation classes.", ""]) {
+    const edited = { ...profile, teachingExperience };
+    assert.equal(validStep("teacher-profile", edited), true);
+    assert.equal(edited.name, profile.name);
+    assert.equal(edited.approach, profile.approach);
+    assert.equal(edited.teachingExperience, teachingExperience);
+  }
+});
+
+test("choosing a concrete learner meeting format clears explicit Decide later state", () => {
+  const deferred = answers({ role: "learner", formatDeferred: true, learningFormats: [] });
+  const online = { ...deferred, ...toggleLearningFormat(deferred, "Online") };
+  assert.equal(online.formatDeferred, false);
+  assert.deepEqual(online.learningFormats, ["Online"]);
+  assert.equal(validStep("learner-preferences", deferred), true);
+});
 
 test("learner confidence names the selected language context and challenges accept presets, text or both", () => {
   const a = answers({ role: "learner", learningLanguages: ["French"] });

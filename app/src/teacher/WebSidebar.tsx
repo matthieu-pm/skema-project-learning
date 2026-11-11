@@ -25,7 +25,7 @@ export function WebSidebar({ route, navigate }: { route: Route; navigate: Naviga
         { label: "Teaching tools", items: [
           item("modules", "Ongoing modules", "layers", { page: "modules" }, modulePages.includes(route.page)),
           item("availability", "Availability", "clock", { page: "availability" }, route.page === "availability"),
-          item("templates", "Templates", "document", { page: "lessons", tab: "Templates" }, route.page === "lessons" && tab === "Templates"),
+          item("templates", "Lesson templates", "document", { page: "lessons", tab: "Templates" }, route.page === "lessons" && tab === "Templates"),
           item("archive", "Archive", "archive", { page: "lessons", tab: "Archive" }, route.page === "lessons" && tab === "Archive"),
         ] },
       ]}

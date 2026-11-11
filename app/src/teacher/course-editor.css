@@ -1538,3 +1538,32 @@
 .teacher-mobile .ce-editor :is(.ce-direct-lesson-fields, .ce-direct-module-fields, .ce-direct-block-fields) .tw-field :is(input, textarea, select, :where(.app-select-trigger)) { min-height: 42px; font-size: 16px; }
 .teacher-mobile .ce-editor .ce-direct-title .tw-field input { font-size: 22px; }
 .teacher-mobile .ce-editor .ce-direct-module-fields .ce-direct-title input { font-size: 18px; }
+
+/* Independent, explicit assignment/template choices in the Use lesson dialog. */
+.teacher-workspace .ce-use-description { margin: 0 0 20px; color: var(--tw-muted); font-size: 14px; line-height: 1.65; }
+.ce-use-form { display: flex; flex-direction: column; gap: 20px; min-width: 0; }
+.teacher-workspace .ce-use-choices { display: flex; flex-direction: column; gap: 24px; min-width: 0; margin: 0; padding: 0; border: 0; }
+.ce-use-choice { min-width: 0; }
+.teacher-workspace .ce-use-choice .ce-checkbox { align-items: center; gap: 10px; margin: 0; font-size: 14px; font-weight: 500; }
+.teacher-workspace .ce-use-choice .ce-checkbox input { flex: none; width: 18px; height: 18px; margin: 0; accent-color: var(--tw-ink); }
+.teacher-workspace .ce-use-helper { margin: 6px 0 0; color: var(--tw-muted); font-size: 13px; line-height: 1.6; }
+.ce-use-choice > .ce-use-helper { padding-inline-start: 28px; }
+.ce-use-option-fields { display: flex; flex-direction: column; gap: 12px; margin-top: 16px; padding-inline-start: 28px; min-width: 0; }
+.teacher-workspace .ce-use-option-fields .tw-field { margin: 0; }
+.teacher-workspace .ce-use-snapshot { margin: 0; color: var(--tw-ink); font-size: 12px; line-height: 1.6; }
+.teacher-workspace .ce-use-field-error { margin: 0; color: #b42318; font-size: 13px; line-height: 1.5; }
+.teacher-workspace .ce-use-option-fields .tw-field .tw-error { margin: 0 !important; padding: 0; background: transparent; border-radius: 0; font-size: 13px; line-height: 1.5; }
+.ce-use-readiness { display: flex; flex-direction: column; align-items: flex-start; gap: 10px; font-size: 13px; line-height: 1.6; }
+.teacher-workspace .ce-use-notice { margin: 0; padding-top: 16px; border-top: 1px solid var(--tw-line); color: var(--tw-muted); font-size: 12px; line-height: 1.65; }
+.teacher-workspace .ce-use-errors { margin: 0; padding: 14px; }
+.ce-use-errors:focus { outline: 2px solid var(--tw-ink); outline-offset: 2px; }
+.ce-use-footer { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 12px; }
+.ce-sheet-close { display: flex; justify-content: flex-end; margin-bottom: 8px; }
+.teacher-mobile .ce-use-option-fields { padding-inline-start: 0; }
+.teacher-mobile .ce-use-footer { flex-direction: column; align-items: stretch; }
+.teacher-mobile .ce-use-footer .tw-button { width: 100%; min-height: 44px; }
+@media (max-width: 560px) {
+  .ce-use-option-fields { padding-inline-start: 0; }
+  .ce-use-footer { flex-direction: column; align-items: stretch; }
+  .ce-use-footer .tw-button { width: 100%; }
+}

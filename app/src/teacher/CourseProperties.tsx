@@ -6,6 +6,7 @@ import {
   createBlock,
   id,
   moduleTypes,
+  moduleDisplayTitle,
   partRoles,
   practiceFormats,
   teachFormats,
@@ -583,8 +584,8 @@ export function ModulePropertiesFields({
   presentation?: "sidebar" | "canvas";
 }) {
   const type = <Select label="Module type" value={m.type} options={[...moduleTypes]} onChange={(value) => changeModule({ ...m, type: value as ModuleType })} />;
-  const title = <TextField label="Module title" value={m.title} onChange={(value) => changeModule({ ...m, title: value })} />;
-  const goal = <TextField label="Module learning goal" multiline value={m.goal} onChange={(value) => changeModule({ ...m, goal: value })} />;
+  const title = <TextField label="Module title" placeholder={moduleDisplayTitle({ ...m, title: "" })} value={m.title} onChange={(value) => changeModule({ ...m, title: value })} />;
+  const goal = <TextField label="Module learning goal" placeholder="Optional" multiline value={m.goal} onChange={(value) => changeModule({ ...m, goal: value })} />;
   const minutes = <TextField label="Estimated minutes" type="number" min="1" max="240" value={String(m.minutes)} onChange={(value) => changeModule({ ...m, minutes: Number(value) })} />;
   return presentation === "canvas" ? (
     <div className="ce-direct-module-fields">
@@ -640,7 +641,7 @@ export function CourseProperties({
               <strong>Total lesson time · {totalMinutes(c)} min</strong>
               {c.modules.map((x) => (
                 <div key={x.id}>
-                  <span>{x.title}</span>
+                  <span>{moduleDisplayTitle(x)}</span>
                   <span>{x.minutes} min</span>
                 </div>
               ))}

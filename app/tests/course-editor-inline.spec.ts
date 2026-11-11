@@ -57,7 +57,7 @@ test("canvas edits update the intended module and block and stay in sync with Pr
   await expect(outline.nth(1).locator(".ce-outline-block").first()).toContainText("A drink for you");
 });
 
-test("direct lesson changes support Undo and Redo and persist only after Save changes", async ({ page }) => {
+test("direct lesson changes support Undo and Redo and persist only after Save draft", async ({ page }) => {
   const { editor, canvas, properties } = await openEditor(page);
   const fields = details(canvas, "Lesson details");
   const title = fields.getByRole("textbox", { name: "Lesson title", exact: true });
@@ -74,7 +74,7 @@ test("direct lesson changes support Undo and Redo and persist only after Save ch
   await page.reload();
   await expect(title).toHaveValue(originalTitle);
   await title.fill(newTitle);
-  await page.getByRole("button", { name: "Save changes", exact: true }).click();
+  await page.getByRole("button", { name: "Save draft", exact: true }).click();
   await expect(canvas.locator(".ce-view-status")).toContainText("Saved");
   await page.reload();
   const restored = page.locator(".teacher-web .ce-canvas");

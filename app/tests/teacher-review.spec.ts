@@ -43,8 +43,10 @@ async function reachTeacherReview(page: Page, presentation: Presentation) {
   await flow.fill("Display name", "Avery Martin");
   await flow.fill("Your approach, in a sentence", "Practical conversation, at your pace.");
   await flow.continueTo("teacher-subjects");
-  await flow.choice("English").click();
-  for (const level of ["B2", "A2", "A1", "B1"]) await flow.choice(level).click();
+  await flow.current().getByRole("combobox", { name: "Search teaching languages", exact: true }).fill("English");
+  await flow.current().getByRole("option", { name: "English", exact: true }).click();
+  const english = flow.current().getByRole("group", { name: "Levels for English", exact: true });
+  for (const level of ["B2", "A2", "A1", "B1"]) await english.getByRole("checkbox", { name: level, exact: true }).click();
   await flow.continueTo("teacher-lessons");
   await flow.choice("Online").click();
   await flow.choice("45 minutes").click();
@@ -66,7 +68,7 @@ test("teacher review keeps section edits, canonical levels and optional/free les
   await expect(page.locator(".web-step-meta")).toContainText("Step 8 of 8");
   await expectSetupProgress(page, 8, 8);
   await expect(flow.current().getByRole("region", { name: "Teaching profile", exact: true })).toContainText("Avery Martin");
-  await expect(definition(languages(), "Levels")).toHaveText("A1 · A2 · B1 · B2");
+  await expect(definition(languages(), "English")).toHaveText("A1 · A2 · B1 · B2");
   await expect(definition(lessons(), "Lesson duration")).toHaveText("45 minutes");
   await expect(definition(lessons(), "Price per lesson")).toHaveText("€30");
   await expectCompactWebAction(page, flow.current(), "Continue to identity check");
@@ -75,11 +77,12 @@ test("teacher review keeps section edits, canonical levels and optional/free les
   await flow.expectStep("teacher-subjects");
   await expect(page.locator(".web-step-meta")).toContainText("Step 6 of 8");
   await expectSetupProgress(page, 6, 8);
-  for (const level of ["B2", "A2", "A1", "B1"]) await expect(flow.choice(level)).toHaveAttribute("aria-pressed", "true");
-  await flow.choice("C1").click();
+  const english = flow.current().getByRole("group", { name: "Levels for English", exact: true });
+  for (const level of ["B2", "A2", "A1", "B1"]) await expect(english.getByRole("checkbox", { name: level, exact: true })).toBeChecked();
+  await english.getByRole("checkbox", { name: "C1", exact: true }).click();
   await flow.continueTo("teacher-review", "Save and return");
   await expect(page.locator(".web-step-meta")).toContainText("Step 8 of 8");
-  await expect(definition(languages(), "Levels")).toHaveText("A1 · A2 · B1 · B2 · C1");
+  await expect(definition(languages(), "English")).toHaveText("A1 · A2 · B1 · B2 · C1");
 
   // A summary reached with Back must still enforce the edited required fields.
   await flow.current().getByRole("button", { name: "Edit profile", exact: true }).click();

@@ -1,6 +1,7 @@
 import { courseIssues, cloneCourse } from "./course.ts";
 import type { Course, AppliedCourse } from "./course.ts";
 import type { Answers } from "../onboarding";
+import { teachingLanguageLevelsFor } from "../onboarding.ts";
 export type Student = {
   id: string;
   name: string;
@@ -65,6 +66,8 @@ export type Profile = {
   languages: string;
   levels: string;
   approach: string;
+  teachingExperience?: string;
+  teachingLanguageLevels?: Record<string, string[]>;
   format: string;
   city: string;
   duration: string;
@@ -314,6 +317,10 @@ export function initialProfile(a?: Answers): Profile {
     approach:
       a?.approach ||
       "Practical conversations, thoughtful feedback, and lessons that feel like you.",
+    teachingExperience: a?.teachingExperience ?? "",
+    teachingLanguageLevels: a ? teachingLanguageLevelsFor(a) : {
+      French: ["A1", "A2", "B1", "B2"], English: ["A1", "A2", "B1", "B2"],
+    },
     format: a ? a.format : "Either",
     city: a ? a.city : "Paris, France",
     duration: a ? a.duration : "30 minutes",
@@ -321,6 +328,19 @@ export function initialProfile(a?: Answers): Profile {
     freeConfirmed: a?.freeConfirmed || false,
     identity: a?.identityPreviewComplete || false,
   };
+}
+export function profileTeachingLanguages(profile: Pick<Profile, "languages">): string[] {
+  return [...new Set(profile.languages.split(",").map(language => language.trim()).filter(Boolean))];
+}
+export function profileTeachingLevels(profile: Pick<Profile, "languages" | "levels" | "teachingLanguageLevels">): Record<string, string[]> {
+  const legacy = profile.levels.split(",").map(level => level.trim()).filter(Boolean);
+  const hasMapping = !!profile.teachingLanguageLevels && Object.keys(profile.teachingLanguageLevels).length > 0;
+  return Object.fromEntries(profileTeachingLanguages(profile).map(language => [
+    language, [...(hasMapping ? profile.teachingLanguageLevels?.[language] || [] : legacy)],
+  ]));
+}
+export function profileLanguageSummary(profile: Pick<Profile, "languages" | "levels" | "teachingLanguageLevels">): string {
+  return Object.entries(profileTeachingLevels(profile)).map(([language, levels]) => `${language}${levels.length ? ` · ${levels.join(", ")}` : ""}`).join("; ");
 }
 export function lessonValid(l: Lesson) {
   if (l.course) return courseIssues(l.course).length === 0;

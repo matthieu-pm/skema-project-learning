@@ -20,6 +20,7 @@ export type Answers = {
   personalGoal: string;
   learningFormats: LearningFormat[];
   format: string;
+  formatDeferred: boolean;
   city: string;
   days: string[];
   time: string;
@@ -28,6 +29,8 @@ export type Answers = {
   name: string;
   teachingLanguages: string[];
   teachingLevels: string[];
+  teachingLanguageLevels: Record<string, string[]>;
+  teachingExperience: string;
   approach: string;
   duration: string;
   rate: string;
@@ -60,6 +63,7 @@ export const initialAnswers: Answers = {
   personalGoal: "",
   learningFormats: [],
   format: "",
+  formatDeferred: false,
   city: "",
   days: [],
   time: "",
@@ -68,6 +72,8 @@ export const initialAnswers: Answers = {
   name: "",
   teachingLanguages: [],
   teachingLevels: [],
+  teachingLanguageLevels: {},
+  teachingExperience: "",
   approach: "",
   duration: "",
   rate: "",
@@ -90,6 +96,41 @@ export const languageChoices = [
   "Japanese",
 ] as const;
 export const learnerFormatChoices = ["Online", "In person"] as const;
+export const teachingLevelChoices = ["A1", "A2", "B1", "B2", "C1", "C2"] as const;
+type TeachingLevelsInput = Pick<Answers, "teachingLanguages" | "teachingLevels"> & {
+  teachingLanguageLevels?: Record<string, string[]>;
+};
+const normalizedTeachingLevels = (levels: readonly string[] = []) =>
+  teachingLevelChoices.filter(level => levels.includes(level));
+
+/** Older onboarding state used one global level list for every selected language. */
+export function teachingLanguageLevelsFor(a: TeachingLevelsInput): Record<string, string[]> {
+  const mapping = a.teachingLanguageLevels ?? {};
+  const legacy = Object.keys(mapping).length === 0;
+  return Object.fromEntries([...new Set(a.teachingLanguages)].map(language => [language,
+    normalizedTeachingLevels(Object.prototype.hasOwnProperty.call(mapping, language)
+      ? mapping[language] : legacy ? a.teachingLevels : []),
+  ]));
+}
+export function teachingLanguagesPatch(languages: string[], levels: Record<string, string[]>): Partial<Answers> {
+  const teachingLanguages = [...new Set(languages)];
+  const teachingLanguageLevels = Object.fromEntries(teachingLanguages.map(language => [language, normalizedTeachingLevels(levels[language])]));
+  return {
+    teachingLanguages, teachingLanguageLevels,
+    teachingLevels: teachingLevelChoices.filter(level => Object.values(teachingLanguageLevels).some(values => values.includes(level))),
+  };
+}
+export function toggleTeachingLanguage(a: TeachingLevelsInput, language: string): Partial<Answers> {
+  const levels = teachingLanguageLevelsFor(a);
+  return teachingLanguagesPatch(a.teachingLanguages.includes(language)
+    ? a.teachingLanguages.filter(value => value !== language) : [...a.teachingLanguages, language], levels);
+}
+export function toggleTeachingLevel(a: TeachingLevelsInput, language: string, level: string): Partial<Answers> {
+  const levels = teachingLanguageLevelsFor(a), selected = levels[language] ?? [];
+  if (!a.teachingLanguages.includes(language)) return {};
+  return teachingLanguagesPatch(a.teachingLanguages, { ...levels, [language]: selected.includes(level)
+    ? selected.filter(value => value !== level) : [...selected, level] });
+}
 // Normalize older single-format answers at the edge so later learner flows can
 // consume the same list whether one or both meeting formats were selected.
 export function learningFormatsFor(a: Pick<Answers, "learningFormats" | "format">): LearningFormat[] {
@@ -106,6 +147,7 @@ export function toggleLearningFormat(a: Answers, format: LearningFormat): Partia
   return {
     learningFormats,
     format: "",
+    formatDeferred: false,
     ...(!learningFormats.includes("In person") ? { city: "" } : {}),
   };
 }
@@ -306,7 +348,7 @@ export function validStep(step: Step, a: Answers): boolean {
     case "teacher-profile":
       return a.name.trim().length >= 2 && a.approach.trim().length >= 5;
     case "teacher-subjects":
-      return a.teachingLanguages.length > 0 && a.teachingLevels.length > 0;
+      return a.teachingLanguages.length > 0 && Object.values(teachingLanguageLevelsFor(a)).every(levels => levels.length > 0);
     case "teacher-lessons":
       return validLessonSettings(a);
     case "learner-goal":
@@ -344,7 +386,7 @@ export function validStep(step: Step, a: Answers): boolean {
     case "teaching-languages":
       return a.teachingLanguages.length > 0;
     case "teaching-levels":
-      return a.teachingLevels.length > 0;
+      return a.teachingLanguages.length > 0 && Object.values(teachingLanguageLevelsFor(a)).every(levels => levels.length > 0);
     case "approach":
       return a.approach.trim().length >= 5;
     case "duration":

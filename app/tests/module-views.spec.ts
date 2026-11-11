@@ -43,8 +43,8 @@ for (const viewport of [{ width: 1280, height: 720 }, { width: 1024, height: 720
     await wheelPane(page, pane, -600);
     await expect.poll(() => pane.evaluate(element => element.scrollTop)).toBe(0);
     await expect(switcher).toBeInViewport({ ratio: 1 });
-    await switcher.getByRole("button", { name: "Lessons by student", exact: true }).click();
-    await expect(switcher.getByRole("button", { name: "Lessons by student", exact: true })).toHaveAttribute("aria-pressed", "true");
+    await switcher.getByRole("button", { name: "Lessons for students", exact: true }).click();
+    await expect(switcher.getByRole("button", { name: "Lessons for students", exact: true })).toHaveAttribute("aria-pressed", "true");
     const student = pane.getByRole("combobox", { name: "Select student", exact: true });
     await selectChoice(page, student, "Lucas Bernard");
     await expectSelectedChoice(student, "Lucas Bernard");

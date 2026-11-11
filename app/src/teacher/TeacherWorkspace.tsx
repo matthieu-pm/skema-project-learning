@@ -61,7 +61,7 @@ const titles: Record<string, string> = {
   recap: "Lesson recap",
   "recap-preview": "Review recap",
   lessons: "Lessons",
-  editor: "Module editor",
+  editor: "Lesson editor",
   "lesson-preview": "Learner preview",
   "ai-review": "Review AI draft",
   share: "Share lesson",

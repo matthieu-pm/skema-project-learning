@@ -27,12 +27,13 @@ test("desktop dropdowns support keyboard selection, selected state, Escape and p
   await expect(page.locator(".lw-teacher-card").first()).toContainText("English");
 });
 
-test("a dropdown inside Publish course stays above the dialog and returns focus to its control", async ({ page }) => {
+test("a dropdown inside Use lesson stays above the dialog and returns focus to its control", async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 1000 });
   await page.goto("/?teacher=1&view=web&flow=editor&lesson=cafe");
-  await page.getByRole("button", { name: "Publish course", exact: true }).click();
-  const dialog = page.getByRole("dialog", { name: "Publish course", exact: true });
+  await page.getByRole("button", { name: "Use lesson", exact: true }).click();
+  const dialog = page.getByRole("dialog", { name: "Use lesson", exact: true });
   await expect(dialog).toBeVisible();
+  await dialog.getByRole("checkbox", { name: "Assign to a student", exact: true }).click();
   const student = dialog.getByRole("combobox", { name: "Student", exact: true });
   await student.click();
   const learner = page.getByRole("option", { name: "Léa Martin · French A2", exact: true });

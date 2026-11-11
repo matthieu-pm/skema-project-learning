@@ -112,6 +112,18 @@
 .learning-app .welcome-brand { display: block; color: #171717; font-size: 24px; font-weight: 600; letter-spacing: -1.2px; margin-bottom: 32px; }
 .learning-app .welcome h1 { color: #171717; font-size: 36px; line-height: 1.12; font-weight: 600; letter-spacing: -1.4px; text-wrap: balance; }
 .learning-app .welcome p { max-width: 280px; color: #666; font-size: 15px; line-height: 1.6; margin-top: 20px; }
+.learning-app .welcome .welcome-learner-value { margin-top: 16px; font-size: 13px; }
+.learning-app .field-help { margin-top: 8px; color: #737373; font-size: 12px; line-height: 1.6; }
+.learning-app .inline-link.deferred-choice { gap: 7px; text-decoration: none; padding: 7px 9px; margin-top: 8px; border-radius: 4px; }
+.learning-app .deferred-choice-check { display: grid; place-items: center; width: 16px; height: 16px; border: 1px solid #d4d4d4; border-radius: 3px; }
+.learning-app .deferred-choice.is-selected { color: #171717; background: #f5f5f5; }
+.learning-app .deferred-choice.is-selected .deferred-choice-check { color: #fff; background: #171717; border-color: #171717; }
+.learning-app .verification-information { display: grid; gap: 22px; margin-bottom: 24px; }
+.learning-app .verification-information strong { font-size: 14px; font-weight: 500; }
+.learning-app .verification-information p { margin-top: 6px; color: #666; font-size: 14px; line-height: 1.6; }
+.learning-app .teacher-review-experience { margin-top: 20px; }
+.learning-app .teacher-review-experience h3 { font-size: 12px; color: #737373; font-weight: 400; }
+.learning-app .teacher-review-experience p { margin-top: 6px; white-space: pre-line; overflow-wrap: anywhere; font-size: 14px; line-height: 1.7; color: #525252; }
 .learning-app .account-intro { padding: 0; margin: 0 0 28px; text-align: left; }
 .learning-app .account-intro h1 { font-size: 26px; font-weight: 600; line-height: 1.2; letter-spacing: -.8px; margin-bottom: 10px; }
 .learning-app .account-intro > p { color: #666; font-size: 14px; }

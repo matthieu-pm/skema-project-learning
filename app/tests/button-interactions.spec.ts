@@ -3,7 +3,7 @@ import { expect, test, type Locator, type Page } from "@playwright/test";
 async function editorButton(page: Page) {
   await page.setViewportSize({ width: 1440, height: 1000 });
   await page.goto("/?teacher=1&view=web&flow=editor&lesson=cafe");
-  return page.getByRole("button", { name: "Save changes", exact: true });
+  return page.getByRole("button", { name: "Save draft", exact: true });
 }
 
 async function moveToCenter(page: Page, button: Locator) {

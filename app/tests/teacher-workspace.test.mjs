@@ -9,6 +9,9 @@ import {
   learnerMaterial,
   lessonValid,
   initialProfile,
+  profileTeachingLanguages,
+  profileTeachingLevels,
+  profileLanguageSummary,
   primaryTab,
 } from "../src/teacher/model.ts";
 import { initialAnswers } from "../src/onboarding.ts";
@@ -23,6 +26,30 @@ import {
   validateWeeklyHours,
   workingDayError,
 } from "../src/teacher/availability.ts";
+
+test("teaching experience stays optional and survives onboarding profile transfer without changing existing values", () => {
+  const answers = { ...initialAnswers, name: "Alex", approach: "Conversation and practical examples", teachingLanguages: ["French", "English"], teachingLevels: ["A1", "B2"], teachingLanguageLevels: { French: ["A1"], English: ["B2"] }, teachingExperience: "Five years teaching adults and teenagers.", duration: "30 minutes", rate: "25" };
+  const profile = initialProfile(answers);
+  assert.equal(profile.teachingExperience, answers.teachingExperience);
+  assert.equal(profile.approach, answers.approach);
+  assert.equal(profile.rate, "25");
+  assert.deepEqual(profileTeachingLevels(profile), { French: ["A1"], English: ["B2"] });
+  assert.equal(profileLanguageSummary(profile), "French · A1; English · B2");
+  assert.equal(initialProfile({ ...answers, teachingExperience: "" }).teachingExperience, "");
+  assert.equal(initialProfile({ ...answers, teachingExperience: undefined }).teachingExperience, "");
+});
+
+test("legacy teaching profiles retain their global levels while explicit missing levels stay missing", () => {
+  const profile = { languages: "French, English, French", levels: "A1, B1" };
+  assert.deepEqual(profileTeachingLanguages(profile), ["French", "English"]);
+  assert.deepEqual(profileTeachingLevels(profile), { French: ["A1", "B1"], English: ["A1", "B1"] });
+  const mapped = { ...profile, teachingLanguageLevels: { French: ["A2"], English: [] } };
+  assert.deepEqual(profileTeachingLevels(mapped), { French: ["A2"], English: [] });
+  assert.deepEqual(profileTeachingLevels({ ...profile, teachingLanguageLevels: { French: ["A2"] } }), { French: ["A2"], English: [] });
+  const isolated = profileTeachingLevels(mapped);
+  isolated.French.push("C1");
+  assert.deepEqual(mapped.teachingLanguageLevels.French, ["A2"]);
+});
 
 test("working hours remain independent per weekday and survive turning a day off", () => {
   const original = createAvailability();

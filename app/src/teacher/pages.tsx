@@ -2,6 +2,9 @@ import LocationField from "../LocationField";
 import FreeLessonConfirmation from "../FreeLessonConfirmation";
 import ProfilePortrait from "../ProfilePortrait";
 import { CountryText } from "../CountryFlag";
+import TeacherLanguageSelect, { focusTeachingLanguageError } from "../TeacherLanguageSelect";
+import { useKeyboard, useKeyboardInsets } from "../mobile";
+import "./teaching-profile.css";
 import {
   isFreeLesson,
   lessonDurations,
@@ -24,7 +27,7 @@ import {
   type Course,
 } from "./course";
 import CourseEditor, { LessonPlayer } from "./CourseEditor";
-import { useState, type ReactNode } from "react";
+import { useEffect, useRef, useState, type ReactNode } from "react";
 import { CalendarPage } from "./CalendarPage";
 import {
   useWorkspace,
@@ -48,6 +51,9 @@ import {
   lessonValid,
   overlaps,
   dateLabel,
+  profileTeachingLanguages,
+  profileTeachingLevels,
+  profileLanguageSummary,
   type Route,
   type Lesson,
 } from "./model";
@@ -479,7 +485,7 @@ function ModulesPage({ navigate }: { navigate: Navigate }) {
       />
       <div className="tw-module-views" aria-label="Ongoing module views">
         <Segments
-          items={["Review queue", "Lessons by student"]}
+          items={["Review queue", "Lessons for students"]}
           value={view}
           onChange={setView}
         />
@@ -487,10 +493,10 @@ function ModulesPage({ navigate }: { navigate: Navigate }) {
       <div hidden={view !== "Review queue"}>
         <ReviewQueue navigate={navigate} />
       </div>
-      {view === "Lessons by student" && (
+      {view === "Lessons for students" && (
         <>
           <Panel>
-            <SectionTitle>Lessons by student</SectionTitle>
+            <SectionTitle>Lessons for students</SectionTitle>
             <Select
               label="Select student"
               value={studentId}
@@ -894,9 +900,9 @@ function LessonsPage({
         }
       />
       <Segments
-        items={["Library", "Drafts", "Templates", "Archive"]}
-        value={tab === "Module editor" ? "Drafts" : tab}
-        onChange={(value) => setTab(value === "Drafts" ? "Module editor" : value)}
+        items={["Library", "Drafts", "Lesson templates", "Archive"]}
+        value={tab === "Module editor" ? "Drafts" : tab === "Templates" ? "Lesson templates" : tab}
+        onChange={(value) => setTab(value === "Drafts" ? "Module editor" : value === "Lesson templates" ? "Templates" : value)}
       />
       {tab === "Templates" ? (
         <>
@@ -2104,12 +2110,13 @@ function ProfilePage({
           <div>
             <h2>{p.name}</h2>
             <p>
-              {p.languages} · {p.levels}
+              {profileLanguageSummary(p)}
             </p>
           </div>
           <Badge tone="orange">Profile draft</Badge>
         </div>
         <blockquote>{p.approach}</blockquote>
+        {p.teachingExperience?.trim() && <section className="tw-profile-experience"><h3>Language teaching experience</h3><p>{p.teachingExperience}</p></section>}
         <div className="tw-profile-facts">
           <span>
             <Icon name="video" />
@@ -2143,7 +2150,7 @@ function ProfilePage({
             {!lessonSettingsReady(p) && (
               <p className="tw-subtle">
                 Duration or price is not set. You can prepare lessons now and
-                complete these details before publishing a lesson.
+                complete these details before assigning a lesson to a student.
               </p>
             )}
           </>
@@ -2211,14 +2218,49 @@ function ProfileEditPage({
     attempt,
   } = useWorkspace();
   const [preview, setPreview] = useState(false);
+  const languageFields = useRef<HTMLDivElement>(null);
+  const [showLanguageErrors, setShowLanguageErrors] = useState(false);
+  const selectedLanguages = profileTeachingLanguages(p);
+  const selectedLevels = profileTeachingLevels(p);
+  const languageErrors = Object.fromEntries(selectedLanguages.filter(language => !selectedLevels[language]?.length).map(language => [language, `Choose at least one level for ${language}.`]));
+  const { focusedElement } = useKeyboard();
+  const { isKeyboardVisible, keyboardHeight } = useKeyboardInsets();
+  useEffect(() => {
+    const panel = languageFields.current?.closest<HTMLElement>(".tw-panel");
+    if (!mobile || !isKeyboardVisible || !focusedElement || !panel?.contains(focusedElement)) return;
+    const scroll = panel.closest<HTMLElement>(".mobile-scroll");
+    if (!scroll) return;
+    const footer = scroll.closest(".flow-stack")?.querySelector<HTMLElement>(".flow-fixed-footer");
+    let frame = 0;
+    const reveal = () => {
+      frame = 0;
+      if (document.activeElement !== focusedElement) return;
+      const viewport = scroll.getBoundingClientRect();
+      if (!viewport.height) return;
+      const cssPerPixel = scroll.clientHeight / viewport.height;
+      const margin = 12 / cssPerPixel;
+      const top = viewport.top + margin;
+      const bottom = Math.min(viewport.bottom, footer?.getBoundingClientRect().top ?? viewport.bottom) - margin;
+      const field = focusedElement.getBoundingClientRect();
+      const delta = field.height > bottom - top ? field.top - top
+        : field.bottom > bottom ? field.bottom - bottom
+        : field.top < top ? field.top - top : 0;
+      if (Math.abs(delta) > .5) scroll.scrollTop += delta * cssPerPixel;
+    };
+    const queueReveal = () => { if (!frame) frame = requestAnimationFrame(reveal); };
+    const observer = new ResizeObserver(queueReveal);
+    observer.observe(scroll);
+    observer.observe(panel);
+    observer.observe(focusedElement);
+    queueReveal();
+    return () => { observer.disconnect(); cancelAnimationFrame(frame); };
+  }, [mobile, preview, isKeyboardVisible, keyboardHeight, focusedElement]);
   const update = (patch: Partial<typeof p>) => {
     setProfile((v) => ({ ...v, ...patch }));
     setPreview(false);
   };
   const valid =
     p.name.trim().length >= 2 &&
-    p.languages.trim() &&
-    p.levels.trim() &&
     p.approach.trim().length >= 5 &&
     validLessonSettings(p);
   return (
@@ -2240,9 +2282,10 @@ function ProfileEditPage({
           <>
             <h2>{p.name}</h2>
             <p>
-              {p.languages} · {p.levels}
+              {profileLanguageSummary(p)}
             </p>
             <blockquote>{p.approach}</blockquote>
+            {p.teachingExperience?.trim() && <section className="tw-profile-experience"><h3>Language teaching experience</h3><p>{p.teachingExperience}</p></section>}
             <p>
               {p.format || "Format not set"} ·{" "}
               {p.duration || "Duration not set"} ·{" "}
@@ -2254,7 +2297,7 @@ function ProfileEditPage({
                 onClick={() => {
                   if (
                     attempt(() => {
-                      setSavedProfile({ ...p });
+                      setSavedProfile({ ...p, teachingLanguageLevels: structuredClone(selectedLevels) });
                     }, "Teaching profile updated. Existing booking terms are preserved.")
                   )
                     navigate(returnLessonId ? { page: "editor", id: returnLessonId } : { page: "profile" });
@@ -2274,17 +2317,9 @@ function ProfileEditPage({
               value={p.name}
               onChange={(name) => update({ name })}
             />
-            <div className="tw-form-pair">
-              <TextField
-                label="Teaching languages"
-                value={p.languages}
-                onChange={(languages) => update({ languages })}
-              />
-              <TextField
-                label="Teaching levels"
-                value={p.levels}
-                onChange={(levels) => update({ levels })}
-              />
+            <div ref={languageFields}>
+              <TeacherLanguageSelect mobile={mobile} languages={selectedLanguages} levels={selectedLevels} errors={showLanguageErrors ? { ...languageErrors, ...(!selectedLanguages.length ? { "": "Choose at least one teaching language." } : {}) } : undefined}
+                onChange={(languages, levels) => update({ languages: languages.join(", "), levels: [...new Set(languages.flatMap(language => levels[language] || []))].join(", "), teachingLanguageLevels: structuredClone(levels) })} />
             </div>
             <TextField
               label="Your teaching approach"
@@ -2292,6 +2327,8 @@ function ProfileEditPage({
               onChange={(approach) => update({ approach })}
               multiline
             />
+            <TextField label="Language teaching experience" value={p.teachingExperience ?? ""} onChange={(teachingExperience) => update({ teachingExperience })} multiline />
+            <p className="tw-subtle">Describe your teaching background, the learners you’ve worked with, and your approach.</p>
             <Select
               label="Meeting format"
               value={p.format}
@@ -2332,10 +2369,19 @@ function ProfileEditPage({
               />
             )}
             <p className="tw-subtle">
-              Required before publishing a lesson. You can save your profile with
+              Required before assigning a lesson to a student. You can save your profile with
               these fields blank. Enter 0 and confirm to offer free lessons.
             </p>
-            <Button disabled={!valid} onClick={() => setPreview(true)}>
+            <Button disabled={!valid} onClick={() => {
+              setShowLanguageErrors(true);
+              if (!selectedLanguages.length || Object.keys(languageErrors).length) {
+                requestAnimationFrame(() => {
+                  focusTeachingLanguageError(languageFields.current || undefined);
+                });
+                return;
+              }
+              setPreview(true);
+            }}>
               Review teaching profile
             </Button>
           </>

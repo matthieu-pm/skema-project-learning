@@ -64,7 +64,7 @@ test("teacher sidebar has precise active routes, a usable collapsed rail, and a 
   const active = navigation.locator('[aria-current="page"]');
   await expect(active).toHaveCount(1);
   await expect(active).toHaveAttribute("aria-label", "Ongoing modules");
-  for (const label of ["Templates", "Archive", "Lessons"]) {
+  for (const label of ["Lesson templates", "Archive", "Lessons"]) {
     await navigation.getByRole("button", { name: label, exact: true }).click();
     await expect(active).toHaveCount(1);
     await expect(active).toHaveAttribute("aria-label", label);
