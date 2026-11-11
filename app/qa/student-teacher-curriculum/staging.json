@@ -1,0 +1,17 @@
+{
+  "stagePath": "/var/folders/j2/gzj18t_x2251dx_cnqdcscm80000gn/T/mimo-curriculum-release-cj4xhpfd/app",
+  "fileCount": 487,
+  "sourceCommit": "2b4f095869f9589c00dc2ea8d9f8c6bac9e8ab1e",
+  "branch": "dev/redesign-screens-in-a-minimal",
+  "exclusions": [
+    "node_modules",
+    ".git",
+    ".vercel",
+    "dist",
+    "qa",
+    "test-results",
+    "playwright-report",
+    ".env*",
+    "*.log"
+  ]
+}

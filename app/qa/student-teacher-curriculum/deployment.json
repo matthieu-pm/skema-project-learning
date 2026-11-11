@@ -1,0 +1,55 @@
+{
+  "projectName": "mimo-prototype",
+  "projectId": "prj_SEpdrBUQD5HcdNc5GRT73OKvrcrm",
+  "team": "matthieu-pm",
+  "teamId": "team_KddvwwnftxOOhP8UymRnP0PX",
+  "production": {
+    "id": "dpl_DfV2kQ43Kj9JZMS9iYzu5XveKddn",
+    "url": "https://mimo-prototype-five.vercel.app",
+    "deploymentUrl": "https://mimo-prototype-95biqnyng-matthieu-pm.vercel.app",
+    "readyState": "READY",
+    "target": "production",
+    "previousDeploymentId": "dpl_B1TRgCALrz3wUoCdMX3mQEKxy7Rj"
+  },
+  "scope": [
+    "Gilbert public lesson card and detailed Overview/Curriculum, sourced from Mimo Students Figma",
+    "Six modules, nine blocks, three outcomes and read-only preview, with owned public deep links and original local SVG artwork"
+  ],
+  "method": "Fresh isolated app snapshot uploaded with Vercel CLI --prod --skip-domain, then Ready production build promoted through authenticated Vercel API.",
+  "source": {
+    "commit": "2b4f095869f9589c00dc2ea8d9f8c6bac9e8ab1e",
+    "branch": "dev/redesign-screens-in-a-minimal",
+    "fileCount": 487,
+    "manifest": "source-manifest.json",
+    "matchedCurrentAndStaging": true,
+    "deltaFromPriorProduction": "4 existing integration/test/guidance files changed; 7 public lesson UI/data/style/asset/provenance/browser-test files added; no removals. Booking model, protected runtime, configuration and dependencies unchanged.",
+    "excluded": [
+      "node_modules",
+      ".git",
+      ".vercel",
+      "dist",
+      "qa",
+      "test-results",
+      "playwright-report",
+      ".env*",
+      "*.log"
+    ]
+  },
+  "build": "Vercel npm ci and npm run build passed TypeScript/Vite/Sites packaging and all 28 protected runtime hashes.",
+  "verification": "Prior local production build, 12 learner units, all 3 distinct new desktop/iPhone/Pixel browser flows and native WebKit review remain valid for this unchanged feature snapshot. Source freeze and read-only release audit passed. See verification.md for test retry and device limits.",
+  "aliasVerification": {
+    "alias": "mimo-prototype-five.vercel.app",
+    "deploymentId": "dpl_DfV2kQ43Kj9JZMS9iYzu5XveKddn",
+    "projectId": "prj_SEpdrBUQD5HcdNc5GRT73OKvrcrm",
+    "method": "Authenticated get_alias after promotion"
+  },
+  "hostedUi": "Not fetched or re-tested; readiness and stable alias verified through Vercel metadata API.",
+  "authentication": "Inherited Vercel Authentication retained",
+  "git": {
+    "featureCommit": "2b4f095869f9589c00dc2ea8d9f8c6bac9e8ab1e",
+    "remote": "https://github.com/matthieu-pm/skema-project-learning.git",
+    "branch": "dev/redesign-screens-in-a-minimal",
+    "featurePushed": true,
+    "releaseRecord": "Committed and pushed separately after deployment; QA and root context are excluded from deployed source."
+  }
+}
