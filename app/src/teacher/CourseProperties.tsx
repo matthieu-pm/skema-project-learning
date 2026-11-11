@@ -44,7 +44,7 @@ export function BlockProperties({
           <Select
             label="Block purpose"
             value={b.purpose}
-            options={["Teach", "Practise"]}
+            options={["Teach", "Practice"]}
             onChange={(v) => edit({ purpose: v as Purpose })}
           />
           <Select
@@ -549,7 +549,7 @@ export function BlockProperties({
           {b.filename && <p>{b.filename}</p>}
         </>
       )}
-      {b.purpose === "Practise" && !autoAssessed(b) && (
+      {b.purpose === "Practice" && !autoAssessed(b) && (
         <p className="ce-info">
           Responses go to the teacher for review. No automatic grade.
         </p>

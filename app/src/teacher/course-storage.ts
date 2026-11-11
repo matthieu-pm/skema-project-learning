@@ -10,7 +10,13 @@ const key = "mimo.lesson-library.v1";
 type Library = { version: 1; lessons: Lesson[]; templates: CourseTemplate[] };
 export function readLibrary(): Library {
   try {
-    const parsed = JSON.parse(localStorage.getItem(key) || "null");
+    const parsed = JSON.parse(localStorage.getItem(key) || "null", (field, value) => {
+      // Keep previously saved drafts, templates and applied snapshots readable.
+      if (field === "purpose" && value === "Practise") return "Practice";
+      if (field === "type" && typeof value === "string" && value.startsWith("Practise · "))
+        return `Practice · ${value.slice("Practise · ".length)}`;
+      return value;
+    });
     if (
       parsed?.version === 1 &&
       Array.isArray(parsed.lessons) &&

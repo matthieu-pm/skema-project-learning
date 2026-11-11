@@ -58,7 +58,7 @@ test("all seven assessed formats validate teacher keys; open responses stay teac
     "Quiz",
     "Fill the gap",
   ]) {
-    const b = createBlock(format, "Practise");
+    const b = createBlock(format, "Practice");
     assert.equal(autoAssessed(b), true, format);
     assert.deepEqual(blockIssues(b), [], format);
     if (["Flashcards", "Vocabulary recall"].includes(format)) {
@@ -79,11 +79,11 @@ test("all seven assessed formats validate teacher keys; open responses stay teac
     "Document",
     "Role-play",
   ])
-    assert.equal(autoAssessed(createBlock(format, "Practise")), false);
-  const quiz = createBlock("Quiz", "Practise");
+    assert.equal(autoAssessed(createBlock(format, "Practice")), false);
+  const quiz = createBlock("Quiz", "Practice");
   quiz.answer = "Not an option";
   assert.ok(blockIssues(quiz).some((x) => x.includes("quiz options")));
-  const sentence = createBlock("Sentence construction", "Practise");
+  const sentence = createBlock("Sentence construction", "Practice");
   sentence.answer = "A sentence the tiles cannot construct";
   assert.ok(blockIssues(sentence).some((x) => x.includes("sentence tiles")));
 });
@@ -141,6 +141,24 @@ test("legacy conversion preserves content; adaptation and learner snapshots excl
   assert.equal(rich.course.modules[0].blocks[0].words[0].word, "un café");
   rich.course.modules[0].blocks[0].words[0].word = "Later draft";
   assert.equal(snapshot.course.modules[0].blocks[0].words[0].word, "un café");
+});
+
+test("saved practice blocks accept the previous spelling without changing authored text or stored snapshots", async () => {
+  const { readLibrary } = await import("../src/teacher/course-storage.ts");
+  const legacy = JSON.stringify({ version: 1, lessons: [{
+    blocks: [{ type: "Practise · Written response", content: "Practise my introduction" }],
+    course: { modules: [{ blocks: [{ purpose: "Practise", text: "Practise my introduction" }] }] },
+    publishedEditor: { content: { modules: [{ blocks: [{ purpose: "Practise" }] }] } },
+  }], templates: [{ content: { modules: [{ blocks: [{ purpose: "Practise" }] }] } }] });
+  Object.defineProperty(globalThis, "localStorage", { configurable: true, value: { getItem: () => legacy } });
+  const library = readLibrary();
+  assert.equal(library.lessons[0].blocks[0].type, "Practice · Written response");
+  assert.equal(library.lessons[0].course.modules[0].blocks[0].purpose, "Practice");
+  assert.equal(library.lessons[0].publishedEditor.content.modules[0].blocks[0].purpose, "Practice");
+  assert.equal(library.templates[0].content.modules[0].blocks[0].purpose, "Practice");
+  assert.equal(library.lessons[0].blocks[0].content, "Practise my introduction");
+  assert.equal(library.lessons[0].course.modules[0].blocks[0].text, "Practise my introduction");
+  assert.equal(localStorage.getItem("mimo.lesson-library.v1"), legacy);
 });
 
 test("explicit saves persist one draft and keep applied snapshots and other lessons independent", async () => {

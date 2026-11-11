@@ -788,7 +788,7 @@ function Editor({ lesson, navigate }: { lesson: Lesson; navigate: Navigate }) {
             </div>
           </div>
           <div className="ce-tabs">
-            {["Modules", "Teach", "Practise", "Templates"].map((t) => (
+            {["Modules", "Teach", "Practice", "Templates"].map((t) => (
               <button
                 key={t}
                 aria-pressed={library === t}
@@ -974,7 +974,7 @@ function Editor({ lesson, navigate }: { lesson: Lesson; navigate: Navigate }) {
                       ![...teachFormats, ...practiceFormats].includes(
                         data.format,
                       ) ||
-                      !["Teach", "Practise"].includes(data.purpose)
+                      !["Teach", "Practice"].includes(data.purpose)
                     )
                       return;
                     const b = createBlock(data.format, data.purpose);
@@ -1189,7 +1189,7 @@ function Editor({ lesson, navigate }: { lesson: Lesson; navigate: Navigate }) {
             <>
               <p>Add content to {selectedModule?.title || "a module"}.</p>
               <div className="ce-tabs">
-                {(["Teach", "Practise"] as Purpose[]).map((p) => (
+                {(["Teach", "Practice"] as Purpose[]).map((p) => (
                   <button
                     key={p}
                     aria-pressed={purpose === p}

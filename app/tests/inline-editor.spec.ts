@@ -80,7 +80,7 @@ test("editing other modules and adding a quiz keeps all content and answer keys 
   await expect(modules.nth(0).getByLabel("Word or phrase 1", { exact: true })).toHaveValue("un café");
   await modules.nth(4).getByRole("button", { name: "Add block", exact: true }).click();
   const dialog = page.getByRole("dialog");
-  await dialog.getByRole("button", { name: "Practise", exact: true }).click();
+  await dialog.getByRole("button", { name: "Practice", exact: true }).click();
   await dialog.getByRole("button", { name: /Quiz/ }).click();
   const quiz = modules.nth(4).locator(".ce-canvas-block").last();
   await quiz.getByLabel("Question", { exact: true }).fill("Which phrase is polite?");

@@ -1454,7 +1454,7 @@ function Screen({ step }: { step: Step }) {
           <p className="step-description">
             {a.role === "teacher"
               ? "Choose how you’d like to teach."
-              : "Choose how you’d like to practise toward your goal."}
+              : "Choose how you’d like to practice toward your goal."}
           </p>
         )}
         {step === "format" &&
