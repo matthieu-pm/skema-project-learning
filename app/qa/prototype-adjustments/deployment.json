@@ -1,0 +1,57 @@
+{
+  "projectName": "mimo-prototype",
+  "projectId": "prj_SEpdrBUQD5HcdNc5GRT73OKvrcrm",
+  "team": "matthieu-pm",
+  "teamId": "team_KddvwwnftxOOhP8UymRnP0PX",
+  "production": {
+    "id": "dpl_8QEBSJRWKgqjwGxDC8uwDZ71mEGs",
+    "url": "https://mimo-prototype-five.vercel.app",
+    "deploymentUrl": "https://mimo-prototype-d2fy7439r-matthieu-pm.vercel.app",
+    "readyState": "READY",
+    "target": "production",
+    "previousDeploymentId": "dpl_AS4vC75HGyzvECNwTkzcdqoqvtaU"
+  },
+  "scope": [
+    "Onboarding value, optional teaching experience, searchable teaching languages with independent levels, accessible Decide later selection and plain verification information",
+    "Lesson editor terminology, optional module title/goal, private Save draft, independent Use lesson choices and atomic immutable assignment/template snapshots with duplicate protection",
+    "Phone focus-reveal fixes, scoped acceptance/regression tests and durable source/verification records"
+  ],
+  "source": {
+    "commit": "222728c2066465121ccb03444354f776bf552646",
+    "branch": "dev/redesign-screens-in-a-minimal",
+    "fileCount": 500,
+    "manifest": "source-manifest.json",
+    "matchedCurrentAndStaging": true,
+    "deltaFromPriorProduction": "23 existing onboarding/profile/editor/guidance/test files changed; 4 language selector/profile-style/acceptance-test files added; no removals. Learner booking/preparation, public assets, dependency manifests/lockfile, build configuration and protected runtime match prior production.",
+    "exclusions": [
+      "node_modules",
+      ".git",
+      ".vercel",
+      "dist",
+      "qa",
+      "test-results",
+      "playwright-report",
+      ".env*",
+      "*.log"
+    ]
+  },
+  "method": "Fresh isolated app snapshot deployed with Vercel CLI --prod --skip-domain, then Ready production build promoted through authenticated Vercel API.",
+  "build": "Remote npm ci and npm run build passed TypeScript, Vite, Sites packaging and all 28 protected runtime hashes.",
+  "verification": "113 unit/worker tests and 31 distinct scoped browser cases passed; final local build/runtime/diff checks, native desktop review, reviewed captures and independent release audit passed. Full sequencing and physical-device/native-review limits remain in verification.md. No product source changed during release.",
+  "aliasVerification": {
+    "alias": "mimo-prototype-five.vercel.app",
+    "deploymentId": "dpl_8QEBSJRWKgqjwGxDC8uwDZ71mEGs",
+    "projectId": "prj_SEpdrBUQD5HcdNc5GRT73OKvrcrm",
+    "method": "Authenticated get_alias after promotion; first immediate read still showed the prior release, subsequent read confirmed propagation."
+  },
+  "authentication": "Inherited Vercel Authentication retained",
+  "hostedUi": "Not fetched or re-tested; deployment readiness and the stable alias were verified through authenticated Vercel metadata.",
+  "git": {
+    "featureCommit": "222728c2066465121ccb03444354f776bf552646",
+    "featurePushed": true,
+    "branch": "dev/redesign-screens-in-a-minimal",
+    "remote": "https://github.com/matthieu-pm/skema-project-learning.git",
+    "releaseRecord": "Committed and pushed separately after deployment; QA and root context are excluded from deployed source."
+  },
+  "limits": "Profile edits retain existing workspace-session state; assignment/template actions remain browser-local simulations without actual student notification or backend delivery. No main merge or independent Sites deployment was performed."
+}

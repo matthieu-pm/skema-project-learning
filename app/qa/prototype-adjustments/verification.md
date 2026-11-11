@@ -1,6 +1,6 @@
 # Prototype adjustments verification
 
-Verified locally on 11 November 2026 against the user-supplied [implementation handoff](./feedback.md). No Git publication or deployment was performed for this task.
+Verified locally on 11 November 2026 against the user-supplied [implementation handoff](./feedback.md). The later authorized Git publication and production deployment are recorded below.
 
 ## Scope and acceptance coverage
 
@@ -64,4 +64,10 @@ The screenshot-writing learner usability tests were not run. Original search ima
 | `qa/usability-feedback/desktop-search.png` | `f54425180b6e6810cf4e34798f27bfa4d9909449308e6de8a6038d29eecd72ee` |
 | `qa/usability-feedback/mobile-search.png` | `aa474f59ce41b03053a66f4de0a0e3cf76aafed46beafe8b6026ff65921e0fd7` |
 
-No unresolved blocker remains in the checked scope. Profile persistence remains session state; lessons/templates/assignments remain simulated browser-local data. Unrelated learner preparation, public teacher curriculum, research assets and production deployment state were preserved.
+No unresolved blocker remains in the checked scope. Profile persistence remains session state; lessons/templates/assignments remain simulated browser-local data. Unrelated learner preparation, public teacher curriculum and research assets were preserved. The local verification did not alter production; subsequent authorized publication is recorded below.
+
+## Production publication — 11 November 2026
+
+The user subsequently requested commit, push and deployment. Feature commit `222728c2066465121ccb03444354f776bf552646` was pushed to `origin/dev/redesign-screens-in-a-minimal`. The unchanged 500-file app snapshot matched local source and isolated staging. Relative to the prior booked-session release, 23 existing files changed, four were added and none removed. Independent release review confirmed no unrelated assets, dependencies, configuration, protected runtime or learner booking/preparation changes. No product code or tests were changed during this release.
+
+Vercel installed and built the snapshot successfully, passing TypeScript, Vite, Sites packaging and all 28 protected runtime hashes. Ready production deployment `dpl_8QEBSJRWKgqjwGxDC8uwDZ71mEGs` was promoted in the existing mimo-prototype project. Authenticated get_deployment and get_alias confirm Ready/production and that [mimo-prototype-five.vercel.app](https://mimo-prototype-five.vercel.app) maps to this exact release. The first immediate alias read showed the preceding deployment; the subsequent read confirmed propagation. Inherited Vercel Authentication remains enabled. Hosted pages were not fetched or re-tested; the local test evidence and limits above remain explicit. No main merge or independent Sites publication occurred. See deployment.json, source-manifest.json and staging.json. Release records are committed and pushed separately from the deployed feature snapshot.
