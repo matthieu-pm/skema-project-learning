@@ -2,6 +2,7 @@ import { useEffect, useRef, useState, type ReactNode } from "react";
 import type { FlowControls, FlowScreen } from "./mobile/FlowStack";
 import { setupProgress, type Answers, type Step } from "./onboarding";
 import { Icon } from "./teacher/icons";
+import { Button } from "./teacher/ui/button";
 import "./web-onboarding.css";
 
 type Props = {
@@ -14,6 +15,10 @@ const finished = new Set<Step>([
   "learner-ready",
   "verification-ready",
   "teacher-draft",
+]);
+const wideSteps = new Set<Step>([
+  "language", "teaching-languages", "teaching-levels", "teacher-subjects",
+  "teacher-lessons", "learner-preferences", "extras", "learner-ready",
 ]);
 
 function sectionFor(step: Step) {
@@ -82,12 +87,15 @@ export default function WebOnboarding({
   const {
     index,
     total,
-    percent: progress,
     optionalIdentity,
   } = setupProgress(answers, step);
   const section = optionalIdentity
     ? "Optional identity check"
     : sectionFor(step);
+  const progressTotal = answers.role ? total : 2;
+  const progressStep = answers.role ? (finished.has(step) ? total : index + 1) : step === "welcome" ? 1 : 2;
+  const progressLabel = answers.role ? `Step ${progressStep} of ${total}` : "Choose your path";
+  const setupLabel = answers.role === "teacher" ? "Teaching setup" : answers.role === "learner" ? "Learning setup" : "Get started";
 
   // Shared content/actions use the mobile flow's interface in a desktop shell.
   const entry = (screen: FlowScreen) => ({
@@ -120,33 +128,9 @@ export default function WebOnboarding({
   }, [current.key, current.id]);
 
   return (
-    <div className={`learning-app updated-onboarding web-onboarding ${step === "teacher-review" ? "web-teacher-review" : ""}`}>
+    <div className={`learning-app updated-onboarding web-onboarding ${wideSteps.has(step) ? "web-setup-wide" : ""} ${step === "teacher-review" ? "web-teacher-review" : ""}`}>
       <header className="web-setup-header">
-        <nav aria-label="Onboarding">
-          {flow.canGoBack ? (
-            <button
-              className="web-back"
-              aria-label="Go back"
-              onClick={() => {
-                onBack();
-                flow.pop();
-              }}
-            >
-              <Icon name="back" size={22} />
-            </button>
-          ) : (
-            <span className="web-back-placeholder" />
-          )}
-          <div
-            className="progress"
-            role="progressbar"
-            aria-label="Setup progress"
-            aria-valuemin={0}
-            aria-valuemax={100}
-            aria-valuenow={progress}
-          >
-            <span style={{ width: progress + "%" }} />
-          </div>
+        <div className="web-setup-brand-row">
           <a
             className="web-setup-brand"
             href="/?view=web"
@@ -154,28 +138,55 @@ export default function WebOnboarding({
           >
             <span>mimo</span>
           </a>
-        </nav>
+          <span className="web-setup-context">{setupLabel}</span>
+        </div>
       </header>
       <div className="web-setup-main">
-        <div className="web-step-meta">
-          <span>{section}</span>
-          <span>
-            {finished.has(step)
-              ? "Ready for the next step"
-              : !answers.role ? "Choose your path" : "Step " + (index + 1) + " of " + total}
-          </span>
+        <div className="web-setup-card">
+          <nav className="web-step-meta" aria-label="Onboarding">
+            {flow.canGoBack ? (
+              <Button
+                static
+                variant="ghost"
+                size="sm"
+                className="web-back"
+                aria-label="Go back"
+                onClick={() => {
+                  onBack();
+                  flow.pop();
+                }}
+              >
+                <Icon name="back" size={16} />
+                Back
+              </Button>
+            ) : <span>{section}</span>}
+            <span className="web-step-count">
+              {finished.has(step) ? "Ready for the next step" : progressLabel}
+            </span>
+          </nav>
+          <div
+            className="setup-segments"
+            style={{ gridTemplateColumns: `repeat(${progressTotal}, minmax(0, 1fr))` }}
+            role="progressbar"
+            aria-label="Setup progress"
+            aria-valuemin={0}
+            aria-valuemax={progressTotal}
+            aria-valuenow={progressStep}
+            aria-valuetext={progressLabel}
+          >
+            {Array.from({ length: progressTotal }, (_, segment) => <span key={segment} data-complete={segment < progressStep ? "true" : undefined} aria-hidden="true" />)}
+          </div>
+          <section
+            ref={stage}
+            tabIndex={-1}
+            aria-label={section}
+            className="web-setup-stage"
+            data-testid="web-onboarding-current"
+            data-web-step={step}
+          >
+            {children(flow)}
+          </section>
         </div>
-        <section
-          ref={stage}
-          tabIndex={-1}
-          aria-label={section}
-          className="web-setup-stage"
-          data-testid="web-onboarding-current"
-          data-web-step={step}
-        >
-          {children(flow)}
-        </section>
-
         <a className="web-mobile-link" href="/?view=mobile">
           Open mobile app <Icon name="arrow" size={14} />
         </a>

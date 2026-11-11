@@ -1,5 +1,8 @@
 .location-field { display: flex; flex-direction: column; gap: 8px; margin: 20px 0; min-width: 0; text-align: left; }
 .location-field > label { font: inherit; font-weight: 500; font-size: 14px; }
+.location-input { position: relative; min-width: 0; }
+.location-field .location-input > input { padding-inline-end: 40px; }
+.location-country { position: absolute; inset-inline-end: 14px; top: 50%; transform: translateY(-50%); display: flex; width: 16px; height: 12px; pointer-events: none; }
 .location-field input { box-sizing: border-box; width: 100%; min-width: 0; font: inherit; color: #171717; background: #fff; border: 1px solid #d4d4d4; border-radius: 6px; min-height: 48px; padding: 12px 14px; transition: border-color var(--ui-duration-fast) ease; }
 .location-field input:focus-visible, .location-field button:focus-visible { outline: 2px solid #171717; outline-offset: 3px; transition: none; }
 .location-field input:focus-visible { border-color: #171717; }

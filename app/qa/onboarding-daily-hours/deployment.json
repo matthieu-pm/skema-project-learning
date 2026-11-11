@@ -1,0 +1,26 @@
+{
+  "projectName": "mimo-prototype",
+  "projectId": "prj_SEpdrBUQD5HcdNc5GRT73OKvrcrm",
+  "team": "matthieu-pm",
+  "teamId": "team_KddvwwnftxOOhP8UymRnP0PX",
+  "production": {
+    "id": "dpl_9u2udS6JoutqxPP9qSdPD2x6svwY",
+    "url": "https://mimo-prototype-five.vercel.app",
+    "deploymentUrl": "https://mimo-prototype-m995d9lok-matthieu-pm.vercel.app",
+    "readyState": "READY",
+    "target": "production",
+    "previousDeploymentId": "dpl_J7y9ViW5feKuiMmrUtM99rvGLnu9"
+  },
+  "scope": [
+    "Compact Cal.com-inspired web and phone onboarding presentation",
+    "Independent working interval for each weekday with retention and validation",
+    "All pending account-led sidebar and Availability design changes"
+  ],
+  "method": "Uploaded an isolated current local snapshot using Vercel CLI with --prod --skip-domain. Promoted the Ready production build through authenticated Vercel API after verification.",
+  "source": "223-file SHA256 source manifest matches the current worktree exactly at promotion. Environment files, dependencies, QA artifacts, logs, Git metadata and generated output were excluded.",
+  "build": "npm ci; npm run build; TypeScript/Vite/Sites packaging; 28 protected runtime hashes passed locally and in Vercel build",
+  "verification": "82 unit/worker tests and 49 browser cases passed first run before final density CSS. Final Availability-only run passed 9/10; its only failure was a 1px row mismatch, corrected and passed on targeted rerun with all seven rows visible/equal. Final build/runtime checks passed. Native proof is in verification.md. Vercel metadata confirms Ready/production and get_alias confirms stable production hostname maps to this exact deployment.",
+  "hostedUi": "Not fetched or re-tested; release status verified through Vercel metadata and alias API",
+  "authentication": "Inherited Vercel Authentication retained",
+  "git": "No commit or push"
+}

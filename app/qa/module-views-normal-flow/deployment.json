@@ -1,0 +1,37 @@
+{
+  "projectName": "mimo-prototype",
+  "projectId": "prj_SEpdrBUQD5HcdNc5GRT73OKvrcrm",
+  "team": "matthieu-pm",
+  "teamId": "team_KddvwwnftxOOhP8UymRnP0PX",
+  "production": {
+    "id": "dpl_EGMohvRMF5HziG5XL3BVntLYhyjm",
+    "url": "https://mimo-prototype-five.vercel.app",
+    "deploymentUrl": "https://mimo-prototype-2p7ccw7by-matthieu-pm.vercel.app",
+    "readyState": "READY",
+    "target": "production",
+    "previousDeploymentId": "dpl_9h1x9SCkbuD3XziQHZEKVfpndkjW"
+  },
+  "scope": [
+    "Ongoing modules view switcher uses normal document flow and scrolls away with the content",
+    "Removed the exact explanatory Unreviewed/Draft-feedback helper from module-result navigation; functional status messages remain"
+  ],
+  "method": "Fresh isolated current app snapshot uploaded through Vercel CLI --prod --skip-domain, then Ready production build promoted with authenticated Vercel API.",
+  "source": "224-file SHA256 manifest matched current source at promotion. Excluded dependencies, QA, generated output, Git metadata, environment files and logs.",
+  "checks": "Three normal-flow browser cases passed at 1280/1024/390px. Final local and remote TypeScript/Vite/Sites builds and 28 runtime hashes passed. Native WebKit confirmed the switcher scrolls out of view and the results note/status paragraph is absent in its ordinary state. See verification.md for scope and limits.",
+  "aliasVerification": {
+    "alias": "mimo-prototype-five.vercel.app",
+    "deploymentId": "dpl_EGMohvRMF5HziG5XL3BVntLYhyjm",
+    "projectId": "prj_SEpdrBUQD5HcdNc5GRT73OKvrcrm",
+    "method": "Authenticated get_alias after promotion"
+  },
+  "earlierUnpromotedBuild": {
+    "id": "dpl_ENGedpLr1KeDLV1C7PfDYcsp99pn",
+    "url": "https://mimo-prototype-jsxv10ax4-matthieu-pm.vercel.app",
+    "status": "Ready; staged without production alias, never promoted",
+    "scope": "Normal-flow correction only; superseded when the user added note removal before promotion",
+    "manifest": "source-manifest-normal-flow-only.json"
+  },
+  "hostedUi": "Not fetched or re-tested; readiness and stable alias verified through Vercel metadata API.",
+  "authentication": "Inherited Vercel Authentication retained",
+  "git": "No commit or push"
+}

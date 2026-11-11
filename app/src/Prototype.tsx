@@ -1,5 +1,6 @@
 import "./minimal-foundation.css";
 import LocationField from "./LocationField";
+import { CountryFlag, CountryText } from "./CountryFlag";
 import FreeLessonConfirmation from "./FreeLessonConfirmation";
 import { isFreeLesson, lessonPriceLabel } from "./lesson-settings";
 import {
@@ -181,59 +182,62 @@ function ActionButton({
 function Field({
   label,
   multiline = false,
+  leading,
   ...props
 }: InputHTMLAttributes<HTMLInputElement> & {
   label: string;
   multiline?: boolean;
+  leading?: ReactNode;
 }) {
   const keyboard = useKeyboard(),
     { web } = useSetup();
-  if (web)
-    return (
-      <label className="setup-field">
-        <span>{label}</span>
-        {multiline ? (
-          <textarea
-            aria-label={label}
-            placeholder={props.placeholder}
-            value={props.value}
-            maxLength={props.maxLength}
-            onChange={(e) =>
-              props.onChange?.(
-                e as unknown as React.ChangeEvent<HTMLInputElement>,
-              )
-            }
-            rows={4}
-          />
-        ) : (
-          <input {...props} aria-label={label} />
-        )}
-      </label>
-    );
+  const control = web ? (
+    multiline ? (
+      <textarea
+        aria-label={label}
+        placeholder={props.placeholder}
+        value={props.value}
+        maxLength={props.maxLength}
+        onChange={(e) =>
+          props.onChange?.(
+            e as unknown as React.ChangeEvent<HTMLInputElement>,
+          )
+        }
+        rows={4}
+      />
+    ) : <input {...props} aria-label={label} />
+  ) : (
+    multiline ? (
+      <KeyboardTextarea
+        aria-label={label}
+        placeholder={props.placeholder}
+        value={props.value}
+        maxLength={props.maxLength}
+        onChange={(e) =>
+          props.onChange?.(
+            e as unknown as React.ChangeEvent<HTMLInputElement>,
+          )
+        }
+        onBlur={() => keyboard.hide()}
+        rows={4}
+      />
+    ) : (
+      <KeyboardInput
+        {...props}
+        aria-label={label}
+        onBlur={() => keyboard.hide()}
+      />
+    )
+  );
   return (
     <label className="setup-field">
       <span>{label}</span>
-      {multiline ? (
-        <KeyboardTextarea
-          aria-label={label}
-          placeholder={props.placeholder}
-          value={props.value}
-          maxLength={props.maxLength}
-          onChange={(e) =>
-            props.onChange?.(
-              e as unknown as React.ChangeEvent<HTMLInputElement>,
-            )
-          }
-          onBlur={() => keyboard.hide()}
-          rows={4}
-        />
-      ) : (
-        <KeyboardInput
-          {...props}
-          aria-label={label}
-          onBlur={() => keyboard.hide()}
-        />
-      )}
+      {leading !== undefined ? (
+        <span className="setup-field-control has-leading">
+          <span className="setup-field-leading" aria-hidden="true">{leading}</span>
+          {control}
+        </span>
+      ) : control}
     </label>
   );
 }
@@ -369,7 +373,10 @@ const headings: Partial<Record<Step, string>> = {
 function Header({ step }: { step: Step }) {
   const flow = useFlow(),
     { answers, setError, setEditingReview } = useSetup();
-  const { percent, index, total } = setupProgress(answers, step);
+  const { index, total, optionalIdentity } = setupProgress(answers, step);
+  const progressTotal = answers.role ? total : 2;
+  const progressStep = answers.role ? (endings.has(step) ? total : index + 1) : step === "welcome" ? 1 : 2;
+  const progressLabel = answers.role ? `Step ${progressStep} of ${total}` : "Choose your path";
   return (
     <nav className="onboarding-nav" aria-label="Onboarding">
       <button
@@ -383,21 +390,24 @@ function Header({ step }: { step: Step }) {
       >
         <Icon name="back" />
       </button>
-      {
+      <div className="onboarding-progress-group">
+        <div className="onboarding-progress-meta">
+          <span>{optionalIdentity ? "Identity check" : answers.role === "teacher" ? "Teaching setup" : answers.role === "learner" ? "Learning setup" : "Get started"}</span>
+          <span className="setup-step-count">{progressLabel}</span>
+        </div>
         <div
-          className="progress"
+          className="setup-segments"
+          style={{ gridTemplateColumns: `repeat(${progressTotal}, minmax(0, 1fr))` }}
           role="progressbar"
           aria-label="Setup progress"
           aria-valuemin={0}
-          aria-valuemax={100}
-          aria-valuenow={percent}
+          aria-valuemax={progressTotal}
+          aria-valuenow={progressStep}
+          aria-valuetext={progressLabel}
         >
-          <span style={{ width: `${percent}%` }} />
+          {Array.from({ length: progressTotal }, (_, segment) => <span key={segment} data-complete={segment < progressStep ? "true" : undefined} aria-hidden="true" />)}
         </div>
-      }
-      <span className="setup-step-count">
-        {answers.role ? `${index + 1}/${total}` : ""}
-      </span>
+      </div>
     </nav>
   );
 }
@@ -1168,6 +1178,7 @@ function Screen({ step }: { step: Step }) {
           <div className="setup-group">
             <Field
               label="Document issuing country"
+              leading={<CountryFlag country={a.country} />}
               value={a.country}
               placeholder="France"
               onChange={(e) => update({ country: e.target.value })}
@@ -1686,7 +1697,7 @@ function Screen({ step }: { step: Step }) {
                 <div><dt>Lesson duration</dt><dd className={!a.duration ? "teacher-review-unset" : undefined}>{a.duration || "Not set"}</dd></div>
                 <div><dt>Price per lesson</dt><dd className={!a.rate.trim() ? "teacher-review-unset" : undefined}>{lessonPriceLabel(a.rate, a.freeConfirmed)}</dd></div>
                 <div><dt>Meeting format</dt><dd className={!a.format ? "teacher-review-unset" : undefined}>{a.format || "Not set"}</dd></div>
-                {a.format !== "Online" && <div><dt>City or neighbourhood</dt><dd className={!a.city.trim() ? "teacher-review-unset" : undefined}>{a.city || "Not set"}</dd></div>}
+                {a.format !== "Online" && <div><dt>City or neighbourhood</dt><dd className={!a.city.trim() ? "teacher-review-unset" : undefined}><CountryText value={a.city || "Not set"} /></dd></div>}
               </dl>
             </section>
             <p className="teacher-review-note">Your profile remains a draft until you’re ready.</p>
@@ -1830,6 +1841,7 @@ function Screen({ step }: { step: Step }) {
         {step === "country" && (
           <Field
             label="Document issuing country"
+            leading={<CountryFlag country={a.country} />}
             placeholder="France"
             value={a.country}
             onChange={(e) => update({ country: e.target.value })}
@@ -1854,7 +1866,7 @@ function Screen({ step }: { step: Step }) {
                     : "Add document"}
                 </strong>
                 <span>
-                  {a.documentType} · {a.country}
+                  {a.documentType} · <CountryText value={a.country} />
                 </span>
               </span>
               {a.documentReady && <CheckIcon />}
@@ -1903,7 +1915,7 @@ function Screen({ step }: { step: Step }) {
               {a.challengeDetails && <p>{a.challengeDetails}</p>}
               <p>
                 {learningFormats.join(" & ") || "Flexible format"}
-                {learningFormats.includes("In person") && a.city ? ` · ${a.city}` : ""}
+                {learningFormats.includes("In person") && a.city ? <> · <CountryText value={a.city} /></> : ""}
               </p>
               <p>
                 {a.days.join(" & ") || "Flexible days"} ·{" "}

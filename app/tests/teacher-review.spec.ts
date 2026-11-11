@@ -1,4 +1,5 @@
 import { expect, test, type Locator, type Page } from "@playwright/test";
+import { expectCompactWebAction, expectSetupProgress } from "./helpers/onboarding";
 
 type Presentation = "web" | "mobile";
 
@@ -63,16 +64,21 @@ test("teacher review keeps section edits, canonical levels and optional/free les
   const lessons = () => flow.current().getByRole("region", { name: "Lesson details", exact: true });
 
   await expect(page.locator(".web-step-meta")).toContainText("Step 8 of 8");
+  await expectSetupProgress(page, 8, 8);
   await expect(flow.current().getByRole("region", { name: "Teaching profile", exact: true })).toContainText("Avery Martin");
   await expect(definition(languages(), "Levels")).toHaveText("A1 · A2 · B1 · B2");
   await expect(definition(lessons(), "Lesson duration")).toHaveText("45 minutes");
   await expect(definition(lessons(), "Price per lesson")).toHaveText("€30");
+  await expectCompactWebAction(page, flow.current(), "Continue to identity check");
 
   await flow.current().getByRole("button", { name: "Edit languages and levels", exact: true }).click();
   await flow.expectStep("teacher-subjects");
+  await expect(page.locator(".web-step-meta")).toContainText("Step 6 of 8");
+  await expectSetupProgress(page, 6, 8);
   for (const level of ["B2", "A2", "A1", "B1"]) await expect(flow.choice(level)).toHaveAttribute("aria-pressed", "true");
   await flow.choice("C1").click();
   await flow.continueTo("teacher-review", "Save and return");
+  await expect(page.locator(".web-step-meta")).toContainText("Step 8 of 8");
   await expect(definition(languages(), "Levels")).toHaveText("A1 · A2 · B1 · B2 · C1");
 
   // A summary reached with Back must still enforce the edited required fields.
@@ -115,6 +121,7 @@ test("phone teacher review keeps section edits and fixed actions usable without 
   test.setTimeout(60_000);
   const flow = await reachTeacherReview(page, "mobile");
   await expect(flow.current().getByRole("heading", { name: "Review your teaching profile", exact: true })).toBeVisible();
+  await expectSetupProgress(page, 8, 8);
   const overflow = await flow.current().evaluate(element => {
     const review = element.querySelector(".teacher-profile-review") as HTMLElement;
     return { screen: element.scrollWidth - element.clientWidth, review: review.scrollWidth - review.clientWidth };
@@ -141,8 +148,10 @@ test("phone teacher review keeps section edits and fixed actions usable without 
   await flow.expectStep("teacher-lessons");
   await flow.continueTo("teacher-review", "Save and return");
   await flow.continueTo("identity-intro", "Continue to identity check");
+  await expectSetupProgress(page, 1, 5);
   await page.getByRole("button", { name: "Go back", exact: true }).click();
   await flow.expectStep("teacher-review");
+  await expectSetupProgress(page, 8, 8);
   await flow.action("Finish verification later").click();
   await expect(page.locator(".teacher-mobile")).toBeVisible();
 });

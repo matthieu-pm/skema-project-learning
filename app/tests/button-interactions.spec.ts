@@ -49,7 +49,8 @@ test("keyboard activation keeps buttons still with clear focus and static contro
   await expect(button).toHaveCSS("outline-color", "rgb(23, 23, 23)");
   await page.keyboard.up("Space");
 
-  const collapse = page.getByRole("button", { name: "Collapse navigation", exact: true });
+  const collapse = page.locator(".teacher-web .tw-toolbar").getByRole("button", { name: "Collapse navigation", exact: true });
+  await expect(collapse).toHaveAttribute("data-sidebar", "trigger");
   await moveToCenter(page, collapse);
   await page.mouse.down();
   await expectScale(collapse, 1);

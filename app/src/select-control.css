@@ -103,10 +103,15 @@
 .app-select-indicator { position: absolute; inset-inline-end: 10px; display: flex; align-items: center; }
 .app-select-scroll { display: flex; align-items: center; justify-content: center; height: 24px; background: #fff; color: #737373; }
 .app-select-scroll:first-child > svg { transform: rotate(180deg); }
+.app-select-country-label { display: inline-flex; align-items: center; gap: 8px; vertical-align: middle; }
+.app-select-control[data-country-flags] > select { padding-inline-start: 36px !important; }
+.app-select-native-country { position: absolute; inset-inline-start: 12px; top: 50%; transform: translateY(-50%); display: flex; width: 16px; height: 12px; pointer-events: none; }
 @media (hover: hover) and (pointer: fine) {
   .app-select-trigger:hover:not(:disabled) { border-color: #a3a3a3; }
 }
 @media (forced-colors: active) {
   .app-select-control > select { appearance: auto; }
   .app-select-control > .app-select-chevron { display: none; }
+  .app-select-native-country { display: none; }
+  .app-select-control[data-country-flags] > select { padding-inline-start: 11px !important; }
 }

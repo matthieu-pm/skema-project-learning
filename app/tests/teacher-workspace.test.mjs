@@ -12,6 +12,102 @@ import {
   primaryTab,
 } from "../src/teacher/model.ts";
 import { initialAnswers } from "../src/onboarding.ts";
+import {
+  availabilityWeekdays,
+  copyWorkingHours,
+  createAvailability,
+  createWorkingTimeSlot,
+  removeWorkingTimeSlot,
+  updateWorkingDay,
+  updateWorkingTimeSlot,
+  validateWeeklyHours,
+  workingDayError,
+} from "../src/teacher/availability.ts";
+
+test("working hours remain independent per weekday and survive turning a day off", () => {
+  const original = createAvailability();
+  const mondayId = original.days.Mon.slots[0].id;
+  const tuesdayId = original.days.Tue.slots[0].id;
+  const monday = updateWorkingTimeSlot(original, "Mon", mondayId, { start: "10:00", end: "16:30" });
+  const tuesday = updateWorkingTimeSlot(monday, "Tue", tuesdayId, { start: "08:30", end: "18:00" });
+  const disabled = updateWorkingDay(tuesday, "Mon", { enabled: false });
+  const restored = updateWorkingDay(disabled, "Mon", { enabled: true });
+  assert.deepEqual(restored.days.Mon, { enabled: true, slots: [{ id: mondayId, start: "10:00", end: "16:30" }] });
+  assert.deepEqual(restored.days.Tue, { enabled: true, slots: [{ id: tuesdayId, start: "08:30", end: "18:00" }] });
+  assert.deepEqual(original.days.Mon.slots[0], { id: mondayId, start: "09:00", end: "17:00" });
+  assert.notEqual(mondayId, tuesdayId);
+  assert.equal(original.days.Wed.enabled, false);
+  assert.equal(restored.zone, "Europe/Paris");
+  assert.deepEqual(validateWeeklyHours(restored.days), { dayErrors: {} });
+});
+
+test("availability validates each enabled weekday and ignores retained hours for disabled days", () => {
+  let availability = createAvailability();
+  for (const [day] of availabilityWeekdays)
+    availability = updateWorkingDay(availability, day, { enabled: false });
+  assert.match(validateWeeklyHours(availability.days).scheduleError, /at least one/);
+  availability = updateWorkingDay(availability, "Mon", { enabled: true });
+  for (const [start, end] of [["", "17:00"], ["09:00", ""], ["25:00", "17:00"], ["09:00", "17:99"], ["09:00", "09:00"], ["17:00", "09:00"]]) {
+    const invalid = updateWorkingDay(availability, "Tue", { enabled: true, slots: [createWorkingTimeSlot(start, end)] });
+    const errors = validateWeeklyHours(invalid.days);
+    assert.match(errors.dayErrors.Tue, /Tuesday/);
+    assert.equal(errors.dayErrors.Mon, undefined);
+    assert.equal(errors.scheduleError, undefined);
+    const disabled = updateWorkingDay(invalid, "Tue", { enabled: false });
+    assert.deepEqual(validateWeeklyHours(disabled.days), { dayErrors: {} });
+    assert.match(validateWeeklyHours(updateWorkingDay(disabled, "Tue", { enabled: true }).days).dayErrors.Tue, /Tuesday/);
+  }
+  assert.deepEqual(validateWeeklyHours(updateWorkingDay(availability, "Mon", { slots: [createWorkingTimeSlot("00:00", "23:59")] }).days), { dayErrors: {} });
+  assert.match(workingDayError("Mon", { enabled: true, slots: [] }), /Monday/);
+});
+
+test("multiple time slots keep IDs through edits/removal and validate overlaps without rejecting adjacent hours", () => {
+  const original = createAvailability();
+  const first = createWorkingTimeSlot("09:00", "12:00");
+  const second = createWorkingTimeSlot("12:00", "17:00");
+  const slots = updateWorkingDay(original, "Mon", { slots: [first, second] });
+  assert.equal(workingDayError("Mon", slots.days.Mon), undefined);
+  const edited = updateWorkingTimeSlot(slots, "Mon", second.id, { start: "11:59" });
+  assert.match(workingDayError("Mon", edited.days.Mon), /Monday.*overlap/);
+  assert.deepEqual(slots.days.Mon.slots, [first, second]);
+  const reversed = updateWorkingDay(slots, "Mon", { slots: [second, first] });
+  assert.equal(workingDayError("Mon", reversed.days.Mon), undefined);
+  assert.deepEqual(reversed.days.Mon.slots.map((slot) => slot.id), [second.id, first.id]);
+  const nested = updateWorkingDay(slots, "Mon", { slots: [createWorkingTimeSlot("09:00", "17:00"), createWorkingTimeSlot("10:00", "11:00")] });
+  assert.match(workingDayError("Mon", nested.days.Mon), /overlap/);
+  const remaining = removeWorkingTimeSlot(slots, "Mon", first.id);
+  assert.deepEqual(remaining.days.Mon.slots, [second]);
+  assert.equal(removeWorkingTimeSlot(remaining, "Mon", second.id), remaining);
+  const disabled = updateWorkingDay(slots, "Mon", { enabled: false });
+  assert.deepEqual(updateWorkingDay(disabled, "Mon", { enabled: true }).days.Mon.slots, [first, second]);
+  assert.equal(createWorkingTimeSlot().start, "");
+  assert.equal(createWorkingTimeSlot().end, "");
+});
+
+test("copying hours replaces and enables selected days with independent slot IDs and no source mutation", () => {
+  const initial = createAvailability();
+  const source = updateWorkingDay(initial, "Mon", { slots: [createWorkingTimeSlot("08:00", "12:00"), createWorkingTimeSlot("14:00", "18:00")] });
+  const before = structuredClone(source);
+  const copied = copyWorkingHours(source, "Mon", ["Mon", "Tue", "Wed", "Tue"]);
+  const ranges = (day) => day.slots.map(({ start, end }) => ({ start, end }));
+  assert.deepEqual(source, before);
+  assert.equal(copied.days.Mon, source.days.Mon);
+  assert.equal(copied.days.Thu, source.days.Thu);
+  assert.equal(copied.days.Wed.enabled, true);
+  assert.deepEqual(ranges(copied.days.Tue), ranges(source.days.Mon));
+  assert.deepEqual(ranges(copied.days.Wed), ranges(source.days.Mon));
+  assert.equal(new Set([copied.days.Mon, copied.days.Tue, copied.days.Wed].flatMap((day) => day.slots.map((slot) => slot.id))).size, 6);
+  const later = updateWorkingTimeSlot(copied, "Tue", copied.days.Tue.slots[0].id, { start: "10:00" });
+  assert.equal(later.days.Mon.slots[0].start, "08:00");
+  assert.equal(later.days.Wed.slots[0].start, "08:00");
+  assert.equal(copyWorkingHours(source, "Mon", []), source);
+  assert.equal(copyWorkingHours(source, "Mon", ["Mon"]), source);
+  const invalid = updateWorkingTimeSlot(source, "Mon", source.days.Mon.slots[0].id, { end: "" });
+  assert.equal(copyWorkingHours(invalid, "Mon", ["Tue"]), invalid);
+  const disabled = updateWorkingDay(source, "Mon", { enabled: false });
+  assert.equal(copyWorkingHours(disabled, "Mon", ["Tue"]), disabled);
+});
+
 test("adjacent bookings fit, overlapping confirmed bookings do not, and inactive sessions release time", () => {
   const ss = initialSessions();
   assert.equal(overlaps(ss, "2026-10-10", "14:15", 30), true);

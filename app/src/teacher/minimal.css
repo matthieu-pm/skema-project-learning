@@ -402,6 +402,7 @@
 .teacher-workspace .tw-panel > h2 + p { margin-top: 0; }
 .teacher-workspace .tw-panel > .tw-actions:last-child { margin-top: 24px; }
 .teacher-workspace .tw-panel > .tw-actions:first-child { margin-top: 0; }
+.teacher-workspace .tw-preview-actions + .tw-preview-adapt { margin-top: 24px; }
 .teacher-workspace :is(.ce-dialog-heading, .ce-dialog-content) { padding: 20px 24px; }
 .teacher-workspace .ce-dialog-heading { gap: 20px; }
 .teacher-workspace .ce-block-select { border-radius: 5px 5px 0 0; }

@@ -1,6 +1,7 @@
 import LocationField from "../LocationField";
 import FreeLessonConfirmation from "../FreeLessonConfirmation";
 import ProfilePortrait from "../ProfilePortrait";
+import { CountryText } from "../CountryFlag";
 import {
   isFreeLesson,
   lessonDurations,
@@ -11,6 +12,7 @@ import {
 } from "../lesson-settings";
 import ReviewQueue from "./ReviewQueue";
 import ModuleResults from "./ModuleResults";
+import AvailabilityPage from "./AvailabilityPage";
 import {
   cloneCourse,
   fromLesson,
@@ -892,9 +894,9 @@ function LessonsPage({
         }
       />
       <Segments
-        items={["Library", "Module editor", "Templates", "Archive"]}
-        value={tab}
-        onChange={setTab}
+        items={["Library", "Drafts", "Templates", "Archive"]}
+        value={tab === "Module editor" ? "Drafts" : tab}
+        onChange={(value) => setTab(value === "Drafts" ? "Module editor" : value)}
       />
       {tab === "Templates" ? (
         <>
@@ -1054,7 +1056,7 @@ function LessonPreview({
       <p className="tw-subtle">
         Private teaching notes are excluded. Nothing is shared by previewing.
       </p>
-      <div className="tw-actions">
+      <div className="tw-actions tw-preview-actions">
         {!sessionId && (
           <>
             <Button
@@ -1089,7 +1091,7 @@ function LessonPreview({
         )}
       </div>
       {!sessionId && !l.studentId && (
-        <Panel>
+        <Panel className="tw-preview-adapt">
           <h2>Ready to make it personal?</h2>
           <p>
             Choose one learner to create a separate version. Your reusable
@@ -1284,109 +1286,6 @@ function SharePage({ id, navigate }: { id?: string; navigate: Navigate }) {
     </>
   );
 }
-function AvailabilityPage() {
-  const {
-    availability: a,
-    setAvailability,
-    availabilitySaved,
-    setAvailabilitySaved,
-    attempt,
-  } = useWorkspace();
-  const [error, setError] = useState("");
-  const change = (patch: Partial<typeof a>) => {
-    setAvailability((v) => ({ ...v, ...patch }));
-    setAvailabilitySaved(false);
-    setError("");
-  };
-  return (
-    <>
-      <PageHeading
-        title="Availability"
-        description="Choose your open hours. Existing bookings stay reserved."
-      />
-      <Panel>
-        <Select
-          label="Time zone"
-          value={a.zone}
-          options={[
-            "Europe/Paris",
-            "Europe/London",
-            "America/New_York",
-            "Asia/Tokyo",
-          ]}
-          onChange={(zone) => change({ zone })}
-        />
-        {a.zone !== "Europe/Paris" && (
-          <p className="tw-error" role="alert">
-            Choose Europe/Paris to save your availability.
-          </p>
-        )}
-        <h2>Your teaching days</h2>
-        <div className="tw-day-options">
-          {["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"].map((day) => (
-            <button
-              key={day}
-              className={a.days.includes(day) ? "selected" : ""}
-              aria-pressed={a.days.includes(day)}
-              onClick={() =>
-                change({
-                  days: a.days.includes(day)
-                    ? a.days.filter((d) => d !== day)
-                    : [...a.days, day],
-                })
-              }
-            >
-              {day}
-            </button>
-          ))}
-        </div>
-        <div className="tw-form-pair">
-          <TextField
-            label="Start time"
-            type="time"
-            value={a.start}
-            onChange={(start) => change({ start })}
-          />
-          <TextField
-            label="End time"
-            type="time"
-            value={a.end}
-            onChange={(end) => change({ end })}
-          />
-        </div>
-        <div className="tw-callout">
-          <Icon name="calendar" />
-          <p>
-            Confirmed sessions are reserved automatically within these hours.
-            Removing an open day does not cancel an existing booking.
-          </p>
-        </div>
-        {error && (
-          <p className="tw-error" role="alert">
-            {error}
-          </p>
-        )}
-        <Button
-          disabled={a.zone !== "Europe/Paris"}
-          onClick={() => {
-            if (!a.days.length || !a.start || !a.end || a.start >= a.end) {
-              setError(
-                "Choose at least one day and an end time after the start time.",
-              );
-              return;
-            }
-            attempt(
-              () => setAvailabilitySaved(true),
-              "Availability saved. Confirmed bookings are preserved.",
-            );
-          }}
-        >
-          {availabilitySaved ? "Availability saved" : "Save availability"}
-        </Button>
-      </Panel>
-    </>
-  );
-}
 function SessionPage({ id, navigate }: { id?: string; navigate: Navigate }) {
   const { sessions, lessons, attempt, updateSession } =
     useWorkspace();
@@ -1420,7 +1319,7 @@ function SessionPage({ id, navigate }: { id?: string; navigate: Navigate }) {
               <span>Meeting</span>
               <strong>
                 {s.format}
-                {s.format === "In person" ? " · Paris, France" : ""}
+                {s.format === "In person" && <> · <CountryText value="Paris, France" /></>}
               </strong>
             </div>
             <div className="tw-detail-row">
@@ -2221,7 +2120,7 @@ function ProfilePage({
           {p.format !== "Online" && (
             <span>
               <Icon name="pin" />
-              {p.city || "City not set"}
+              <CountryText value={p.city || "City not set"} />
             </span>
           )}
           <span>
@@ -2349,7 +2248,7 @@ function ProfileEditPage({
               {p.duration || "Duration not set"} ·{" "}
               {lessonPriceLabel(p.rate, p.freeConfirmed)}
             </p>
-            {p.format !== "Online" && <p>{p.city}</p>}
+            {p.format !== "Online" && <p><CountryText value={p.city} /></p>}
             <div className="tw-actions">
               <Button
                 onClick={() => {
@@ -2716,6 +2615,7 @@ function IdentityPage({
           <>
             <Select
               label="Issuing country"
+              countryFlags
               value={a.country || "France"}
               options={[
                 "France",
@@ -2761,7 +2661,7 @@ function IdentityPage({
           <>
             <h2>Add a document</h2>
             <p>
-              {a.country} · {a.documentType}
+              <CountryText value={a.country} /> · {a.documentType}
             </p>
             <Button onClick={() => next("selfie")}>Add document</Button>
           </>

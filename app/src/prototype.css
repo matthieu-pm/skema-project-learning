@@ -26,16 +26,21 @@
 .learning-scroll .mobile-scroll-content { min-height: 100%; }
 .device-screen:has(.learning-app) { overflow: clip; }
 .learning-app .flow-screen, .learning-app .flow-fixed-header { background: var(--paper); }
-.learning-app .onboarding-nav { position: relative; left: 20px; width: calc(100% - 40px); height: 54px; display: flex; align-items: center; gap: 16px; }
-.learning-app .back { display: grid; place-items: center; width: 32px; height: 40px; padding: 0; flex-shrink: 0; border: 0; border-radius: 6px; color: #666; background: transparent; }
+.learning-app .onboarding-nav { position: relative; left: 20px; width: calc(100% - 40px); height: 54px; display: flex; align-items: center; gap: 12px; }
+.learning-app .back { display: grid; place-items: center; width: 36px; height: 44px; padding: 0; flex-shrink: 0; border: 0; border-radius: 6px; color: #666; background: transparent; }
 .learning-app .back svg { width: 20px; height: 20px; }
 .learning-app .progress { flex: 1; height: 3px; background: #ededed; border-radius: 0; overflow: hidden; }
 .learning-app .progress > span { display: block; height: 100%; min-width: 0; background: #171717; }
-.learning-app .setup-step-count { min-width: 32px; color: #666; text-align: right; font-size: 12px; font-variant-numeric: tabular-nums; }
-.learning-app .setup-content { padding: 26px 24px calc(var(--flow-footer-height) + var(--mobile-safe-area-height) + 28px); }
-.learning-app .guide { margin: 0 0 28px; }
+.learning-app .onboarding-progress-group { flex: 1; min-width: 0; }
+.learning-app .onboarding-progress-meta { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; margin-bottom: 8px; color: #737373; font-size: 11px; line-height: 1.4; }
+.learning-app .setup-step-count { color: #666; white-space: nowrap; text-align: right; font-size: 11px; font-variant-numeric: tabular-nums; }
+.learning-app .setup-segments { display: grid; gap: 4px; width: 100%; min-width: 0; }
+.learning-app .setup-segments > span { display: block; height: 3px; border-radius: 1px; background: #e8e8e8; }
+.learning-app .setup-segments > span[data-complete="true"] { background: #171717; }
+.learning-app .setup-content { padding: 20px 24px calc(var(--flow-footer-height) + var(--mobile-safe-area-height) + 28px); }
+.learning-app .guide { margin: 0 0 24px; }
 .learning-app .guide:has(+ .step-description), .learning-app .guide:has(+ .setup-group > .step-description:first-child) { margin-bottom: 12px; }
-.learning-app .speech { padding: 0; border: 0; background: transparent; color: #171717; font-size: 26px; line-height: 1.2; letter-spacing: -1px; font-weight: 600; text-align: left; text-wrap: balance; }
+.learning-app .speech { padding: 0; border: 0; background: transparent; color: #171717; font-size: 25px; line-height: 1.25; letter-spacing: -.8px; font-weight: 600; text-align: left; text-wrap: balance; }
 .learning-app .step-description { color: #666; font-size: 14px; line-height: 1.6; margin: 0 0 20px; }
 .learning-app .setup-group .step-description { margin: 0 0 12px; }
 .learning-app .setup-group > .step-description { margin: 0; }
@@ -53,12 +58,12 @@
 .learning-app .checkbox { display: grid; place-items: center; flex-shrink: 0; width: 18px; height: 18px; border: 1px solid #c9c9c9; border-radius: 4px; }
 .learning-app .selected .checkbox { border-color: #171717; background: #171717; color: white; }
 .learning-app .checkbox svg { width: 15px; height: 15px; }
-.learning-app .role-options .choice, .learning-app .topic-options .choice { min-height: 84px; padding: 18px 16px; }
+.learning-app .role-options .choice, .learning-app .topic-options .choice { min-height: 76px; padding: 16px; }
 .learning-app .level-options .choice-copy, .learning-app .teaching-level-options .choice-copy { display: grid; grid-template-columns: 30px 1fr; gap: 12px; align-items: baseline; }
 .learning-app .level-options .choice-copy > span, .learning-app .teaching-level-options .choice-copy > span { margin: 0; }
 .learning-app .level-options .choice:last-child .choice-copy { display: block; }
 .learning-app .level-options .choice:last-child .choice-copy > span { margin-top: 4px; }
-.learning-app .setup-group { display: flex; flex-direction: column; gap: 24px; }
+.learning-app .setup-group { display: flex; flex-direction: column; gap: 20px; }
 .learning-app .setup-section { min-width: 0; border: 0; margin: 0; padding: 0; }
 .learning-app .setup-section legend { padding: 0; margin-bottom: 10px; font-size: 14px; font-weight: 500; }
 .learning-app .setup-compact { display: grid; gap: 8px; }
@@ -78,13 +83,16 @@
 .learning-app .setup-field input[type=number] { appearance: textfield; }
 .learning-app .setup-field input[type=number]::-webkit-inner-spin-button { appearance: none; }
 .learning-app .setup-field input[autocomplete=one-time-code] { font-size: 26px; letter-spacing: 8px; text-align: center; font-variant-numeric: tabular-nums; }
+.learning-app .setup-field-control { position: relative; display: block; width: 100%; min-width: 0; }
+.learning-app .setup-field-control.has-leading input { padding-inline-start: 40px; }
+.learning-app .setup-field-leading { position: absolute; inset-inline-start: 12px; top: 50%; transform: translateY(-50%); display: grid; place-items: center; width: 16px; height: 12px; pointer-events: none; }
 .learning-app .setup-note { color: #666; font-size: 13px; line-height: 1.6; margin: 16px 0; }
 .learning-app .setup-group .setup-note { margin: 0; }
 .learning-app .preview-note { color: #737373; font-size: 12px; line-height: 1.6; margin: 18px 0; }
 .learning-app .field-error { color: #b42318; font-size: 13px; line-height: 1.5; margin: 12px 0; }
 .learning-app .inline-link { display: inline-flex; align-items: center; gap: 6px; min-height: 36px; padding: 8px 0; border: 0; background: transparent; color: #171717; font-size: 13px; font-weight: 500; text-decoration: underline; text-underline-offset: 3px; }
 .learning-app .inline-link:disabled { color: #888; text-decoration: none; }
-.learning-app .flow-fixed-footer .actions { position: relative; min-height: 82px; padding: 14px 24px 20px; }
+.learning-app .flow-fixed-footer .actions { position: relative; min-height: 82px; padding: 14px 24px 20px; border-top: 1px solid #ededed; }
 .learning-app .actions { display: flex; flex-direction: column; gap: 12px; background: #fff; }
 .learning-app .primary, .learning-app .secondary { display: flex; align-items: center; justify-content: center; width: 100%; height: 44px; min-height: 44px; padding: 0 16px; border: 1px solid #171717; border-radius: 6px; font-size: 14px; font-weight: 500; line-height: 1.4; text-transform: none; letter-spacing: 0; box-shadow: none; transition: scale var(--ui-duration-press, 150ms) ease-out, background-color var(--ui-duration-fast, 120ms) ease, border-color var(--ui-duration-fast, 120ms) ease; }
 .learning-app :is(.primary, .secondary):not(:disabled):not(:focus-visible):not([data-static]):active { scale: .96; }
@@ -99,9 +107,10 @@
 .learning-app .text-button { width: 100%; min-height: 40px; border: 0; padding: 8px 0; border-radius: 6px; background: none; color: #666; font-size: 13px; font-weight: 500; text-transform: none; letter-spacing: 0; transition: background-color var(--ui-duration-fast, 120ms) ease, color var(--ui-duration-fast, 120ms) ease; }
 .learning-app .text-button:disabled { color: #a3a3a3; }
 .learning-app .with-divider { border-top: 1px solid var(--line); }
-.learning-app .welcome { position: absolute; top: 25%; left: 24px; right: 24px; text-align: left; }
-.learning-app .welcome-brand { display: block; color: #171717; font-size: 24px; font-weight: 600; letter-spacing: -1.2px; margin-bottom: 40px; }
-.learning-app .welcome h1 { color: #171717; font-size: 42px; line-height: 1.07; font-weight: 600; letter-spacing: -1.8px; text-wrap: balance; }
+.learning-app .welcome { position: static; text-align: left; }
+.learning-app .setup-welcome { padding-top: 112px; }
+.learning-app .welcome-brand { display: block; color: #171717; font-size: 24px; font-weight: 600; letter-spacing: -1.2px; margin-bottom: 32px; }
+.learning-app .welcome h1 { color: #171717; font-size: 36px; line-height: 1.12; font-weight: 600; letter-spacing: -1.4px; text-wrap: balance; }
 .learning-app .welcome p { max-width: 280px; color: #666; font-size: 15px; line-height: 1.6; margin-top: 20px; }
 .learning-app .account-intro { padding: 0; margin: 0 0 28px; text-align: left; }
 .learning-app .account-intro h1 { font-size: 26px; font-weight: 600; line-height: 1.2; letter-spacing: -.8px; margin-bottom: 10px; }

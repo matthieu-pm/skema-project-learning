@@ -7,6 +7,7 @@ import { Avatar, LearnerAvatar, Button, Empty, ErrorMessage, Field, LearnerPrese
 import { availableSlots, classifyLesson, createSlots, filterTeachers, fixtureBookings, teachers, type Booking, type LessonFormat, type SearchFilters, type Slot, type SortOption, type Teacher } from "./model";
 import { cancelBooking, instantBook, readBookings, saveReview, subscribeBookings } from "./storage";
 import { WorkspaceSidebar } from "../WorkspaceSidebar";
+import { CountryText } from "../CountryFlag";
 import { SidebarInset, SidebarProvider, SidebarTrigger, useSidebar } from "../teacher/ui/sidebar";
 import "./learner.css";
 
@@ -43,8 +44,9 @@ function Navigation({ route, navigate }: { route: Route; navigate: Navigate }) {
   return <nav className="lw-navigation" aria-label="Learning workspace">{mainNav.map(([page, label, icon]) => <button key={page} aria-current={activeTab(route) === page ? "page" : undefined} onClick={() => navigate({ page }, true)}><Icon name={icon} /><span>{label}</span></button>)}</nav>;
 }
 function DesktopNavigationTrigger() {
-  const { isMobile } = useSidebar();
-  return isMobile ? <SidebarTrigger static aria-label="Open navigation" className="lw-sidebar-trigger" /> : null;
+  const { isMobile, state } = useSidebar();
+  const expanded = state === "expanded";
+  return <SidebarTrigger static size={isMobile ? "icon-lg" : "icon-sm"} aria-label={isMobile ? "Open navigation" : expanded ? "Collapse navigation" : "Expand navigation"} aria-expanded={isMobile ? undefined : expanded} className="mimo-content-sidebar-trigger lw-sidebar-trigger" />;
 }
 function Toolbar({ route, navigate, back, canGoBack }: { route: Route; navigate: Navigate; back: () => void; canGoBack: boolean }) {
   const { mobile } = useLearner();
@@ -60,7 +62,7 @@ function TeacherIdentity({ teacher, navigate, large = false }: { teacher: Teache
 function TeacherCard({ teacher, navigate }: { teacher: Teacher; navigate: Navigate }) {
   const { slots, bookings, now, filters } = useLearner();
   const available = availableSlots(teacher.id, slots, bookings, now, filters).slice(0, 4);
-  return <Panel className="lw-teacher-card"><div className="lw-teacher-card-info"><TeacherIdentity teacher={teacher} navigate={navigate} /><p className="lw-teacher-bio">{teacher.bio}</p><p className="lw-meta"><Icon name="pin" size={16} />{teacher.city} · {teacher.formats.join(" & ")}</p><div className="lw-card-bottom"><strong>{currency(teacher.rate)} <span>/ {teacher.duration} min</span></strong><Button secondary onClick={() => navigate({ page: "teacher", teacherId: teacher.id })}>View profile</Button></div></div><div className="lw-card-availability"><h3>Next available</h3>{available.length ? <div className="lw-slot-grid">{available.map(slot => <button className="lw-slot" key={slot.id} onClick={() => navigate({ page: "book", teacherId: teacher.id, slotId: slot.id, format: slot.format })}><span>{dayText(slot.start, now)}</span><strong>{timeText(slot.start)}</strong><small>{slot.format}</small></button>)}</div> : <p>No open times for these filters.</p>}</div></Panel>;
+  return <Panel className="lw-teacher-card"><div className="lw-teacher-card-info"><TeacherIdentity teacher={teacher} navigate={navigate} /><p className="lw-teacher-bio">{teacher.bio}</p><p className="lw-meta"><Icon name="pin" size={16} /><CountryText value={teacher.city} /> · {teacher.formats.join(" & ")}</p><div className="lw-card-bottom"><strong>{currency(teacher.rate)} <span>/ {teacher.duration} min</span></strong><Button secondary onClick={() => navigate({ page: "teacher", teacherId: teacher.id })}>View profile</Button></div></div><div className="lw-card-availability"><h3>Next available</h3>{available.length ? <div className="lw-slot-grid">{available.map(slot => <button className="lw-slot" key={slot.id} onClick={() => navigate({ page: "book", teacherId: teacher.id, slotId: slot.id, format: slot.format })}><span>{dayText(slot.start, now)}</span><strong>{timeText(slot.start)}</strong><small>{slot.format}</small></button>)}</div> : <p>No open times for these filters.</p>}</div></Panel>;
 }
 function SearchPage({ navigate }: { navigate: Navigate }) {
   const { filters, setFilters, sort, setSort, slots, bookings, now, catalog } = useLearner();
@@ -72,7 +74,7 @@ function SearchPage({ navigate }: { navigate: Navigate }) {
 function TeacherProfile({ teacher, navigate }: { teacher: Teacher; navigate: Navigate }) {
   const { slots, bookings, now } = useLearner();
   const nextSlots = availableSlots(teacher.id, slots, bookings, now).slice(0, 6);
-  return <><Panel className="lw-profile-hero"><TeacherIdentity teacher={teacher} navigate={navigate} large /><div className="lw-profile-actions"><strong>{currency(teacher.rate)} <span>/ {teacher.duration} min</span></strong><Button onClick={() => navigate({ page: "book", teacherId: teacher.id })}>Book a lesson</Button><Button secondary icon="message" onClick={() => navigate({ page: "messages", teacherId: teacher.id })}>Send a message</Button></div></Panel><div className="lw-two-columns"><div className="lw-stack"><Panel><h2>Meet {teacher.name.split(" ")[0]}</h2><p>{teacher.bio}</p><dl className="lw-facts"><div><dt>Languages</dt><dd>{teacher.languages.join(", ")}</dd></div><div><dt>Lesson format</dt><dd>{teacher.formats.join(" and ")}</dd></div><div><dt>Location</dt><dd>{teacher.city}</dd></div></dl></Panel><Panel><h2>What learners say</h2><Rating teacher={teacher} onClick={() => navigate({ page: "reviews", teacherId: teacher.id })} />{teacher.reviews.length ? <blockquote>“{teacher.reviews[0].text}”<footer><span className="lw-review-author"><LearnerAvatar name={teacher.reviews[0].author} /><span>{teacher.reviews[0].author}</span></span></footer></blockquote> : <p>Be the first to leave a review after your lesson.</p>}<Button secondary onClick={() => navigate({ page: "reviews", teacherId: teacher.id })}>Read all reviews</Button></Panel></div><Panel><h2>Choose a lesson time</h2><p className="lw-muted">Europe/Paris</p>{nextSlots.length ? <div className="lw-slot-grid">{nextSlots.map(slot => <button key={slot.id} className="lw-slot" onClick={() => navigate({ page: "book", teacherId: teacher.id, slotId: slot.id, format: slot.format })}><span>{dayText(slot.start, now)}</span><strong>{timeText(slot.start)}</strong><small>{slot.format}</small></button>)}</div> : <p>No open times at the moment.</p>}</Panel></div></>;
+  return <><Panel className="lw-profile-hero"><TeacherIdentity teacher={teacher} navigate={navigate} large /><div className="lw-profile-actions"><strong>{currency(teacher.rate)} <span>/ {teacher.duration} min</span></strong><Button onClick={() => navigate({ page: "book", teacherId: teacher.id })}>Book a lesson</Button><Button secondary icon="message" onClick={() => navigate({ page: "messages", teacherId: teacher.id })}>Send a message</Button></div></Panel><div className="lw-two-columns"><div className="lw-stack"><Panel><h2>Meet {teacher.name.split(" ")[0]}</h2><p>{teacher.bio}</p><dl className="lw-facts"><div><dt>Languages</dt><dd>{teacher.languages.join(", ")}</dd></div><div><dt>Lesson format</dt><dd>{teacher.formats.join(" and ")}</dd></div><div><dt>Location</dt><dd><CountryText value={teacher.city} /></dd></div></dl></Panel><Panel><h2>What learners say</h2><Rating teacher={teacher} onClick={() => navigate({ page: "reviews", teacherId: teacher.id })} />{teacher.reviews.length ? <blockquote>“{teacher.reviews[0].text}”<footer><span className="lw-review-author"><LearnerAvatar name={teacher.reviews[0].author} /><span>{teacher.reviews[0].author}</span></span></footer></blockquote> : <p>Be the first to leave a review after your lesson.</p>}<Button secondary onClick={() => navigate({ page: "reviews", teacherId: teacher.id })}>Read all reviews</Button></Panel></div><Panel><h2>Choose a lesson time</h2><p className="lw-muted">Europe/Paris</p>{nextSlots.length ? <div className="lw-slot-grid">{nextSlots.map(slot => <button key={slot.id} className="lw-slot" onClick={() => navigate({ page: "book", teacherId: teacher.id, slotId: slot.id, format: slot.format })}><span>{dayText(slot.start, now)}</span><strong>{timeText(slot.start)}</strong><small>{slot.format}</small></button>)}</div> : <p>No open times at the moment.</p>}</Panel></div></>;
 }
 function ReviewsPage({ teacher, navigate }: { teacher: Teacher; navigate: Navigate }) {
   return <><Heading title={`Reviews for ${teacher.name}`} description="Feedback from learners after their lessons." /><Panel><TeacherIdentity teacher={teacher} navigate={navigate} /></Panel><div className="lw-stack">{teacher.reviews.length ? teacher.reviews.map(review => <Panel key={review.id} className="lw-review-card"><div><span className="lw-review-author"><LearnerAvatar name={review.author} /><strong>{review.author}</strong></span><span className="lw-stars" aria-label={`${review.rating} out of 5 stars`}>{"★".repeat(review.rating)}{"☆".repeat(5 - review.rating)}</span></div><p>{review.text}</p><small>{review.date}</small></Panel>) : <Empty title="No reviews yet">This teacher is new to Mimo. Reviews will appear here after completed lessons.</Empty>}</div></>;
@@ -193,7 +195,6 @@ function DesktopWorkspace({ route, navigate, back, canGoBack }: {
     <SidebarProvider className="mimo-web-shell lw-web-shell" style={{ "--sidebar-width": "248px", "--sidebar-width-icon": "64px" } as CSSProperties}>
       <WorkspaceSidebar
         workspaceLabel="Learning workspace"
-        homeHref="/?learner=1&view=web"
         groups={[
           { label: "Workspace", items: mainNav.map(([page, label, icon]) => ({
             id: page, label, icon, active: route.page !== "messages" && activeTab(route) === page,
@@ -206,7 +207,7 @@ function DesktopWorkspace({ route, navigate, back, canGoBack }: {
         ]}
         primaryAction={{ id: "find-teacher", label: "Find a teacher", icon: "search", onSelect: () => navigate({ page: "search" }, true) }}
         supportLinks={[{ id: "mobile-app", label: "Mobile app", icon: "video", href: "/?learner=1&view=mobile" }]}
-        account={{ name, role: "Learner account", initials, ariaLabel: "Learner account menu", items: [
+        account={{ name, initials, ariaLabel: "Learner account menu", items: [
           { id: "profile", label: "Learning profile", icon: "person", onSelect: () => navigate({ page: "profile" }, true) },
           { id: "onboarding", label: "Replay onboarding", icon: "back", href: "/?view=web" },
         ] }}

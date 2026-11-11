@@ -14,6 +14,16 @@
   "source": "Complete current app snapshot staged outside Git. Excluded environment files, dependencies, QA artifacts, logs, Git metadata and generated build output.",
   "build": "npm ci; npm run build; TypeScript; Vite; dist/client; 28 protected runtime hashes passed",
   "verification": "Local 80 unit/worker tests; all 37 distinct browser cases verified (29 app-flow and 8 protected-runtime cases), combining the full run and targeted rerun after scoping an existing ambiguous test locator. Native in-app visual and keyboard review documented in verification.md. Remote build Ready and preview target confirmed through Vercel metadata. Hosted URL was not fetched and hosted flows were not re-tested.",
-  "production": "No promotion; prior production aliases preserved",
+  "production": {
+    "id": "dpl_J7y9ViW5feKuiMmrUtM99rvGLnu9",
+    "url": "https://mimo-prototype-five.vercel.app",
+    "deploymentUrl": "https://mimo-prototype-4xdnn9md0-matthieu-pm.vercel.app",
+    "readyState": "READY",
+    "target": "production",
+    "method": "Production build from the same verified source snapshot, staged with --skip-domain and then promoted through the authenticated Vercel API.",
+    "verification": "All 188 compared app source, public asset, script, worker and build configuration files matched the verified preview snapshot. Remote TypeScript/Vite build and all 28 protected runtime hashes passed. Deployment metadata confirmed READY/production; get_alias confirmed mimo-prototype-five.vercel.app maps to this deployment in the intended project. Hosted pages were not fetched or re-tested.",
+    "previousDeploymentId": "dpl_2oDbfdnhe9NT4RuxrTWLmquGXZbp",
+    "authentication": "Inherited Vercel Authentication retained"
+  },
   "git": "No commit or push"
 }

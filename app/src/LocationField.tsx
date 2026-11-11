@@ -1,6 +1,8 @@
 import { useEffect, useId, useRef, useState } from "react";
 import { KeyboardInput, useKeyboard } from "./mobile";
 import { findLocations, locationPermissionError, type LocationChoice } from "./locations";
+import { CountryFlag, CountryText } from "./CountryFlag";
+import { countryForLocation } from "./countries";
 import "./location-field.css";
 
 export default function LocationField({ value, onChange, mobile = false, label = "City or neighbourhood", allowLocation = true }: {
@@ -75,9 +77,11 @@ export default function LocationField({ value, onChange, mobile = false, label =
   };
   const Input = mobile ? KeyboardInput : "input";
   const expanded = focused && choices.length > 0;
+  const country = countryForLocation(value);
   return (
     <div className="location-field">
       <label htmlFor={id}>{label}</label>
+      <div className="location-input">
       <Input id={id} value={value} placeholder="Start typing a city or neighbourhood" autoComplete="off"
         role="combobox" aria-autocomplete="list" aria-expanded={expanded}
         aria-controls={expanded ? `${id}-list` : undefined}
@@ -93,9 +97,11 @@ export default function LocationField({ value, onChange, mobile = false, label =
           }
           if (e.key === "Enter" && expanded && active >= 0) { e.preventDefault(); choose(choices[active]); }
         }} />
+      <span className="location-country" aria-hidden="true">{country && <CountryFlag country={country.code} />}</span>
+      </div>
       {expanded && <ul id={`${id}-list`} role="listbox" aria-label="Location suggestions">
         {choices.map((choice, index) => <li key={choice.label} id={`${id}-option-${index}`} role="option" aria-selected={active === index}
-          onMouseDown={(e) => e.preventDefault()} onClick={() => choose(choice)}>{choice.label}</li>)}
+          onMouseDown={(e) => e.preventDefault()} onClick={() => choose(choice)}><CountryText value={choice.label} /></li>)}
       </ul>}
       <p id={`${id}-status`} role="status">{status || "Type at least 2 characters. You can also enter a location manually."}</p>
       {error && <div id={`${id}-error`} role="alert"><p>{error}</p><button type="button" onClick={() => { committed.current = ""; setFocused(true); setRetry((n) => n + 1); setError(""); }}>Retry suggestions</button></div>}

@@ -14,7 +14,6 @@ export function WebSidebar({ route, navigate }: { route: Route; navigate: Naviga
   return (
     <WorkspaceSidebar
       workspaceLabel="Teaching workspace"
-      homeHref="/?teacher=1&view=web"
       primaryAction={item("new-lesson", "New lesson", "plus", { page: "lessons", tab: "Module editor" })}
       groups={[
         { items: [
@@ -36,7 +35,6 @@ export function WebSidebar({ route, navigate }: { route: Route; navigate: Naviga
       ]}
       account={{
         name: profile.name,
-        role: "Teacher account",
         portraitId: profile.name === "Gilbert" ? "gilbert" : undefined,
         initials: profile.name.slice(0, 1).toUpperCase(),
         ariaLabel: "Teacher account menu",

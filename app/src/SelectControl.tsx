@@ -1,6 +1,7 @@
 import { useSyncExternalStore, type AriaAttributes } from "react";
 import { Select } from "radix-ui";
 import { Icon } from "./teacher/icons";
+import { CountryFlag } from "./CountryFlag";
 import "./select-control.css";
 
 type Choice = string | { value: string; label: string; disabled?: boolean };
@@ -11,6 +12,7 @@ type SelectControlProps = AriaAttributes & {
   options: Choice[];
   native?: boolean;
   disabled?: boolean;
+  countryFlags?: boolean;
 };
 
 const forcedColorsQuery = "(forced-colors: active)";
@@ -24,17 +26,18 @@ const noForcedColors = () => false;
 
 /** Styled desktop choices; retain platform pickers inside phones and in high contrast. */
 export default function SelectControl({
-  value, onChange, options, native = false, disabled, id, ...aria
+  value, onChange, options, native = false, disabled, countryFlags = false, id, ...aria
 }: SelectControlProps) {
   const forcedColors = useSyncExternalStore(subscribeToForcedColors, hasForcedColors, noForcedColors);
   const choices = options.map(option => typeof option === "string" ? { value: option, label: option } : option);
 
   if (native || forcedColors) {
     return (
-      <span className="app-select-control">
+      <span className="app-select-control" data-country-flags={countryFlags || undefined}>
         <select id={id} value={value} onChange={event => onChange(event.target.value)} disabled={disabled} {...aria}>
           {choices.map(choice => <option key={choice.value} value={choice.value} disabled={choice.disabled}>{choice.label}</option>)}
         </select>
+        {countryFlags && <span className="app-select-native-country" aria-hidden="true"><CountryFlag country={choices.find(choice => choice.value === value)?.label || ""} /></span>}
         <Icon name="down" size={16} className="app-select-chevron" />
       </span>
     );
@@ -55,7 +58,7 @@ export default function SelectControl({
             <Select.Viewport className="app-select-viewport">
               {choices.map(choice => (
                 <Select.Item key={choice.value} value={encode(choice.value)} disabled={choice.disabled} textValue={choice.label} className="app-select-option">
-                  <Select.ItemText>{choice.label}</Select.ItemText>
+                  <Select.ItemText>{countryFlags ? <span className="app-select-country-label"><CountryFlag country={choice.label} /><span>{choice.label}</span></span> : choice.label}</Select.ItemText>
                   <Select.ItemIndicator className="app-select-indicator"><Icon name="check" size={16} /></Select.ItemIndicator>
                 </Select.Item>
               ))}

@@ -247,6 +247,13 @@ export default function ModuleResults({
   const unreviewed = reviewable.filter((b) => blockReviewLabel(b, rows[b.id]) === "Unreviewed").length;
   const nextUnreviewed = nextUnreviewedBlock(result, rows, activeBlock?.id || "");
   const busy = Object.values(mediaBusy).some(Boolean);
+  const navigationStatus = busy
+    ? "Finish or cancel recording before navigating."
+    : unreviewed === 0
+      ? "No unreviewed responses. Draft feedback may still need sharing."
+      : !nextUnreviewed && blockReviewLabel(activeBlock!, rows[activeBlock!.id]) === "Unreviewed"
+        ? "This is the last unreviewed response."
+        : null;
   const chooseBlock = (id: string) => {
     if (!busy) setBlockSelection({ result: result.id, block: id });
   };
@@ -318,9 +325,7 @@ export default function ModuleResults({
             <Button static kind="secondary" disabled={busy || activeIndex >= result.blocks.length - 1} onClick={() => chooseBlock(result.blocks[activeIndex + 1].id)}>Next block</Button>
             <Button static disabled={busy || !nextUnreviewed} onClick={() => nextUnreviewed && chooseBlock(nextUnreviewed)}>Next unreviewed</Button>
           </div>
-          <p className="mr-muted" role="status">
-            {busy ? "Finish or cancel recording before navigating." : unreviewed === 0 ? "No unreviewed responses. Draft feedback may still need sharing." : !nextUnreviewed && blockReviewLabel(activeBlock!, rows[activeBlock!.id]) === "Unreviewed" ? "This is the last unreviewed response." : "Unreviewed means no student-facing feedback yet. Draft feedback stays private until shared."}
-          </p>
+          {navigationStatus && <p className="mr-muted" role="status">{navigationStatus}</p>}
         </nav>
       )}
       {result.blocks.map((block, index) => {

@@ -1,0 +1,16 @@
+{
+  "source": "/Users/matthieu/.codex/worktrees/2432/skema-project-learning/app",
+  "stage": "/var/folders/j2/gzj18t_x2251dx_cnqdcscm80000gn/T/mimo-sticky-production-z1u1lkbn/app",
+  "files": 224,
+  "excluded": [
+    ".git",
+    ".vercel",
+    "dist",
+    "node_modules",
+    "playwright-report",
+    "qa",
+    "test-results",
+    ".env*",
+    "*.log"
+  ]
+}

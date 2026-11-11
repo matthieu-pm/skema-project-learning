@@ -41,13 +41,11 @@ export type WorkspaceSidebarGroup = {
 };
 export type WorkspaceSidebarProps = {
   workspaceLabel: string;
-  homeHref: string;
   groups: WorkspaceSidebarGroup[];
   primaryAction?: WorkspaceSidebarItem;
   supportLinks?: WorkspaceSidebarItem[];
   account: {
     name: string;
-    role: string;
     portraitId?: string;
     initials: string;
     ariaLabel?: string;
@@ -80,8 +78,8 @@ function NavigationItems({ items, choose }: { items: WorkspaceSidebarItem[]; cho
   );
 }
 
-export function WorkspaceSidebar({ workspaceLabel, homeHref, groups, primaryAction, supportLinks = [], account }: WorkspaceSidebarProps) {
-  const { state, isMobile, openMobile, setOpenMobile, toggleSidebar } = useSidebar();
+export function WorkspaceSidebar({ workspaceLabel, groups, primaryAction, supportLinks = [], account }: WorkspaceSidebarProps) {
+  const { state, isMobile, openMobile, setOpenMobile } = useSidebar();
   const wasDrawerOpen = useRef(openMobile);
   useEffect(() => {
     const closed = wasDrawerOpen.current && !openMobile;
@@ -95,31 +93,52 @@ export function WorkspaceSidebar({ workspaceLabel, homeHref, groups, primaryActi
     item.onSelect?.();
     if (isMobile) setOpenMobile(false);
   };
-  const collapseLabel = isMobile ? "Close navigation" : collapsed ? "Expand navigation" : "Collapse navigation";
   return (
     <Sidebar variant="sidebar" collapsible="icon" className={`mimo-sidebar${collapsed ? " mimo-sidebar-collapsed" : ""}`}>
       <SidebarHeader className="mimo-sidebar-header">
-        <div className="mimo-sidebar-brand-row">
-          <a className="mimo-sidebar-brand" href={homeHref} aria-label={`Mimo ${workspaceLabel.toLowerCase()}`} onClick={() => { if (isMobile) setOpenMobile(false); }}>
-            <span className="mimo-sidebar-wordmark">mimo</span>
-            <span className="mimo-sidebar-workspace">{workspaceLabel}</span>
-          </a>
-          <Tooltip>
+        <div className="mimo-sidebar-account-row">
+          <SidebarMenu className="mimo-sidebar-account-slot">
+            <SidebarMenuItem>
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button static variant="ghost" className="mimo-sidebar-account" aria-label={account.ariaLabel || "Profile menu"}>
+                    <span className="mimo-sidebar-avatar" aria-hidden="true">
+                      {account.portraitId ? <ProfilePortrait id={account.portraitId} initials={account.initials} /> : account.initials}
+                    </span>
+                    <span className="mimo-sidebar-account-copy"><strong>{account.name}</strong></span>
+                    <Icon name="down" size={14} strokeWidth={1.5} className="mimo-sidebar-account-chevron" />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent className="mimo-sidebar-menu" side={collapsed ? "right" : "bottom"} align="start" sideOffset={8}>
+                  <DropdownMenuLabel className="mimo-sidebar-menu-label">{account.name}</DropdownMenuLabel>
+                  <DropdownMenuSeparator />
+                  {account.items.map((item) => (
+                    <Fragment key={item.id}>
+                      {item.separatorBefore && <DropdownMenuSeparator />}
+                      <DropdownMenuItem asChild={!!item.href} onSelect={() => choose(item)} aria-current={item.active ? "page" : undefined}>
+                        {item.href ? <a href={item.href}><Icon name={item.icon} size={17} strokeWidth={1.5} /><span>{item.label}</span></a> : <><Icon name={item.icon} size={17} strokeWidth={1.5} /><span>{item.label}</span></>}
+                      </DropdownMenuItem>
+                    </Fragment>
+                  ))}
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </SidebarMenuItem>
+          </SidebarMenu>
+          {isMobile && <Tooltip>
             <TooltipTrigger asChild>
               <Button
                 static
                 variant="ghost"
                 size="icon-sm"
                 className="mimo-sidebar-collapse"
-                aria-label={collapseLabel}
-                aria-expanded={isMobile ? undefined : !collapsed}
-                onClick={() => isMobile ? setOpenMobile(false) : toggleSidebar()}
+                aria-label="Close navigation"
+                onClick={() => setOpenMobile(false)}
               >
-                <Icon name={isMobile ? "close" : "sidebar"} size={18} strokeWidth={1.5} />
+                <Icon name="close" size={18} strokeWidth={1.5} />
               </Button>
             </TooltipTrigger>
-            <TooltipContent side="right" className="mimo-sidebar-tooltip">{collapseLabel}</TooltipContent>
-          </Tooltip>
+            <TooltipContent side="right" className="mimo-sidebar-tooltip">Close navigation</TooltipContent>
+          </Tooltip>}
         </div>
         {primaryAction && (
           <Tooltip>
@@ -143,36 +162,9 @@ export function WorkspaceSidebar({ workspaceLabel, homeHref, groups, primaryActi
             </SidebarGroup>
           ))}
         </nav>
-        {supportLinks.length > 0 && <SidebarGroup className="mimo-sidebar-support"><NavigationItems items={supportLinks} choose={choose} /></SidebarGroup>}
       </SidebarContent>
       <SidebarFooter className="mimo-sidebar-footer">
-        <SidebarMenu>
-          <SidebarMenuItem>
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <SidebarMenuButton className="mimo-sidebar-account" aria-label={account.ariaLabel || "Account menu"}>
-                  <span className="mimo-sidebar-avatar" aria-hidden="true">
-                    {account.portraitId ? <ProfilePortrait id={account.portraitId} initials={account.initials} /> : account.initials}
-                  </span>
-                  <span className="mimo-sidebar-account-copy"><strong>{account.name}</strong><span>{account.role}</span></span>
-                  <Icon name="expand" size={16} strokeWidth={1.5} className="mimo-sidebar-account-chevron" />
-                </SidebarMenuButton>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent className="mimo-sidebar-menu" side={isMobile ? "top" : "right"} align="end" sideOffset={10}>
-                <DropdownMenuLabel className="mimo-sidebar-menu-label">{account.name}<span>{account.role}</span></DropdownMenuLabel>
-                <DropdownMenuSeparator />
-                {account.items.map((item) => (
-                  <Fragment key={item.id}>
-                    {item.separatorBefore && <DropdownMenuSeparator />}
-                    <DropdownMenuItem asChild={!!item.href} onSelect={() => choose(item)} aria-current={item.active ? "page" : undefined}>
-                      {item.href ? <a href={item.href}><Icon name={item.icon} size={17} strokeWidth={1.5} /><span>{item.label}</span></a> : <><Icon name={item.icon} size={17} strokeWidth={1.5} /><span>{item.label}</span></>}
-                    </DropdownMenuItem>
-                  </Fragment>
-                ))}
-              </DropdownMenuContent>
-            </DropdownMenu>
-          </SidebarMenuItem>
-        </SidebarMenu>
+        {supportLinks.length > 0 && <SidebarGroup className="mimo-sidebar-support"><NavigationItems items={supportLinks} choose={choose} /></SidebarGroup>}
       </SidebarFooter>
     </Sidebar>
   );

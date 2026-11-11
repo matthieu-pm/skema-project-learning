@@ -1,0 +1,44 @@
+{
+  "projectName": "mimo-prototype",
+  "projectId": "prj_SEpdrBUQD5HcdNc5GRT73OKvrcrm",
+  "team": "matthieu-pm",
+  "teamId": "team_KddvwwnftxOOhP8UymRnP0PX",
+  "production": {
+    "id": "dpl_9h1x9SCkbuD3XziQHZEKVfpndkjW",
+    "url": "https://mimo-prototype-five.vercel.app",
+    "deploymentUrl": "https://mimo-prototype-9gqgg5j6j-matthieu-pm.vercel.app",
+    "readyState": "READY",
+    "target": "production",
+    "previousDeploymentId": "dpl_A4xqzgDWZhjWA8uJswifgPAbhae1"
+  },
+  "scope": [
+    "Multiple independent time slots per weekday and explicit copy-hours checklist",
+    "Centered collapsed avatars, header collapse/expand before breadcrumbs and removed visible account-role subtitles",
+    "Drafts library tab and 24px preview action/card spacing",
+    "Ongoing modules view switcher pinned flush below toolbar during web scrolling"
+  ],
+  "method": "Isolated source snapshot deployed with Vercel CLI --prod --skip-domain, then Ready production build promoted through authenticated Vercel API.",
+  "source": "Final 224-file SHA256 snapshot matched current worktree at promotion. Excluded QA, generated output, dependencies, Git metadata, environment files and logs.",
+  "build": "TypeScript/Vite/Sites packaging and 28 protected runtime hashes passed locally and in Vercel build.",
+  "verification": "84 unit/worker cases and 28 scoped availability/select/runtime browser cases passed. Affected copy-menu cases passed 3/3 after bounded-footer CSS. Four button cases and three final sidebar cases passed; final build/runtime passed. Native proof and exact retry sequence in verification.md. The later sticky follow-up passed all three new actual-scroll cases at 1280px/1024px/390px, plus final build/typecheck/Sites packaging/runtime/diff checks. Native WebKit confirms switcher top equals toolbar bottom at64px and switching views remains usable.",
+  "hostedUi": "Not fetched or re-tested; Ready/production and stable alias checked with authenticated Vercel metadata API.",
+  "authentication": "Inherited Vercel Authentication retained",
+  "git": "No commit or push",
+  "aliasVerification": {
+    "alias": "mimo-prototype-five.vercel.app",
+    "deploymentId": "dpl_9h1x9SCkbuD3XziQHZEKVfpndkjW",
+    "projectId": "prj_SEpdrBUQD5HcdNc5GRT73OKvrcrm",
+    "method": "Authenticated Vercel get_alias after promotion"
+  },
+  "earlierReleaseThisTask": {
+    "id": "dpl_A4xqzgDWZhjWA8uJswifgPAbhae1",
+    "url": "https://mimo-prototype-five.vercel.app",
+    "deploymentUrl": "https://mimo-prototype-9rmw51x9o-matthieu-pm.vercel.app",
+    "readyState": "READY",
+    "target": "production",
+    "previousDeploymentId": "dpl_9u2udS6JoutqxPP9qSdPD2x6svwY",
+    "sourceManifest": "source-manifest-initial-release.json",
+    "sourceFileCount": 223,
+    "note": "Initial multiple-slots/copy/sidebar/Drafts/spacing release. User then requested sticky switcher and this follow-up superseded it."
+  }
+}

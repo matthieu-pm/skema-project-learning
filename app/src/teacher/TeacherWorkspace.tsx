@@ -74,8 +74,9 @@ const titles: Record<string, string> = {
   identity: "Identity check",
 };
 function WebNavigationTrigger() {
-  const { isMobile } = useSidebar();
-  return isMobile ? <SidebarTrigger static aria-label="Open navigation" /> : null;
+  const { isMobile, state } = useSidebar();
+  const expanded = state === "expanded";
+  return <SidebarTrigger static size={isMobile ? "icon-lg" : "icon-sm"} aria-label={isMobile ? "Open navigation" : expanded ? "Collapse navigation" : "Expand navigation"} aria-expanded={isMobile ? undefined : expanded} className="mimo-content-sidebar-trigger" />;
 }
 function Toolbar({
   route,

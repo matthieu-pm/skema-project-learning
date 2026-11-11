@@ -69,12 +69,14 @@ export function Select({
   onChange,
   options,
   disabled = false,
+  countryFlags = false,
 }: {
   label: string;
   value: string;
   onChange: (v: string) => void;
   options: (string | { value: string; label: string })[];
   disabled?: boolean;
+  countryFlags?: boolean;
 }) {
   const { mobile } = useWorkspace();
   return (
@@ -87,6 +89,7 @@ export function Select({
         options={options}
         native={mobile}
         disabled={disabled}
+        countryFlags={countryFlags}
       />
     </label>
   );

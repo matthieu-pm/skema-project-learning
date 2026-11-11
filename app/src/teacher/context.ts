@@ -1,4 +1,5 @@
 import { readLibrary, restoreLessons } from "./course-storage";
+import { createAvailability, type Availability } from "./availability";
 import type { CourseTemplate, Course } from "./course";
 import { createContext, useContext, useState } from "react";
 import { initialAnswers, type Answers } from "../onboarding";
@@ -74,12 +75,7 @@ export function useWorkspaceState(a?: Answers) {
     });
   const [feedback, setFeedback] = useState(""),
     [feedbackShared, setFeedbackShared] = useState(false),
-    [availability, setAvailability] = useState({
-      days: ["Mon", "Tue", "Thu", "Fri"],
-      start: "09:00",
-      end: "17:00",
-      zone: "Europe/Paris",
-    }),
+    [availability, setAvailability] = useState<Availability>(createAvailability),
     [availabilitySaved, setAvailabilitySaved] = useState(false);
   const updateLesson = (id: string, patch: Partial<Lesson>) =>
     setLessons((ls) =>
