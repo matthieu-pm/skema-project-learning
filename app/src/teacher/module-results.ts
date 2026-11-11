@@ -19,7 +19,7 @@ export type CompletedBlock = {
 };
 export function canReviewBlock(block: CompletedBlock): boolean {
   return (
-    block.type.startsWith("Practise · ") &&
+    block.type.startsWith("Practice · ") &&
     (block.response !== undefined || block.recording !== undefined)
   );
 }
@@ -53,7 +53,7 @@ export const moduleResults: ModuleResult[] = [
       {
         id: "vocab-recall",
         title: "Remember the word",
-        type: "Practise · Vocabulary recall",
+        type: "Practice · Vocabulary recall",
         prompt: "How do you say ‘the bill’ in French?",
         response: "le addition",
         answer: "l’addition",
@@ -62,7 +62,7 @@ export const moduleResults: ModuleResult[] = [
       {
         id: "vocab-pairs",
         title: "Match the café words",
-        type: "Practise · Matching pairs",
+        type: "Practice · Matching pairs",
         prompt: "Match each French word to its English meaning.",
         response:
           "un café → a coffee\nun thé → a tea\nà emporter → to take away",
@@ -90,7 +90,7 @@ export const moduleResults: ModuleResult[] = [
       {
         id: "grammar-order",
         title: "Put the request in order",
-        type: "Practise · Arrange words",
+        type: "Practice · Arrange words",
         prompt: "Arrange: un thé / voudrais / Je / s’il vous plaît",
         response: "Je voudrais un thé s’il vous plaît",
         answer: "Je voudrais un thé s’il vous plaît",
@@ -99,7 +99,7 @@ export const moduleResults: ModuleResult[] = [
       {
         id: "grammar-gap",
         title: "Complete the request",
-        type: "Practise · Fill the gap",
+        type: "Practice · Fill the gap",
         prompt: "Je ___ un café, s’il vous plaît.",
         response: "veux",
         answer: "voudrais",
@@ -119,7 +119,7 @@ export const moduleResults: ModuleResult[] = [
       {
         id: "speaking-recording",
         title: "Ask the barista",
-        type: "Practise · Spoken response",
+        type: "Practice · Spoken response",
         prompt: "Order a drink and ask what the barista recommends.",
         recording: {
           transcript:
@@ -131,7 +131,7 @@ export const moduleResults: ModuleResult[] = [
       {
         id: "speaking-written",
         title: "Try another situation",
-        type: "Practise · Written response",
+        type: "Practice · Written response",
         prompt: "Write a polite request for the bill.",
         response: "Est-ce que je peux avoir l’addition, s’il vous plaît ?",
       },
@@ -156,7 +156,7 @@ export const moduleResults: ModuleResult[] = [
       {
         id: "listening-quiz",
         title: "Catch the departure time",
-        type: "Practise · Quiz",
+        type: "Practice · Quiz",
         prompt: "When does the train leave? A: 3:15 · B: 3:30 · C: 3:45",
         response: "A · 3:15",
         answer: "A · 3:15",
@@ -165,7 +165,7 @@ export const moduleResults: ModuleResult[] = [
       {
         id: "listening-written",
         title: "Explain what you heard",
-        type: "Practise · Written response",
+        type: "Practice · Written response",
         prompt: "Where is the speaker going, and why?",
         response:
           "The speaker is going to the station to catch a train at 3:15.",
@@ -185,7 +185,7 @@ export const moduleResults: ModuleResult[] = [
       {
         id: "meeting-spoken",
         title: "Present your idea",
-        type: "Practise · Spoken response",
+        type: "Practice · Spoken response",
         prompt: "Présentez une idée avec : à mon avis, parce que, par exemple.",
         recording: {
           transcript:
@@ -197,7 +197,7 @@ export const moduleResults: ModuleResult[] = [
       {
         id: "meeting-reflection",
         title: "Reflect on your response",
-        type: "Practise · Written response",
+        type: "Practice · Written response",
         prompt: "What would you improve next time?",
         response:
           "I want to pause less between my reason and my example, and use a clearer closing sentence.",

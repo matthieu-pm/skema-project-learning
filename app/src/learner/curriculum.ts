@@ -9,20 +9,20 @@ export type PublicLesson = {
   greeting: string;
   description: string;
   goals: string[];
-  modules: { title: string; minutes: number; blocks: { title: string; purpose: "Teach" | "Practise" }[] }[];
+  modules: { title: string; minutes: number; blocks: { title: string; purpose: "Teach" | "Practice" }[] }[];
 };
 
 const cafe: PublicLesson = {
   id: "cafe", teacherId: "gilbert", title: "A conversation at the café",
   language: "French", level: "A2", greeting: "Bonjour !",
-  description: "Order a drink and ask a natural follow-up question. Practise useful words, build your sentence and try it with your teacher.",
+  description: "Order a drink and ask a natural follow-up question. Practice useful words, build your sentence and try it with your teacher.",
   goals: ["Order a drink politely", "Ask a natural follow-up question", "Try it in your own words"],
   modules: [
-    { title: "Warm-up", minutes: 5, blocks: [{ title: "Vocabulary recall", purpose: "Practise" }] },
-    { title: "Vocabulary", minutes: 5, blocks: [{ title: "Flashcards", purpose: "Teach" }, { title: "Matching pairs", purpose: "Practise" }] },
-    { title: "Grammar", minutes: 5, blocks: [{ title: "Sentence construction", purpose: "Teach" }, { title: "Sentence construction", purpose: "Practise" }] },
-    { title: "Listening", minutes: 5, blocks: [{ title: "Audio", purpose: "Teach" }, { title: "Written response", purpose: "Practise" }] },
-    { title: "Speaking", minutes: 5, blocks: [{ title: "Spoken response", purpose: "Practise" }] },
+    { title: "Warm-up", minutes: 5, blocks: [{ title: "Vocabulary recall", purpose: "Practice" }] },
+    { title: "Vocabulary", minutes: 5, blocks: [{ title: "Flashcards", purpose: "Teach" }, { title: "Matching pairs", purpose: "Practice" }] },
+    { title: "Grammar", minutes: 5, blocks: [{ title: "Sentence construction", purpose: "Teach" }, { title: "Sentence construction", purpose: "Practice" }] },
+    { title: "Listening", minutes: 5, blocks: [{ title: "Audio", purpose: "Teach" }, { title: "Written response", purpose: "Practice" }] },
+    { title: "Speaking", minutes: 5, blocks: [{ title: "Spoken response", purpose: "Practice" }] },
     { title: "Reflection", minutes: 5, blocks: [{ title: "Lesson recap", purpose: "Teach" }] },
   ],
 };

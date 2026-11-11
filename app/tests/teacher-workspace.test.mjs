@@ -400,7 +400,7 @@ test("audio and writing annotations validate evidence and recording bounds", asy
   const b = {
     id: "b",
     title: "Respond",
-    type: "Practise · Written response",
+    type: "Practice · Written response",
     prompt: "Write",
     response: "Je veux un café.",
   };
@@ -441,7 +441,7 @@ test("follow-up practice creates an independent student draft and preserves the 
   assert.equal(lesson.studentId, "lea");
   assert.equal(lesson.status, "Draft");
   assert.equal(lesson.course.modules[0].type, "Vocabulary");
-  assert.equal(lesson.course.modules[0].blocks[0].purpose, "Practise");
+  assert.equal(lesson.course.modules[0].blocks[0].purpose, "Practice");
   assert.equal(
     lesson.course.modules[0].blocks[0].text,
     "Write two new café requests.",

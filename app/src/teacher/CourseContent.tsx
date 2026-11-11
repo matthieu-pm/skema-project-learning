@@ -344,7 +344,7 @@ export function StudentBlock({
   return (
     <div className="ce-student-block">
       <span className="ce-kicker">
-        {b.purpose === "Teach" ? "Learn" : "Practise"} · {b.format}
+        {b.purpose === "Teach" ? "Learn" : "Practice"} · {b.format}
       </span>
       <h2>{b.title}</h2>
       <p>{b.instructions}</p>
@@ -557,7 +557,7 @@ export function StudentBlock({
               )}
             </div>
           )}
-          {b.purpose === "Practise" && !auto && (
+          {b.purpose === "Practice" && !auto && (
             <div className="ce-response">
               {["Spoken response", "Role-play"].includes(b.format) ? (
                 <>

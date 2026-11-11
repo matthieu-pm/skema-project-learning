@@ -15,7 +15,7 @@ Adapted to the current Cal.com-inspired workspace, Labil Grotesk, Hugeicons, gen
 
 ## Implemented
 
-Gilbert’s student-facing profile now exposes lesson details and a direct curriculum action. The lesson screen provides Overview / Curriculum tabs, goals, language/level, format, duration, price and expandable module block lists with Teach/Practise labels. Tabs support arrows, Home and End. Module disclosures are native keyboard controls; their state survives tab switching. Booking and contact actions open the existing teacher-specific flows.
+Gilbert’s student-facing profile now exposes lesson details and a direct curriculum action. The lesson screen provides Overview / Curriculum tabs, goals, language/level, format, duration, price and expandable module block lists with Teach/Practice labels. Tabs support arrows, Home and End. Module disclosures are native keyboard controls; their state survives tab switching. Booking and contact actions open the existing teacher-specific flows.
 
 Only Gilbert has an authored public lesson in this supplied reference. Other sample teachers show an explicit empty state and contact action. The public catalogue contains no private notes, answer keys or browser-local teacher drafts. No enrollment, progress, paid course entitlement, block player or teacher/student synchronization was added.
 
@@ -31,3 +31,5 @@ Direct preview: `/?learner=1&view=web&flow=teacher&teacherId=gilbert`; use `view
 - Existing historical screenshots rewritten by regression tests were restored. Prior release documentation/captures were preserved.
 
 Evidence: `desktop-curriculum.jpg`, `iphone-overview.jpg`, `iphone-curriculum.jpg`, `pixel-curriculum.jpg`. These show local fictional sample content.
+
+Practice wording follow-up (11 November): updated all app-owned spelling, including the block-purpose discriminator and sample copy. Legacy library records normalize on read without rewriting authored text or stored snapshots. Build and 28 runtime hashes passed; 35 teacher tests (including legacy saved drafts) and 7 editor/profile browser checks passed. Current built-screen evidence: `practice-spelling.jpg`. Historical captures are preserved.

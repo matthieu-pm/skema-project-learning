@@ -183,7 +183,7 @@ export function reusePractice(block: CompletedBlock): CourseBlock {
           ].includes(original)
         ? (original as Format)
         : "Written response";
-  const copy = createBlock(format, "Practise");
+  const copy = createBlock(format, "Practice");
   copy.title = block.title;
   copy.text = block.prompt;
   copy.instructions =
@@ -234,7 +234,7 @@ export function followUpLesson(
   const activity =
     format === "Reuse activity"
       ? reusePractice(block)
-      : createBlock(format, "Practise");
+      : createBlock(format, "Practice");
   activity.title = `Try again · ${block.title}`;
   activity.instructions =
     "Try this follow-up activity. Your teacher will review your response.";

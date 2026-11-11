@@ -175,7 +175,7 @@ export function initialLessons(): Lesson[] {
       language: "French",
       level: "A2",
       blocks: makeBlocks(),
-      notes: "Léa prefers to practise once before trying without prompts.",
+      notes: "Léa prefers to practice once before trying without prompts.",
       status: "Approved",
       archived: false,
     },
@@ -240,7 +240,7 @@ export function initialSessions(): Session[] {
       format: "Online",
       status: "Confirmed",
       lessonId: "lea-cafe",
-      notes: "Practise ordering, then remove the prompts.",
+      notes: "Practice ordering, then remove the prompts.",
       recap: "",
       practice: "",
       recapShared: false,
@@ -299,7 +299,7 @@ export function initialSessions(): Session[] {
       notes:
         "Léa ordered confidently. Follow-up questions needed another example.",
       recap:
-        "You ordered confidently and asked for a recommendation. Next time, we’ll practise a spontaneous follow-up question.",
+        "You ordered confidently and asked for a recommendation. Next time, we’ll practice a spontaneous follow-up question.",
       practice:
         "Try asking “Vous me conseillez quoi ?” in a café, if you have a chance.",
       recapShared: false,

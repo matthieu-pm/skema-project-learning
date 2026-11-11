@@ -1212,7 +1212,7 @@ function AiPage({ id, navigate }: { id?: string; navigate: Navigate }) {
                             goal: "Keep a conversation going with a follow-up question.",
                             blocks: [
                               {
-                                ...createBlock("Role-play", "Practise"),
+                                ...createBlock("Role-play", "Practice"),
                                 title: "One more question",
                                 text: "After ordering, ask for a recommendation. Explain why you would choose it, then ask a follow-up question.",
                               },
@@ -2069,7 +2069,7 @@ function RecapPage({
                 updateSession(s.id, { recap: v, recapShared: false })
               }
               multiline
-              placeholder="What did they practise? What improved?"
+              placeholder="What did they practice? What improved?"
             />
             <TextField
               label="Optional next practice"

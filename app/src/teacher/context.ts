@@ -50,7 +50,7 @@ export function useWorkspaceState(a?: Answers) {
     >({
       lea: [
         {
-          body: "Hi! Could we practise asking for a recommendation next time?",
+          body: "Hi! Could we practice asking for a recommendation next time?",
           mine: false,
         },
       ],
@@ -62,7 +62,7 @@ export function useWorkspaceState(a?: Answers) {
       ],
       maya: [
         {
-          body: "I’d love to practise my opening for Monday’s meeting.",
+          body: "I’d love to practice my opening for Monday’s meeting.",
           mine: false,
         },
       ],
