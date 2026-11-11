@@ -35,7 +35,13 @@ import {
   DropdownMenuTrigger,
 } from "./ui/dropdown-menu";
 
-const sections = [
+type Section = {
+  page: string;
+  label: string;
+  icon: string;
+  items?: { label: string; route: Route }[];
+};
+const sections: Section[] = [
   {
     page: "students",
     label: "Students",
@@ -43,46 +49,27 @@ const sections = [
     items: [
       { label: "Student profiles", route: { page: "students" } },
       { label: "Ongoing modules", route: { page: "modules" } },
-      { label: "Messages", route: { page: "messages" } },
     ],
   },
-  {
-    page: "schedule",
-    label: "Schedule",
-    icon: "calendar",
-    items: [
-      { label: "Calendar", route: { page: "schedule" } },
-      { label: "Availability", route: { page: "availability" } },
-    ],
-  },
+  { page: "schedule", label: "Schedule", icon: "calendar" },
+  { page: "availability", label: "Availability", icon: "clock" },
   {
     page: "lessons",
     label: "Lessons",
     icon: "book",
     items: [
+      { label: "Library", route: { page: "lessons", tab: "Library" } },
       {
         label: "Module editor",
         route: { page: "lessons", tab: "Module editor" },
       },
-      { label: "Library", route: { page: "lessons", tab: "Library" } },
       { label: "Templates", route: { page: "lessons", tab: "Templates" } },
       { label: "Archive", route: { page: "lessons", tab: "Archive" } },
     ],
   },
-  {
-    page: "profile",
-    label: "Profile",
-    icon: "person",
-    items: [
-      { label: "Teaching profile", route: { page: "profile" } },
-      { label: "Help", route: { page: "help" } },
-      { label: "Account settings", route: { page: "settings" } },
-      { label: "Payout", route: { page: "payout" } },
-    ],
-  },
-] as const;
+  { page: "messages", label: "Messages", icon: "message" },
+];
 
-// sidebar-08: inset shell, collapsible main groups, secondary links, account menu.
 export function WebSidebar({
   route,
   navigate,
@@ -92,46 +79,97 @@ export function WebSidebar({
 }) {
   const { profile } = useWorkspace();
   const { isMobile, setOpenMobile } = useSidebar();
-  const [expanded, setExpanded] = useState<string[]>(["students"]);
+  const [expanded, setExpanded] = useState<string[]>([primaryTab(route)]);
   const go = (next: Route) => {
     navigate(next, true);
     if (isMobile) setOpenMobile(false);
+  };
+  const isActive = (page: string) => {
+    if (["availability", "messages"].includes(route.page))
+      return route.page === page;
+    return primaryTab(route) === page;
   };
   return (
     <Sidebar
       variant="inset"
       collapsible="icon"
-      className={`tw-shadcn-sidebar${route.page === "editor" ? " tw-editor-sidebar" : ""}`}
+      className={`tw-shadcn-sidebar tw-cal-sidebar${route.page === "editor" ? " tw-editor-sidebar" : ""}`}
     >
       <SidebarHeader>
-        {isMobile && (
-          <button
-            className="tw-sidebar-close"
-            aria-label="Close navigation"
-            onClick={() => setOpenMobile(false)}
-          >
-            <Icon name="close" />
-          </button>
-        )}
-        <SidebarMenu>
-          <SidebarMenuItem>
-            <SidebarMenuButton size="lg" asChild>
-              <a href="/?teacher=1&view=web" className="tw-sidebar-brand">
-                <span className="tw-brand-tile">
-                  <img src="/assets/onboarding/luma.png" alt="" />
-                </span>
-                <span className="tw-brand-name">
-                  <strong>mimo</strong>
-                  <span>Teaching workspace</span>
-                </span>
-              </a>
-            </SidebarMenuButton>
-          </SidebarMenuItem>
-        </SidebarMenu>
+        <div className="tw-sidebar-header-row">
+          <SidebarMenu>
+            <SidebarMenuItem>
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <SidebarMenuButton
+                    aria-label="Account menu"
+                    tooltip={profile.name}
+                    className="tw-sidebar-account"
+                  >
+                    <span className="tw-teacher-avatar">
+                      {profile.name === "Gilbert" ? (
+                        <ProfilePortrait id="gilbert" initials="G" />
+                      ) : (
+                        profile.name.slice(0, 1).toUpperCase()
+                      )}
+                    </span>
+                    <span className="tw-account-copy">
+                      <strong>{profile.name}</strong>
+                    </span>
+                    <Icon
+                      name="down"
+                      className="tw-account-chevron"
+                      size={15}
+                    />
+                  </SidebarMenuButton>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent
+                  className="tw-account-menu w-60"
+                  side="bottom"
+                  align="start"
+                  sideOffset={6}
+                >
+                  <DropdownMenuLabel>{profile.name}</DropdownMenuLabel>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem onSelect={() => go({ page: "profile" })}>
+                    <Icon name="person" />
+                    Teaching profile
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onSelect={() => go({ page: "settings" })}>
+                    <Icon name="settings" />
+                    Account settings
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onSelect={() => go({ page: "payout" })}>
+                    <Icon name="wallet" />
+                    Payout
+                  </DropdownMenuItem>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem asChild>
+                    <a href="/?view=web">
+                      <Icon name="back" />
+                      Replay onboarding
+                    </a>
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </SidebarMenuItem>
+          </SidebarMenu>
+          {isMobile && (
+            <button
+              className="tw-sidebar-close"
+              aria-label="Close navigation"
+              onClick={() => setOpenMobile(false)}
+            >
+              <Icon name="close" />
+            </button>
+          )}
+        </div>
       </SidebarHeader>
       <SidebarContent>
         <SidebarGroup>
-          <SidebarGroupLabel>Teaching</SidebarGroupLabel>
+          <SidebarGroupLabel className="tw-sidebar-group-label">
+            Workspace
+          </SidebarGroupLabel>
           <SidebarMenu>
             {sections.map((section) => (
               <Collapsible
@@ -142,60 +180,82 @@ export function WebSidebar({
                   setExpanded((values) =>
                     open
                       ? [...values, section.page]
-                      : values.filter((v) => v !== section.page),
+                      : values.filter((value) => value !== section.page),
                   )
                 }
               >
                 <SidebarMenuItem>
                   <SidebarMenuButton
                     tooltip={section.label}
-                    isActive={primaryTab(route) === section.page}
-                    aria-current={
-                      primaryTab(route) === section.page ? "page" : undefined
-                    }
+                    isActive={isActive(section.page)}
+                    aria-current={isActive(section.page) ? "page" : undefined}
                     aria-label={section.label}
-                    onClick={() => go({ page: section.page })}
+                    onClick={() => {
+                      if (section.items)
+                        setExpanded((values) =>
+                          values.includes(section.page)
+                            ? values
+                            : [...values, section.page],
+                        );
+                      go({ page: section.page });
+                    }}
                   >
                     <Icon name={section.icon} />
                     <span>{section.label}</span>
                   </SidebarMenuButton>
-                  <CollapsibleTrigger asChild>
-                    <SidebarMenuAction
-                      className="data-[state=open]:rotate-90"
-                      aria-label={`Expand ${section.label}`}
-                    >
-                      <Icon name="arrow" size={16} />
-                    </SidebarMenuAction>
-                  </CollapsibleTrigger>
-                  <CollapsibleContent>
-                    <SidebarMenuSub>
-                      {section.items.map((item) => (
-                        <SidebarMenuSubItem key={item.label}>
-                          <SidebarMenuSubButton
-                            asChild
-                            isActive={
-                              route.page === item.route.page &&
-                              (("tab" in item.route &&
-                                item.route.tab === (route.tab || "Library")) ||
-                                !("tab" in item.route))
-                            }
-                          >
-                            <button onClick={() => go(item.route)}>
-                              {item.label}
-                            </button>
-                          </SidebarMenuSubButton>
-                        </SidebarMenuSubItem>
-                      ))}
-                    </SidebarMenuSub>
-                  </CollapsibleContent>
+                  {section.items && (
+                    <>
+                      <CollapsibleTrigger asChild>
+                        <SidebarMenuAction
+                          className="data-[state=open]:rotate-90"
+                          aria-label={`Expand ${section.label}`}
+                        >
+                          <Icon name="arrow" size={14} />
+                        </SidebarMenuAction>
+                      </CollapsibleTrigger>
+                      <CollapsibleContent>
+                        <SidebarMenuSub>
+                          {section.items.map((item) => (
+                            <SidebarMenuSubItem key={item.label}>
+                              <SidebarMenuSubButton
+                                asChild
+                                isActive={
+                                  route.page === item.route.page &&
+                                  (!item.route.tab ||
+                                    item.route.tab === (route.tab || "Library"))
+                                }
+                              >
+                                <button onClick={() => go(item.route)}>
+                                  {item.label}
+                                </button>
+                              </SidebarMenuSubButton>
+                            </SidebarMenuSubItem>
+                          ))}
+                        </SidebarMenuSub>
+                      </CollapsibleContent>
+                    </>
+                  )}
                 </SidebarMenuItem>
               </Collapsible>
             ))}
           </SidebarMenu>
         </SidebarGroup>
-        <SidebarGroup className="mt-auto">
-          <SidebarGroupLabel>Resources</SidebarGroupLabel>
+        <SidebarGroup className="mt-auto tw-sidebar-utilities">
           <SidebarMenu>
+            <SidebarMenuItem>
+              <SidebarMenuButton
+                tooltip="Profile"
+                isActive={
+                  route.page === "profile" ||
+                  route.page === "profile-edit" ||
+                  route.page === "profile-preview"
+                }
+                onClick={() => go({ page: "profile" })}
+              >
+                <Icon name="person" />
+                <span>Profile</span>
+              </SidebarMenuButton>
+            </SidebarMenuItem>
             <SidebarMenuItem>
               <SidebarMenuButton
                 tooltip="Help & support"
@@ -206,7 +266,7 @@ export function WebSidebar({
               </SidebarMenuButton>
             </SidebarMenuItem>
             <SidebarMenuItem>
-              <SidebarMenuButton asChild tooltip="Mobile app">
+              <SidebarMenuButton tooltip="Mobile app" asChild>
                 <a href="/?teacher=1&view=mobile">
                   <Icon name="video" />
                   <span>Mobile app</span>
@@ -220,57 +280,14 @@ export function WebSidebar({
       <SidebarFooter>
         <SidebarMenu>
           <SidebarMenuItem>
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <SidebarMenuButton
-                  size="lg"
-                  aria-label="Teacher account menu"
-                  className="tw-sidebar-account"
-                >
-                  <span className="tw-teacher-avatar">
-                    {profile.name === "Gilbert" ? <ProfilePortrait id="gilbert" initials="G" /> : profile.name.slice(0, 1).toUpperCase()}
-                  </span>
-                  <span className="tw-account-copy">
-                    <strong>{profile.name}</strong>
-                    <span>Teacher account</span>
-                  </span>
-                  <Icon name="expand" className="ml-auto" size={16} />
-                </SidebarMenuButton>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent
-                className="tw-account-menu w-60"
-                side={isMobile ? "bottom" : "right"}
-                align="end"
-                sideOffset={8}
-              >
-                <DropdownMenuLabel>
-                  {profile.name}
-                  <span className="tw-menu-subtitle">
-                    Your teaching workspace
-                  </span>
-                </DropdownMenuLabel>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem onSelect={() => go({ page: "profile" })}>
-                  <Icon name="person" />
-                  Teaching profile
-                </DropdownMenuItem>
-                <DropdownMenuItem onSelect={() => go({ page: "settings" })}>
-                  <Icon name="settings" />
-                  Account settings
-                </DropdownMenuItem>
-                <DropdownMenuItem onSelect={() => go({ page: "payout" })}>
-                  <Icon name="wallet" />
-                  Payout
-                </DropdownMenuItem>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem asChild>
-                  <a href="/?view=web">
-                    <Icon name="back" />
-                    Replay onboarding
-                  </a>
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
+            <SidebarMenuButton
+              tooltip="Settings"
+              isActive={route.page === "settings"}
+              onClick={() => go({ page: "settings" })}
+            >
+              <Icon name="settings" />
+              <span>Settings</span>
+            </SidebarMenuButton>
           </SidebarMenuItem>
         </SidebarMenu>
       </SidebarFooter>

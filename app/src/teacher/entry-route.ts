@@ -18,7 +18,7 @@ export function teacherEntryRoute(search: string, lessonIds: string[]): Route {
       : { page: "modules" };
   }
   if (flow === "lessons") return { page: "lessons", tab: "Library" };
-  if (flow === "schedule" || flow === "profile" || flow === "students")
+  if (flow === "schedule" || flow === "availability" || flow === "profile" || flow === "students")
     return { page: flow };
   return { page: "students" };
 }
