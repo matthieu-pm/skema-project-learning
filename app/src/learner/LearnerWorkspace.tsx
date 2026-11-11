@@ -7,12 +7,15 @@ import { Avatar, LearnerAvatar, Button, Empty, ErrorMessage, Field, LearnerPrese
 import { availableSlots, classifyLesson, createSlots, filterTeachers, fixtureBookings, teachers, type Booking, type LessonFormat, type SearchFilters, type Slot, type SortOption, type Teacher } from "./model";
 import { cancelBooking, instantBook, readBookings, saveReview, subscribeBookings } from "./storage";
 import BookingCalendar from "./BookingCalendar";
+import LessonCurriculum, { TeacherLessons, type LessonSection } from "./LessonCurriculum";
+import { publicLessonFor } from "./curriculum";
 import "./learner.css";
+import "./curriculum.css";
 import WorkspaceDesign from "../WorkspaceDesign";
 
 type Category = "Ongoing" | "Upcoming" | "Past";
-type Page = "home" | "search" | "teacher" | "reviews" | "book" | "checkout" | "success" | "lessons" | "lesson" | "cancel" | "review" | "messages" | "profile";
-type Route = { page: Page; teacherId?: string; slotId?: string; format?: LessonFormat; bookingId?: string; category?: Category; replaceBookingId?: string };
+type Page = "home" | "search" | "teacher" | "curriculum" | "reviews" | "book" | "checkout" | "success" | "lessons" | "lesson" | "cancel" | "review" | "messages" | "profile";
+type Route = { page: Page; teacherId?: string; slotId?: string; format?: LessonFormat; bookingId?: string; category?: Category; section?: LessonSection; replaceBookingId?: string };
 type Navigate = (route: Route, replace?: boolean) => void;
 type State = {
   mobile: boolean; answers?: Answers; now: Date; slots: Slot[]; bookings: Booking[]; catalog: Teacher[];
@@ -22,10 +25,10 @@ type State = {
 const Learner = createContext<State>(null!);
 const useLearner = () => useContext(Learner);
 const categories: Category[] = ["Ongoing", "Upcoming", "Past"];
-const titles: Record<Page, string> = { home: "Home", search: "Find a teacher", teacher: "Teacher profile", reviews: "Teacher reviews", book: "Book a lesson", checkout: "Payment", success: "Booking confirmed", lessons: "Lessons", lesson: "Your lesson", cancel: "Cancel lesson", review: "Leave a review", messages: "Messages", profile: "Profile" };
+const titles: Record<Page, string> = { home: "Home", search: "Find a teacher", teacher: "Teacher profile", curriculum: "Lesson details", reviews: "Teacher reviews", book: "Book a lesson", checkout: "Payment", success: "Booking confirmed", lessons: "Lessons", lesson: "Your lesson", cancel: "Cancel lesson", review: "Leave a review", messages: "Messages", profile: "Profile" };
 const mainNav = [ ["home", "Home", "book"], ["lessons", "Lessons", "calendar"], ["search", "Search", "search"], ["profile", "Profile", "person"] ] as const;
 function activeTab(route: Route) {
-  if (["teacher", "reviews", "book", "checkout"].includes(route.page)) return "search";
+  if (["teacher", "curriculum", "reviews", "book", "checkout"].includes(route.page)) return "search";
   if (["success", "lesson", "cancel", "review"].includes(route.page)) return "lessons";
   return route.page === "messages" ? "home" : route.page;
 }
@@ -67,7 +70,7 @@ function SearchPage({ navigate }: { navigate: Navigate }) {
 function TeacherProfile({ teacher, navigate }: { teacher: Teacher; navigate: Navigate }) {
   const { slots, bookings, now } = useLearner();
   const nextSlots = availableSlots(teacher.id, slots, bookings, now).slice(0, 6);
-  return <><Panel className="lw-profile-hero"><TeacherIdentity teacher={teacher} navigate={navigate} large /><div className="lw-profile-actions"><strong>{currency(teacher.rate)} <span>/ {teacher.duration} min</span></strong><Button onClick={() => navigate({ page: "book", teacherId: teacher.id })}>Book a lesson</Button><Button secondary icon="message" onClick={() => navigate({ page: "messages", teacherId: teacher.id })}>Send a message</Button></div></Panel><div className="lw-two-columns"><div className="lw-stack"><Panel><h2>Meet {teacher.name.split(" ")[0]}</h2><p>{teacher.bio}</p><dl className="lw-facts"><div><dt>Languages</dt><dd>{teacher.languages.join(", ")}</dd></div><div><dt>Lesson format</dt><dd>{teacher.formats.join(" and ")}</dd></div><div><dt>Location</dt><dd>{teacher.city}</dd></div></dl></Panel><Panel><h2>What learners say</h2><Rating teacher={teacher} onClick={() => navigate({ page: "reviews", teacherId: teacher.id })} />{teacher.reviews.length ? <blockquote>“{teacher.reviews[0].text}”<footer><span className="lw-review-author"><LearnerAvatar name={teacher.reviews[0].author} /><span>{teacher.reviews[0].author}</span></span></footer></blockquote> : <p>Be the first to leave a review after your lesson.</p>}<Button secondary onClick={() => navigate({ page: "reviews", teacherId: teacher.id })}>Read all reviews</Button></Panel></div><Panel><h2>Choose a lesson time</h2><p className="lw-muted">Europe/Paris</p>{nextSlots.length ? <div className="lw-slot-grid">{nextSlots.map(slot => <button key={slot.id} className="lw-slot" onClick={() => navigate({ page: "book", teacherId: teacher.id, slotId: slot.id, format: slot.format })}><span>{dayText(slot.start, now)}</span><strong>{timeText(slot.start)}</strong><small>{slot.format}</small></button>)}</div> : <p>No open times at the moment.</p>}</Panel></div></>;
+  return <><Panel className="lw-profile-hero"><TeacherIdentity teacher={teacher} navigate={navigate} large /><div className="lw-profile-actions"><strong>{currency(teacher.rate)} <span>/ {teacher.duration} min</span></strong><Button onClick={() => navigate({ page: "book", teacherId: teacher.id })}>Book a lesson</Button><Button secondary icon="message" onClick={() => navigate({ page: "messages", teacherId: teacher.id })}>Send a message</Button></div></Panel><div className="lw-two-columns"><div className="lw-stack"><Panel><h2>Meet {teacher.name.split(" ")[0]}</h2><p>{teacher.bio}</p><dl className="lw-facts"><div><dt>Languages</dt><dd>{teacher.languages.join(", ")}</dd></div><div><dt>Lesson format</dt><dd>{teacher.formats.join(" and ")}</dd></div><div><dt>Location</dt><dd>{teacher.city}</dd></div></dl></Panel><TeacherLessons teacher={teacher} onOpen={section => navigate({ page: "curriculum", teacherId: teacher.id, section })} onMessage={() => navigate({ page: "messages", teacherId: teacher.id })} /><Panel><h2>What learners say</h2><Rating teacher={teacher} onClick={() => navigate({ page: "reviews", teacherId: teacher.id })} />{teacher.reviews.length ? <blockquote>“{teacher.reviews[0].text}”<footer><span className="lw-review-author"><LearnerAvatar name={teacher.reviews[0].author} /><span>{teacher.reviews[0].author}</span></span></footer></blockquote> : <p>Be the first to leave a review after your lesson.</p>}<Button secondary onClick={() => navigate({ page: "reviews", teacherId: teacher.id })}>Read all reviews</Button></Panel></div><Panel><h2>Choose a lesson time</h2><p className="lw-muted">Europe/Paris</p>{nextSlots.length ? <div className="lw-slot-grid">{nextSlots.map(slot => <button key={slot.id} className="lw-slot" onClick={() => navigate({ page: "book", teacherId: teacher.id, slotId: slot.id, format: slot.format })}><span>{dayText(slot.start, now)}</span><strong>{timeText(slot.start)}</strong><small>{slot.format}</small></button>)}</div> : <p>No open times at the moment.</p>}</Panel></div></>;
 }
 function ReviewsPage({ teacher, navigate }: { teacher: Teacher; navigate: Navigate }) {
   return <><Heading title={`Reviews for ${teacher.name}`} description="Feedback from learners after their lessons." /><Panel><TeacherIdentity teacher={teacher} navigate={navigate} /></Panel><div className="lw-stack">{teacher.reviews.length ? teacher.reviews.map(review => <Panel key={review.id} className="lw-review-card"><div><span className="lw-review-author"><LearnerAvatar name={review.author} /><strong>{review.author}</strong></span><span className="lw-stars" aria-label={`${review.rating} out of 5 stars`}>{"★".repeat(review.rating)}{"☆".repeat(5 - review.rating)}</span></div><p>{review.text}</p><small>{review.date}</small></Panel>) : <Empty title="No reviews yet">This teacher is new to Mimo. Reviews will appear here after completed lessons.</Empty>}</div></>;
@@ -164,11 +167,12 @@ function ProfilePage() {
 }
 function PageContent({ route, navigate }: { route: Route; navigate: Navigate }) {
   const { bookings } = useLearner(), teacher = useTeacher(route.teacherId), booking = bookings.find(item => item.id === route.bookingId);
-  if (["teacher", "reviews", "book", "checkout"].includes(route.page) && !teacher) return <Empty title="Choose a teacher" action={<Button onClick={() => navigate({ page: "search" }, true)}>Find a teacher</Button>} />;
+  if (["teacher", "curriculum", "reviews", "book", "checkout"].includes(route.page) && !teacher) return <Empty title="Choose a teacher" action={<Button onClick={() => navigate({ page: "search" }, true)}>Find a teacher</Button>} />;
   if (["lesson", "cancel", "review"].includes(route.page) && !booking) return <Empty title="Lesson not found" action={<Button onClick={() => navigate({ page: "lessons" }, true)}>View lessons</Button>} />;
   switch (route.page) {
     case "search": return <SearchPage navigate={navigate} />;
     case "teacher": return <TeacherProfile teacher={teacher!} navigate={navigate} />;
+    case "curriculum": return publicLessonFor(teacher!.id) ? <LessonCurriculum teacher={teacher!} initialSection={route.section} onBook={() => navigate({ page: "book", teacherId: teacher!.id })} onMessage={() => navigate({ page: "messages", teacherId: teacher!.id })} /> : <Empty title="No lesson outline published yet" action={<Button secondary onClick={() => navigate({ page: "teacher", teacherId: teacher!.id }, true)}>View teacher profile</Button>} />;
     case "reviews": return <ReviewsPage teacher={teacher!} navigate={navigate} />;
     case "book": return <BookPage teacher={teacher!} route={route} navigate={navigate} />;
     case "checkout": return <CheckoutPage teacher={teacher!} route={route} navigate={navigate} />;
@@ -192,7 +196,8 @@ function screenFor(route: Route): FlowScreen {
 }
 function MobileNavigation({ route }: { route: Route }) { return <Navigation route={route} navigate={useLearner().setRoot} />; }
 function initialRoute(): Route {
-  const flow = new URLSearchParams(window.location.search).get("flow");
+  const params = new URLSearchParams(window.location.search), flow = params.get("flow"), teacherId = params.get("teacherId");
+  if (["teacher", "curriculum"].includes(flow || "") && teachers.some(teacher => teacher.id === teacherId)) return { page: flow as Page, teacherId: teacherId!, section: params.get("section") === "curriculum" ? "curriculum" : "overview" };
   return { page: (["search", "lessons", "profile"].includes(flow || "") ? flow : "home") as Page };
 }
 export default function LearnerWorkspace({ mobile = false, answers }: { mobile?: boolean; answers?: Answers }) {

@@ -1,0 +1,49 @@
+.lw-public-lessons { display: grid; gap: 20px; }
+.lw-public-lessons > h2 { margin: 0; }
+.lw-public-lesson-heading { display: flex; align-items: center; gap: 18px; }
+.lw-public-lesson-heading > div:last-child { min-width: 0; }
+.lw-public-lesson-heading h3 { font-size: 19px; margin: 6px 0; }
+.lw-public-lesson-heading p { font-size: 13px; }
+.lw-lesson-cover-mini { flex-shrink: 0; width: 90px; min-height: 98px; border-radius: 10px; background: #f3eeff; color: #785836; display: grid; place-content: center; justify-items: center; gap: 8px; }
+.lw-lesson-cover-mini span { font-size: 12px; }
+.lw-public-lesson-hero { display: grid; grid-template-columns: 220px minmax(0, 1fr); align-items: center; gap: 30px; }
+.lw-lesson-cover { display: flex; align-items: center; justify-content: space-between; gap: 20px; padding: 28px; min-height: 150px; background: #f3eeff; border-radius: 12px; color: #855629; }
+.lw-lesson-cover > span { font-size: 24px; font-weight: 650; letter-spacing: -.5px; }
+.lw-lesson-cover > svg { width: 36px; }
+.lw-public-lesson-title { display: grid; gap: 10px; }
+.lw-public-lesson-title > p { font-size: 14px; }
+.lw-curriculum-tabs { display: flex; gap: 24px; border-bottom: 1px solid var(--workspace-line, #e6e6e6); }
+.lw-curriculum-tabs > button { min-height: 45px; padding: 8px 2px; border: 0; border-bottom: 2px solid transparent; background: none; font-weight: 550; color: var(--lw-muted); }
+.lw-curriculum-tabs > button[aria-selected="true"] { color: var(--lw-purple); border-bottom-color: var(--lw-purple); }
+.lw-lesson-overview > h3 { margin-top: 26px; }
+.lw-lesson-goals { display: grid; gap: 14px; padding: 0; margin: 16px 0 0; list-style: none; }
+.lw-lesson-goals > li { display: flex; gap: 10px; align-items: flex-start; }
+.lw-lesson-goals svg { color: var(--lw-purple); margin-top: 2px; }
+.lw-curriculum-intro { display: grid; gap: 8px; margin-bottom: 20px; }
+.lw-curriculum-intro > p { font-size: 13px; }
+.lw-curriculum-modules { display: grid; gap: 12px; }
+.lw-curriculum-module { border: 1px solid var(--workspace-line, #e6e6e6); border-radius: 12px; background: white; }
+.lw-curriculum-module > summary { list-style: none; display: flex; align-items: center; gap: 14px; min-height: 80px; padding: 16px; cursor: pointer; border-radius: 12px; }
+.lw-curriculum-module > summary::-webkit-details-marker { display: none; }
+.lw-curriculum-module > summary > span:nth-child(2) { flex: 1; display: grid; gap: 4px; }
+.lw-curriculum-module small { font-size: 12px; color: var(--lw-muted); }
+.lw-module-number { display: grid; place-items: center; width: 36px; height: 40px; flex-shrink: 0; border-radius: 8px; background: #f5f2ff; color: var(--lw-purple); font-size: 13px; }
+.lw-curriculum-module[open] > summary > svg { transform: rotate(180deg); }
+.lw-curriculum-module > ul { list-style: none; padding: 0 16px; margin: 0; border-top: 1px solid var(--workspace-line, #e6e6e6); }
+.lw-curriculum-module li { display: flex; align-items: center; gap: 12px; padding: 16px 0; font-size: 14px; }
+.lw-curriculum-module li + li { border-top: 1px solid var(--workspace-line, #e6e6e6); }
+.lw-curriculum-module li > span { flex: 1; }
+.lw-curriculum-module li > svg { color: var(--lw-muted); }
+.lw-curriculum-module > summary:focus-visible { outline: 3px solid var(--lw-purple); outline-offset: 3px; }
+.lw-lesson-terms > .lw-facts { margin-bottom: 24px; }
+.lw-lesson-terms > .lw-button { width: 100%; }
+.lw-lesson-terms > .lw-button + .lw-button { margin-top: 10px; }
+.learner-mobile .lw-public-lesson-hero { grid-template-columns: minmax(0, 1fr); gap: 22px; }
+.learner-mobile .lw-public-lesson-title h1 { font-size: 25px; }
+.learner-mobile .lw-lesson-cover { min-height: 128px; }
+.learner-mobile .lw-public-lesson-heading { gap: 14px; }
+.learner-mobile .lw-public-lesson-heading h3 { font-size: 17px; }
+.learner-mobile .lw-lesson-cover-mini { width: 68px; }
+.learner-mobile .lw-public-lessons .lw-inline-actions { flex-direction: column; align-items: stretch; }
+.learner-mobile .lw-curriculum-module li { gap: 8px; font-size: 13px; }
+@media (max-width: 1000px) { .learner-web .lw-public-lesson-hero { grid-template-columns: minmax(0, 1fr); gap: 22px; } }

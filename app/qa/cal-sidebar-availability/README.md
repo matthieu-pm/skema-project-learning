@@ -27,3 +27,9 @@ These are user-selected examples from one product, not independent cross-product
 Boundaries: availability remains in-memory for the current browser preview session. Saving does not synchronize a learner calendar or modify any confirmed booking. Only Europe/Paris is supported. Date overrides, multiple named schedules and integrations visible in Cal.com were not introduced. Physical-device testing and hosted verification of the new UI were not performed.
 
 Local entry: `http://127.0.0.1:4175/?teacher=1&view=web&flow=availability`; change `view=mobile` for the protected phone preview. Existing port 4174 belongs to another worktree and was preserved. Prior inline-editor release notes/captures already in the working tree were preserved.
+
+## Production release
+
+The user subsequently authorized merge/deployment. [PR #5](https://github.com/matthieu-pm/skema-project-learning/pull/5) merged as `4a7c06a0ee601ff725443fe40bb2ce1cf3d0b2f6`; its tree equals tested head `3ce2d72`. Vercel deployment `dpl_DM9T3FpbFt5rZGFmWVcUFBnYPfKP` reached Ready after about 20 seconds of build time and owns the stable production domain.
+
+Hosted browser checks confirmed teacher/learner sidebars without repeated app/profile-type labels, learner profile navigation, independent Monday/Tuesday start times, the desktop copy popover and the phone-scoped copy BottomSheet. The iPhone keyboard was dismissed and content/scroll widths both measured 393px. No browser warning/error logs appeared on the three checked pages. Temporary hour edits were restored without saving, and copy dialogs were cancelled. Captures: `production-desktop.jpg`, `production-iphone.jpg`. These notes/captures are local follow-up evidence. Physical devices and all other hosted states were not retested; the separate Sites copy was not updated.
