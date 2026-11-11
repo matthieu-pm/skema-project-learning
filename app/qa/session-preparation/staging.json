@@ -1,0 +1,17 @@
+{
+  "stagePath": "/var/folders/j2/gzj18t_x2251dx_cnqdcscm80000gn/T/mimo-session-preparation-release-ege9x9hz/app",
+  "fileCount": 496,
+  "sourceCommit": "4c15215be03c97e0e7363443d765d8ac5c6e3a68",
+  "branch": "dev/redesign-screens-in-a-minimal",
+  "exclusions": [
+    "node_modules",
+    ".git",
+    ".vercel",
+    "dist",
+    "qa",
+    "test-results",
+    "playwright-report",
+    ".env*",
+    "*.log"
+  ]
+}

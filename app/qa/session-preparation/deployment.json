@@ -1,0 +1,56 @@
+{
+  "projectName": "mimo-prototype",
+  "projectId": "prj_SEpdrBUQD5HcdNc5GRT73OKvrcrm",
+  "team": "matthieu-pm",
+  "teamId": "team_KddvwwnftxOOhP8UymRnP0PX",
+  "production": {
+    "id": "dpl_AS4vC75HGyzvECNwTkzcdqoqvtaU",
+    "url": "https://mimo-prototype-five.vercel.app",
+    "deploymentUrl": "https://mimo-prototype-ko92dswko-matthieu-pm.vercel.app",
+    "readyState": "READY",
+    "target": "production",
+    "previousDeploymentId": "dpl_DfV2kQ43Kj9JZMS9iYzu5XveKddn"
+  },
+  "scope": [
+    "Booked Gilbert cafe preparation: six modules, nine activities, saved answers/completion, resume, answer-key results and per-session isolation",
+    "Explicit booking assignment and preserved progress through rescheduling; cancelled/unassigned guards; app-owned phone focus reveal; original local coffee artwork"
+  ],
+  "source": {
+    "commit": "4c15215be03c97e0e7363443d765d8ac5c6e3a68",
+    "branch": "dev/redesign-screens-in-a-minimal",
+    "fileCount": 496,
+    "manifest": "source-manifest.json",
+    "matchedCurrentAndStaging": true,
+    "deltaFromPriorProduction": "7 existing guidance/test/integration/provenance/package-script files changed; 9 preparation source/style/test/asset files added; no removals. Package script expands test:learner only; dependencies, lockfile, protected runtime and deployment configuration unchanged.",
+    "exclusions": [
+      "node_modules",
+      ".git",
+      ".vercel",
+      "dist",
+      "qa",
+      "test-results",
+      "playwright-report",
+      ".env*",
+      "*.log"
+    ]
+  },
+  "method": "Fresh isolated app snapshot uploaded with Vercel CLI --prod --skip-domain, then Ready production build promoted through authenticated Vercel API.",
+  "build": "Remote npm ci and npm run build passed TypeScript, Vite, Sites packaging and all 28 protected runtime hashes.",
+  "verification": "26 learner/preparation unit tests; final 5-case preparation browser suite (15.7s) including settled iPhone/Pixel keyboard and asset geometry; 3 existing public lesson browser regressions (21.2s); native narrow-web booking/preparation/return/resume; final local build, diff and read-only React/storage review. See verification.md for sequencing and limits.",
+  "aliasVerification": {
+    "alias": "mimo-prototype-five.vercel.app",
+    "deploymentId": "dpl_AS4vC75HGyzvECNwTkzcdqoqvtaU",
+    "projectId": "prj_SEpdrBUQD5HcdNc5GRT73OKvrcrm",
+    "method": "Authenticated get_alias after promotion"
+  },
+  "authentication": "Inherited Vercel Authentication retained",
+  "hostedUi": "Not fetched or re-tested; readiness and stable alias verified through authenticated metadata API.",
+  "git": {
+    "featureCommit": "4c15215be03c97e0e7363443d765d8ac5c6e3a68",
+    "featurePushed": true,
+    "branch": "dev/redesign-screens-in-a-minimal",
+    "remote": "https://github.com/matthieu-pm/skema-project-learning.git",
+    "releaseRecord": "Committed and pushed separately after deployment; QA and root context are excluded from deployed source."
+  },
+  "limits": "Preparation is browser-local for the known Gilbert cafe assignment. No private teacher drafts, backend delivery, cross-device progress or real speech recording was added. The independent Sites deployment and main branch were not modified."
+}
