@@ -1,3 +1,4 @@
+import TeacherLanguagePicker from "./TeacherLanguagePicker";
 import LocationField from "./LocationField";
 import FreeLessonConfirmation from "./FreeLessonConfirmation";
 import { isFreeLesson, lessonPriceLabel } from "./lesson-settings";
@@ -29,6 +30,10 @@ import {
   type FlowControls,
 } from "./mobile";
 import {
+  teacherLanguageLevels,
+  toggleTeachingLanguage,
+  setTeacherLevels,
+  teachingLanguageSummary,
   initialAnswers,
   changeAccountMethod,
   sampleGoogleAccount,
@@ -429,7 +434,16 @@ function Footer({ step, inline = false }: { step: Step; inline?: boolean }) {
     if (next) flow.push(screens[next]);
   };
   const submit = () => {
-    if (!validStep(step, a)) return;
+    if (!validStep(step, a)) {
+      if (step === "teacher-subjects") {
+        keyboard.hide();
+        const missing = a.teachingLanguages.find(language => !teacherLanguageLevels(a)[language]?.length);
+        setError(missing ? `Choose at least one level for ${missing}.` : "Choose at least one language.");
+        const target = [...document.querySelectorAll<HTMLElement>('[data-step="teacher-subjects"]:not([inert]) [data-teaching-language]')].find(element => element.dataset.teachingLanguage === missing);
+        (target || document.querySelector<HTMLElement>('[data-step="teacher-subjects"]:not([inert]) [role="combobox"]'))?.focus();
+      }
+      return;
+    }
     if (endings.has(step)) {
       openWorkspace();
       return;
@@ -501,7 +515,7 @@ function Footer({ step, inline = false }: { step: Step; inline?: boolean }) {
       : "Find a teacher"
     : undefined;
   const mainDisabled =
-    !validStep(step, a) ||
+    (step !== "teacher-subjects" && !validStep(step, a)) ||
     (["format", "city", "days", "time"].includes(step) &&
       !(
         {
@@ -745,6 +759,7 @@ function Screen({ step }: { step: Step }) {
             />
           </div>
         )}
+        {step === "role" && a.role === "teacher" && <div className="teacher-value"><h2>Your lessons. Real connections.</h2><p>Create lessons you can edit and reuse. Connect with students through in-person or online meetups.</p></div>}
         {step === "account" && (
           <>
             <Field
@@ -810,6 +825,8 @@ function Screen({ step }: { step: Step }) {
                 Add a short description of at least 5 characters.
               </p>
             )}
+            <Field label="Language teaching experience" multiline maxLength={2000} value={a.teachingExperience || ""} onChange={event => update({ teachingExperience: event.target.value })} />
+            <p className="step-description">Describe your teaching background, the learners you’ve worked with, and your approach.</p>
             <details className="setup-optional">
               <summary>Add a photo or video (optional)</summary>
               <Upload kind="photo" />
@@ -817,37 +834,7 @@ function Screen({ step }: { step: Step }) {
           </div>
         )}
         {step === "teacher-subjects" && (
-          <div className="setup-group">
-            <fieldset className="setup-section">
-              <legend>Languages you teach</legend>
-              <div className="options setup-compact two-columns">
-                {languages.map((language) => (
-                  <Choice
-                    key={language}
-                    label={language}
-                    check
-                    selected={a.teachingLanguages.includes(language)}
-                    onClick={() => toggle("teachingLanguages", language)}
-                  />
-                ))}
-              </div>
-            </fieldset>
-            <fieldset className="setup-section">
-              <legend>Levels you teach</legend>
-              <div className="options setup-compact three-columns">
-                {levelChoices.map(([level]) => (
-                  <Choice
-                    key={level}
-                    label={level}
-                    check
-                    selected={a.teachingLevels.includes(level)}
-                    onClick={() => toggle("teachingLevels", level)}
-                  />
-                ))}
-              </div>
-            </fieldset>
-            <Note>Choose one or more languages and levels.</Note>
-          </div>
+          <TeacherLanguagePicker mobile={!web} selected={a.teachingLanguages} levels={teacherLanguageLevels(a)} showErrors={!!error} onToggle={language => { setError(""); update(toggleTeachingLanguage(a, language)); }} onLevels={(language, levels) => { setError(""); update(setTeacherLevels(a, language, levels)); }} />
         )}
         {step === "teacher-lessons" && (
           <div className="setup-group">
@@ -862,18 +849,14 @@ function Screen({ step }: { step: Step }) {
                     onClick={() =>
                       update({
                         format,
+                        meetingFormatDeferred: false,
                         ...(format === "Online" ? { city: "" } : {}),
                       })
                     }
                   />
                 ))}
               </div>
-              <button
-                className="inline-link"
-                onClick={() => update({ format: "", city: "" })}
-              >
-                Decide later
-              </button>
+              <Choice label="Decide later" check selected={!!a.meetingFormatDeferred} onClick={() => update({ format: "", city: "", meetingFormatDeferred: true })} />
             </fieldset>
             {a.format && a.format !== "Online" && (
               <LocationField label="City or neighbourhood (optional)" mobile={!web} value={a.city} onChange={(city) => update({ city })} allowLocation={a.role === "teacher"} />
@@ -1008,12 +991,7 @@ function Screen({ step }: { step: Step }) {
                   />
                 ))}
               </div>
-              <button
-                className="inline-link"
-                onClick={() => update({ learningFormats: [], format: "", city: "" })}
-              >
-                Decide later
-              </button>
+              <Choice label="Decide later" check selected={!!a.meetingFormatDeferred} onClick={() => update({ learningFormats: [], format: "", city: "", meetingFormatDeferred: true })} />
             </fieldset>
             {learningFormats.includes("In person") && (
               <LocationField label="City or neighbourhood (optional)" mobile={!web} value={a.city} onChange={(city) => update({ city })} allowLocation={a.role === "teacher"} />
@@ -1666,7 +1644,7 @@ function Screen({ step }: { step: Step }) {
             )}
             <h2>{a.name}</h2>
             <p>
-              {a.teachingLanguages.join(", ")} · {a.teachingLevels.join(", ")}
+              {teachingLanguageSummary(a)}
             </p>
             <blockquote>{a.approach}</blockquote>
             <p>
@@ -1722,8 +1700,8 @@ function Screen({ step }: { step: Step }) {
         )}
         {step === "identity-intro" && (
           <>
-            <div className="options">
-              <div className="info-card">
+            <div className={a.role === "teacher" ? "verification-info" : "options"}>
+              <div className={a.role === "teacher" ? "verification-info-item" : "info-card"}>
                 <strong>
                   {a.role === "teacher"
                     ? "Verify before accepting bookings"
@@ -1737,7 +1715,7 @@ function Screen({ step }: { step: Step }) {
                     : "Your identity document won’t appear on your public profile."}
                 </p>
               </div>
-              <div className="info-card">
+              <div className={a.role === "teacher" ? "verification-info-item" : "info-card"}>
                 <strong>
                   {a.role === "teacher"
                     ? "Identity, not qualifications"

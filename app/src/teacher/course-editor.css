@@ -1490,3 +1490,15 @@
 @media (max-width: 600px) {
   .teacher-workspace .ce-inline-lesson-title .tw-field textarea { font-size: 21px; }
 }
+.ce-use-lesson { display: grid; gap: 20px; }
+.ce-use-choice { display: flex; align-items: flex-start; gap: 12px; cursor: pointer; padding: 14px; border: 1px solid var(--tw-line, #e3e0e8); border-radius: 10px; }
+.ce-use-choice > input { margin: 3px 0 0; width: 18px; height: 18px; flex-shrink: 0; accent-color: #5235e9; }
+.ce-use-choice > span { display: grid; gap: 5px; }
+.ce-use-choice small, .ce-prototype-notice, .ce-version-notice { font-size: 13px; line-height: 1.5; color: #696573; }
+.ce-use-choice:has(input:checked) { border-color: #aa9bdc; background: #faf8ff; }
+.ce-use-lesson > [data-use-field] { display: grid; gap: 14px; }
+.ce-use-lesson .ce-actions { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 10px; }
+.ce-dialog-description { padding: 0 24px; margin: 16px 0 0; font-size: 14px; line-height: 1.5; }
+.ce-use-lesson [data-use-errors]:focus { outline: 2px solid #5235e9; outline-offset: 3px; }
+.ce-sheet .ce-use-lesson .ce-actions { flex-direction: column; align-items: stretch; }
+.ce-use-lesson .ce-prototype-notice { margin: 0; }

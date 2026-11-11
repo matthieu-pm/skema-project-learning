@@ -104,10 +104,12 @@ export type CourseTemplate = {
   own?: boolean;
 };
 export type AppliedCourse = {
+  id?: string;
   content: Course;
   studentId: string;
   appliedAt: string;
 };
+export const moduleHeading = (module: Pick<CourseModule, "title" | "type">) => module.title.trim() || (module.type === "Custom" ? "Custom section" : module.type);
 export const partRoles = [
   "Subject",
   "Verb",
@@ -329,14 +331,13 @@ export function courseIssues(c: Course): string[] {
   if (!c.goal.trim()) issues.push("Add a lesson learning goal.");
   if (!c.modules.length) issues.push("Add at least one module.");
   for (const m of c.modules) {
-    if (!m.title.trim() || !m.goal.trim())
-      issues.push(`${m.title || "Module"}: add a title and learning goal.`);
+    if (!moduleTypes.includes(m.type)) issues.push(`${moduleHeading(m)}: choose a module type.`);
     if (!Number.isFinite(m.minutes) || m.minutes <= 0 || m.minutes > 240)
-      issues.push(`${m.title}: enter 1–240 minutes.`);
-    if (!m.blocks.length) issues.push(`${m.title}: add a block.`);
+      issues.push(`${moduleHeading(m)}: enter 1–240 minutes.`);
+    if (!m.blocks.length) issues.push(`${moduleHeading(m)}: add a block.`);
     for (const b of m.blocks)
       issues.push(
-        ...blockIssues(b).map((s) => `${m.title} / ${b.title}: ${s}`),
+        ...blockIssues(b).map((s) => `${moduleHeading(m)} / ${b.title}: ${s}`),
       );
   }
   return issues;
@@ -386,7 +387,7 @@ export function coursePatch(c: Course): Partial<Lesson> {
     blocks: c.modules.map((m) => ({
       id: m.id,
       type: m.type,
-      title: m.title,
+      title: moduleHeading(m),
       content: m.blocks.map((b) => `${b.title}: ${b.text}`).join("\n"),
       minutes: m.minutes,
     })),

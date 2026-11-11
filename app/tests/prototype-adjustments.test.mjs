@@ -1,0 +1,83 @@
+import test from "node:test";
+import assert from "node:assert/strict";
+import { initialAnswers, teacherLanguageLevels, toggleTeachingLanguage, setTeacherLevels, validStep } from "../src/onboarding.ts";
+import { initialLessons, initialProfile } from "../src/teacher/model.ts";
+import { courseIssues, readyTemplates, moduleHeading } from "../src/teacher/course.ts";
+import { useLessonErrors, prepareLessonUse } from "../src/teacher/lesson-use.ts";
+import { readLibrary, writeLibraryChanges, writeDraft } from "../src/teacher/course-storage.ts";
+const choices = patch => ({ assign: false, studentId: "", template: false, templateName: "Café lesson", ...patch });
+const source = () => initialLessons()[0], course = () => readyTemplates()[0].content;
+
+test("teacher languages have independent required levels, deduplicate and remove only the selected language", () => {
+  let answers = { ...initialAnswers };
+  for (const language of ["French", "English"]) answers = { ...answers, ...toggleTeachingLanguage(answers, language) };
+  answers = { ...answers, ...setTeacherLevels(answers, "French", ["A2", "A2"]) };
+  assert.equal(validStep("teacher-subjects", answers), false);
+  answers = { ...answers, ...setTeacherLevels(answers, "English", ["C1"]) };
+  assert.equal(validStep("teacher-subjects", answers), true);
+  assert.deepEqual(teacherLanguageLevels(answers), { French: ["A2"], English: ["C1"] });
+  answers = { ...answers, ...toggleTeachingLanguage(answers, "French") };
+  assert.deepEqual(teacherLanguageLevels(answers), { English: ["C1"] });
+  answers = { ...answers, ...toggleTeachingLanguage(answers, "French") };
+  assert.deepEqual(teacherLanguageLevels(answers).French, []);
+  assert.equal(validStep("teacher-subjects", answers), false);
+});
+test("legacy language selections and optional teaching experience preserve existing profile values", () => {
+  const a = { ...initialAnswers, name: "Nina", approach: "Practical conversations", teachingLanguages: ["French", "English"], teachingLevels: ["A2"], teachingExperience: "I taught adults for three years." };
+  assert.deepEqual(teacherLanguageLevels(a), { French: ["A2"], English: ["A2"] });
+  assert.equal(initialProfile(a).experience, a.teachingExperience);
+  assert.equal(initialProfile(a).name, "Nina");
+  assert.equal(validStep("teacher-profile", { ...a, teachingExperience: "" }), true);
+});
+test("module titles and goals are optional while lesson metadata, module type and block content remain required", () => {
+  const c = course(); c.modules.forEach(module => { module.title = ""; module.goal = ""; });
+  assert.deepEqual(courseIssues(c), []);
+  assert.equal(moduleHeading(c.modules[1]), "Vocabulary");
+  assert.equal(moduleHeading({ title: " ", type: "Custom" }), "Custom section");
+  c.title = ""; assert.ok(courseIssues(c).includes("Add a lesson title."));
+  c.goal = ""; assert.ok(courseIssues(c).includes("Add a lesson learning goal."));
+  c.modules[0].type = "Unknown"; assert.ok(courseIssues(c).some(message => message.includes("choose a module type")));
+});
+test("use choices validate only checked options and keep existing readiness checks", () => {
+  const l = source(), c = course(), p = initialProfile();
+  assert.deepEqual(useLessonErrors(l, c, p, choices({})), { content: [] });
+  assert.equal(useLessonErrors(l, c, p, choices({ assign: true })).student, "Choose a student.");
+  assert.equal(useLessonErrors(l, c, p, choices({ template: true, templateName: "  " })).templateName, "Enter a template name.");
+  assert.equal(useLessonErrors(l, c, p, choices({ assign: false, studentId: "bad", template: true })).student, undefined);
+  assert.equal(useLessonErrors(l, c, p, choices({ assign: true, studentId: "lea", templateName: "" })).templateName, undefined);
+  assert.ok(useLessonErrors(l, c, { ...p, duration: "", rate: "" }, choices({ assign: true, studentId: "lea" })).content.length);
+  assert.deepEqual(useLessonErrors(l, c, { ...p, duration: "", rate: "" }, choices({ template: true })).content, []);
+});
+test("assignment creates an independent student copy and snapshot, templates remain separate and duplicates are blocked", () => {
+  const l = source(), c = course(), p = initialProfile();
+  const result = prepareLessonUse(l, c, [], choices({ assign: true, studentId: "lea", template: true }));
+  assert.notEqual(result.assigned.id, l.id);
+  assert.equal(result.assigned.studentId, "lea"); assert.equal(result.assigned.status, "Shared");
+  assert.equal(result.draft.status, "Draft"); assert.equal(result.templates.length, 1);
+  assert.equal(result.assigned.notes, "");
+  const original = result.assigned.publishedEditor.content.modules[0].blocks[0].words[0].word;
+  c.modules[0].blocks[0].words[0].word = "Changed original";
+  result.draft.course.modules[0].blocks[0].words[0].word = "Changed draft";
+  result.templates[0].content.modules[0].blocks[0].words[0].word = "Changed template";
+  assert.equal(result.assigned.publishedEditor.content.modules[0].blocks[0].words[0].word, original);
+  assert.equal(result.assigned.course.modules[0].blocks[0].words[0].word, original);
+  assert.equal(result.assigned.sharedVersion.course.modules[0].blocks[0].words[0].word, original);
+  assert.match(useLessonErrors(result.draft, course(), p, choices({ assign: true, studentId: "lea" })).student, /already assigned/);
+  const templateOnly = prepareLessonUse(l, course(), [], choices({ template: true, studentId: "lea" }));
+  assert.equal(templateOnly.assigned, undefined); assert.equal(templateOnly.draft.publishedEditor, undefined); assert.equal(templateOnly.draft.status, "Draft");
+});
+test("drafts save unfinished private content; combined use persists once and failed or unreadable writes never replace existing work", () => {
+  const values = new Map(); let writes = 0, fail = false;
+  Object.defineProperty(globalThis, "localStorage", { configurable: true, value: { getItem: key => values.get(key) ?? null, setItem(key, value) { if (fail) throw new Error("full"); writes++; values.set(key, value); } } });
+  const l = { ...source(), title: "", course: { ...course(), title: "", goal: "" } };
+  writeDraft(l, []); assert.equal(readLibrary().lessons[0].title, ""); assert.equal(readLibrary().templates.length, 0);
+  const result = prepareLessonUse(source(), course(), [], choices({ assign: true, studentId: "lea", template: true }));
+  writeLibraryChanges([result.draft, result.assigned], result.templates);
+  assert.equal(writes, 2); assert.equal(readLibrary().lessons.length, 2); assert.equal(readLibrary().templates.length, 1);
+  const before = [...values.entries()]; fail = true;
+  assert.throws(() => writeLibraryChanges([result.draft, result.assigned], result.templates));
+  assert.deepEqual([...values.entries()], before);
+  fail = false; values.set("mimo.lesson-library.v1", "broken");
+  assert.throws(() => writeDraft(l, []), /could not be read/);
+  assert.equal(values.get("mimo.lesson-library.v1"), "broken");
+});

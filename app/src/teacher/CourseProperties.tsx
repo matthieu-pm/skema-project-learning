@@ -7,6 +7,7 @@ import {
   createBlock,
   id,
   moduleTypes,
+  moduleHeading,
   partRoles,
   practiceFormats,
   teachFormats,
@@ -641,7 +642,7 @@ export function CourseProperties({
               <strong>Total lesson time · {totalMinutes(c)} min</strong>
               {c.modules.map((x) => (
                 <div key={x.id}>
-                  <span>{x.title}</span>
+                  <span>{moduleHeading(x)}</span>
                   <span>{x.minutes} min</span>
                 </div>
               ))}
@@ -661,12 +662,12 @@ export function CourseProperties({
                   }
                 />
                 <TextField
-                  label="Module title"
+                  label="Module title (optional)"
                   value={m.title}
                   onChange={(v) => changeModule({ ...m, title: v })}
                 />
                 <TextField
-                  label="Module learning goal"
+                  label="Module learning goal (optional)"
                   multiline
                   value={m.goal}
                   onChange={(v) => changeModule({ ...m, goal: v })}

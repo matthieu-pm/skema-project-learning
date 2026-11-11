@@ -69,17 +69,22 @@ export function Select({
   value,
   onChange,
   options,
+  error,
 }: {
   label: string;
   value: string;
   onChange: (v: string) => void;
   options: (string | { value: string; label: string })[];
+  error?: string;
 }) {
+  const errorId = useId();
   return (
     <label className="tw-field">
       <span>{label}</span>
       <SelectControl
         aria-label={label}
+        aria-invalid={!!error}
+        aria-describedby={error ? errorId : undefined}
         value={value}
         onChange={(e) => onChange(e.target.value)}
       >
@@ -93,6 +98,7 @@ export function Select({
           ),
         )}
       </SelectControl>
+      {error && <span id={errorId} className="tw-error" role="alert">{error}</span>}
     </label>
   );
 }

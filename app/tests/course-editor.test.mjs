@@ -113,11 +113,12 @@ test("outline reorders modules and moves whole blocks across modules without cha
     c,
   );
 });
-test("empty modules, invalid minutes, missing goals and incomplete blocks cannot be applied", () => {
+test("empty modules, invalid minutes, missing lesson goals and incomplete blocks cannot be used", () => {
   const c = readyTemplates()[0].content;
   c.modules.push(createModule("Custom"));
   assert.ok(courseIssues(c).some((s) => s.includes("add a block")));
-  assert.ok(courseIssues(c).some((s) => s.includes("learning goal")));
+  c.goal = "";
+  assert.ok(courseIssues(c).some((s) => s.includes("lesson learning goal")));
   c.modules[0].minutes = NaN;
   assert.ok(courseIssues(c).some((s) => s.includes("1–240")));
   c.modules[0].blocks[0].words = [];

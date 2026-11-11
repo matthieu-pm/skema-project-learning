@@ -60,10 +60,10 @@ const sections: Section[] = [
     items: [
       { label: "Library", route: { page: "lessons", tab: "Library" } },
       {
-        label: "Module editor",
-        route: { page: "lessons", tab: "Module editor" },
+        label: "Lesson editor",
+        route: { page: "lessons", tab: "Lesson editor" },
       },
-      { label: "Templates", route: { page: "lessons", tab: "Templates" } },
+      { label: "Lesson templates", route: { page: "lessons", tab: "Templates" } },
       { label: "Archive", route: { page: "lessons", tab: "Archive" } },
     ],
   },

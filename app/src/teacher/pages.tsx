@@ -1,3 +1,5 @@
+import TeacherLanguagePicker from "../TeacherLanguagePicker";
+import { initialAnswers, teacherLanguageLevels, toggleTeachingLanguage, setTeacherLevels } from "../onboarding";
 import AvailabilityPage from "./AvailabilityPage";
 import LocationField from "../LocationField";
 import FreeLessonConfirmation from "../FreeLessonConfirmation";
@@ -486,7 +488,7 @@ function ModulesPage({ navigate }: { navigate: Navigate }) {
       />
       <div className="tw-module-views" aria-label="Ongoing module views">
         <Segments
-          items={["Review queue", "Lessons by student"]}
+          items={["Review queue", "Lessons for students"]}
           value={view}
           onChange={setView}
         />
@@ -494,10 +496,10 @@ function ModulesPage({ navigate }: { navigate: Navigate }) {
       <div hidden={view !== "Review queue"}>
         <ReviewQueue navigate={navigate} />
       </div>
-      {view === "Lessons by student" && (
+      {view === "Lessons for students" && (
         <>
           <Panel>
-            <SectionTitle>Lessons by student</SectionTitle>
+            <SectionTitle>Lessons for students</SectionTitle>
             <Select
               label="Select student"
               value={studentId}
@@ -860,7 +862,7 @@ function LessonsPage({
     setNotice,
     templates: savedTemplates,
   } = useWorkspace();
-  const [tab, setTab] = useState(route.tab || "Library"),
+  const [tab, setTab] = useState(route.tab === "Module editor" ? "Lesson editor" : route.tab === "Templates" ? "Lesson templates" : route.tab || "Library"),
     [query, setQuery] = useState("");
   const learner = route.id ? findStudent(route.id) : null;
   const create = (template?: Course) => {
@@ -888,7 +890,7 @@ function LessonsPage({
     (l) =>
       (!learner || !l.studentId || l.studentId === learner.id) &&
       (tab === "Archive" ? l.archived : !l.archived) &&
-      (tab !== "Module editor" || l.status === "Draft") &&
+      (tab !== "Lesson editor" || l.status === "Draft") &&
       `${l.title} ${l.language}`.toLowerCase().includes(query.toLowerCase()),
   );
   return (
@@ -911,11 +913,11 @@ function LessonsPage({
         }
       />
       <Segments
-        items={["Library", "Module editor", "Templates", "Archive"]}
+        items={["Library", "Lesson editor", "Lesson templates", "Archive"]}
         value={tab}
         onChange={setTab}
       />
-      {tab === "Templates" ? (
+      {tab === "Lesson templates" ? (
         <>
           <div className="tw-template-intro">
             <img src="/assets/onboarding/nori.png" alt="Nori" />
@@ -2132,12 +2134,12 @@ function ProfilePage({
           <div>
             <h2>{p.name}</h2>
             <p>
-              {p.languages} · {p.levels}
+              {Object.entries(p.languageLevels || Object.fromEntries(p.languages.split(",").map(language => [language.trim(), p.levels.split(",").map(level => level.trim())]))).map(([language, levels]) => `${language}: ${levels.join(", ")}`).join(" · ")}
             </p>
           </div>
           <Badge tone="orange">Local profile draft</Badge>
         </div>
-        <blockquote>{p.approach}</blockquote>
+        <blockquote>{p.approach}</blockquote>{p.experience?.trim() && <section className="tw-experience"><h3>Language teaching experience</h3><p className="tw-preserve">{p.experience}</p></section>}
         <div className="tw-profile-facts">
           <span>
             <Icon name="video" />
@@ -2243,10 +2245,15 @@ function ProfileEditPage({
     setProfile((v) => ({ ...v, ...patch }));
     setPreview(false);
   };
+  const languageAnswers = { ...initialAnswers, teachingLanguages: p.languages.split(",").map(value => value.trim()).filter(Boolean), teachingLevels: p.levels.split(",").map(value => value.trim()).filter(Boolean), teachingLevelsByLanguage: p.languageLevels };
+  const changeLanguages = (patch: Partial<typeof languageAnswers>) => {
+    const next = { ...languageAnswers, ...patch };
+    update({ languages: next.teachingLanguages.join(", "), levels: next.teachingLevels.join(", "), languageLevels: teacherLanguageLevels(next) });
+  };
   const valid =
     p.name.trim().length >= 2 &&
     p.languages.trim() &&
-    p.levels.trim() &&
+    Object.values(teacherLanguageLevels(languageAnswers)).every(levels => levels.length > 0) &&
     p.approach.trim().length >= 5 &&
     validLessonSettings(p);
   return (
@@ -2268,9 +2275,9 @@ function ProfileEditPage({
           <>
             <h2>{p.name}</h2>
             <p>
-              {p.languages} · {p.levels}
+              {Object.entries(p.languageLevels || Object.fromEntries(p.languages.split(",").map(language => [language.trim(), p.levels.split(",").map(level => level.trim())]))).map(([language, levels]) => `${language}: ${levels.join(", ")}`).join(" · ")}
             </p>
-            <blockquote>{p.approach}</blockquote>
+            <blockquote>{p.approach}</blockquote>{p.experience?.trim() && <div><h3>Language teaching experience</h3><p className="tw-preserve">{p.experience}</p></div>}
             <p>
               {p.format || "Format not set"} ·{" "}
               {p.duration || "Duration not set"} ·{" "}
@@ -2302,24 +2309,15 @@ function ProfileEditPage({
               value={p.name}
               onChange={(name) => update({ name })}
             />
-            <div className="tw-form-pair">
-              <TextField
-                label="Teaching languages"
-                value={p.languages}
-                onChange={(languages) => update({ languages })}
-              />
-              <TextField
-                label="Teaching levels"
-                value={p.levels}
-                onChange={(levels) => update({ levels })}
-              />
-            </div>
+            <TeacherLanguagePicker mobile={mobile} selected={languageAnswers.teachingLanguages} levels={teacherLanguageLevels(languageAnswers)} showErrors onToggle={language => changeLanguages(toggleTeachingLanguage(languageAnswers, language))} onLevels={(language, levels) => changeLanguages(setTeacherLevels(languageAnswers, language, levels))} />
             <TextField
               label="Your teaching approach"
               value={p.approach}
               onChange={(approach) => update({ approach })}
               multiline
             />
+            <TextField label="Language teaching experience" multiline value={p.experience || ""} onChange={experience => update({ experience })} />
+            <p className="tw-subtle">Describe your teaching background, the learners you’ve worked with, and your approach.</p>
             <Select
               label="Meeting format"
               value={p.format}

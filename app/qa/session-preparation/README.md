@@ -32,3 +32,9 @@ This is browser-local prototype progress. No connected teacher assignment delive
 Preview: `/?learner=1&view=web&flow=preparation&bookingId=sample-upcoming`; use `view=mobile` for the phone.
 
 Evidence: `desktop-curriculum.jpg`, `desktop-answer.jpg`, `desktop-progress.jpg`, `iphone-curriculum.jpg`, `iphone-keyboard.jpg`, `iphone-response.jpg`.
+
+## Production release
+
+The user subsequently authorized merge/deployment. [PR #7](https://github.com/matthieu-pm/skema-project-learning/pull/7) merged as `4fbfd7bed4c3ce81f461337f5445324e3b0e3926`; its tree equals tested `e8f81d2`. Fresh checks passed 90 unit/worker tests and 31 production-browser checks, the build and 28 protected runtime hashes. Vercel Git deployment `dpl_dwg8SCgRc2NeVnYQZQNkTUSaCGbw` reached Ready on [the production domain](https://skema-project-learning.vercel.app).
+
+Hosted desktop smoke checks followed Upcoming → preparation → player and completed both recall cards. Progress stayed 0/9 after the first card, then saved 1/9 after the second submission/reveal. A fresh iPhone view in the same browser resumed 1/9, retained all four navigation tabs, and measured 393px client/scroll widths. Both browser warning/error logs were empty. The hosted smoke check exercised one module; the full nine-block path was covered by the production-build browser suite. Captures: `production-desktop.jpg`, `production-iphone.jpg`. No cross-device synchronization or teacher delivery is implied. Local main is synchronized; these release notes/captures remain local follow-up evidence.
