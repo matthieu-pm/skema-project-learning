@@ -1,0 +1,233 @@
+/* Cal.com-inspired workspace surfaces. Original Mimo implementation; no Cal code or assets. */
+.learner-workspace, .teacher-workspace {
+  --workspace-ink: #202124;
+  --workspace-muted: #686970;
+  --workspace-line: #e6e6e8;
+  --workspace-accent: #6844d9;
+  --workspace-soft: #f4f1fc;
+  --lw-purple: var(--workspace-accent);
+  --lw-ink: var(--workspace-ink);
+  --lw-muted: var(--workspace-muted);
+  --lw-line: var(--workspace-line);
+  --tw-blue: var(--workspace-accent);
+  --tw-blue-deep: #5432bb;
+  --tw-ink: var(--workspace-ink);
+  --tw-muted: var(--workspace-muted);
+  --tw-line: var(--workspace-line);
+  color: var(--workspace-ink);
+  font-size: 14px;
+}
+.learner-workspace h1, .teacher-workspace h1 { font-size: 28px; font-weight: 650; letter-spacing: -.8px; line-height: 1.2; }
+.learner-workspace h2, .teacher-workspace h2 { font-size: 18px; font-weight: 600; letter-spacing: -.3px; }
+.learner-workspace h3, .teacher-workspace h3 { font-size: 14px; font-weight: 600; }
+.lw-page-heading p, .tw-page-heading p { margin-top: 8px; color: var(--workspace-muted); font-size: 14px; }
+.learner-web { grid-template-columns: 224px minmax(0, 1fr); }
+.lw-sidebar { background: #f9f9fa; padding: 25px 12px 18px; border-color: var(--workspace-line); }
+.lw-brand { padding: 0 12px; gap: 9px; margin-bottom: 35px; }
+.lw-brand img { width: 28px; height: 34px; }
+.lw-brand > span { font-size: 27px; color: var(--workspace-ink); letter-spacing: -1.2px; }
+.lw-brand small { font-size: 12px; margin-top: 5px; }
+.lw-nav-label { margin: 0 12px 10px !important; color: var(--workspace-muted); font-size: 12px; }
+.lw-navigation { gap: 4px; }
+.lw-navigation button { min-height: 38px; padding: 8px 12px; border-radius: 7px; color: #626269; font-size: 14px; font-weight: 500; }
+.lw-navigation button[aria-current="page"] { color: #28262d; background: #ebebee; font-weight: 600; }
+.lw-navigation button[aria-current="page"] > svg { color: var(--workspace-accent); }
+.lw-sidebar-bottom { padding: 17px 9px 0; gap: 18px; }
+.lw-sidebar-bottom > span { font-size: 12px; line-height: 1.6; }
+.lw-account-button small { font-size: 12px; }
+.lw-toolbar, .teacher-web .tw-toolbar { height: 60px; border-color: var(--workspace-line); padding-inline: 32px; font-weight: 500; }
+.lw-toolbar .lw-breadcrumb, .tw-toolbar .tw-breadcrumb { color: var(--workspace-muted); }
+.lw-icon-button, .tw-icon-button { border-radius: 7px; background: transparent; color: #66666e; }
+.learner-web .lw-content { padding: 36px clamp(24px, 4vw, 64px) 48px; gap: 24px; }
+.learner-web .lw-content > * { width: 100%; max-width: 1080px; margin-inline: auto; }
+.lw-panel { border: 1px solid var(--workspace-line); border-radius: 12px; box-shadow: none; }
+.learner-workspace .lw-button, .teacher-workspace .tw-button {
+  border-width: 1px; border-radius: 7px; min-height: 36px; padding: 8px 13px;
+  font-weight: 600 !important; font-size: 13px !important; letter-spacing: 0;
+  box-shadow: 0 1px 2px #0000000a; scale: 1;
+  transition: background-color 120ms ease, border-color 120ms ease;
+}
+.learner-workspace .lw-button.lw-primary, .teacher-workspace .tw-button.tw-primary { background: var(--workspace-accent); border-color: #5e3bc8; color: white; }
+.learner-workspace .lw-button.lw-secondary, .teacher-workspace .tw-button.tw-secondary { background: #fff; color: #34343b; border-color: #dcdce0; }
+.learner-workspace .lw-button.lw-danger, .teacher-workspace .tw-button.tw-danger { background: #fff5f4; border-color: #efd1cf; color: #a52e28; }
+.teacher-workspace .tw-button.tw-quiet { box-shadow: none; }
+.learner-workspace .lw-button:active:not(:disabled), .teacher-workspace .tw-button:active:not(:disabled) { transform: none; scale: 1; box-shadow: inset 0 1px 2px #00000010; }
+.learner-workspace .lw-button:disabled, .teacher-workspace .tw-button:disabled { box-shadow: none; }
+.learner-workspace .lw-field :is(input, select, textarea), .teacher-workspace .tw-field :is(input, select, textarea) { border: 1px solid #dcdce0; border-radius: 7px; min-height: 40px; box-shadow: 0 1px 2px #00000004; color: var(--workspace-ink); }
+.lw-field > span, .learner-workspace legend, .tw-field > span { color: #505158; font-size: 12px; font-weight: 550; }
+.lw-search-controls { background: #fafafa; padding: 18px 20px; border-radius: 10px; }
+.lw-search-fields { grid-template-columns: minmax(0, 1fr) 220px; }
+.lw-field:has(> .lw-field-icon) { position: relative; }
+.lw-field > .lw-field-icon { position: absolute; bottom: 13px; left: 11px; color: #767680; pointer-events: none; }
+.learner-workspace .lw-field:has(> .lw-field-icon) input { padding-left: 36px; }
+.lw-filter-row { gap: 16px 32px; margin-top: 16px; }
+.lw-chips { gap: 5px; }
+.lw-chips button { border: 1px solid #dedee2; border-radius: 6px; font-size: 12px; font-weight: 500; min-height: 32px; padding: 6px 11px; }
+.lw-chips button[aria-pressed="true"] { background: var(--workspace-soft); border-color: #b8a6e8; color: #5736af; }
+.lw-results-toolbar > p { font-size: 13px; }
+.lw-results-toolbar > p strong { color: var(--workspace-ink); font-weight: 600; }
+.lw-results-toolbar select { font-size: 12px; min-height: 34px; }
+.lw-teacher-results { gap: 14px; }
+.lw-teacher-card { grid-template-columns: minmax(0, 1.25fr) minmax(250px, 1fr); gap: 26px; padding: 24px; }
+.lw-teacher-card-info { gap: 13px; }
+.lw-teacher-identity { gap: 13px; }
+.lw-teacher-identity h2 { font-size: 18px; font-weight: 650; }
+.lw-teacher-identity p { margin: 3px 0; font-size: 12px; }
+.lw-avatar { width: 52px; height: 52px; border-radius: 50%; }
+.lw-avatar.large { width: 72px; height: 72px; border-radius: 50%; }
+.lw-rating { font-size: 12px !important; gap: 4px; }
+.lw-rating strong { color: var(--workspace-ink); font-weight: 600; }
+.lw-teacher-bio { color: #5f6068; font-size: 13px; line-height: 1.65; }
+.lw-specialties span { background: #f5f5f6; color: #63636d; border: 1px solid #ebebed; border-radius: 5px; font-size: 11px; padding: 2px 7px; }
+.lw-card-bottom > strong { font-size: 21px; color: var(--workspace-ink); letter-spacing: -.5px; }
+.lw-card-bottom > strong > span { display: inline; font-size: 12px; letter-spacing: 0; }
+.lw-card-availability { border-color: var(--workspace-line); padding-left: 26px; }
+.lw-card-availability h3 { display: flex; align-items: center; gap: 7px; font-size: 12px; font-weight: 500; color: #5c5d65; }
+.lw-availability-dot { display: inline-block; width: 6px; height: 6px; border-radius: 50%; background: #448463; }
+.lw-slot-grid { gap: 8px; }
+.lw-slot { background: #fff; border: 1px solid #ddddE2; border-radius: 6px; min-height: 68px; gap: 2px; padding: 8px; }
+.lw-slot > span { color: #696971; font-size: 11px; }
+.lw-slot strong { font-size: 14px; color: #37333f; font-weight: 600; font-variant-numeric: tabular-nums; }
+.lw-slot small { font-size: 11px; color: #74747c; }
+.lw-slot[aria-pressed="true"] { background: var(--workspace-soft); border-color: var(--workspace-accent); box-shadow: 0 0 0 1px var(--workspace-accent); }
+.lw-booking-summary { gap: 14px; }
+.lw-profile-hero { padding: 28px; }
+.lw-profile-actions { gap: 9px; }
+.lw-lesson-tabs { gap: 14px; }
+.lw-lesson-tabs button { font-size: 13px; font-weight: 500; border-bottom-width: 2px; padding-inline: 5px; min-height: 44px; }
+.lw-lesson-tabs button[aria-selected="true"] { color: var(--workspace-ink); border-bottom-color: var(--workspace-ink); }
+.lw-lesson-tabs button > span { background: #f0f0f2; border-radius: 5px; color: #62626b; font-size: 11px; }
+.lw-lesson-card { padding: 24px; grid-template-columns: 110px minmax(0, 1fr) auto; }
+.lw-lesson-time { border-right: 1px solid var(--workspace-line); padding-right: 18px; }
+.lw-lesson-time strong { color: var(--workspace-ink); font-size: 24px; font-weight: 600; }
+.lw-lesson-info .lw-avatar { border-radius: 50%; }
+.lw-status { background: #edf5ee; color: #38714a; font-size: 12px; border-radius: 5px; }
+.lw-empty { background: #fafafa; border: 1px dashed #dcdce2; border-radius: 10px; }
+.lw-empty > svg { color: #92929b; }
+.lw-home-welcome { background: #f7f5fc; padding: 28px 32px; }
+.lw-home-welcome p { color: #686174; font-size: 14px; }
+.lw-home-welcome img { width: 90px; height: 110px; }
+.lw-success-booking, .lw-live-room { background: #f8f7fb; }
+.lw-payment-method { background: #fafafa; border-width: 1px; border-radius: 8px; }
+.lw-total strong { font-size: 22px; font-weight: 650; }
+.lw-booking-layout { display: grid; grid-template-columns: minmax(205px, .9fr) minmax(290px, 1.35fr) minmax(210px, .9fr); border: 1px solid var(--workspace-line); border-radius: 12px; background: white; overflow: hidden; }
+.lw-booking-person, .lw-booking-calendar, .lw-booking-times { min-width: 0; padding: 26px 22px; }
+.lw-booking-person { display: flex; flex-direction: column; gap: 23px; border-right: 1px solid var(--workspace-line); }
+.lw-booking-person .lw-teacher-identity { flex-direction: column; align-items: flex-start; gap: 12px; }
+.lw-booking-person .lw-avatar.large { width: 52px; height: 52px; }
+.lw-booking-person > h2 { font-size: 22px; line-height: 1.25; letter-spacing: -.5px; }
+.lw-booking-about { font-size: 13px; line-height: 1.7; color: var(--workspace-muted); }
+.lw-booking-about summary { cursor: pointer; font-size: 12px; font-weight: 550; color: #505158; }
+.lw-booking-about p { margin-top: 10px; }
+.lw-booking-meta { display: flex; flex-direction: column; gap: 13px; color: #62626c; font-size: 13px; }
+.lw-booking-meta > span { display: flex; align-items: center; gap: 9px; }
+.lw-calendar-heading { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 25px; }
+.lw-calendar-heading > div { display: flex; gap: 2px; }
+.lw-calendar-heading h2 { font-size: 15px; }
+.lw-calendar-heading .lw-icon-button { width: 28px; height: 28px; padding: 4px; }
+.lw-calendar-weekdays, .lw-calendar-days { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 5px; }
+.lw-calendar-weekdays { margin-bottom: 12px; }
+.lw-calendar-weekdays span { font-size: 11px; text-align: center; color: #787881; }
+.lw-calendar-days button { position: relative; aspect-ratio: 1; border: 1px solid transparent; border-radius: 6px; background: #f2f2f4; color: #36363c; font-size: 13px; font-weight: 550; }
+.lw-calendar-days button:disabled { background: transparent; color: #aaaab2; opacity: 1; }
+.lw-calendar-days button:not(:disabled) > span { position: absolute; width: 3px; height: 3px; background: #898092; border-radius: 50%; bottom: 5px; left: calc(50% - 1.5px); }
+.lw-calendar-days button[aria-pressed="true"] { color: white; background: var(--workspace-accent); }
+.lw-calendar-days button[aria-pressed="true"] > span { background: white; }
+.lw-calendar-days button[aria-current="date"] { border-color: #d8d4e1; }
+.lw-calendar-note { display: flex; align-items: center; gap: 7px; color: #74747c; font-size: 11px; margin-top: 22px !important; }
+.lw-calendar-note > span { width: 5px; height: 5px; background: #898092; border-radius: 50%; }
+.lw-booking-times { border-left: 1px solid var(--workspace-line); }
+.lw-booking-times > h2 { font-size: 15px; }
+.lw-booking-times > p { font-size: 11px; margin-top: 5px; }
+.lw-booking-time-list { display: grid; gap: 8px; margin-block: 22px; }
+.lw-booking-time-list .lw-slot { flex-direction: row; min-height: 38px; position: relative; }
+.lw-booking-time-list .lw-slot svg { position: absolute; right: 10px; color: var(--workspace-accent); }
+.lw-booking-times .lw-booking-summary .lw-button { width: 100%; font-size: 12px !important; }
+.lw-selection-status { font-size: 12px; color: var(--workspace-muted); min-height: 36px; }
+
+/* The teacher workspace shares surfaces; editor panels and calendar geometry retain their layout. */
+.teacher-web { background: #f9f9fa; }
+.teacher-web .tw-web-shell { --sidebar-width: 14rem; --sidebar-background: #f9f9fa; }
+.teacher-web .tw-web-main { border-radius: 0; box-shadow: none; border-left: 1px solid var(--workspace-line); margin: 0; }
+.teacher-web .tw-toolbar { border-radius: 0; }
+.teacher-web .tw-content:not(.tw-editor-content) { padding: 36px clamp(24px, 4vw, 56px) 42px; max-width: 1280px; }
+.teacher-workspace :is(.tw-panel, .tw-student-card, .tw-lesson-card, .tw-template-card, .tw-module-card, .tw-block, .tw-lesson-block, .tw-student-line, .tw-learner-preview, .tw-live-activity, .tw-full-calendar) { border: 1px solid var(--workspace-line); border-radius: 10px; box-shadow: none; }
+.tw-shadcn-sidebar [data-slot="sidebar-group-label"] { text-transform: none; letter-spacing: 0; font-size: 12px; color: #72727a; }
+.tw-shadcn-sidebar [data-slot="sidebar-menu-button"] { font-weight: 500; }
+.tw-shadcn-sidebar [data-slot="sidebar-menu-button"][data-active="true"] { background: #ebebee; font-weight: 600; }
+.tw-shadcn-sidebar [data-slot="sidebar-menu-button"][data-active="true"] > svg { color: var(--workspace-accent); }
+.tw-brand-tile { background: transparent; }
+.tw-brand-name > span { font-size: 11px; color: #6e6e76; }
+.tw-account-copy > span { color: #6e6e76; }
+.teacher-workspace .tw-next-session { padding: 16px; }
+.teacher-workspace .tw-next-session > img { background: #f5f3f9; border-radius: 7px; }
+.teacher-workspace .tw-library-summary { background: #faf9fd; }
+.teacher-workspace .tw-student-card { min-height: 220px; }
+.teacher-workspace .tw-student-card .tw-avatar { width: 44px; height: 44px; border-radius: 50%; }
+.teacher-workspace .tw-badge { font-size: 11px; border-radius: 5px; }
+.teacher-workspace .tw-badge.white { color: #62626d; text-transform: none; letter-spacing: 0; font-size: 12px; }
+.teacher-workspace .tw-segments { border-radius: 7px; background: #f4f4f5; }
+.teacher-workspace .tw-segments button { border-width: 1px; border-radius: 5px; }
+.teacher-workspace .tw-cal-today { border: 1px solid #dcdce0; border-radius: 6px; box-shadow: 0 1px 2px #00000008; }
+.teacher-workspace .tw-cal-views { border-radius: 7px; background: #f4f4f5; }
+.teacher-workspace .tw-cal-navigation h2 { font-size: 17px; }
+.teacher-workspace .tw-cal-date { border-radius: 6px; }
+.teacher-workspace .tw-cal-month-weekdays { background: #fafafa; }
+.teacher-workspace .tw-cal-month-cell.outside { background: #fcfcfd; }
+.teacher-workspace .tw-preview-caption { color: #74747e; }
+
+@media (hover: hover) and (pointer: fine) {
+  .learner-workspace .lw-button.lw-primary:hover:not(:disabled), .teacher-workspace .tw-button.tw-primary:hover:not(:disabled) { background: #5736bd; border-color: #5736bd; }
+  .learner-workspace .lw-button.lw-secondary:hover:not(:disabled), .teacher-workspace .tw-button.tw-secondary:hover:not(:disabled) { background: #f7f7f8; border-color: #c8c8ce; }
+  .lw-navigation button:hover { background: #eeeef0; }
+  .lw-slot:hover, .lw-chips button:hover { background: #f8f6fc; border-color: #b8a6e8; }
+  .lw-calendar-days button:hover:not(:disabled):not([aria-pressed="true"]) { background: #e8e5f0; }
+}
+@media (max-width: 1190px) {
+  .lw-booking-layout { grid-template-columns: minmax(0, 1.4fr) minmax(210px, 1fr); }
+  .lw-booking-person { grid-column: 1 / -1; border-right: 0; border-bottom: 1px solid var(--workspace-line); gap: 15px; }
+  .lw-booking-person .lw-teacher-identity { flex-direction: row; align-items: center; }
+  .lw-booking-meta { flex-direction: row; flex-wrap: wrap; gap: 12px 22px; }
+}
+@media (max-width: 1050px) {
+  .learner-web .lw-teacher-card { grid-template-columns: minmax(0, 1fr); gap: 18px; }
+  .learner-web .lw-card-availability { border-left: 0; padding: 17px 0 0; }
+  .learner-web .lw-lesson-card { grid-template-columns: 85px minmax(0, 1fr); }
+}
+@media (max-width: 750px) {
+  .learner-web { grid-template-columns: 76px minmax(0, 1fr); }
+  .learner-web .lw-nav-label { display: none; }
+  .learner-web .lw-search-fields { grid-template-columns: minmax(0, 1fr); }
+}
+.learner-mobile h1, .teacher-mobile h1 { font-size: 25px; letter-spacing: -.6px; }
+.learner-mobile .lw-content { gap: 20px; }
+.learner-mobile .lw-toolbar { font-weight: 550; }
+.learner-mobile .lw-panel { padding: 18px; }
+.learner-mobile .lw-teacher-card { gap: 16px; }
+.learner-mobile .lw-teacher-identity h2 { font-size: 18px; }
+.learner-mobile .lw-avatar { border-radius: 50%; }
+.learner-mobile .lw-search-controls { padding: 16px; }
+.learner-mobile .lw-search-fields { grid-template-columns: minmax(0, 1fr) 140px; gap: 12px; }
+.learner-mobile .lw-filter-row { gap: 14px 22px; }
+.learner-mobile .lw-navigation button { font-size: 12px; min-height: 53px; padding: 5px 2px; }
+.learner-mobile .lw-navigation button[aria-current="page"] { background: #f4f1fc; color: #5736af; }
+.learner-mobile .lw-lesson-card { grid-template-columns: minmax(0, 1fr); }
+.learner-mobile .lw-lesson-time { border-right: 0; padding-right: 0; }
+.learner-mobile .lw-booking-layout { grid-template-columns: minmax(0, 1fr); }
+.learner-mobile .lw-booking-person, .learner-mobile .lw-booking-calendar, .learner-mobile .lw-booking-times { padding: 22px 18px; }
+.learner-mobile .lw-booking-times { border-left: 0; border-top: 1px solid var(--workspace-line); }
+.learner-mobile .lw-booking-meta { flex-direction: column; }
+.learner-mobile .lw-booking-times .lw-button { min-height: 42px; }
+.learner-mobile .lw-button, .teacher-mobile .tw-button { min-height: 44px; }
+.learner-mobile .lw-home-welcome { padding: 22px; }
+@media (max-width: 520px) {
+  .learner-web { grid-template-columns: minmax(0, 1fr); }
+  .learner-web .lw-sidebar { padding: 5px; }
+  .learner-web .lw-content { padding: 24px 18px 100px; }
+  .learner-web .lw-booking-layout { grid-template-columns: minmax(0, 1fr); }
+  .learner-web .lw-booking-times { border-left: 0; border-top: 1px solid var(--workspace-line); }
+  .learner-web .lw-lesson-time { border-right: 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .learner-workspace .lw-button, .teacher-workspace .tw-button { transition: none; }
+}

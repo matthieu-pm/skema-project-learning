@@ -11,12 +11,12 @@ export function Button({ children, onClick, secondary = false, danger = false, d
 }) {
   return <button className={`lw-button ${secondary ? "lw-secondary" : "lw-primary"} ${danger ? "lw-danger" : ""}`} onClick={onClick} disabled={disabled}>{icon && <Icon name={icon} size={18} />}<span>{children}</span></button>;
 }
-export function Field({ label, value, onChange, multiline = false, placeholder, maxLength }: {
-  label: string; value: string; onChange: (value: string) => void; multiline?: boolean; placeholder?: string; maxLength?: number;
+export function Field({ label, value, onChange, multiline = false, placeholder, maxLength, icon }: {
+  label: string; value: string; onChange: (value: string) => void; multiline?: boolean; placeholder?: string; maxLength?: number; icon?: string;
 }) {
   const mobile = useContext(LearnerPresentation), keyboard = useKeyboard(), id = useId();
   const props = { id, value, onChange: (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => onChange(event.target.value), placeholder, maxLength, onBlur: () => { if (mobile) keyboard.hide(); } };
-  return <label className="lw-field" htmlFor={id}><span>{label}</span>{multiline ? mobile ? <KeyboardTextarea {...props} rows={4} /> : <textarea {...props} rows={4} /> : mobile ? <KeyboardInput {...props} /> : <input {...props} />}</label>;
+  return <label className="lw-field" htmlFor={id}><span>{label}</span>{icon && <Icon name={icon} size={18} className="lw-field-icon" />}{multiline ? mobile ? <KeyboardTextarea {...props} rows={4} /> : <textarea {...props} rows={4} /> : mobile ? <KeyboardInput {...props} /> : <input {...props} />}</label>;
 }
 export function Select({ label, value, options, onChange }: { label: string; value: string; options: string[]; onChange: (value: string) => void }) {
   const id = useId();
