@@ -13,6 +13,7 @@ export function TextField({
   value,
   onChange,
   multiline = false,
+  rows = 4,
   type = "text",
   placeholder,
   min,
@@ -23,6 +24,7 @@ export function TextField({
   value: string;
   onChange: (value: string) => void;
   multiline?: boolean;
+  rows?: number;
   type?: string;
   placeholder?: string;
   min?: string;
@@ -49,9 +51,9 @@ export function TextField({
       <span>{label}</span>
       {multiline ? (
         mobile ? (
-          <KeyboardTextarea {...props} rows={4} />
+          <KeyboardTextarea {...props} rows={rows} />
         ) : (
-          <textarea {...props} rows={4} />
+          <textarea {...props} rows={rows} />
         )
       ) : mobile ? (
         <KeyboardInput {...props} type={type} min={min} max={max} />

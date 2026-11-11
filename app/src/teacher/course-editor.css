@@ -1443,3 +1443,50 @@
 .ce-mobile-player[data-keyboard="true"] > .ce-student-navigation,
 .ce-mobile-player[data-keyboard="true"] > .ce-simulation,
 .ce-preview-screen:has(.ce-mobile-player[data-keyboard="true"]) > .tw-button { display: none; }
+.ce-module-heading-content { flex: 1; min-width: 0; }
+.ce-inline-field { min-width: 0; }
+.teacher-workspace .ce-inline-field .tw-field { display: flex; flex-direction: column; gap: 3px; margin: 0; }
+.teacher-workspace .ce-inline-field .tw-field > span { font-size: 11px; color: var(--tw-muted); font-weight: 400; }
+.teacher-workspace .ce-inline-field .tw-field :is(input, textarea) {
+  box-sizing: border-box; width: 100%; min-width: 0; min-height: 32px;
+  padding: 5px 7px; border: 1px solid transparent; border-radius: 5px;
+  box-shadow: none; background: transparent; color: var(--tw-ink);
+  font-family: inherit; font-size: 13px; line-height: 1.5; resize: none;
+}
+.teacher-workspace .ce-inline-field .tw-field :is(input, textarea):focus {
+  background: #fff; border-color: var(--tw-blue); outline: 2px solid #6844d921; outline-offset: 1px;
+}
+.teacher-workspace .ce-inline-field .tw-field :is(input, textarea)::placeholder { color: #85818d; }
+.teacher-workspace :is(.ce-inline-lesson-title, .ce-inline-module-title, .ce-inline-block-title) .tw-field > span {
+  position: absolute; width: 1px; height: 1px; padding: 0; overflow: hidden; clip-path: inset(50%); white-space: nowrap;
+}
+.teacher-workspace .ce-inline-lesson-title .tw-field textarea { font-size: 24px; font-weight: 650; line-height: 1.25; letter-spacing: -.4px; }
+.teacher-workspace .ce-inline-module-title .tw-field textarea { font-size: 17px; font-weight: 600; }
+.teacher-workspace .ce-inline-block-title .tw-field :is(input, textarea) { font-size: 15px; font-weight: 600; }
+.ce-lesson-heading > .ce-lesson-metadata { margin: 8px 0 14px; }
+.ce-lesson-metadata > .tw-field { margin: 0; width: auto; }
+.ce-inline-module-metadata { display: flex; align-items: center; gap: 5px; flex-wrap: wrap; }
+.ce-inline-module-metadata > .tw-field { width: auto; margin: 0; }
+.ce-inline-module-metadata > .ce-inline-field { width: 58px; }
+.ce-inline-module-metadata > .ce-inline-field .tw-field > span,
+.ce-inline-module-metadata > .tw-field > span:first-child,
+.ce-lesson-metadata > .tw-field > span:first-child { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
+.teacher-workspace :is(.ce-inline-module-metadata, .ce-lesson-metadata) .tw-field select { min-height: 32px; padding-top: 3px; padding-bottom: 3px; font-size: 12px; background-color: transparent; box-shadow: none; }
+.ce-canvas-block > .ce-inline-block-content { display: flex; flex-direction: column; gap: 12px; cursor: auto; padding: 14px; }
+.ce-inline-block-content > .tw-button { align-self: flex-start; }
+.ce-property-list { display: contents; }
+.ce-inline-vocabulary { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 190px), 1fr)); gap: 12px; }
+.ce-inline-vocabulary .ce-property-item { background: #fafafa; border-radius: 7px; padding: 12px; gap: 8px; min-width: 0; }
+.ce-inline-vocabulary .ce-property-item > .tw-button { align-self: flex-start; }
+.ce-inline-vocabulary .ce-picture { align-self: center; }
+.ce-card-media:not(details) { display: contents; }
+.ce-card-media summary { cursor: pointer; color: var(--tw-muted); font-size: 12px; padding-block: 6px; }
+.ce-card-media[open] > :not(summary) { margin-block: 10px; }
+.ce-inline-block-content > h3 { margin: 6px 0 0; }
+.ce-inline-block-content > p { margin: 0; }
+@media (hover: hover) and (pointer: fine) {
+  .teacher-workspace .ce-inline-field .tw-field :is(input, textarea):hover:not(:focus) { border-color: var(--tw-line); background: #fafafa; }
+}
+@media (max-width: 600px) {
+  .teacher-workspace .ce-inline-lesson-title .tw-field textarea { font-size: 21px; }
+}
