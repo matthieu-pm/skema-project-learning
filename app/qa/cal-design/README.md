@@ -23,3 +23,5 @@ Limits: physical devices, exhaustive editor/review interactions, and hosted depl
 ## Production release follow-up
 
 PR #3 merged on 11 November 2026. The first hosted release exposed a Vite CSS extraction-order difference: a shared CSS dependency loaded before per-workspace base styles. `WorkspaceDesign.tsx` mounts the scoped design after those base styles. `npm run test:production` now builds and serves the real output; all 12 checks passed, including learner/teacher desktop/phone surface precedence and the learner flows. `production-desktop-booking.png` and `production-phone-booking.png` capture this built local output. Earlier images are retained as dated evidence.
+
+The correction deployed from `main` as commit `5ecf880`, Vercel deployment `dpl_A6p7Ax4RXR8ebdTAvAsnMVeDCegy`, Ready on https://skema-project-learning.vercel.app. Hosted checks confirmed final learner/teacher stylesheet precedence, visible teacher editor actions, learner search → calendar, and a 393px iPhone learner content/scroll width with a loaded portrait. No real payment was submitted; this remains the existing frontend simulation.
