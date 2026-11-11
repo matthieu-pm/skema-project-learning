@@ -1,0 +1,37 @@
+.app-select-control {
+  position: relative;
+  display: inline-grid;
+  width: 100%;
+  min-width: 0;
+  vertical-align: middle;
+}
+.lw-field > .app-select-control,
+.tw-field > .app-select-control {
+  font: inherit;
+  color: inherit;
+}
+.app-select-control > select {
+  width: 100%;
+  min-width: 0;
+  appearance: none;
+  -webkit-appearance: none;
+  padding-inline-end: 40px !important;
+  text-overflow: ellipsis;
+}
+.app-select-control > .app-select-chevron {
+  position: absolute;
+  inset-inline-end: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 16px;
+  height: 16px;
+  display: block;
+  color: #74717e;
+  pointer-events: none;
+}
+.lw-results-toolbar .app-select-control { max-width: 215px; }
+.tw-cal-meta .app-select-control { width: auto; }
+@media (forced-colors: active) {
+  .app-select-control > select { appearance: auto; }
+  .app-select-control > .app-select-chevron { display: none; }
+}

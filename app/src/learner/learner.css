@@ -121,6 +121,16 @@ body:has(.learner-web) { height: 100dvh; overflow: hidden; }
 .lw-review-card > div { display: flex; justify-content: space-between; gap: 14px; margin-bottom: 12px; }
 .lw-stars { color: #a56a10; letter-spacing: 2px; }
 .lw-review-card small { display: block; margin-top: 14px; color: var(--lw-muted); font-size: 12px; }
+.lw-review-author { display: inline-flex; align-items: center; gap: 10px; }
+.lw-review-author .lw-avatar.lw-learner-avatar { width: 36px; height: 36px; border-radius: 50%; font-size: 13px; }
+.lw-learner-avatar { background: #eee4ff; }
+.lw-learner-profile { display: flex; align-items: center; gap: 18px; }
+.lw-learner-profile p { margin-top: 5px; }
+.lw-account-button { display: flex; align-items: center; gap: 10px; border: 0; padding: 0; background: none; text-align: left; }
+.lw-account-button .lw-learner-avatar { width: 36px; height: 36px; border-radius: 12px; font-size: 13px; }
+.lw-account-button > span:nth-child(2) { flex: 1; }
+.lw-account-button strong { display: block; font-size: 13px; }
+.lw-account-button small { display: block; font-size: 11px; color: var(--lw-muted); }
 .lw-booking-summary { display: flex; flex-direction: column; gap: 18px; }
 .lw-booking-summary > h2 { margin: 0; }
 .lw-total { display: flex; justify-content: space-between; align-items: center; gap: 12px; border-top: 1px solid var(--lw-line); padding-top: 18px; }
@@ -184,7 +194,7 @@ body:has(.learner-web) { height: 100dvh; overflow: hidden; }
 .learner-mobile .lw-panel { padding: 20px; }
 .learner-mobile .lw-search-fields, .learner-mobile .lw-two-columns, .learner-mobile .lw-teacher-card { grid-template-columns: minmax(0, 1fr); }
 .learner-mobile .lw-search-controls { padding: 16px; }
-.learner-mobile .lw-search-fields { grid-template-columns: minmax(0, 1fr) 125px; gap: 12px; }
+.learner-mobile .lw-search-fields { grid-template-columns: minmax(0, 1fr) 145px; gap: 12px; }
 .learner-mobile .lw-search-controls .lw-field :is(input, select) { padding-inline: 10px; font-size: 13px; }
 .learner-mobile .lw-filter-row { gap: 14px 20px; margin-top: 14px; }
 .learner-mobile .lw-card-availability { padding: 17px 0 0; border-left: none; border-top: 1px solid var(--lw-line); }
@@ -192,7 +202,7 @@ body:has(.learner-web) { height: 100dvh; overflow: hidden; }
 .learner-mobile .lw-results-toolbar > p { padding-top: 8px; font-size: 13px; }
 .learner-mobile .lw-results-toolbar .lw-field > span { white-space: nowrap; }
 .learner-mobile .lw-results-toolbar .lw-field { flex-direction: column; align-items: flex-end; gap: 4px; }
-.learner-mobile .lw-results-toolbar select { font-size: 12px; max-width: 185px; }
+.learner-mobile .lw-results-toolbar select { font-size: 12px; max-width: 215px; }
 .learner-mobile .lw-teacher-card { gap: 17px; }
 .learner-mobile .lw-teacher-identity h2 { font-size: 20px; }
 .learner-mobile .lw-avatar { width: 54px; height: 54px; border-radius: 16px; }

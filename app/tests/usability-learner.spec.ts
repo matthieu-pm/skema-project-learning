@@ -58,6 +58,10 @@ for (const mobile of [false, true]) {
     await screen().getByRole("textbox", { name: "Your review", exact: true }).fill("Patient explanations and useful practice.");
     await screen().getByRole("button", { name: "Save review", exact: true }).click();
     await expect(screen().getByRole("status")).toContainText("Your review is saved");
+    await nav.getByRole("button", { name: "Profile", exact: true }).click();
+    await expect(screen().getByRole("heading", { name: "Your learning profile", exact: true })).toBeVisible();
+    await expect.poll(() => screen().locator(".lw-learner-profile img").evaluate((node: HTMLImageElement) => node.complete && node.naturalWidth > 0)).toBe(true);
+    await page.screenshot({ path: `qa/usability-feedback/${mobile ? "mobile" : "desktop"}-learner-profile.png` });
     if (mobile) {
       const widths = await screen().locator(".lw-content").evaluate(element => ({ client: element.clientWidth, scroll: element.scrollWidth }));
       expect(widths.scroll).toBeLessThanOrEqual(widths.client + 1);

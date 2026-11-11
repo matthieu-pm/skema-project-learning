@@ -1,4 +1,5 @@
 import { useState, type CSSProperties } from "react";
+import SelectControl from "../SelectControl";
 import {
   Button,
   Icon,
@@ -126,7 +127,7 @@ export function CalendarPage({ navigate }: { navigate: Navigate }) {
           </span>
           <label>
             <span className="tw-cal-filter-label">Show</span>
-            <select
+            <SelectControl
               aria-label="Filter calendar sessions"
               value={filter}
               onChange={(e) => setFilter(e.target.value)}
@@ -136,7 +137,7 @@ export function CalendarPage({ navigate }: { navigate: Navigate }) {
                   <option key={item}>{item}</option>
                 ),
               )}
-            </select>
+            </SelectControl>
           </label>
         </div>
         {view === "Month" ? (

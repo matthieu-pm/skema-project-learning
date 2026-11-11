@@ -1,0 +1,182 @@
+{
+  "generator": "Built-in image_gen",
+  "created": "2026-11-11",
+  "fictional": true,
+  "assets": [
+    {
+      "id": "gilbert",
+      "file": "gilbert.webp",
+      "prompt": "Use case: photorealistic-natural. Asset type: square teacher profile avatar for a language-tutoring prototype. Create one fictional friendly man around 50, short salt-and-pepper hair, light stubble, subtle glasses, a simple muted navy shirt. Head and upper shoulders, direct eye contact, natural gentle smile, centered face with generous headroom for rounded cropping. Soft daylight, warm pale lavender studio background, authentic skin texture, understated editorial photography, sharp eyes. One person only, no writing, no border, no watermark. Fictional person, no real individual likeness."
+    },
+    {
+      "id": "diego",
+      "file": "diego.webp",
+      "prompt": "Use case: photorealistic-natural. Asset type: square profile avatar for a language-tutoring prototype. One fictional man in his mid 30s, tan skin, short dark wavy hair, light beard, muted teal shirt. Head and upper shoulders, direct eye contact, natural gentle smile, centered face with generous headroom for rounded cropping. Soft daylight, warm pale lavender studio background, authentic skin texture, understated editorial photography, sharp eyes. One person only, no text, no writing, no border, no watermark. Fictional person, no real individual likeness."
+    },
+    {
+      "id": "emma",
+      "file": "emma.webp",
+      "prompt": "Use case: photorealistic-natural. Asset type: square profile avatar for a language-tutoring prototype. One fictional woman in her late 30s, fair skin, shoulder-length brown hair, muted blue blouse. Head and upper shoulders, direct eye contact, natural gentle smile, centered face with generous headroom for rounded cropping. Soft daylight, warm pale lavender studio background, authentic skin texture, understated editorial photography, sharp eyes. One person only, no text, no writing, no border, no watermark. Fictional person, no real individual likeness."
+    },
+    {
+      "id": "yuki",
+      "file": "yuki.webp",
+      "prompt": "Use case: photorealistic-natural. Asset type: square profile avatar for a language-tutoring prototype. One fictional woman in her early 30s, East Asian features, straight dark shoulder-length hair, sage sweater. Head and upper shoulders, direct eye contact, natural gentle smile, centered face with generous headroom for rounded cropping. Soft daylight, warm pale lavender studio background, authentic skin texture, understated editorial photography, sharp eyes. One person only, no text, no writing, no border, no watermark. Fictional person, no real individual likeness."
+    },
+    {
+      "id": "sofia",
+      "file": "sofia.webp",
+      "prompt": "Use case: photorealistic-natural. Asset type: square profile avatar for a language-tutoring prototype. One fictional woman in her mid 30s, olive skin, dark curly bob, warm terracotta blouse. Head and upper shoulders, direct eye contact, natural gentle smile, centered face with generous headroom for rounded cropping. Soft daylight, warm pale lavender studio background, authentic skin texture, understated editorial photography, sharp eyes. One person only, no text, no writing, no border, no watermark. Fictional person, no real individual likeness."
+    },
+    {
+      "id": "amina",
+      "file": "amina.webp",
+      "prompt": "Use case: photorealistic-natural. Asset type: square profile avatar for a language-tutoring prototype. One fictional woman in her early 40s, dark skin, natural short curls, cream blouse. Head and upper shoulders, direct eye contact, natural gentle smile, centered face with generous headroom for rounded cropping. Soft daylight, warm pale lavender studio background, authentic skin texture, understated editorial photography, sharp eyes. One person only, no text, no writing, no border, no watermark. Fictional person, no real individual likeness."
+    },
+    {
+      "id": "lucas-t",
+      "file": "lucas-t.webp",
+      "prompt": "Use case: photorealistic-natural. Asset type: square profile avatar for a language-tutoring prototype. One fictional man in his late 20s, light skin, wavy brown hair, clean-shaven, blue shirt. Head and upper shoulders, direct eye contact, natural gentle smile, centered face with generous headroom for rounded cropping. Soft daylight, warm pale lavender studio background, authentic skin texture, understated editorial photography, sharp eyes. One person only, no text, no writing, no border, no watermark. Fictional person, no real individual likeness."
+    },
+    {
+      "id": "ines",
+      "file": "ines.webp",
+      "prompt": "Use case: photorealistic-natural. Asset type: square profile avatar for a language-tutoring prototype. One fictional woman in her early 30s, medium brown skin, dark curly hair, lavender blouse. Head and upper shoulders, direct eye contact, natural gentle smile, centered face with generous headroom for rounded cropping. Soft daylight, warm pale lavender studio background, authentic skin texture, understated editorial photography, sharp eyes. One person only, no text, no writing, no border, no watermark. Fictional person, no real individual likeness."
+    },
+    {
+      "id": "hugo",
+      "file": "hugo.webp",
+      "prompt": "Use case: photorealistic-natural. Asset type: square profile avatar for a language-tutoring prototype. One fictional man in his mid 40s, fair skin, short brown hair, neat beard, forest-green shirt. Head and upper shoulders, direct eye contact, natural gentle smile, centered face with generous headroom for rounded cropping. Soft daylight, warm pale lavender studio background, authentic skin texture, understated editorial photography, sharp eyes. One person only, no text, no writing, no border, no watermark. Fictional person, no real individual likeness."
+    },
+    {
+      "id": "ana",
+      "file": "ana.webp",
+      "prompt": "Use case: photorealistic-natural. Asset type: square profile avatar for a language-tutoring prototype. One fictional woman in her late 30s, tan skin, dark shoulder-length hair, simple cream cardigan. Head and upper shoulders, direct eye contact, natural gentle smile, centered face with generous headroom for rounded cropping. Soft daylight, warm pale lavender studio background, authentic skin texture, understated editorial photography, sharp eyes. One person only, no text, no writing, no border, no watermark. Fictional person, no real individual likeness."
+    },
+    {
+      "id": "oliver",
+      "file": "oliver.webp",
+      "prompt": "Use case: photorealistic-natural. Asset type: square profile avatar for a language-tutoring prototype. One fictional man in his early 40s, light skin, short light brown hair, subtle glasses, gray-blue shirt. Head and upper shoulders, direct eye contact, natural gentle smile, centered face with generous headroom for rounded cropping. Soft daylight, warm pale lavender studio background, authentic skin texture, understated editorial photography, sharp eyes. One person only, no text, no writing, no border, no watermark. Fictional person, no real individual likeness."
+    },
+    {
+      "id": "mei",
+      "file": "mei.webp",
+      "prompt": "Use case: photorealistic-natural. Asset type: square profile avatar for a language-tutoring prototype. One fictional woman in her late 30s, East Asian features, short black bob, cream sweater. Head and upper shoulders, direct eye contact, natural gentle smile, centered face with generous headroom for rounded cropping. Soft daylight, warm pale lavender studio background, authentic skin texture, understated editorial photography, sharp eyes. One person only, no text, no writing, no border, no watermark. Fictional person, no real individual likeness."
+    },
+    {
+      "id": "leonie",
+      "file": "leonie.webp",
+      "prompt": "Use case: photorealistic-natural. Asset type: square profile avatar for a language-tutoring prototype. One fictional woman in her early 30s, light skin, short auburn hair, sage blouse. Head and upper shoulders, direct eye contact, natural gentle smile, centered face with generous headroom for rounded cropping. Soft daylight, warm pale lavender studio background, authentic skin texture, understated editorial photography, sharp eyes. One person only, no text, no writing, no border, no watermark. Fictional person, no real individual likeness."
+    },
+    {
+      "id": "marco",
+      "file": "marco.webp",
+      "prompt": "Use case: photorealistic-natural. Asset type: square profile avatar for a language-tutoring prototype. One fictional man in his late 30s, olive skin, dark short curls, light stubble, muted blue shirt. Head and upper shoulders, direct eye contact, natural gentle smile, centered face with generous headroom for rounded cropping. Soft daylight, warm pale lavender studio background, authentic skin texture, understated editorial photography, sharp eyes. One person only, no text, no writing, no border, no watermark. Fictional person, no real individual likeness."
+    },
+    {
+      "id": "julie",
+      "file": "julie.webp",
+      "prompt": "Use case: photorealistic-natural. Asset type: square profile avatar for a language-tutoring prototype. One fictional woman in her mid 40s, fair skin, shoulder-length chestnut hair, soft green cardigan. Head and upper shoulders, direct eye contact, natural gentle smile, centered face with generous headroom for rounded cropping. Soft daylight, warm pale lavender studio background, authentic skin texture, understated editorial photography, sharp eyes. One person only, no text, no writing, no border, no watermark. Fictional person, no real individual likeness."
+    },
+    {
+      "id": "nora",
+      "file": "nora.webp",
+      "prompt": "Use case: photorealistic-natural. Asset type: square profile avatar for a language-tutoring prototype. One fictional woman in her early 40s, brown skin, dark hair tied loosely back, cream blouse. Head and upper shoulders, direct eye contact, natural gentle smile, centered face with generous headroom for rounded cropping. Soft daylight, warm pale lavender studio background, authentic skin texture, understated editorial photography, sharp eyes. One person only, no text, no writing, no border, no watermark. Fictional person, no real individual likeness."
+    },
+    {
+      "id": "elena",
+      "file": "elena.webp",
+      "prompt": "Use case: photorealistic-natural. Asset type: square profile avatar for a language-tutoring prototype. One fictional woman in her mid 30s, tan skin, long dark brown hair, muted mauve shirt. Head and upper shoulders, direct eye contact, natural gentle smile, centered face with generous headroom for rounded cropping. Soft daylight, warm pale lavender studio background, authentic skin texture, understated editorial photography, sharp eyes. One person only, no text, no writing, no border, no watermark. Fictional person, no real individual likeness."
+    },
+    {
+      "id": "louis",
+      "file": "louis.webp",
+      "prompt": "Use case: photorealistic-natural. Asset type: square profile avatar for a language-tutoring prototype. One fictional man in his early 30s, medium brown skin, short dark curls, muted gray shirt. Head and upper shoulders, direct eye contact, natural gentle smile, centered face with generous headroom for rounded cropping. Soft daylight, warm pale lavender studio background, authentic skin texture, understated editorial photography, sharp eyes. One person only, no text, no writing, no border, no watermark. Fictional person, no real individual likeness."
+    },
+    {
+      "id": "sara",
+      "file": "sara.webp",
+      "prompt": "Use case: photorealistic-natural. Asset type: square profile avatar for a language-tutoring prototype. One fictional woman in her late 20s, olive skin, wavy shoulder-length dark hair, sage blouse. Head and upper shoulders, direct eye contact, natural gentle smile, centered face with generous headroom for rounded cropping. Soft daylight, warm pale lavender studio background, authentic skin texture, understated editorial photography, sharp eyes. One person only, no text, no writing, no border, no watermark. Fictional person, no real individual likeness."
+    },
+    {
+      "id": "james",
+      "file": "james.webp",
+      "prompt": "Use case: photorealistic-natural. Asset type: square profile avatar for a language-tutoring prototype. One fictional man in his late 40s, dark skin, short cropped hair, subtle beard, navy shirt. Head and upper shoulders, direct eye contact, natural gentle smile, centered face with generous headroom for rounded cropping. Soft daylight, warm pale lavender studio background, authentic skin texture, understated editorial photography, sharp eyes. One person only, no text, no writing, no border, no watermark. Fictional person, no real individual likeness."
+    },
+    {
+      "id": "aiko",
+      "file": "aiko.webp",
+      "prompt": "Use case: photorealistic-natural. Asset type: square profile avatar for a language-tutoring prototype. One fictional woman in her mid 30s, East Asian features, shoulder-length dark hair, soft lavender sweater. Head and upper shoulders, direct eye contact, natural gentle smile, centered face with generous headroom for rounded cropping. Soft daylight, warm pale lavender studio background, authentic skin texture, understated editorial photography, sharp eyes. One person only, no text, no writing, no border, no watermark. Fictional person, no real individual likeness."
+    },
+    {
+      "id": "camille",
+      "file": "camille.webp",
+      "prompt": "Use case: photorealistic-natural. Asset type: square profile avatar for a language-tutoring prototype. One fictional woman in her early 30s, fair skin, wavy brown bob, muted blue shirt. Head and upper shoulders, direct eye contact, natural gentle smile, centered face with generous headroom for rounded cropping. Soft daylight, warm pale lavender studio background, authentic skin texture, understated editorial photography, sharp eyes. One person only, no text, no writing, no border, no watermark. Fictional person, no real individual likeness."
+    },
+    {
+      "id": "felix",
+      "file": "felix.webp",
+      "prompt": "Use case: photorealistic-natural. Asset type: square profile avatar for a language-tutoring prototype. One fictional man in his early 40s, fair skin, short sandy hair, light beard, muted olive shirt. Head and upper shoulders, direct eye contact, natural gentle smile, centered face with generous headroom for rounded cropping. Soft daylight, warm pale lavender studio background, authentic skin texture, understated editorial photography, sharp eyes. One person only, no text, no writing, no border, no watermark. Fictional person, no real individual likeness."
+    },
+    {
+      "id": "valentina",
+      "file": "valentina.webp",
+      "prompt": "Use case: photorealistic-natural. Asset type: square profile avatar for a language-tutoring prototype. One fictional woman in her early 40s, olive skin, dark wavy hair, subtle glasses, cream shirt. Head and upper shoulders, direct eye contact, natural gentle smile, centered face with generous headroom for rounded cropping. Soft daylight, warm pale lavender studio background, authentic skin texture, understated editorial photography, sharp eyes. One person only, no text, no writing, no border, no watermark. Fictional person, no real individual likeness."
+    },
+    {
+      "id": "tom",
+      "file": "tom.webp",
+      "prompt": "Use case: photorealistic-natural. Asset type: square profile avatar for a language-tutoring prototype. One fictional man in his early 30s, light skin, short reddish-brown curls, navy crew-neck. Head and upper shoulders, direct eye contact, natural gentle smile, centered face with generous headroom for rounded cropping. Soft daylight, warm pale lavender studio background, authentic skin texture, understated editorial photography, sharp eyes. One person only, no text, no writing, no border, no watermark. Fictional person, no real individual likeness."
+    },
+    {
+      "id": "student-lea",
+      "file": "student-lea.webp",
+      "prompt": "Use case: photorealistic-natural. Asset type: square profile avatar for a language-tutoring prototype. One fictional woman in her mid 20s, fair skin, shoulder-length chestnut hair, pale blue casual top. Head and upper shoulders, direct eye contact, natural gentle smile, centered face with generous headroom for rounded cropping. Soft daylight, warm pale lavender studio background, authentic skin texture, understated editorial photography, sharp eyes. One person only, no text, no writing, no border, no watermark. Fictional person, no real individual likeness."
+    },
+    {
+      "id": "student-lucas",
+      "file": "student-lucas.webp",
+      "prompt": "Use case: photorealistic-natural. Asset type: square profile avatar for a language-tutoring prototype. One fictional man in his mid 20s, light skin, short brown curls, gray crew-neck. Head and upper shoulders, direct eye contact, natural gentle smile, centered face with generous headroom for rounded cropping. Soft daylight, warm pale lavender studio background, authentic skin texture, understated editorial photography, sharp eyes. One person only, no text, no writing, no border, no watermark. Fictional person, no real individual likeness."
+    },
+    {
+      "id": "student-maya",
+      "file": "student-maya.webp",
+      "prompt": "Use case: photorealistic-natural. Asset type: square profile avatar for a language-tutoring prototype. One fictional woman in her late 20s, medium brown skin, long dark wavy hair, muted mauve top. Head and upper shoulders, direct eye contact, natural gentle smile, centered face with generous headroom for rounded cropping. Soft daylight, warm pale lavender studio background, authentic skin texture, understated editorial photography, sharp eyes. One person only, no text, no writing, no border, no watermark. Fictional person, no real individual likeness."
+    },
+    {
+      "id": "student-noah",
+      "file": "student-noah.webp",
+      "prompt": "Use case: photorealistic-natural. Asset type: square profile avatar for a language-tutoring prototype. One fictional man in his early 20s, brown skin, short black curls, dark green crew-neck. Head and upper shoulders, direct eye contact, natural gentle smile, centered face with generous headroom for rounded cropping. Soft daylight, warm pale lavender studio background, authentic skin texture, understated editorial photography, sharp eyes. One person only, no text, no writing, no border, no watermark. Fictional person, no real individual likeness."
+    },
+    {
+      "id": "reviewer-alex",
+      "prompt": "Use case: photorealistic-natural. Asset type: square learner/reviewer profile avatar for a language-tutoring prototype. One fictional androgynous adult in their late 20s, medium skin, short dark wavy hair, muted blue crew-neck. Head and upper shoulders, direct eye contact, natural gentle smile, centered face and generous headroom for rounded cropping. Soft daylight, pale lavender background, authentic skin texture, understated editorial portrait photography, sharp eyes. One person only; no text, watermark, border or resemblance to a real individual.",
+      "file": "reviewer-alex.webp"
+    },
+    {
+      "id": "reviewer-sam",
+      "prompt": "Use case: photorealistic-natural. Asset type: square learner/reviewer profile avatar for a language-tutoring prototype. One fictional adult man in his early 30s, dark skin, very short hair, gray-green crew-neck. Head and upper shoulders, direct eye contact, natural gentle smile, centered face and generous headroom for rounded cropping. Soft daylight, pale lavender background, authentic skin texture, understated editorial portrait photography, sharp eyes. One person only; no text, watermark, border or resemblance to a real individual.",
+      "file": "reviewer-sam.webp"
+    },
+    {
+      "id": "reviewer-lou",
+      "prompt": "Use case: photorealistic-natural. Asset type: square learner/reviewer profile avatar for a language-tutoring prototype. One fictional adult woman in her late 20s, fair skin, short auburn hair, sage shirt. Head and upper shoulders, direct eye contact, natural gentle smile, centered face and generous headroom for rounded cropping. Soft daylight, pale lavender background, authentic skin texture, understated editorial portrait photography, sharp eyes. One person only; no text, watermark, border or resemblance to a real individual.",
+      "file": "reviewer-lou.webp"
+    },
+    {
+      "id": "reviewer-camille",
+      "prompt": "Use case: photorealistic-natural. Asset type: square learner/reviewer profile avatar for a language-tutoring prototype. One fictional adult woman in her late 20s, tan skin, dark curly hair tied loosely back, soft blue shirt. Head and upper shoulders, direct eye contact, natural gentle smile, centered face and generous headroom for rounded cropping. Soft daylight, pale lavender background, authentic skin texture, understated editorial portrait photography, sharp eyes. One person only; no text, watermark, border or resemblance to a real individual.",
+      "file": "reviewer-camille.webp"
+    },
+    {
+      "id": "reviewer-robin",
+      "prompt": "Use case: photorealistic-natural. Asset type: square learner/reviewer profile avatar for a language-tutoring prototype. One fictional androgynous adult in their early 30s, light skin, short sandy hair, cream crew-neck. Head and upper shoulders, direct eye contact, natural gentle smile, centered face and generous headroom for rounded cropping. Soft daylight, pale lavender background, authentic skin texture, understated editorial portrait photography, sharp eyes. One person only; no text, watermark, border or resemblance to a real individual.",
+      "file": "reviewer-robin.webp"
+    },
+    {
+      "id": "reviewer-charlie",
+      "prompt": "Use case: photorealistic-natural. Asset type: square learner/reviewer profile avatar for a language-tutoring prototype. One fictional adult woman in her early 30s, East Asian features, dark bob, muted mauve top. Head and upper shoulders, direct eye contact, natural gentle smile, centered face and generous headroom for rounded cropping. Soft daylight, pale lavender background, authentic skin texture, understated editorial portrait photography, sharp eyes. One person only; no text, watermark, border or resemblance to a real individual.",
+      "file": "reviewer-charlie.webp"
+    }
+  ]
+}

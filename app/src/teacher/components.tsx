@@ -1,4 +1,6 @@
 import { useId, type ReactNode } from "react";
+import SelectControl from "../SelectControl";
+import ProfilePortrait from "../ProfilePortrait";
 import { KeyboardInput, KeyboardTextarea, useKeyboard } from "../mobile";
 import { students, type Route } from "./model";
 import { useWorkspace } from "./context";
@@ -74,7 +76,7 @@ export function Select({
   return (
     <label className="tw-field">
       <span>{label}</span>
-      <select
+      <SelectControl
         aria-label={label}
         value={value}
         onChange={(e) => onChange(e.target.value)}
@@ -88,7 +90,7 @@ export function Select({
             </option>
           ),
         )}
-      </select>
+      </SelectControl>
     </label>
   );
 }
@@ -129,7 +131,7 @@ export function Avatar({ id, size = "" }: { id: string; size?: string }) {
   const s = students.find((s) => s.id === id)!;
   return (
     <span className={`tw-avatar ${s.color} ${size}`} aria-hidden="true">
-      {s.initials}
+      <ProfilePortrait id={`student-${s.id}`} initials={s.initials} />
     </span>
   );
 }

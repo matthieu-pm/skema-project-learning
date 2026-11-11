@@ -1,5 +1,6 @@
 import LocationField from "../LocationField";
 import FreeLessonConfirmation from "../FreeLessonConfirmation";
+import ProfilePortrait from "../ProfilePortrait";
 import {
   isFreeLesson,
   lessonDurations,
@@ -2229,7 +2230,7 @@ function ProfilePage({
       <Panel className="tw-teaching-profile">
         <div className="tw-profile-hero">
           <span className="tw-teacher-avatar large">
-            {p.name.slice(0, 1).toUpperCase()}
+            {p.name === "Gilbert" ? <ProfilePortrait id="gilbert" initials="G" /> : p.name.slice(0, 1).toUpperCase()}
           </span>
           <div>
             <h2>{p.name}</h2>
