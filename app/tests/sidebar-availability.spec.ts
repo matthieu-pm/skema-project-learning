@@ -19,8 +19,8 @@ test("account-first sidebars keep routes, account actions, collapsed navigation 
   await page.getByRole("menuitem", { name: "Payout", exact: true }).click();
   await expect(page.getByRole("heading", { name: "Your teaching deserves clarity.", exact: true })).toBeVisible();
   await sidebar.getByRole("button", { name: "Lessons", exact: true }).click();
-  await sidebar.getByRole("button", { name: "Templates", exact: true }).click();
-  await expect(sidebar.getByRole("button", { name: "Templates", exact: true })).toHaveAttribute("data-active", "true");
+  await sidebar.getByRole("button", { name: "Lesson templates", exact: true }).click();
+  await expect(sidebar.getByRole("button", { name: "Lesson templates", exact: true })).toHaveAttribute("data-active", "true");
   await page.getByRole("button", { name: "Toggle Sidebar", exact: true }).click();
   await sidebar.getByRole("button", { name: "Availability", exact: true }).click();
   await expect(page.getByRole("heading", { name: "Availability", exact: true })).toBeVisible();

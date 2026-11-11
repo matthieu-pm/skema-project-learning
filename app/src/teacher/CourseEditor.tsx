@@ -1,5 +1,6 @@
 import {
   useEffect,
+  useId,
   useMemo,
   useRef,
   useState,
@@ -38,6 +39,7 @@ import {
   createModule,
   fromLesson,
   id as newId,
+  moduleHeading,
   moduleTypes,
   moveOutline,
   practiceFormats,
@@ -52,7 +54,8 @@ import {
   type Move,
   type Purpose,
 } from "./course";
-import { writeDraft } from "./course-storage";
+import { writeDraft, writeLibraryChanges } from "./course-storage";
+import { prepareLessonUse, useLessonErrors, type UseErrors } from "./lesson-use";
 import "./course-editor.css";
 
 function EditorActions({ children }: { children: ReactNode }) {
@@ -89,11 +92,17 @@ function EditorDialog({
   children,
   onClose,
   wide = false,
+  busy = false,
+  description,
+  restoreFocus,
 }: {
   title: string;
   children: ReactNode;
   onClose: () => void;
   wide?: boolean;
+  busy?: boolean;
+  description?: string;
+  restoreFocus?: () => void;
 }) {
   const { mobile } = useWorkspace();
   if (mobile)
@@ -101,16 +110,17 @@ function EditorDialog({
       <BottomSheet
         open
         onOpenChange={(open) => {
-          if (!open) onClose();
+          if (!open && !busy) onClose();
         }}
         title={title}
+        description={description}
         snap={0.76}
       >
         <div className="teacher-workspace ce-sheet">
           <div className="ce-dialog-content">
-            <Button kind="quiet" onClick={onClose}>
+            {title === "Use lesson" ? <button className="tw-icon-button" aria-label="Close dialog" disabled={busy} onClick={onClose}><Icon name="close" /></button> : <Button kind="quiet" onClick={onClose}>
               Close {title.toLowerCase()}
-            </Button>
+            </Button>}
             {children}
           </div>
         </div>
@@ -120,21 +130,25 @@ function EditorDialog({
     <Dialog.Root
       open
       onOpenChange={(open) => {
-        if (!open) onClose();
+        if (!open && !busy) onClose();
       }}
     >
       <Dialog.Portal>
         <Dialog.Overlay className="ce-overlay" />
         <Dialog.Content
-          aria-describedby={undefined}
+          {...(!description ? { "aria-describedby": undefined } : {})}
+          onEscapeKeyDown={event => { if (busy) event.preventDefault(); }}
+          onPointerDownOutside={event => { if (busy) event.preventDefault(); }}
+          onCloseAutoFocus={event => { if (restoreFocus) { event.preventDefault(); restoreFocus(); } }}
           className={`teacher-workspace ce-dialog ${wide ? "ce-wide" : ""}`}
         >
           <div className="ce-dialog-heading">
             <Dialog.Title>{title}</Dialog.Title>
-            <Dialog.Close className="tw-icon-button" aria-label="Close dialog">
+            <Dialog.Close className="tw-icon-button" aria-label="Close dialog" disabled={busy}>
               <Icon name="close" />
             </Dialog.Close>
           </div>
+          {description && <Dialog.Description className="ce-dialog-description">{description}</Dialog.Description>}
           <div className="ce-dialog-content">{children}</div>
         </Dialog.Content>
       </Dialog.Portal>
@@ -194,7 +208,7 @@ export function LessonPlayer({ course: c, fitMobile = false }: { course: Course;
           <span style={{ width: `${((step + 1) / sequence.length) * 100}%` }} />
         </div>
         <strong>
-          {current.module.type} · {current.module.title}
+          {moduleHeading(current.module)}
         </strong>
         <small>
           Block {step + 1} of {sequence.length} · {current.module.minutes} min
@@ -280,12 +294,22 @@ function Editor({ lesson, navigate }: { lesson: Lesson; navigate: Navigate }) {
       "preview" | "published" | "block" | "module" | "apply" | null
     >(null),
     [purpose, setPurpose] = useState<Purpose>("Teach"),
-    [recipient, setRecipient] = useState(lesson.studentId || ""),
+    [recipient, setRecipient] = useState(""),
+    [assignStudent, setAssignStudent] = useState(false),
     [asTemplate, setAsTemplate] = useState(false),
     [templateName, setTemplateName] = useState(c.title),
     [errors, setErrors] = useState<string[]>([]),
     [moveMenu, setMoveMenu] = useState<string | null>(null),
     [dragging, setDragging] = useState(false);
+  const useHelpId = useId();
+  const [useErrors, setUseErrors] = useState<UseErrors>({ content: [] }), [busy, setBusy] = useState(false);
+  const processing = useRef(false), useTrigger = useRef<HTMLButtonElement>(null), useDialog = useRef<HTMLDivElement>(null);
+  const closeUse = () => { if (processing.current) return; setModal(null); requestAnimationFrame(() => useTrigger.current?.focus()); };
+  useEffect(() => {
+    if (modal !== "apply") return;
+    const selector = useErrors.student ? '[data-use-field="student"] select' : useErrors.templateName ? '[data-use-field="template"] input' : useErrors.content.length ? '[data-use-errors]' : "";
+    if (selector) requestAnimationFrame(() => useDialog.current?.querySelector<HTMLElement>(selector)?.focus());
+  }, [useErrors, modal]);
   const cleanupDrag = useRef<(() => void) | undefined>(undefined);
   const inlineEdit = useRef<{ field: HTMLElement; recorded: boolean } | null>(null);
   const histories = editorHistories[lesson.id] || { past: [], future: [] };
@@ -298,7 +322,7 @@ function Editor({ lesson, navigate }: { lesson: Lesson; navigate: Navigate }) {
       !!lesson.publishedEditor &&
       JSON.stringify(lesson.publishedEditor.content) === JSON.stringify(c);
   const status = applied
-    ? "Applied"
+    ? "Assigned version"
     : changed
       ? "Draft · Edited"
       : lesson.savedAt
@@ -452,73 +476,36 @@ function Editor({ lesson, navigate }: { lesson: Lesson; navigate: Navigate }) {
     setBlockId(undefined);
     setNotice("Block deleted. Use Undo to restore it.");
   };
-  const save = (apply = false) => {
-    if (apply && offline) {
-      setErrors([
-        "You’re offline in this simulation. Reconnect in Account settings, then apply. Your draft is still editable.",
-      ]);
-      return false;
-    }
-    const issues = apply ? [...courseIssues(c), ...lessonPublicationIssues(savedProfile, !!recipient)] : [];
-    if (apply && !recipient && !asTemplate)
-      issues.push("Select a student or save this lesson as a template.");
-    if (apply && asTemplate && !templateName.trim())
-      issues.push("Give your template a name.");
-    if (issues.length) {
-      setErrors(issues);
-      return false;
-    }
-    const now = new Date().toISOString();
-    const next: Lesson = {
-      ...lesson,
-      ...coursePatch(c),
-      savedEditor: structuredClone(c),
-      savedAt: now,
-      ...(apply
-        ? {
-            publishedEditor: {
-              content: structuredClone(c),
-              studentId: recipient,
-              appliedAt: now,
-            },
-            status: recipient ? "Shared" : "Approved",
-          }
-        : {}),
-    };
-    const nextTemplates =
-      apply && asTemplate
-        ? [
-            ...templates,
-            {
-              id: newId(),
-              name: templateName.trim(),
-              level: c.level,
-              content: structuredClone(c),
-              own: true,
-            },
-          ]
-        : templates;
-    try {
-      writeDraft(next, nextTemplates);
-    } catch {
-      setErrors([
-        "Changes could not be saved on this device. Free up browser storage and try Save changes again. Your edits are still here.",
-      ]);
-      return false;
-    }
-    updateLesson(lesson.id, next);
-    setTemplates(nextTemplates);
-    setErrors([]);
-    if (apply) {
-      setModal(null);
-      setNotice(
-        `Changes applied in this prototype${recipient ? ` for ${students.find((s) => s.id === recipient)?.name}` : ""}${asTemplate ? "; template saved" : ""}.`,
-      );
-    } else
-      setNotice(
-        "Changes saved on this device. The applied lesson is unchanged.",
-      );
+  const save = () => {
+    const next: Lesson = { ...lesson, ...coursePatch(structuredClone(c)), savedEditor: structuredClone(c), savedAt: new Date().toISOString() };
+    try { writeDraft(next, templates); }
+    catch { setErrors(["Draft could not be saved on this device. Free up browser storage and try Save draft again. Your edits are still here."]); return false; }
+    updateLesson(lesson.id, next); setErrors([]);
+    setNotice("Draft saved on this device. Student assignments and lesson templates are unchanged.");
     return true;
+  };
+  const useLesson = async () => {
+    if (processing.current) return;
+    const choices = { assign: assignStudent, studentId: recipient, template: asTemplate, templateName };
+    if (!choices.assign && !choices.template) return;
+    const issues = useLessonErrors(lesson, c, savedProfile, choices);
+    if (offline) issues.content.push("You’re offline in this simulation. Reconnect in Account settings and try again. Your edits are still here.");
+    setUseErrors(issues);
+    if (issues.student || issues.templateName || issues.content.length) return;
+    processing.current = true; setBusy(true);
+    try {
+      await Promise.resolve();
+      const result = prepareLessonUse(lesson, c, templates, choices);
+      const changes = result.assigned ? [result.draft, result.assigned] : [result.draft];
+      writeLibraryChanges(changes, result.templates);
+      setLessons(previous => [...previous.filter(item => !changes.some(next => next.id === item.id)), ...changes]);
+      setTemplates(result.templates); setErrors([]); setModal(null);
+      const name = students.find(student => student.id === recipient)?.name;
+      setNotice(choices.assign ? `Prototype only. Lesson assigned to ${name}${choices.template ? " and saved as a template" : ""}. No student is notified.` : "Prototype only. Lesson template saved on this device.");
+      requestAnimationFrame(() => useTrigger.current?.focus());
+    } catch (reason) {
+      setUseErrors({ content: [reason instanceof Error && reason.message.includes("could not be read") ? reason.message : "The selected actions could not be saved. No assignment or template was created. Keep your choices and try again after freeing browser storage."] });
+    } finally { processing.current = false; setBusy(false); }
   };
   const useTemplate = (content: Course) => {
     const course = cloneCourse(content),
@@ -672,7 +659,7 @@ function Editor({ lesson, navigate }: { lesson: Lesson; navigate: Navigate }) {
                 { value: "", label: "Choose module" },
                 ...c.modules
                   .filter((m) => m.id !== target.moduleId)
-                  .map((m) => ({ value: m.id, label: m.title })),
+                  .map((m) => ({ value: m.id, label: moduleHeading(m) })),
               ]}
               onChange={(v) => {
                 if (v) move(target, { moduleId: v });
@@ -788,7 +775,7 @@ function Editor({ lesson, navigate }: { lesson: Lesson; navigate: Navigate }) {
             </div>
           </div>
           <div className="ce-tabs">
-            {["Modules", "Teach", "Practice", "Templates"].map((t) => (
+            {["Modules", "Teach", "Practice", "Lesson templates"].map((t) => (
               <button
                 key={t}
                 aria-pressed={library === t}
@@ -813,7 +800,7 @@ function Editor({ lesson, navigate }: { lesson: Lesson; navigate: Navigate }) {
                   ))}
                 </div>
               </>
-            ) : library === "Templates" ? (
+            ) : library === "Lesson templates" ? (
               <>
                 <p>
                   Start an editable copy. Your current lesson stays in the
@@ -867,19 +854,19 @@ function Editor({ lesson, navigate }: { lesson: Lesson; navigate: Navigate }) {
                   className={`ce-outline-row ${selectedModule?.id === m.id && !selectedBlock ? "selected" : ""}`}
                   data-ce-module={m.id}
                 >
-                  {grip({ moduleId: m.id }, m.title)}
+                  {grip({ moduleId: m.id }, moduleHeading(m))}
                   <button
                     className="ce-outline-title"
                     onClick={() => selectModule(m)}
                   >
                     <span>
-                      {String(i + 1).padStart(2, "0")} · {m.title}
+                      {String(i + 1).padStart(2, "0")} · {moduleHeading(m)}
                     </span>
                     <small>
                       {m.type} · {m.minutes} min
                     </small>
                   </button>
-                  {more({ moduleId: m.id }, m.title, i, c.modules.length)}
+                  {more({ moduleId: m.id }, moduleHeading(m), i, c.modules.length)}
                 </div>
                 {m.blocks.map((b, j) => (
                   <div
@@ -912,7 +899,7 @@ function Editor({ lesson, navigate }: { lesson: Lesson; navigate: Navigate }) {
         </aside>
         <main className="ce-canvas">
           <div className="ce-canvas-label">
-            <span>Module editor</span>
+            <span>Lesson editor</span>
             <span className="ce-view-status">
               <span>Teacher view</span>
               <Badge tone={applied ? "green" : "orange"}>{status}</Badge>
@@ -1020,24 +1007,24 @@ function Editor({ lesson, navigate }: { lesson: Lesson; navigate: Navigate }) {
                     <div role="heading" aria-level={2}>
                       <InlineField
                         className="ce-inline-module-title"
-                        label="Module title"
+                        label="Module title (optional)"
                         multiline
                         value={m.title}
-                        placeholder="Untitled module"
+                        placeholder={moduleHeading({ ...m, title: "" })}
                         onChange={(title) => changeModule({ ...m, title })}
                       />
                     </div>
                     <InlineField
-                      label="Module learning goal"
+                      label="Module learning goal (optional)"
                       multiline
                       value={m.goal}
-                      placeholder="Add this module’s learning goal…"
+                      placeholder="Add a learning goal (optional)…"
                       onChange={(goal) => changeModule({ ...m, goal })}
                     />
                   </div>
                   <button
                     className="tw-icon-button"
-                    aria-label={`Settings for ${m.title}`}
+                    aria-label={`Settings for ${moduleHeading(m)}`}
                     onClick={() => {
                       selectModule(m);
                       if (mobile) {
@@ -1099,7 +1086,7 @@ function Editor({ lesson, navigate }: { lesson: Lesson; navigate: Navigate }) {
                 className="tw-text-link"
                 onClick={() => open("published")}
               >
-                View applied version
+                View assigned version
               </button>
               <small>
                 {lesson.publishedEditor.studentId
@@ -1139,16 +1126,9 @@ function Editor({ lesson, navigate }: { lesson: Lesson; navigate: Navigate }) {
             Preview lesson
           </Button>
           <Button kind="secondary" onClick={() => save()}>
-            Save changes
+            Save draft
           </Button>
-          <Button
-            onClick={() => {
-              setErrors([]);
-              open("apply");
-            }}
-          >
-            Apply changes
-          </Button>
+          <button ref={useTrigger} className="tw-button tw-primary" onClick={() => { setErrors([]); setUseErrors({ content: [] }); setAssignStudent(false); setAsTemplate(false); setRecipient(""); setTemplateName(c.title); open("apply"); }}>Use lesson</button>
         </div>
       </EditorActions>
       {modal && (
@@ -1159,12 +1139,15 @@ function Editor({ lesson, navigate }: { lesson: Lesson; navigate: Navigate }) {
               : modal === "preview"
                 ? "Preview lesson"
                 : modal === "apply"
-                  ? "Apply lesson changes"
+                  ? "Use lesson"
                   : modal === "module"
                     ? "Add module"
                     : "Add block"
           }
-          onClose={() => setModal(null)}
+          onClose={modal === "apply" ? closeUse : () => setModal(null)}
+          busy={busy}
+          description={modal === "apply" ? "Assign this lesson to a student, save it as a reusable template, or do both." : undefined}
+          restoreFocus={modal === "apply" ? () => useTrigger.current?.focus() : undefined}
           wide={modal === "preview" || modal === "published"}
         >
           {modal === "published" && lesson.publishedEditor ? (
@@ -1206,72 +1189,16 @@ function Editor({ lesson, navigate }: { lesson: Lesson; navigate: Navigate }) {
               </div>
             </>
           ) : (
-            <>
-              <p>
-                Apply this version for a student, save it as a reusable
-                template, or do both.
-              </p>
-              <p className="ce-info">
-                Prototype only · changes and files stay in this browser. No
-                student is notified.
-              </p>
-              <Select
-                label="Student"
-                value={recipient}
-                options={[
-                  {
-                    value: "",
-                    label: "Choose a student (optional for a template)",
-                  },
-                  ...students.map((s) => ({
-                    value: s.id,
-                    label: `${s.name} · ${s.language} ${s.level}`,
-                  })),
-                ]}
-                onChange={setRecipient}
-              />
-              {recipient && (
-                <div className="ce-info">
-                  <strong>Lesson details</strong>
-                  <p>{savedProfile.duration || "Duration not set"} · {lessonPriceLabel(savedProfile.rate, savedProfile.freeConfirmed)} per lesson</p>
-                  {lessonPublicationIssues(savedProfile, true).length > 0 && <>
-                    <p>Set duration and price before publishing for a student. Your draft and templates can still be saved.</p>
-                    <Button kind="secondary" onClick={() => {
-                      if (save()) navigate({ page: "profile-edit", id: lesson.id, tab: "return-to-editor" });
-                    }}>Edit teaching profile</Button>
-                  </>}
-                </div>
-              )}
-              <label className="ce-checkbox">
-                <input
-                  type="checkbox"
-                  checked={asTemplate}
-                  onChange={(e) => setAsTemplate(e.target.checked)}
-                />
-                Save as a template
-              </label>
-              {asTemplate && (
-                <TextField
-                  label="Template name"
-                  value={templateName}
-                  onChange={setTemplateName}
-                />
-              )}
-              {errors.length > 0 && (
-                <div className="ce-warning" role="alert">
-                  <strong>Complete these before applying</strong>
-                  {errors.map((s, i) => (
-                    <p key={i}>{s}</p>
-                  ))}
-                </div>
-              )}
-              <div className="ce-actions">
-                <Button kind="secondary" onClick={() => setModal(null)}>
-                  Keep editing
-                </Button>
-                <Button onClick={() => save(true)}>Apply changes</Button>
-              </div>
-            </>
+            <div ref={useDialog} className="ce-use-lesson" aria-busy={busy}>
+              <label className="ce-use-choice"><input type="checkbox" aria-label="Assign to a student" aria-describedby={`${useHelpId}-assign`} checked={assignStudent} disabled={busy} onChange={event => { setAssignStudent(event.target.checked); setUseErrors({ content: [] }); }} /><span><strong>Assign to a student</strong><small id={`${useHelpId}-assign`}>Give a student access to this version of the lesson.</small></span></label>
+              {assignStudent && <div data-use-field="student"><Select label="Student" value={recipient} error={useErrors.student} options={[{ value: "", label: "Choose a student" }, ...students.map(student => ({ value: student.id, label: `${student.name} · ${student.language} ${student.level}` }))]} onChange={value => { setRecipient(value); setUseErrors(previous => ({ ...previous, student: undefined })); }} /><p className="ce-version-notice">Future edits won’t change this student’s assigned version.</p><div className="ce-info"><strong>Lesson details</strong><p>{savedProfile.duration || "Duration not set"} · {lessonPriceLabel(savedProfile.rate, savedProfile.freeConfirmed)} per lesson</p>{lessonPublicationIssues(savedProfile, true).length > 0 && <><p>Set duration and price before assigning. Your draft and lesson templates can still be saved.</p><Button kind="secondary" onClick={() => { if (save()) navigate({ page: "profile-edit", id: lesson.id, tab: "return-to-editor" }); }}>Edit teaching profile</Button></>}</div></div>}
+              <label className="ce-use-choice"><input type="checkbox" aria-label="Save as a lesson template" aria-describedby={`${useHelpId}-template`} checked={asTemplate} disabled={busy} onChange={event => { setAsTemplate(event.target.checked); setUseErrors({ content: [] }); }} /><span><strong>Save as a lesson template</strong><small id={`${useHelpId}-template`}>Create a reusable copy for future lessons.</small></span></label>
+              {asTemplate && <div data-use-field="template"><TextField label="Template name" value={templateName} error={useErrors.templateName} onChange={value => { setTemplateName(value); setUseErrors(previous => ({ ...previous, templateName: undefined })); }} /></div>}
+              {!assignStudent && !asTemplate && <p className="tw-subtle">Choose at least one option to continue.</p>}
+              <p className="ce-prototype-notice">Prototype only. Assignment and template creation are simulated; no student is notified.</p>
+              {useErrors.content.length > 0 && <div className="ce-warning" role="alert" tabIndex={-1} data-use-errors>{useErrors.content.map((message, index) => <p key={index}>{message}</p>)}</div>}
+              <div className="ce-actions"><Button kind="secondary" disabled={busy} onClick={closeUse}>Keep editing</Button><Button disabled={busy || !assignStudent && !asTemplate} onClick={() => { void useLesson(); }}>{busy ? "Saving…" : assignStudent && asTemplate ? "Assign and save template" : assignStudent ? "Assign lesson" : asTemplate ? "Save template" : "Use lesson"}</Button></div>
+            </div>
           )}
         </EditorDialog>
       )}

@@ -162,3 +162,10 @@
 .updated-onboarding .actions.account-inline-actions > .primary,
 .updated-onboarding .actions.account-inline-actions > .secondary { width:100%; order:initial; margin:0; min-width:0; }
 .updated-onboarding .actions.account-inline-actions .account-divider { display:block; order:initial; text-align:center; font-size:13px; color:#777; }
+/* Teacher feedback adjustments keep the existing onboarding shell. */
+.teacher-value { padding: 16px 0 0; text-align: left; display: grid; gap: 8px; }
+.teacher-value h2 { font-size: 20px; line-height: 1.2; margin: 0; }
+.teacher-value p { font-size: 14px; line-height: 1.5; margin: 0; }
+.verification-info { display: grid; gap: 20px; }
+.verification-info-item { padding: 0; background: none; border: 0; box-shadow: none; }
+.verification-info-item p { font-size: 14px; line-height: 1.5; margin: 6px 0 0; }

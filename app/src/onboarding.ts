@@ -28,6 +28,9 @@ export type Answers = {
   name: string;
   teachingLanguages: string[];
   teachingLevels: string[];
+  teachingLevelsByLanguage?: Record<string, string[]>;
+  teachingExperience?: string;
+  meetingFormatDeferred?: boolean;
   approach: string;
   duration: string;
   rate: string;
@@ -68,6 +71,9 @@ export const initialAnswers: Answers = {
   name: "",
   teachingLanguages: [],
   teachingLevels: [],
+  teachingLevelsByLanguage: {},
+  teachingExperience: "",
+  meetingFormatDeferred: false,
   approach: "",
   duration: "",
   rate: "",
@@ -90,6 +96,21 @@ export const languageChoices = [
   "Japanese",
 ] as const;
 export const learnerFormatChoices = ["Online", "In person"] as const;
+export function teacherLanguageLevels(a: Pick<Answers, "teachingLanguages" | "teachingLevels" | "teachingLevelsByLanguage">): Record<string, string[]> {
+  const legacy = !a.teachingLevelsByLanguage || !Object.keys(a.teachingLevelsByLanguage).length;
+  return Object.fromEntries(a.teachingLanguages.map(language => [language, [...(legacy ? a.teachingLevels : a.teachingLevelsByLanguage?.[language] || [])]]));
+}
+export function toggleTeachingLanguage(a: Answers, language: string): Partial<Answers> {
+  const teachingLanguages = a.teachingLanguages.includes(language) ? a.teachingLanguages.filter(value => value !== language) : [...a.teachingLanguages, language];
+  const previous = teacherLanguageLevels(a);
+  const teachingLevelsByLanguage = Object.fromEntries(teachingLanguages.map(value => [value, previous[value] || []]));
+  return { teachingLanguages, teachingLevelsByLanguage, teachingLevels: [...new Set(Object.values(teachingLevelsByLanguage).flat())] };
+}
+export function setTeacherLevels(a: Answers, language: string, levels: string[]): Partial<Answers> {
+  const teachingLevelsByLanguage = { ...teacherLanguageLevels(a), [language]: [...new Set(levels)] };
+  return { teachingLevelsByLanguage, teachingLevels: [...new Set(Object.values(teachingLevelsByLanguage).flat())] };
+}
+export const teachingLanguageSummary = (a: Answers) => Object.entries(teacherLanguageLevels(a)).map(([language, levels]) => `${language}: ${levels.join(", ")}`).join(" · ");
 // Normalize older single-format answers at the edge so later learner flows can
 // consume the same list whether one or both meeting formats were selected.
 export function learningFormatsFor(a: Pick<Answers, "learningFormats" | "format">): LearningFormat[] {
@@ -105,6 +126,7 @@ export function toggleLearningFormat(a: Answers, format: LearningFormat): Partia
     : [...current, format];
   return {
     learningFormats,
+    meetingFormatDeferred: false,
     format: "",
     ...(!learningFormats.includes("In person") ? { city: "" } : {}),
   };
@@ -306,7 +328,7 @@ export function validStep(step: Step, a: Answers): boolean {
     case "teacher-profile":
       return a.name.trim().length >= 2 && a.approach.trim().length >= 5;
     case "teacher-subjects":
-      return a.teachingLanguages.length > 0 && a.teachingLevels.length > 0;
+      return a.teachingLanguages.length > 0 && Object.values(teacherLanguageLevels(a)).every(levels => levels.length > 0);
     case "teacher-lessons":
       return validLessonSettings(a);
     case "learner-goal":

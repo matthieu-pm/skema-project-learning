@@ -15,7 +15,7 @@
     "build": "tsc && vite build && node scripts/prepare-sites-build.mjs",
     "test:onboarding": "node --test tests/onboarding.test.mjs",
     "test:routing": "node --test tests/device-routing.test.mjs",
-    "test:teacher": "node --test tests/teacher-workspace.test.mjs tests/course-editor.test.mjs tests/availability.test.mjs",
+    "test:teacher": "node --test tests/teacher-workspace.test.mjs tests/course-editor.test.mjs tests/availability.test.mjs tests/prototype-adjustments.test.mjs",
     "test:locations": "node --test tests/locations.test.mjs",
     "test:learner": "node --test tests/learner.test.mjs tests/preparation.test.mjs"
   },

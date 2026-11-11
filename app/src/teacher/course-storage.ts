@@ -8,9 +8,10 @@ import {
 
 const key = "mimo.lesson-library.v1";
 type Library = { version: 1; lessons: Lesson[]; templates: CourseTemplate[] };
-export function readLibrary(): Library {
+export function readLibrary(strict = false): Library {
   try {
-    const parsed = JSON.parse(localStorage.getItem(key) || "null", (field, value) => {
+    const raw = localStorage.getItem(key);
+    const parsed = JSON.parse(raw ?? "null", (field, value) => {
       // Keep previously saved drafts, templates and applied snapshots readable.
       if (field === "purpose" && value === "Practise") return "Practice";
       if (field === "type" && typeof value === "string" && value.startsWith("Practise · "))
@@ -23,7 +24,9 @@ export function readLibrary(): Library {
       Array.isArray(parsed.templates)
     )
       return parsed;
+    if (raw !== null && strict) throw new Error("Saved lessons could not be read.");
   } catch {
+    if (strict) throw new Error("Saved lessons could not be read. Reload and try again; existing work has not been replaced.");
     /* Storage may be unavailable. Keep the sample workspace usable. */
   }
   return { version: 1, lessons: [], templates: [] };
@@ -54,12 +57,16 @@ export function restoreLessons(seed: Lesson[]): Lesson[] {
 }
 // Save one explicit draft, never silently save another lesson's working edits.
 export function writeDraft(lesson: Lesson, templates: CourseTemplate[]) {
-  const old = readLibrary();
+  writeLibraryChanges([lesson], templates);
+}
+// One local write makes assignment + template creation atomic.
+export function writeLibraryChanges(lessons: Lesson[], templates: CourseTemplate[]) {
+  const old = readLibrary(true);
   localStorage.setItem(
     key,
     JSON.stringify({
       version: 1,
-      lessons: [...old.lessons.filter((l) => l.id !== lesson.id), lesson],
+      lessons: [...old.lessons.filter((l) => !lessons.some(next => next.id === l.id)), ...lessons],
       templates,
     } satisfies Library),
   );

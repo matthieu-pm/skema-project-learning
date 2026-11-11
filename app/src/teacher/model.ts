@@ -1,6 +1,6 @@
 import { courseIssues, cloneCourse } from "./course.ts";
 import type { Course, AppliedCourse } from "./course.ts";
-import type { Answers } from "../onboarding";
+import { teacherLanguageLevels, type Answers } from "../onboarding.ts";
 export type Student = {
   id: string;
   name: string;
@@ -24,6 +24,7 @@ export type Lesson = {
   savedEditor?: Course;
   savedAt?: string;
   publishedEditor?: AppliedCourse;
+  assignments?: AppliedCourse[];
   id: string;
   title: string;
   outcome: string;
@@ -65,6 +66,8 @@ export type Profile = {
   languages: string;
   levels: string;
   approach: string;
+  experience?: string;
+  languageLevels?: Record<string, string[]>;
   format: string;
   city: string;
   duration: string;
@@ -311,6 +314,8 @@ export function initialProfile(a?: Answers): Profile {
     name: a?.name || "Gilbert",
     languages: a?.teachingLanguages.join(", ") || "French, English",
     levels: a?.teachingLevels.join(", ") || "A1, A2, B1, B2",
+    experience: a?.teachingExperience || "",
+    languageLevels: a ? teacherLanguageLevels(a) : { French: ["A1", "A2", "B1", "B2"], English: ["A1", "A2", "B1", "B2"] },
     approach:
       a?.approach ||
       "Practical conversations, thoughtful feedback, and lessons that feel like you.",
@@ -417,6 +422,7 @@ export function adaptLesson(lesson: Lesson, student: Student): Lesson {
       : undefined,
     savedEditor: undefined,
     publishedEditor: undefined,
+    assignments: undefined,
     savedAt: undefined,
     sourceId: lesson.id,
     studentId: student.id,
