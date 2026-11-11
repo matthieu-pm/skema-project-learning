@@ -33,3 +33,7 @@ Direct preview: `/?learner=1&view=web&flow=teacher&teacherId=gilbert`; use `view
 Evidence: `desktop-curriculum.jpg`, `iphone-overview.jpg`, `iphone-curriculum.jpg`, `pixel-curriculum.jpg`. These show local fictional sample content.
 
 Practice wording follow-up (11 November): updated all app-owned spelling, including the block-purpose discriminator and sample copy. Legacy library records normalize on read without rewriting authored text or stored snapshots. Build and 28 runtime hashes passed; 35 teacher tests (including legacy saved drafts) and 7 editor/profile browser checks passed. Current built-screen evidence: `practice-spelling.jpg`. Historical captures are preserved.
+
+## Production release
+
+The user subsequently authorized merge/deployment. [PR #6](https://github.com/matthieu-pm/skema-project-learning/pull/6) merged as `81e98092c6bab4d2eadfe59a7d505a6e567e7055`, with the same tree as tested `41322c1`. Fresh checks: 84 unit/worker tests, 25 production-browser tests, build and all 28 runtime hashes passed. Vercel Git production deployment `dpl_2zhbCRwoof6mX4hxd3HmD2jdqb3C` is Ready and assigned to [the stable domain](https://skema-project-learning.vercel.app). Hosted desktop profile → curriculum navigation and vocabulary expansion showed the final Practice spelling. iPhone direct entry retained all four navigation tabs and measured 393px content/scroll width. Both browser warning/error logs were empty. Captures: `production-desktop.jpg`, `production-iphone.jpg`. Local main is synchronized; this follow-up evidence remains local.

@@ -9,7 +9,7 @@ export type Booking = {
   id: string; teacherId: string; slotId: string; start: string; end: string;
   format: LessonFormat; status: "confirmed" | "cancelled"; paymentStatus: "paid";
   rate: number; duration: number; review?: { rating: number; text: string; date: string };
-  requestId?: string;
+  requestId?: string; preparationId?: string;
 };
 export type SearchFilters = {
   language?: string; formats?: LessonFormat[]; day?: "Any day" | "Today" | "Tomorrow"; query?: string;
@@ -130,5 +130,5 @@ export function classifyLesson(booking: Booking, now: Date): LessonCategory | nu
 export function fixtureBookings(now: Date): Booking[] {
   const day = parisDay(now);
   const make = (id: string, teacher: Teacher, start: Date): Booking => ({ id, teacherId: teacher.id, slotId: `sample-${id}`, start: start.toISOString(), end: new Date(start.getTime() + teacher.duration * 60_000).toISOString(), format: "Online", status: "confirmed", paymentStatus: "paid", rate: teacher.rate, duration: teacher.duration });
-  return [make("sample-ongoing", teachers[0], new Date(now.getTime() - 15 * 60_000)), make("sample-upcoming", teachers[1], parisTime(addDays(day, 1), 13)), make("sample-past", teachers[2], parisTime(addDays(day, -2), 14))];
+  return [make("sample-ongoing", teachers[0], new Date(now.getTime() - 15 * 60_000)), make("sample-upcoming", teachers[0], parisTime(addDays(day, 1), 13)), make("sample-past", teachers[2], parisTime(addDays(day, -2), 14))];
 }
