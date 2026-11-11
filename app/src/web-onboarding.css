@@ -66,3 +66,21 @@ body:has(.web-onboarding) #root { display: none; }
   .web-onboarding [data-web-step='welcome'] .actions > button { flex: 1 1 100%; }
   .web-onboarding .options.languages, .web-onboarding .teaching-level-options { grid-template-columns: 1fr; }
 }
+
+.web-onboarding.web-teacher-review .web-setup-main { max-width: 720px; padding-top: 32px; }
+.web-onboarding.web-teacher-review .web-step-meta { margin-bottom: 24px; }
+.web-onboarding.web-teacher-review .guide { margin-bottom: 32px; }
+.web-onboarding.web-teacher-review .teacher-profile-review { gap: 24px; }
+.web-onboarding.web-teacher-review .teacher-review-section { padding-bottom: 24px; }
+.web-onboarding.web-teacher-review .teacher-review-identity h2 { font-size: 24px; }
+.web-onboarding.web-teacher-review .teacher-review-approach { max-width: 62ch; }
+.web-onboarding .teacher-review-actions { width: min(100% - 48px, 672px); min-height: 96px; padding-block: 24px; }
+.web-onboarding .teacher-review-actions::before { inset-inline: calc((672px - 100vw) / 2); }
+.web-onboarding .teacher-review-actions > .text-button { max-width: none; }
+@media (max-width: 620px) {
+  .web-onboarding.web-teacher-review .web-setup-main { padding-top: 28px; }
+  .web-onboarding.web-teacher-review .guide { margin-bottom: 28px; }
+  .web-onboarding .teacher-review-actions { gap: 10px; padding-block: 20px 24px; }
+  .web-onboarding .teacher-review-actions > .primary { flex: 1 1 100%; order: 0; }
+  .web-onboarding .teacher-review-actions > .text-button { flex: 1 1 100%; order: 1; margin: 0; text-align: center; }
+}

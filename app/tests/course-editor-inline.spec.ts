@@ -106,7 +106,7 @@ test("phone direct editing keeps keyboard behavior and shares values with the Pr
 test("a new lesson presents a centered empty outline without the removed helper paragraphs", async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 1000 });
   await page.goto("/?teacher=1&view=web&flow=lessons");
-  await page.getByRole("button", { name: "New lesson", exact: true }).click();
+  await page.locator(".teacher-web .tw-content").getByRole("button", { name: "New lesson", exact: true }).click();
   const editor = page.locator(".teacher-web .ce-editor");
   const empty = editor.getByText("Add a module to start building your lesson.", { exact: true });
   await expect(empty).toBeVisible();

@@ -55,7 +55,7 @@ for (const mobile of [false, true]) {
     await expect(screen().getByRole("button", { name: "Leave a review", exact: true })).toBeVisible();
     await screen().getByRole("button", { name: "Leave a review", exact: true }).click();
     const nav = mobile ? page.getByTestId("flow-fixed-footer").getByRole("navigation", { name: "Learning workspace" }) : page.getByRole("navigation", { name: "Learning workspace" });
-    await expect(nav.getByRole("button")).toHaveCount(4);
+    await expect(nav.getByRole("button")).toHaveCount(mobile ? 4 : 5);
     await expect(nav.getByRole("button", { name: "Lessons", exact: true })).toHaveAttribute("aria-current", "page");
     await screen().getByRole("button", { name: "5 stars", exact: true }).click();
     await screen().getByRole("textbox", { name: "Your review", exact: true }).fill("Patient explanations and useful practice.");

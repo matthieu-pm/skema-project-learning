@@ -1,0 +1,19 @@
+{
+  "projectName": "mimo-prototype",
+  "projectId": "prj_SEpdrBUQD5HcdNc5GRT73OKvrcrm",
+  "team": "matthieu-pm",
+  "teamId": "team_KddvwwnftxOOhP8UymRnP0PX",
+  "preview": {
+    "id": "dpl_3xM8FUraNsqJo1FfFpbVxfjKjgbk",
+    "url": "https://mimo-prototype-odn4lkepx-matthieu-pm.vercel.app",
+    "readyState": "READY",
+    "target": null,
+    "aliases": []
+  },
+  "authentication": "Inherited Vercel Authentication retained",
+  "source": "Complete current app snapshot staged outside Git. Excluded environment files, dependencies, QA artifacts, logs, Git metadata and generated build output.",
+  "build": "npm ci; npm run build; TypeScript; Vite; dist/client; 28 protected runtime hashes passed",
+  "verification": "Local 80 unit/worker tests; all 37 distinct browser cases verified (29 app-flow and 8 protected-runtime cases), combining the full run and targeted rerun after scoping an existing ambiguous test locator. Native in-app visual and keyboard review documented in verification.md. Remote build Ready and preview target confirmed through Vercel metadata. Hosted URL was not fetched and hosted flows were not re-tested.",
+  "production": "No promotion; prior production aliases preserved",
+  "git": "No commit or push"
+}

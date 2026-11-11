@@ -16,7 +16,8 @@ import "./shadcn.css";
 import "./teacher.css";
 import "./uxcel.css";
 import "./minimal.css";
-import { SidebarProvider, SidebarInset, SidebarTrigger } from "./ui/sidebar";
+import "../workspace-sidebar.css";
+import { SidebarProvider, SidebarInset, SidebarTrigger, useSidebar } from "./ui/sidebar";
 import { WebSidebar } from "./WebSidebar";
 const tabs = [
   ["students", "Students", "students"],
@@ -72,6 +73,10 @@ const titles: Record<string, string> = {
   payout: "Payout",
   identity: "Identity check",
 };
+function WebNavigationTrigger() {
+  const { isMobile } = useSidebar();
+  return isMobile ? <SidebarTrigger static aria-label="Open navigation" /> : null;
+}
 function Toolbar({
   route,
   navigate,
@@ -87,7 +92,7 @@ function Toolbar({
   return (
     <header className="tw-toolbar">
       <div className="tw-toolbar-left">
-        {!mobile && <SidebarTrigger />}
+        {!mobile && <WebNavigationTrigger />}
         {(canGoBack || route.page === "editor") && (
           <button
             className="tw-icon-button"
@@ -247,7 +252,7 @@ export default function TeacherWorkspace({
             initial={screenFor(mobileRoot.route)}
           />
         ) : (
-          <SidebarProvider className="tw-web-shell" style={{ "--sidebar-width": "232px" } as CSSProperties}>
+          <SidebarProvider className="tw-web-shell mimo-web-shell" style={{ "--sidebar-width": "248px", "--sidebar-width-icon": "64px" } as CSSProperties}>
             <WebSidebar route={route} navigate={navigate} />
             <SidebarInset className="tw-web-main">
               <Toolbar

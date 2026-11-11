@@ -15,6 +15,7 @@ import {
   type ButtonHTMLAttributes,
 } from "react";
 import { Icon, CheckIcon } from "./teacher/icons";
+import { Button as SharedButton } from "./teacher/ui/button";
 import { createPortal } from "react-dom";
 const TeacherWorkspace = lazy(() => import("./teacher/TeacherWorkspace"));
 const LearnerWorkspace = lazy(() => import("./learner/LearnerWorkspace"));
@@ -171,9 +172,11 @@ function Note({ children }: { children: ReactNode }) {
 }
 function ActionButton({
   static: isStatic = false,
+  className,
   ...props
 }: ButtonHTMLAttributes<HTMLButtonElement> & { static?: boolean }) {
-  return <button type="button" data-static={isStatic || undefined} {...props} />;
+  const classes = className?.split(/\s+/) || [];
+  return <SharedButton static={isStatic} variant={classes.includes("secondary") ? "outline" : classes.some(name => name === "text-button" || name === "inline-link") ? "ghost" : "default"} className={className} {...props} />;
 }
 function Field({
   label,
@@ -350,7 +353,7 @@ const headings: Partial<Record<Step, string>> = {
   duration: "How long is a lesson?",
   rate: "What’s your price per lesson?",
   "persona-link": "Your Persona ID. A quicker hello.",
-  "teacher-review": "Here’s your teaching profile.",
+  "teacher-review": "Review your teaching profile",
   "identity-intro": "A little trust goes a long way.",
   "legal-name": "What’s your full legal name?",
   "date-of-birth": "When were you born?",
@@ -543,7 +546,7 @@ function Footer({ step, inline = false }: { step: Step; inline?: boolean }) {
     );
   return (
     <div
-      className={`actions ${optional[step] || step === "welcome" ? "two-actions" : ""}`}
+      className={`actions ${optional[step] || step === "welcome" ? "two-actions" : ""} ${step === "teacher-review" ? "teacher-review-actions" : ""}`}
     >
       <ActionButton className="primary" disabled={mainDisabled} onClick={submit}>
         {editingReview &&
@@ -627,6 +630,10 @@ function Screen({ step }: { step: Step }) {
   const active = flow.current.id === step;
   const guardian = needsGuardian(a);
   const learningFormats = learningFormatsFor(a);
+  const reviewLevels = [...a.teachingLevels].sort((left, right) => {
+    const order = ["A1", "A2", "B1", "B2", "C1", "C2"];
+    return order.indexOf(left) - order.indexOf(right);
+  });
   const isLevel = step === "level" || step.startsWith("level-");
   const levelLanguage = step.startsWith("level-")
     ? step.slice(6)
@@ -695,6 +702,12 @@ function Screen({ step }: { step: Step }) {
     </div>
   );
   const mediaHeading = step === "photo" || step === "resource";
+  const editTeacherSection = (target: Step) => {
+    keyboard.hide();
+    setError("");
+    setup.setEditingReview(true);
+    flow.push(screens[target]);
+  };
   const Scroll = setup.web ? "div" : MobileScroll;
   return (
     <Scroll
@@ -1637,48 +1650,46 @@ function Screen({ step }: { step: Step }) {
           </p>
         )}
         {step === "teacher-review" && (
-          <div className="setup-summary">
-            {setup.photo?.type.startsWith("image/") && (
-              <img
-                className="summary-photo"
-                src={setup.photo.url}
-                alt="Your profile"
-              />
-            )}
-            <h2>{a.name}</h2>
-            <p>
-              {a.teachingLanguages.join(", ")} · {a.teachingLevels.join(", ")}
-            </p>
-            <blockquote>{a.approach}</blockquote>
-            <p>
-              {a.format || "Format to decide"}
-              {a.city ? ` · ${a.city}` : ""}
-            </p>
-            <p>Lesson duration: {a.duration || "Not set"}</p>
-            <p>
-              Price per lesson: <strong>{lessonPriceLabel(a.rate, a.freeConfirmed)}</strong>
-            </p>
-            <Note>Your profile remains a draft until you’re ready.</Note>
-            <div className="setup-review-edits">
-              {[
-                ["teacher-profile", "Edit profile"],
-                ["teacher-subjects", "Edit languages and levels"],
-                ["teacher-lessons", "Edit lesson details"],
-              ].map(([target, label]) => (
-                <button
-                  className="inline-link"
-                  key={target}
-                  onClick={() => {
-                    keyboard.hide();
-                    setError("");
-                    setup.setEditingReview(true);
-                    flow.push(screens[target as Step]);
-                  }}
-                >
-                  {label}
-                </button>
-              ))}
-            </div>
+          <div className="teacher-profile-review">
+            <section className="teacher-review-section teacher-review-profile" aria-label="Teaching profile">
+              <div className="teacher-review-identity">
+                <span className="teacher-review-avatar" aria-hidden="true">
+                  {a.name.trim().split(/\s+/).slice(0, 2).map(part => part[0]).join("").toUpperCase() || "?"}
+                  {setup.photo?.type.startsWith("image/") && <img src={setup.photo.url} alt="" onError={event => { event.currentTarget.style.display = "none"; }} />}
+                </span>
+                <div>
+                  <h2>{a.name || "Your name"}</h2>
+                  <span className="teacher-review-status">Draft profile</span>
+                </div>
+                <SharedButton variant="ghost" size="sm" className="teacher-review-edit" aria-label="Edit profile" onClick={() => editTeacherSection("teacher-profile")}>Edit</SharedButton>
+              </div>
+              <p className="teacher-review-approach">{a.approach || "Add a short introduction to your teaching."}</p>
+            </section>
+
+            <section className="teacher-review-section" aria-labelledby="teacher-review-languages-heading">
+              <div className="teacher-review-section-heading">
+                <h2 id="teacher-review-languages-heading">Languages and levels</h2>
+                <SharedButton variant="ghost" size="sm" className="teacher-review-edit" aria-label="Edit languages and levels" onClick={() => editTeacherSection("teacher-subjects")}>Edit</SharedButton>
+              </div>
+              <dl className="teacher-review-details">
+                <div><dt>Teaching languages</dt><dd>{a.teachingLanguages.join(" · ") || "Not set"}</dd></div>
+                <div><dt>Levels</dt><dd>{reviewLevels.join(" · ") || "Not set"}</dd></div>
+              </dl>
+            </section>
+
+            <section className="teacher-review-section" aria-labelledby="teacher-review-lessons-heading">
+              <div className="teacher-review-section-heading">
+                <h2 id="teacher-review-lessons-heading">Lesson details</h2>
+                <SharedButton variant="ghost" size="sm" className="teacher-review-edit" aria-label="Edit lesson details" onClick={() => editTeacherSection("teacher-lessons")}>Edit</SharedButton>
+              </div>
+              <dl className="teacher-review-details">
+                <div><dt>Lesson duration</dt><dd className={!a.duration ? "teacher-review-unset" : undefined}>{a.duration || "Not set"}</dd></div>
+                <div><dt>Price per lesson</dt><dd className={!a.rate.trim() ? "teacher-review-unset" : undefined}>{lessonPriceLabel(a.rate, a.freeConfirmed)}</dd></div>
+                <div><dt>Meeting format</dt><dd className={!a.format ? "teacher-review-unset" : undefined}>{a.format || "Not set"}</dd></div>
+                {a.format !== "Online" && <div><dt>City or neighbourhood</dt><dd className={!a.city.trim() ? "teacher-review-unset" : undefined}>{a.city || "Not set"}</dd></div>}
+              </dl>
+            </section>
+            <p className="teacher-review-note">Your profile remains a draft until you’re ready.</p>
           </div>
         )}
         {step === "guardian-handoff" && (

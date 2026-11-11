@@ -1,0 +1,116 @@
+/* Attribute specificity lets the primitive own its states across legacy screen styles. */
+.app-button[data-variant][data-size][data-pressable] {
+  --app-button-edge: 0 0 0 1px oklch(0 0 0 / .08), 0 1px 2px -1px oklch(0 0 0 / .08), 0 2px 4px oklch(0 0 0 / .035);
+  --app-button-edge-hover: 0 0 0 1px oklch(0 0 0 / .13), 0 1px 2px -1px oklch(0 0 0 / .08), 0 2px 4px oklch(0 0 0 / .045);
+  --app-button-padding-inline: 14px;
+  box-sizing: border-box;
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 36px;
+  padding: 8px var(--app-button-padding-inline);
+  border: 1px solid transparent;
+  border-radius: 6px;
+  background: #171717;
+  color: #fff;
+  box-shadow: var(--app-button-edge);
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 1.35;
+  letter-spacing: normal;
+  text-transform: none;
+  text-decoration: none;
+  white-space: nowrap;
+  vertical-align: middle;
+  cursor: pointer;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  transform: none;
+  scale: 1;
+  transition: scale 150ms ease-out, background-color 120ms ease, border-color 120ms ease, color 120ms ease, box-shadow 120ms ease;
+}
+.app-button[data-variant][data-size][data-pressable] > svg {
+  flex-shrink: 0;
+  pointer-events: none;
+  stroke-width: 2;
+}
+.app-button[data-variant][data-size][data-pressable] > svg:not(.google-mark) { width: 16px; height: 16px; }
+.app-button[data-variant][data-size][data-pressable]:not([data-size^="icon"]):has(> svg:first-child) { padding-inline-start: calc(var(--app-button-padding-inline) - 2px); }
+.app-button[data-variant][data-size][data-pressable]:not([data-size^="icon"]):has(> svg:last-child) { padding-inline-end: calc(var(--app-button-padding-inline) - 2px); }
+.app-button[data-size][data-pressable][data-variant="default"] { background: #171717; color: #fff; border-color: transparent; }
+.app-button[data-size][data-pressable][data-variant="outline"] { background: #fff; color: #171717; border-color: transparent; }
+.app-button[data-size][data-pressable][data-variant="secondary"] { background: #f5f5f5; color: #171717; border-color: transparent; }
+.app-button[data-size][data-pressable][data-variant="destructive"] {
+  --app-button-edge: 0 0 0 1px rgb(180 35 24 / .2), 0 1px 2px -1px oklch(0 0 0 / .06), 0 2px 4px oklch(0 0 0 / .025);
+  --app-button-edge-hover: 0 0 0 1px rgb(180 35 24 / .36), 0 1px 2px -1px oklch(0 0 0 / .08), 0 2px 4px oklch(0 0 0 / .035);
+  background: #fff;
+  color: #b42318;
+  border-color: transparent;
+}
+.app-button[data-size][data-pressable][data-variant="ghost"],
+.app-button[data-size][data-pressable][data-variant="link"] { background: transparent; color: #525252; border-color: transparent; box-shadow: none; }
+.app-button[data-size][data-pressable][data-variant="link"] { text-decoration: underline; text-underline-offset: 3px; }
+
+.app-button[data-variant][data-pressable][data-size="xs"] { --app-button-padding-inline: 8px; min-height: 28px; padding: 4px var(--app-button-padding-inline); gap: 5px; font-size: 12px; }
+.app-button[data-variant][data-pressable][data-size="sm"] { --app-button-padding-inline: 12px; min-height: 32px; padding: 6px var(--app-button-padding-inline); gap: 6px; }
+.app-button[data-variant][data-pressable][data-size="lg"] { --app-button-padding-inline: 18px; min-height: 40px; padding: 10px var(--app-button-padding-inline); font-size: 14px; }
+.app-button[data-variant][data-pressable][data-size^="icon"] { width: 36px; min-width: 36px; min-height: 36px; padding: 0; }
+.app-button[data-variant][data-pressable][data-size="icon-xs"] { width: 28px; min-width: 28px; min-height: 28px; }
+.app-button[data-variant][data-pressable][data-size="icon-sm"] { width: 32px; min-width: 32px; min-height: 32px; }
+.app-button[data-variant][data-pressable][data-size="icon-lg"] { width: 40px; min-width: 40px; min-height: 40px; }
+.app-button.lw-button[data-variant][data-size][data-pressable] { min-height: 38px; }
+
+/* Old :active recipes cannot turn a keyboard action into a pointer press. */
+.app-button[data-variant][data-size][data-pressable]:not([data-pointer-pressed="true"]):not(:disabled):is(:active, :focus, :focus-visible) { scale: 1; transform: none; }
+.app-button[data-variant][data-size][data-pressable]:focus-visible {
+  outline: 2px solid #171717;
+  outline-offset: 3px;
+  transition: none;
+}
+.app-button[data-variant][data-size][data-pressable]:is(:disabled, [aria-disabled="true"]) {
+  color: #969696;
+  background: #f5f5f5;
+  border-color: transparent;
+  box-shadow: 0 0 0 1px oklch(0 0 0 / .06);
+  opacity: .65;
+  cursor: default;
+  pointer-events: none;
+  transform: none;
+  scale: 1;
+}
+.app-button[data-size][data-pressable][data-variant="ghost"]:is(:disabled, [aria-disabled="true"]),
+.app-button[data-size][data-pressable][data-variant="link"]:is(:disabled, [aria-disabled="true"]) { background: transparent; box-shadow: none; }
+.app-button[data-variant][data-size][data-pressable="true"][data-pointer-pressed="true"]:not(:disabled):not([aria-disabled="true"]):not(:focus-visible) { scale: .96; }
+.app-button[data-size][data-pressable][data-variant="default"]:is([data-pointer-pressed="true"], :active:focus-visible):not(:disabled):not([aria-disabled="true"]) { background: #383838; }
+.app-button[data-size][data-pressable][data-variant="outline"]:is([data-pointer-pressed="true"], :active:focus-visible):not(:disabled):not([aria-disabled="true"]) { background: #f0f0f0; }
+.app-button[data-size][data-pressable][data-variant="secondary"]:is([data-pointer-pressed="true"], :active:focus-visible):not(:disabled):not([aria-disabled="true"]) { background: #e8e8e8; }
+.app-button[data-size][data-pressable][data-variant="destructive"]:is([data-pointer-pressed="true"], :active:focus-visible):not(:disabled):not([aria-disabled="true"]) { background: #fce9e7; color: #9b1c13; }
+.app-button[data-size][data-pressable][data-variant="ghost"]:is([data-pointer-pressed="true"], :active:focus-visible):not(:disabled):not([aria-disabled="true"]) { background: #ededed; color: #171717; }
+
+@media (hover: hover) and (pointer: fine) {
+  .app-button[data-variant][data-size][data-pressable]:hover:not(:disabled):not([aria-disabled="true"]) { box-shadow: var(--app-button-edge-hover); }
+  .app-button[data-size][data-pressable][data-variant="default"]:hover:not(:disabled) { background: #303030; }
+  .app-button[data-size][data-pressable][data-variant="outline"]:hover:not(:disabled) { background: #fafafa; }
+  .app-button[data-size][data-pressable][data-variant="secondary"]:hover:not(:disabled) { background: #ededed; }
+  .app-button[data-size][data-pressable][data-variant="destructive"]:hover:not(:disabled) { background: #fff5f5; color: #9b1c13; }
+  .app-button[data-size][data-pressable][data-variant="ghost"]:hover:not(:disabled),
+  .app-button[data-size][data-pressable][data-variant="link"]:hover:not(:disabled) { color: #171717; background: #f5f5f5; box-shadow: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .app-button[data-variant][data-size][data-pressable] { transition-property: background-color, border-color, color, box-shadow; }
+  .app-button[data-variant][data-size][data-pressable="true"][data-pointer-pressed="true"]:not(:disabled):not([aria-disabled="true"]):not(:focus-visible) { scale: 1; }
+}
+@media (forced-colors: active) {
+  .app-button[data-variant][data-size][data-pressable] { border-color: ButtonText; box-shadow: none; forced-color-adjust: auto; }
+  .app-button[data-variant][data-size][data-pressable]:focus-visible { outline-color: Highlight; }
+  .app-button[data-variant][data-size][data-pressable]:is(:disabled, [aria-disabled="true"]) { border-color: GrayText; color: GrayText; }
+}
+
+/* Workspace CTAs keep phone hit areas; the pinned editor footer stays compact. */
+:is(.teacher-mobile, .learner-mobile) .app-button[data-variant][data-size][data-pressable] { min-height: 44px; padding-block: 10px; font-size: 14px; }
+.learning-app .app-button[data-variant][data-size][data-pressable]:is(.primary, .secondary) { min-height: 44px; font-size: 14px; }
+.ce-phone-actions .app-button[data-variant][data-size][data-pressable] { --app-button-padding-inline: 6px; min-height: 36px; padding: 7px var(--app-button-padding-inline); gap: 5px; font-size: 11px; }
+.ce-phone-actions .app-button[data-variant][data-size][data-pressable] > svg { width: 14px; height: 14px; }

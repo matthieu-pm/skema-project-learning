@@ -120,7 +120,7 @@ export default function WebOnboarding({
   }, [current.key, current.id]);
 
   return (
-    <div className="learning-app updated-onboarding web-onboarding">
+    <div className={`learning-app updated-onboarding web-onboarding ${step === "teacher-review" ? "web-teacher-review" : ""}`}>
       <header className="web-setup-header">
         <nav aria-label="Onboarding">
           {flow.canGoBack ? (

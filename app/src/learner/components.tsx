@@ -3,13 +3,14 @@ import SelectControl from "../SelectControl";
 import ProfilePortrait from "../ProfilePortrait";
 import { KeyboardInput, KeyboardTextarea, useKeyboard } from "../mobile";
 import { Icon } from "../teacher/icons";
+import { Button as SharedButton } from "../teacher/ui/button";
 import { ratingSummary, type Teacher } from "./model";
 
 export const LearnerPresentation = createContext(false);
 export function Button({ children, onClick, secondary = false, danger = false, disabled = false, icon, static: isStatic = false }: {
   children: ReactNode; onClick: () => void; secondary?: boolean; danger?: boolean; disabled?: boolean; icon?: string; static?: boolean;
 }) {
-  return <button className={`lw-button ${secondary ? "lw-secondary" : "lw-primary"} ${danger ? "lw-danger" : ""}`} data-ui-static={isStatic || undefined} data-ui-icon={icon ? "leading" : undefined} onClick={onClick} disabled={disabled}>{icon && <Icon name={icon} size={18} />}<span>{children}</span></button>;
+  return <SharedButton className={`lw-button ${secondary ? "lw-secondary" : "lw-primary"} ${danger ? "lw-danger" : ""}`} variant={danger ? "destructive" : secondary ? "outline" : "default"} static={isStatic} data-ui-static={isStatic || undefined} data-ui-icon={icon ? "leading" : undefined} onClick={onClick} disabled={disabled}>{icon && <Icon name={icon} size={18} />}<span>{children}</span></SharedButton>;
 }
 export function Field({ label, value, onChange, multiline = false, placeholder, maxLength }: {
   label: string; value: string; onChange: (value: string) => void; multiline?: boolean; placeholder?: string; maxLength?: number;

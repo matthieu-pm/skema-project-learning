@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useMemo, useState, type ReactNode } from "react";
+import { createContext, useContext, useEffect, useMemo, useState, type CSSProperties, type ReactNode } from "react";
 import type { Answers } from "../onboarding";
 import { learningFormatsFor } from "../onboarding";
 import { FlowStack, MobileScroll, useKeyboard, type FlowScreen } from "../mobile";
@@ -6,6 +6,8 @@ import { Icon } from "../teacher/icons";
 import { Avatar, LearnerAvatar, Button, Empty, ErrorMessage, Field, LearnerPresentation, Panel, Rating, Select } from "./components";
 import { availableSlots, classifyLesson, createSlots, filterTeachers, fixtureBookings, teachers, type Booking, type LessonFormat, type SearchFilters, type Slot, type SortOption, type Teacher } from "./model";
 import { cancelBooking, instantBook, readBookings, saveReview, subscribeBookings } from "./storage";
+import { WorkspaceSidebar } from "../WorkspaceSidebar";
+import { SidebarInset, SidebarProvider, SidebarTrigger, useSidebar } from "../teacher/ui/sidebar";
 import "./learner.css";
 
 type Category = "Ongoing" | "Upcoming" | "Past";
@@ -21,7 +23,7 @@ const Learner = createContext<State>(null!);
 const useLearner = () => useContext(Learner);
 const categories: Category[] = ["Ongoing", "Upcoming", "Past"];
 const titles: Record<Page, string> = { home: "Home", search: "Find a teacher", teacher: "Teacher profile", reviews: "Teacher reviews", book: "Book a lesson", checkout: "Payment", success: "Booking confirmed", lessons: "Lessons", lesson: "Your lesson", cancel: "Cancel lesson", review: "Leave a review", messages: "Messages", profile: "Profile" };
-const mainNav = [ ["home", "Home", "book"], ["lessons", "Lessons", "calendar"], ["search", "Search", "search"], ["profile", "Profile", "person"] ] as const;
+const mainNav = [ ["home", "Home", "home"], ["lessons", "Lessons", "calendar"], ["search", "Search", "search"], ["profile", "Profile", "person"] ] as const;
 function activeTab(route: Route) {
   if (["teacher", "reviews", "book", "checkout"].includes(route.page)) return "search";
   if (["success", "lesson", "cancel", "review"].includes(route.page)) return "lessons";
@@ -40,9 +42,13 @@ function useTeacher(id?: string) { return useLearner().catalog.find(teacher => t
 function Navigation({ route, navigate }: { route: Route; navigate: Navigate }) {
   return <nav className="lw-navigation" aria-label="Learning workspace">{mainNav.map(([page, label, icon]) => <button key={page} aria-current={activeTab(route) === page ? "page" : undefined} onClick={() => navigate({ page }, true)}><Icon name={icon} /><span>{label}</span></button>)}</nav>;
 }
+function DesktopNavigationTrigger() {
+  const { isMobile } = useSidebar();
+  return isMobile ? <SidebarTrigger static aria-label="Open navigation" className="lw-sidebar-trigger" /> : null;
+}
 function Toolbar({ route, navigate, back, canGoBack }: { route: Route; navigate: Navigate; back: () => void; canGoBack: boolean }) {
   const { mobile } = useLearner();
-  return <header className="lw-toolbar"><div>{canGoBack && <button className="lw-icon-button" onClick={back} aria-label="Go back"><Icon name="back" /></button>}<span>{mobile ? titles[route.page] : <>Learning workspace <span className="lw-breadcrumb">/ {titles[route.page]}</span></>}</span></div><div>{!mobile && <a className="lw-preview-link" href="/?learner=1&view=mobile">Mobile app <Icon name="arrow" size={16} /></a>}<button className="lw-icon-button" aria-label="Open messages" onClick={() => navigate({ page: "messages" })}><Icon name="message" /></button></div></header>;
+  return <header className="lw-toolbar"><div>{!mobile && <DesktopNavigationTrigger />}{canGoBack && <button className="lw-icon-button" onClick={back} aria-label="Go back"><Icon name="back" /></button>}<span>{mobile ? titles[route.page] : <>Learning workspace <span className="lw-breadcrumb">/ {titles[route.page]}</span></>}</span></div><div>{!mobile && <a className="lw-preview-link" href="/?learner=1&view=mobile">Mobile app <Icon name="arrow" size={16} /></a>}<button className="lw-icon-button" aria-label="Open messages" onClick={() => navigate({ page: "messages" })}><Icon name="message" /></button></div></header>;
 }
 function Heading({ title, description, action }: { title: string; description?: string; action?: ReactNode }) {
   return <div className="lw-page-heading"><div><h1>{title}</h1>{description && <p>{description}</p>}</div>{action}</div>;
@@ -177,6 +183,44 @@ function initialRoute(): Route {
   const flow = new URLSearchParams(window.location.search).get("flow");
   return { page: (["search", "lessons", "profile"].includes(flow || "") ? flow : "home") as Page };
 }
+function DesktopWorkspace({ route, navigate, back, canGoBack }: {
+  route: Route; navigate: Navigate; back: () => void; canGoBack: boolean;
+}) {
+  const { answers, storageError } = useLearner();
+  const name = answers?.name || "Alex";
+  const initials = name.trim().split(/\s+/).slice(0, 2).map(part => part[0]).join("").toUpperCase() || "A";
+  return (
+    <SidebarProvider className="mimo-web-shell lw-web-shell" style={{ "--sidebar-width": "248px", "--sidebar-width-icon": "64px" } as CSSProperties}>
+      <WorkspaceSidebar
+        workspaceLabel="Learning workspace"
+        homeHref="/?learner=1&view=web"
+        groups={[
+          { label: "Workspace", items: mainNav.map(([page, label, icon]) => ({
+            id: page, label, icon, active: route.page !== "messages" && activeTab(route) === page,
+            onSelect: () => navigate({ page }, true),
+          })) },
+          { label: "Conversations", items: [{
+            id: "messages", label: "Messages", icon: "message", active: route.page === "messages",
+            onSelect: () => navigate({ page: "messages" }, true),
+          }] },
+        ]}
+        primaryAction={{ id: "find-teacher", label: "Find a teacher", icon: "search", onSelect: () => navigate({ page: "search" }, true) }}
+        supportLinks={[{ id: "mobile-app", label: "Mobile app", icon: "video", href: "/?learner=1&view=mobile" }]}
+        account={{ name, role: "Learner account", initials, ariaLabel: "Learner account menu", items: [
+          { id: "profile", label: "Learning profile", icon: "person", onSelect: () => navigate({ page: "profile" }, true) },
+          { id: "onboarding", label: "Replay onboarding", icon: "back", href: "/?view=web" },
+        ] }}
+      />
+      <SidebarInset className="lw-web-main">
+        <Toolbar route={route} navigate={navigate} back={back} canGoBack={canGoBack} />
+        <div className="lw-content" key={JSON.stringify(route)}>
+          {storageError && <ErrorMessage>{storageError}</ErrorMessage>}
+          <PageContent route={route} navigate={navigate} />
+        </div>
+      </SidebarInset>
+    </SidebarProvider>
+  );
+}
 export default function LearnerWorkspace({ mobile = false, answers }: { mobile?: boolean; answers?: Answers }) {
   const [clock] = useState(() => new Date()), [now, setNow] = useState(clock), slots = useMemo(() => createSlots(clock), [clock]);
   const [bookings, setBookings] = useState<Booking[]>([]), [storageError, setStorageError] = useState("");
@@ -192,5 +236,16 @@ export default function LearnerWorkspace({ mobile = false, answers }: { mobile?:
   const navigate: Navigate = (next, replace = false) => { keyboard.hide(); if (replace) setHistory([]); else setHistory(current => [...current, route]); setRoute(next); };
   const setRoot: Navigate = next => { keyboard.hide(); setMobileRoot(current => ({ route: next, key: current.key + 1 })); };
   const back = () => { keyboard.hide(); setRoute(history.at(-1) || { page: "home" }); setHistory(current => current.slice(0, -1)); };
-  return <Learner.Provider value={{ mobile, answers, now, slots, bookings, catalog, filters, setFilters, sort, setSort, refresh, storageError, setRoot }}><LearnerPresentation.Provider value={mobile}><div className={`learner-workspace ${mobile ? "learner-mobile" : "learner-web"}`}>{mobile ? <FlowStack key={mobileRoot.key} initial={screenFor(mobileRoot.route)} /> : <><aside className="lw-sidebar"><a className="lw-brand" href="/?learner=1&view=web" aria-label="Mimo learning workspace"><span className="lw-brand-mark" aria-hidden="true">m</span><span>mimo<small>Learning workspace</small></span></a><Navigation route={route} navigate={navigate} /><div className="lw-sidebar-bottom"><button className="lw-account-button" onClick={() => navigate({ page: "profile" })}><LearnerAvatar name={answers?.name || "Alex"} /><span><strong>{answers?.name || "Alex"}</strong><small>Learner profile</small></span><Icon name="arrow" size={15} /></button><a href="/?view=web">Replay onboarding <Icon name="arrow" size={15} /></a><span>Learning, one conversation at a time.</span></div></aside><div className="lw-web-main"><Toolbar route={route} navigate={navigate} back={back} canGoBack={history.length > 0} /><main className="lw-content" key={JSON.stringify(route)}>{storageError && <ErrorMessage>{storageError}</ErrorMessage>}<PageContent route={route} navigate={navigate} /></main></div></>}{mobile && storageError && <div className="lw-storage-error" role="alert">{storageError}</div>}</div></LearnerPresentation.Provider></Learner.Provider>;
+  return (
+    <Learner.Provider value={{ mobile, answers, now, slots, bookings, catalog, filters, setFilters, sort, setSort, refresh, storageError, setRoot }}>
+      <LearnerPresentation.Provider value={mobile}>
+        <div className={`learner-workspace ${mobile ? "learner-mobile" : "learner-web"}`}>
+          {mobile ? <FlowStack key={mobileRoot.key} initial={screenFor(mobileRoot.route)} /> : (
+            <DesktopWorkspace route={route} navigate={navigate} back={back} canGoBack={history.length > 0} />
+          )}
+          {mobile && storageError && <div className="lw-storage-error" role="alert">{storageError}</div>}
+        </div>
+      </LearnerPresentation.Provider>
+    </Learner.Provider>
+  );
 }

@@ -7,6 +7,7 @@ import { useWorkspace } from "./context";
 export { useWorkspace } from "./context";
 export type Navigate = (r: Route, replace?: boolean) => void;
 import { Icon } from "./icons";
+import { Button as SharedButton } from "./ui/button";
 export { Icon } from "./icons";
 export function TextField({
   label,
@@ -106,16 +107,16 @@ export function Button({
   static?: boolean;
 }) {
   return (
-    <button
-      type="button"
+    <SharedButton
       className={`tw-button tw-${kind}`}
-      data-static={isStatic || undefined}
+      variant={kind === "secondary" ? "outline" : kind === "quiet" ? "ghost" : kind === "danger" ? "destructive" : "default"}
+      static={isStatic}
       onClick={onClick}
       disabled={disabled}
     >
       {icon && <Icon name={icon} size={18} strokeWidth={2} />}
       <span>{children}</span>
-    </button>
+    </SharedButton>
   );
 }
 export function Badge({
