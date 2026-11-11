@@ -1,0 +1,21 @@
+{
+  "projectName": "mimo-prototype",
+  "projectId": "prj_SEpdrBUQD5HcdNc5GRT73OKvrcrm",
+  "team": "matthieu-pm",
+  "teamId": "team_KddvwwnftxOOhP8UymRnP0PX",
+  "preview": {
+    "id": "dpl_AouPEoHacFDjdPxooJqZBBQ2tBAX",
+    "url": "https://mimo-prototype-8sw33apxg-matthieu-pm.vercel.app",
+    "readyState": "READY"
+  },
+  "initialAutoProduction": {
+    "id": "dpl_2oDbfdnhe9NT4RuxrTWLmquGXZbp",
+    "url": "https://mimo-prototype-five.vercel.app",
+    "readyState": "READY"
+  },
+  "authentication": "Vercel Authentication; inherited project default retained",
+  "source": "Current local app snapshot staged outside Git; environment files, dependencies, QA, logs and generated build output excluded",
+  "build": "npm ci; npm run build; dist/client; Node 26.x",
+  "verification": "Local build, 80 unit/worker tests and 28 browser cases passed. Both Vercel builds and 28 protected runtime hashes passed; Ready state confirmed through deployment metadata. Hosted UI was not fetched or re-tested.",
+  "git": "No commit or push"
+}

@@ -42,7 +42,7 @@ export const practiceFormats = [
 export type Format =
   | (typeof teachFormats)[number]
   | (typeof practiceFormats)[number];
-export type Purpose = "Teach" | "Practise";
+export type Purpose = "Teach" | "Practice";
 export type Word = {
   id: string;
   word: string;
@@ -230,7 +230,7 @@ export const accepts = (input: string, canonical: string, alternatives = "") =>
     .filter((s) => s.trim())
     .some((s) => normalizeAnswer(input) === normalizeAnswer(s));
 export const autoAssessed = (b: CourseBlock) =>
-  b.purpose === "Practise" &&
+  b.purpose === "Practice" &&
   [
     "Vocabulary recall",
     "Flashcards",
@@ -280,7 +280,7 @@ export function blockIssues(b: CourseBlock): string[] {
     ].includes(b.format) &&
     !b.answer.trim()
   )
-    issues.push("Enter the correct answer before students practise.");
+    issues.push("Enter the correct answer before students practice.");
   if (
     b.format === "Quiz" &&
     (b.choices.length < 2 ||
@@ -291,7 +291,7 @@ export function blockIssues(b: CourseBlock): string[] {
     issues.push("Add distinct quiz options and select the correct one.");
   if (
     b.format === "Sentence construction" &&
-    b.purpose === "Practise" &&
+    b.purpose === "Practice" &&
     !accepts(b.parts.map((p) => p.text).join(" "), b.answer, b.alternatives)
   )
     issues.push(
@@ -304,7 +304,7 @@ export function blockIssues(b: CourseBlock): string[] {
         (c) => !c.title.trim() || (!c.assetId && !c.transcript.trim()),
       ))
   )
-    issues.push("Add a file or sample transcript for each clip.");
+    issues.push("Add a file or transcript for each clip.");
   if (
     [
       "Image",
@@ -364,7 +364,7 @@ export function fromLesson(l: Lesson): Course {
           {
             ...createBlock(
               type === "Speaking" ? "Role-play" : "Text box",
-              type === "Speaking" ? "Practise" : "Teach",
+              type === "Speaking" ? "Practice" : "Teach",
             ),
             title: b.title,
             text: b.content,
@@ -441,25 +441,25 @@ export function readyTemplates(): CourseTemplate[] {
       ...createModule(type),
       goal: `Build confidence with ${type.toLowerCase()}.`,
     }));
-  modules[0].blocks = [createBlock("Vocabulary recall", "Practise")];
+  modules[0].blocks = [createBlock("Vocabulary recall", "Practice")];
   modules[1].blocks = [
     createBlock("Flashcards"),
-    createBlock("Matching pairs", "Practise"),
+    createBlock("Matching pairs", "Practice"),
   ];
   modules[2].blocks = [
     createBlock("Sentence construction"),
-    createBlock("Sentence construction", "Practise"),
+    createBlock("Sentence construction", "Practice"),
   ];
   modules[3].blocks = [
     createBlock("Audio"),
     {
-      ...createBlock("Written response", "Practise"),
+      ...createBlock("Written response", "Practice"),
       text: "What does the customer order?",
     },
   ];
   modules[4].blocks = [
     {
-      ...createBlock("Spoken response", "Practise"),
+      ...createBlock("Spoken response", "Practice"),
       text: "Order a drink and ask whether you can pay by card.",
     },
   ];
@@ -487,7 +487,7 @@ export function readyTemplates(): CourseTemplate[] {
   });
   advanced.modules[0].blocks = [
     {
-      ...createBlock("Written response", "Practise"),
+      ...createBlock("Written response", "Practice"),
       text: "Should city centres be car-free? Recall two arguments for each side.",
     },
   ];
@@ -510,7 +510,7 @@ export function readyTemplates(): CourseTemplate[] {
   advanced.modules[1].blocks = [
     { ...createBlock("Flashcards"), words: vocab },
     {
-      ...createBlock("Vocabulary recall", "Practise"),
+      ...createBlock("Vocabulary recall", "Practice"),
       words: structuredClone(vocab),
     },
   ];
@@ -543,13 +543,13 @@ export function readyTemplates(): CourseTemplate[] {
       text: "Les zones piétonnes peuvent réduire la pollution et encourager le commerce local. Néanmoins, les habitants à mobilité réduite et les livraisons ont besoin d’un accès adapté. Une politique efficace doit donc prévoir des exceptions, des transports accessibles et une évaluation régulière des effets.",
     },
     {
-      ...createBlock("Written response", "Practise"),
+      ...createBlock("Written response", "Practice"),
       text: "Compare the two perspectives. Which evidence would help decide?",
     },
   ];
   advanced.modules[4].blocks = [
     {
-      ...createBlock("Spoken response", "Practise"),
+      ...createBlock("Spoken response", "Practice"),
       text: "Give a two-minute argument. Include a concession and a practical compromise.",
     },
   ];

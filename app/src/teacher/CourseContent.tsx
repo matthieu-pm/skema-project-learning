@@ -156,12 +156,12 @@ function ClipPlayer({
         )
       ) : (
         <>
-          <small>Sample playback · generated voice</small>
+
           <Button
             kind="secondary"
             onClick={() => say(clip.transcript, language)}
           >
-            Play sample
+            Read aloud
           </Button>
         </>
       )}
@@ -182,19 +182,19 @@ function ClipPlayer({
           </Button>
           <Button kind="secondary" onClick={() => setRecorded(!recorded)}>
             {recorded
-              ? "Record sample again"
-              : "Repeat after me · record sample"}
+              ? "Record again"
+              : "Repeat after me · record"}
           </Button>
           {recorded && (
             <>
               <p role="status">
-                Sample response recorded. Microphone capture is simulated.
+                Response ready.
               </p>
               <Button
                 kind="secondary"
                 onClick={() => say(clip.answer, language)}
               >
-                Play sample recording
+                Play recording
               </Button>
             </>
           )}
@@ -249,7 +249,7 @@ export function BlockSummary({ block: b }: { block: CourseBlock }) {
           <div key={c.id}>
             <span className="ce-number">{i + 1}</span>
             <strong>{c.title}</strong>
-            <span>{c.filename || "Sample audio"}</span>
+            <span>{c.filename || "Audio"}</span>
           </div>
         ))}
       </div>
@@ -344,7 +344,7 @@ export function StudentBlock({
   return (
     <div className="ce-student-block">
       <span className="ce-kicker">
-        {b.purpose === "Teach" ? "Learn" : "Practise"} · {b.format}
+        {b.purpose === "Teach" ? "Learn" : "Practice"} · {b.format}
       </span>
       <h2>{b.title}</h2>
       <p>{b.instructions}</p>
@@ -428,6 +428,7 @@ export function StudentBlock({
                   b.pairs.map((p) => (
                     <Select
                       key={p.id}
+                      disabled={submitted}
                       label={p.left}
                       value={values[p.id] || ""}
                       options={[
@@ -557,7 +558,7 @@ export function StudentBlock({
               )}
             </div>
           )}
-          {b.purpose === "Practise" && !auto && (
+          {b.purpose === "Practice" && !auto && (
             <div className="ce-response">
               {["Spoken response", "Role-play"].includes(b.format) ? (
                 <>
@@ -569,14 +570,13 @@ export function StudentBlock({
                     }}
                   >
                     {recorded
-                      ? "Record sample again"
-                      : "Record sample response"}
+                      ? "Record again"
+                      : "Record response"}
                   </Button>
                   {recorded && (
                     <>
                       <p>
-                        Sample recording ready · microphone capture is
-                        simulated.
+                        Recording ready.
                       </p>
                       <Button
                         kind="secondary"
@@ -584,7 +584,7 @@ export function StudentBlock({
                           say("Je voudrais un café, s’il vous plaît.", language)
                         }
                       >
-                        Play sample recording
+                        Play recording
                       </Button>
                     </>
                   )}
@@ -613,8 +613,7 @@ export function StudentBlock({
               </Button>
               {sent && (
                 <p role="status">
-                  Submitted in this preview. Your teacher would review this
-                  response; no automatic grade is given.
+                  Response submitted for teacher review. No automatic grade is given.
                 </p>
               )}
             </div>

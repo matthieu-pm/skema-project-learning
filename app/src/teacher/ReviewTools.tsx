@@ -180,7 +180,7 @@ function VoiceFeedbackControl({
         Voice feedback <span className="mr-muted">Optional</span>
       </h3>
       <p className="mr-muted">
-        Record or attach audio up to 20 MB. Audio stays in this browser.
+        Record or attach audio up to 20 MB.
       </p>
       <input
         hidden
@@ -223,7 +223,7 @@ function VoiceFeedbackControl({
       </div>
       {recording && (
         <p role="status">
-          Recording… Stop when you finish. Audio stays in this browser.
+          Recording… Stop when you finish.
         </p>
       )}
       {busy && <p role="status">Preparing audio…</p>}
@@ -319,10 +319,7 @@ function ReviewedResponseControl({
           <p className="mr-recording">
             Voice response · {formatTime(duration)}
           </p>
-          <p className="mr-muted">
-            Synthetic sample audio for testing review tools. This is not a real
-            student recording.
-          </p>
+
           <audio
             ref={audio}
             controls
@@ -367,7 +364,7 @@ function ReviewedResponseControl({
             </Button>
           </div>
           <details>
-            <summary>Sample transcript</summary>
+            <summary>Transcript</summary>
             <p>{block.recording.transcript}</p>
             <p className="mr-muted">
               Review the audio to assess pronunciation and fluency; the

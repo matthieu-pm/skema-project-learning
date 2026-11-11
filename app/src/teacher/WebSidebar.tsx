@@ -3,6 +3,7 @@ import { primaryTab, type Route } from "./model";
 import { useWorkspace } from "./context";
 import { Icon } from "./icons";
 import type { Navigate } from "./components";
+import ProfilePortrait from "../ProfilePortrait";
 import {
   Sidebar,
   SidebarContent,
@@ -98,7 +99,7 @@ export function WebSidebar({
   };
   return (
     <Sidebar
-      variant="inset"
+      variant="sidebar"
       collapsible="icon"
       className={`tw-shadcn-sidebar${route.page === "editor" ? " tw-editor-sidebar" : ""}`}
     >
@@ -116,9 +117,7 @@ export function WebSidebar({
           <SidebarMenuItem>
             <SidebarMenuButton size="lg" asChild>
               <a href="/?teacher=1&view=web" className="tw-sidebar-brand">
-                <span className="tw-brand-tile">
-                  <img src="/assets/onboarding/luma.png" alt="" />
-                </span>
+                <span className="tw-brand-tile" aria-hidden="true">m</span>
                 <span className="tw-brand-name">
                   <strong>mimo</strong>
                   <span>Teaching workspace</span>
@@ -160,7 +159,6 @@ export function WebSidebar({
                   </SidebarMenuButton>
                   <CollapsibleTrigger asChild>
                     <SidebarMenuAction
-                      className="data-[state=open]:rotate-90"
                       aria-label={`Expand ${section.label}`}
                     >
                       <Icon name="arrow" size={16} />
@@ -227,7 +225,7 @@ export function WebSidebar({
                   className="tw-sidebar-account"
                 >
                   <span className="tw-teacher-avatar">
-                    {profile.name.slice(0, 1).toUpperCase()}
+                    {profile.name === "Gilbert" ? <ProfilePortrait id="gilbert" initials="G" /> : profile.name.slice(0, 1).toUpperCase()}
                   </span>
                   <span className="tw-account-copy">
                     <strong>{profile.name}</strong>

@@ -1,5 +1,5 @@
 import { teacherEntryRoute } from "./entry-route";
-import { useEffect, useState } from "react";
+import { useEffect, useState, type CSSProperties } from "react";
 import {
   FlowStack,
   MobileScroll,
@@ -15,7 +15,7 @@ import { TeacherPage } from "./pages";
 import "./shadcn.css";
 import "./teacher.css";
 import "./uxcel.css";
-import "./onboarding-blend.css";
+import "./minimal.css";
 import { SidebarProvider, SidebarInset, SidebarTrigger } from "./ui/sidebar";
 import { WebSidebar } from "./WebSidebar";
 const tabs = [
@@ -70,7 +70,7 @@ const titles: Record<string, string> = {
   settings: "Account settings",
   help: "Help",
   payout: "Payout",
-  identity: "Identity preview",
+  identity: "Identity check",
 };
 function Toolbar({
   route,
@@ -247,7 +247,7 @@ export default function TeacherWorkspace({
             initial={screenFor(mobileRoot.route)}
           />
         ) : (
-          <SidebarProvider className="tw-web-shell">
+          <SidebarProvider className="tw-web-shell" style={{ "--sidebar-width": "232px" } as CSSProperties}>
             <WebSidebar route={route} navigate={navigate} />
             <SidebarInset className="tw-web-main">
               <Toolbar

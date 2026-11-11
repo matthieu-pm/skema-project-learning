@@ -52,7 +52,7 @@ export default function ReviewQueue({ navigate }: { navigate: Navigate }) {
     <Panel className="mr-queue">
       <div className="mr-heading">
         <h2>Review queue</h2>
-        <Badge tone="lilac">Sample submissions</Badge>
+        <Badge tone="lilac">Submissions</Badge>
       </div>
       <p>
         See which student responses need your attention. Completion and teacher
@@ -96,7 +96,7 @@ export default function ReviewQueue({ navigate }: { navigate: Navigate }) {
             </p>
             <p className="mr-muted">
               Submitted {r.completedAt}
-              {r.revision ? " · Attempt 2 · sample revision" : " · Attempt 1"}
+              {r.revision ? " · Attempt 2" : " · Attempt 1"}
             </p>
           </div>
           <div className="mr-queue-action">

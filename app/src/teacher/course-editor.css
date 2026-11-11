@@ -1,4 +1,4 @@
-/* Course Editor uses the workspace's existing font, surfaces and action tokens. */
+/* Module editor layout, content and interaction states. */
 .ce-editor {
   color: var(--tw-ink);
   min-width: 0;
@@ -43,7 +43,7 @@
   grid-template-columns: 224px minmax(280px, 1fr) 286px;
   align-items: start;
   border: 1px solid var(--tw-line);
-  border-radius: 16px;
+  border-radius: 6px;
   background: #f7f7fa;
 }
 .ce-layout h2 {
@@ -54,7 +54,7 @@
 .ce-properties {
   min-width: 0;
   background: white;
-  border-radius: 16px;
+  border-radius: 6px;
 }
 .ce-elements {
   border-right: 1px solid var(--tw-line);
@@ -90,7 +90,7 @@
 .ce-tabs button[aria-pressed="true"] {
   color: var(--tw-blue);
   border-bottom-color: var(--tw-blue);
-  font-weight: 700;
+  font-weight: 600;
 }
 .ce-palette {
   padding: 12px;
@@ -109,7 +109,7 @@
   gap: 9px;
   padding: 10px;
   border: 1px solid var(--tw-line);
-  border-radius: 10px;
+  border-radius: 6px;
   background: white;
   text-align: left;
   margin: 0 0 7px;
@@ -119,10 +119,12 @@
 .ce-palette-item > span {
   flex: 1;
 }
-.ce-palette-item:hover,
-.ce-module-palette > button:hover {
-  background: #f6f2ff;
-  border-color: #c7b9ef;
+@media (hover: hover) and (pointer: fine) {
+.ce-palette-item:hover:not(:disabled),
+.ce-module-palette > button:hover:not(:disabled) {
+  background: #f4f4f4;
+  border-color: #c0c0c0;
+}
 }
 .ce-module-palette {
   display: grid;
@@ -139,7 +141,7 @@
   padding: 10px 5px;
   border: 1px solid var(--tw-line);
   background: #fff;
-  border-radius: 12px;
+  border-radius: 6px;
   font-size: 12px;
 }
 .ce-module-palette svg {
@@ -164,7 +166,7 @@
   border-left: 2px solid transparent;
 }
 .ce-outline-row.selected {
-  background: #f2eeff;
+  background: #f0f0f0;
   border-left-color: var(--tw-blue);
 }
 .ce-outline-block {
@@ -185,7 +187,7 @@
 }
 .ce-outline-title span {
   font-size: 12px;
-  font-weight: 650;
+  font-weight: 600;
   max-width: 100%;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -202,7 +204,7 @@
   height: 30px;
   border: 0;
   background: transparent;
-  color: #9991a8;
+  color: #949494;
   touch-action: none;
   cursor: grab !important;
   flex: none;
@@ -212,9 +214,11 @@
   cursor: grabbing !important;
   user-select: none;
 }
-.ce-dragging [data-ce-module]:hover {
+@media (hover: hover) and (pointer: fine) {
+.ce-dragging [data-ce-module]:hover:not(:disabled) {
   outline: 2px dashed var(--tw-blue);
   outline-offset: -2px;
+}
 }
 .ce-outline-more .tw-icon-button {
   width: 24px;
@@ -230,10 +234,10 @@
   width: 190px;
   z-index: 10;
   border: 1px solid var(--tw-line);
-  border-radius: 12px;
+  border-radius: 6px;
   padding: 8px;
   background: #fff;
-  box-shadow: 0 8px 25px #20104420;
+  box-shadow: none;
 }
 .ce-move-menu .tw-button {
   display: flex;
@@ -258,8 +262,8 @@
 .ce-lesson-paper {
   background: white;
   border: 1px solid var(--tw-line);
-  border-radius: 14px;
-  box-shadow: 0 3px 10px #28203204;
+  border-radius: 6px;
+  box-shadow: none;
   overflow: hidden;
 }
 .ce-lesson-heading {
@@ -289,7 +293,7 @@
 .ce-lesson-metadata > span:not(:last-child)::after {
   content: "·";
   margin-left: 3px;
-  color: #b7b1c0;
+  color: #b3b3b3;
 }
 .ce-lesson-heading p {
   color: var(--tw-muted);
@@ -330,7 +334,7 @@
   line-height: 1.5;
 }
 .ce-module-heading > svg {
-  color: #a098af;
+  color: #9b9b9b;
   margin-top: 10px;
 }
 .ce-number {
@@ -340,16 +344,16 @@
   border-radius: 8px;
   display: inline-grid;
   place-items: center;
-  background: #f0ebfc;
+  background: #ededed;
   color: var(--tw-blue);
   font-size: 12px;
-  font-weight: 700;
+  font-weight: 600;
 }
 .ce-canvas-block {
   margin-bottom: 13px;
   border: 2px solid var(--tw-card-edge);
-  box-shadow: 0 2px 0 var(--tw-card-bottom);
-  border-radius: 14px;
+  box-shadow: none;
+  border-radius: 6px;
   background: #fff;
   overflow: hidden;
 }
@@ -376,15 +380,15 @@
   border-radius: 6px;
   padding: 3px 7px;
   font-size: 10px;
-  font-weight: 700;
+  font-weight: 600;
 }
 .ce-purpose.teach {
-  background: #eaf2ff;
-  color: #3c60a0;
+  background: #f1f1f1;
+  color: #5d5d5d;
 }
 .ce-purpose.practice {
-  background: #fff0e3;
-  color: #985717;
+  background: #f2f2f2;
+  color: #606060;
 }
 .ce-canvas-block > div {
   padding: 14px;
@@ -413,7 +417,7 @@
   gap: 6px;
   padding: 12px 8px;
   border: 1px solid var(--tw-line);
-  border-radius: 12px;
+  border-radius: 6px;
   background: #fcfbff;
 }
 .ce-word strong {
@@ -428,7 +432,7 @@
   width: 100%;
   max-height: 220px;
   object-fit: contain;
-  border-radius: 12px;
+  border-radius: 6px;
   margin: 0 auto;
 }
 .ce-pictogram {
@@ -436,7 +440,7 @@
   display: grid;
   place-items: center;
   font-size: 44px;
-  background: #f7f2ff;
+  background: #f4f4f4;
 }
 .ce-word .ce-picture {
   width: 70px;
@@ -454,18 +458,18 @@
   flex-direction: column;
   gap: 6px;
   padding: 10px;
-  border: 1px solid #cddaf3;
-  border-radius: 10px;
-  background: #f0f5ff;
+  border: 1px solid #d9d9d9;
+  border-radius: 6px;
+  background: #f5f5f5;
   flex: 1 1 80px;
 }
 .ce-part:nth-child(2n) {
-  background: #fff3e8;
-  border-color: #ecd7c0;
+  background: #f5f5f5;
+  border-color: #dadada;
 }
 .ce-part small {
   font-size: 9px;
-  color: #6f6680;
+  color: #6a6a6a;
 }
 .ce-part strong {
   font-size: 14px;
@@ -521,10 +525,10 @@
   gap: 7px;
   width: 100%;
   padding: 12px;
-  border: 1px dashed #c7bddf;
+  border: 1px dashed #c2c2c2;
   color: var(--tw-blue);
   background: #fcfaff;
-  border-radius: 10px;
+  border-radius: 6px;
   font-size: 12px !important;
 }
 .ce-add-module {
@@ -556,7 +560,7 @@
 .ce-property-content .tw-field > span {
   font-size: 11px;
 }
-.ce-property-content :is(input, select, textarea) {
+.ce-property-content :is(input, select, textarea, :where(.app-select-trigger)) {
   font-size: 12px;
   min-width: 0;
 }
@@ -577,33 +581,33 @@
   gap: 10px;
   padding: 12px;
   border: 1px solid var(--tw-line);
-  border-radius: 12px;
+  border-radius: 6px;
   background: #fcfbff;
 }
 .ce-property-item > strong {
   font-size: 12px;
 }
 .ce-duration {
-  background: #f7f4ff;
-  border-radius: 12px;
+  background: #f5f5f5;
+  border-radius: 6px;
   padding: 13px;
   font-size: 12px;
   margin-top: 10px;
 }
 .ce-info {
-  background: #f2effd;
+  background: #f1f1f1;
   padding: 12px;
-  border-radius: 10px;
-  color: #554574;
+  border-radius: 6px;
+  color: #4c4c4c;
   font-size: 12px;
   line-height: 1.6;
 }
 .ce-warning {
-  background: #fff6e8;
-  color: #825719;
+  background: #f7f7f7;
+  color: #5c5c5c;
   padding: 14px;
-  border: 1px solid #efd5af;
-  border-radius: 12px;
+  border: 1px solid #d8d8d8;
+  border-radius: 6px;
   margin: 12px 0;
   font-size: 12px;
 }
@@ -619,7 +623,7 @@
 }
 .ce-template {
   border: 1px solid var(--tw-line);
-  border-radius: 12px;
+  border-radius: 6px;
   padding: 13px;
   margin: 12px 0;
   background: #fcfaff;
@@ -642,7 +646,7 @@
   display: flex;
   flex-direction: column;
   gap: 6px;
-  font-weight: 650;
+  font-weight: 600;
 }
 .ce-upload input {
   max-width: 100%;
@@ -664,7 +668,7 @@
   position: fixed;
   inset: 0;
   z-index: 100;
-  background: #1e183b6b;
+  background: #1c1c1c6b;
   backdrop-filter: blur(3px);
 }
 .ce-dialog {
@@ -677,8 +681,8 @@
   max-height: 90dvh;
   background: #fff;
   border: 2px solid var(--tw-card-edge);
-  border-radius: 20px;
-  box-shadow: 0 30px 100px #12082c30;
+  border-radius: 6px;
+  box-shadow: none;
   display: flex;
   flex-direction: column;
 }
@@ -736,7 +740,7 @@
   max-width: 390px;
   margin: auto;
   border: 1px solid var(--tw-line);
-  border-radius: 20px;
+  border-radius: 6px;
   overflow: hidden;
   background: #fff;
 }
@@ -761,8 +765,8 @@
 }
 .ce-progress {
   height: 5px;
-  background: #e9e2fb;
-  border-radius: 9px;
+  background: #e5e5e5;
+  border-radius: 6px;
   overflow: hidden;
   margin: 4px 0;
 }
@@ -789,7 +793,7 @@
 .ce-kicker {
   font-size: 11px;
   color: var(--tw-blue);
-  font-weight: 650;
+  font-weight: 600;
 }
 .ce-flashcard {
   display: flex;
@@ -799,7 +803,7 @@
   align-items: center;
   padding: 22px 15px;
   border: 2px solid var(--tw-card-edge);
-  border-radius: 18px;
+  border-radius: 6px;
   margin: 20px 0;
 }
 .ce-flashcard .ce-picture {
@@ -816,7 +820,7 @@
   gap: 12px;
   padding: 16px;
   border: 1px solid var(--tw-card-edge);
-  border-radius: 14px;
+  border-radius: 6px;
   margin: 15px 0;
 }
 .ce-clip small {
@@ -845,19 +849,19 @@
   font-size: 11px;
 }
 .ce-result {
-  border-radius: 14px;
+  border-radius: 6px;
   padding: 15px;
   font-size: 13px;
 }
 .ce-result.correct {
-  background: #ecf8ee;
-  color: #276438;
-  border: 1px solid #c5e2ca;
+  background: #f5f5f5;
+  color: #545454;
+  border: 1px solid #dadada;
 }
 .ce-result.incorrect {
-  background: #fff0eb;
-  color: #973b26;
-  border: 1px solid #f1c9bf;
+  background: #f3f3f3;
+  color: #4d4d4d;
+  border: 1px solid #d1d1d1;
 }
 .ce-result p {
   font-size: 13px;
@@ -874,7 +878,7 @@
   gap: 9px;
   padding: 13px;
   border: 1px solid var(--tw-card-edge);
-  border-radius: 10px;
+  border-radius: 6px;
   font-size: 14px;
 }
 .ce-radio-list input {
@@ -890,19 +894,19 @@
 .ce-answer-tiles {
   min-height: 70px;
   padding: 12px;
-  border: 1px dashed #c2b5de;
-  border-radius: 12px;
+  border: 1px dashed #bbbbbb;
+  border-radius: 6px;
   margin-bottom: 10px;
 }
 .ce-tiles button,
 .ce-answer-tiles button {
   padding: 10px 12px;
   border: 1px solid var(--tw-card-edge);
-  border-radius: 9px;
-  background: #f5f0ff;
+  border-radius: 6px;
+  background: #f2f2f2;
   color: var(--tw-ink);
   font-size: 14px;
-  box-shadow: 0 2px 0 var(--tw-card-bottom);
+  box-shadow: none;
 }
 .ce-student-navigation {
   display: flex;
@@ -946,7 +950,7 @@
   .ce-editor
   :is(button, input, select, textarea):focus-visible,
 .ce-dialog :is(button, input, select, textarea):focus-visible {
-  outline: 3px solid #a896e7;
+  outline: 3px solid #a0a0a0;
   outline-offset: 2px;
 }
 @media (min-width: 1500px) {
@@ -983,7 +987,7 @@
   .ce-mobile-panels {
     display: flex;
     border: 1px solid var(--tw-line);
-    border-radius: 12px;
+    border-radius: 6px;
     overflow: hidden;
     margin-bottom: 14px;
   }
@@ -996,9 +1000,9 @@
     font-size: 12px;
   }
   .ce-mobile-panels button[aria-pressed="true"] {
-    background: #f0ebff;
+    background: #eeeeee;
     color: var(--tw-blue);
-    font-weight: 700;
+    font-weight: 600;
   }
   .ce-layout {
     display: block;
@@ -1045,7 +1049,7 @@
   .ce-property-content {
     padding: 20px;
   }
-  .ce-property-content :is(input, select, textarea) {
+  .ce-property-content :is(input, select, textarea, :where(.app-select-trigger)) {
     font-size: 14px;
   }
   .ce-properties .tw-field > span {
@@ -1088,7 +1092,7 @@
   .ce-mobile-panels {
     display: flex;
     border: 1px solid var(--tw-line);
-    border-radius: 12px;
+    border-radius: 6px;
     overflow: hidden;
     margin-bottom: 14px;
   }
@@ -1101,9 +1105,9 @@
     font-size: 12px;
   }
   .ce-mobile-panels button[aria-pressed="true"] {
-    background: #f0ebff;
+    background: #eeeeee;
     color: var(--tw-blue);
-    font-weight: 700;
+    font-weight: 600;
   }
   .ce-layout {
     display: block;
@@ -1150,7 +1154,7 @@
   .ce-property-content {
     padding: 20px;
   }
-  .ce-property-content :is(input, select, textarea) {
+  .ce-property-content :is(input, select, textarea, :where(.app-select-trigger)) {
     font-size: 14px;
   }
   .ce-properties .tw-field > span {
@@ -1334,7 +1338,7 @@
   height: auto;
   min-height: 0;
   padding: 11px 12px 14px;
-  box-shadow: 0 -3px 12px #25153908;
+  box-shadow: none;
 }
 .ce-phone-actions .ce-bottom-actions {
   width: 100%;
@@ -1443,3 +1447,94 @@
 .ce-mobile-player[data-keyboard="true"] > .ce-student-navigation,
 .ce-mobile-player[data-keyboard="true"] > .ce-simulation,
 .ce-preview-screen:has(.ce-mobile-player[data-keyboard="true"]) > .tw-button { display: none; }
+
+/* Direct canvas controls share state and field semantics with the properties rail. */
+.teacher-workspace .ce-outline-empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 120px;
+  margin: 0;
+  padding: 24px 16px;
+  text-align: center;
+  color: var(--tw-muted);
+  font-size: 13px;
+  line-height: 1.6;
+}
+.ce-visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+.ce-direct-lesson-fields,
+.ce-direct-module-fields { min-width: 0; display: flex; flex-direction: column; gap: 14px; }
+.ce-direct-module-fields { flex: 1; gap: 10px; }
+.ce-direct-metadata { display: flex; align-items: flex-end; flex-wrap: wrap; gap: 12px; }
+.ce-direct-metadata > .tw-field { flex: 0 1 150px; min-width: 0; }
+.ce-direct-module-fields .ce-direct-metadata > .tw-field:last-child { flex-basis: 112px; }
+.ce-direct-duration { padding: 10px 0; color: var(--tw-muted); font-size: 12px; white-space: nowrap; }
+.teacher-workspace .ce-editor :is(.ce-direct-lesson-fields, .ce-direct-module-fields) .tw-field { gap: 3px; margin: 0; }
+.teacher-workspace .ce-editor :is(.ce-direct-lesson-fields, .ce-direct-module-fields) .tw-field > span { font-size: 11px; color: #737373; font-weight: 400; }
+.teacher-workspace .ce-editor :is(.ce-direct-lesson-fields, .ce-direct-module-fields) .tw-field :is(input, textarea, select, :where(.app-select-trigger)) {
+  border-color: transparent;
+  background: transparent;
+  box-shadow: none;
+  padding: 6px 7px;
+  min-height: 34px;
+  border-radius: 4px;
+  font-size: 13px;
+}
+.teacher-workspace .ce-editor .ce-direct-title .tw-field input { font-size: 24px; line-height: 1.3; font-weight: 600; letter-spacing: -.6px; padding-block: 5px; }
+.teacher-workspace .ce-editor .ce-direct-module-fields .ce-direct-title input { font-size: 18px; letter-spacing: -.3px; }
+.teacher-workspace .ce-editor .ce-direct-goal textarea { min-height: 48px; height: 58px; resize: vertical; line-height: 1.6; }
+.teacher-workspace .ce-editor :is(.ce-direct-lesson-fields, .ce-direct-module-fields) .tw-field :is(input, textarea, select, :where(.app-select-trigger)):focus {
+  border-color: #a3a3a3;
+  background: #fff;
+}
+.ce-direct-module-heading { align-items: flex-start; gap: 12px; padding-bottom: 20px; scroll-margin-top: 64px; scroll-margin-bottom: 20px; }
+.ce-direct-module-heading > .ce-number { margin-top: 24px; }
+.ce-direct-block { scroll-margin-top: 64px; scroll-margin-bottom: 20px; }
+.teacher-workspace .ce-direct-block > .ce-direct-block-fields {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px 16px;
+  padding: 20px;
+  cursor: auto;
+}
+.ce-direct-block-fields > .tw-field { margin: 0; gap: 4px; }
+.ce-direct-block-fields > .tw-field:has([aria-label="Block title"]),
+.ce-direct-block-fields > .tw-field:has(textarea),
+.ce-direct-block-fields > :not(.tw-field) { grid-column: 1 / -1; }
+.teacher-workspace .ce-editor .ce-direct-block-fields > .tw-field > span { font-size: 11px; color: #737373; font-weight: 400; }
+.teacher-workspace .ce-editor .ce-direct-block-fields > .tw-field :is(input, textarea, select, :where(.app-select-trigger)) { min-height: 34px; padding: 7px 8px; font-size: 13px; border-color: transparent; background: transparent; border-radius: 4px; }
+.teacher-workspace .ce-editor .ce-direct-block-fields > .tw-field [aria-label="Block title"] { font-size: 16px; font-weight: 500; }
+.teacher-workspace .ce-editor .ce-direct-block-fields > .tw-field textarea { min-height: 54px; height: 64px; }
+.teacher-workspace .ce-editor .ce-direct-block-fields > .tw-field :is(input, textarea, select, :where(.app-select-trigger)):focus { border-color: #a3a3a3; background: #fff; }
+.ce-direct-block-fields > :is(h3, p) { margin: 0; }
+.ce-direct-block-fields > .tw-button { justify-self: start; }
+.teacher-workspace .ce-direct-block-fields .ce-property-item { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; padding: 14px; }
+.ce-direct-block-fields .ce-property-item > :is(strong, h3, p, .ce-actions, .tw-button) { grid-column: 1 / -1; }
+.ce-direct-block-fields .ce-property-item > .tw-button { justify-self: start; }
+.ce-direct-block-fields .ce-property-item .tw-field { margin: 0; }
+.teacher-workspace .ce-direct-block-fields .ce-property-item .tw-field :is(input, textarea, select, :where(.app-select-trigger)) { min-height: 34px; padding: 7px 8px; font-size: 13px; }
+.ce-direct-block-fields .ce-upload { min-width: 0; }
+.ce-direct-block-fields .ce-upload input { font-size: 11px; }
+@media (hover: hover) and (pointer: fine) {
+  .teacher-workspace .ce-editor :is(.ce-direct-lesson-fields, .ce-direct-module-fields) .tw-field :is(input, textarea, select, :where(.app-select-trigger)):hover:not(:disabled),
+  .teacher-workspace .ce-editor .ce-direct-block-fields > .tw-field :is(input, textarea, select, :where(.app-select-trigger)):hover:not(:disabled) { border-color: #dedede; background: #fafafa; }
+}
+.teacher-mobile .ce-direct-metadata { gap: 8px; }
+.teacher-mobile .ce-direct-metadata > .tw-field { flex-basis: 140px; }
+.teacher-mobile .ce-direct-module-heading { gap: 8px; }
+.teacher-mobile .ce-direct-module-heading > .ce-number { width: 24px; height: 24px; }
+.teacher-mobile .ce-direct-block-fields .ce-property-item { grid-template-columns: 1fr; }
+.teacher-mobile .ce-direct-block > .ce-direct-block-fields { padding: 16px; gap: 14px 10px; }
+.teacher-mobile .ce-editor :is(.ce-direct-lesson-fields, .ce-direct-module-fields, .ce-direct-block-fields) .tw-field :is(input, textarea, select, :where(.app-select-trigger)) { min-height: 42px; font-size: 16px; }
+.teacher-mobile .ce-editor .ce-direct-title .tw-field input { font-size: 22px; }
+.teacher-mobile .ce-editor .ce-direct-module-fields .ce-direct-title input { font-size: 18px; }

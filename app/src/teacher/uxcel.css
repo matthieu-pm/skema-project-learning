@@ -1,11 +1,11 @@
-/* Uxcel Home reference: neutral chrome, compact cards and purple actions. */
+/* Workspace layout and navigation structure; minimal.css owns final visual treatment. */
 .teacher-workspace {
-  --tw-blue: #5235e9;
-  --tw-blue-deep: #4024c9;
-  --tw-ink: #202026;
-  --tw-muted: #73737e;
+  --tw-blue: #484848;
+  --tw-blue-deep: #363636;
+  --tw-ink: #202020;
+  --tw-muted: #747474;
   --tw-line: #e9e9ee;
-  --tw-orange: #f1edff;
+  --tw-orange: #efefef;
   font-size: 14px;
 }
 .teacher-web {
@@ -27,9 +27,9 @@
   min-width: 0;
   min-height: 0;
   overflow: hidden;
-  border-radius: 12px;
+  border-radius: 6px;
   background: #fff;
-  box-shadow: 0 0 0 1px #ececf0;
+  box-shadow: none;
 }
 .teacher-workspace :is(ul, li) {
   list-style: none;
@@ -41,7 +41,7 @@
 .teacher-workspace [data-slot="sidebar-menu-sub"] {
   margin: 2px 0 4px 20px;
   padding-left: 13px;
-  border-color: #dddde5;
+  border-color: #dedede;
 }
 .tw-shadcn-sidebar [data-slot="sidebar-header"] {
   padding: 14px 8px 18px;
@@ -51,18 +51,20 @@
   background: transparent;
   font-family: inherit;
 }
-.tw-shadcn-sidebar [data-slot="sidebar-menu-button"]:hover {
+@media (hover: hover) and (pointer: fine) {
+.tw-shadcn-sidebar [data-slot="sidebar-menu-button"]:hover:not(:disabled) {
   background: #efeff2;
 }
+}
 .tw-shadcn-sidebar [data-slot="sidebar-menu-button"] {
-  color: #5d5d67;
+  color: #5e5e5e;
   font-size: 14px;
   font-weight: 450;
   height: 36px;
 }
 .tw-shadcn-sidebar [data-slot="sidebar-menu-button"][data-active="true"] {
   color: #242429;
-  font-weight: 650;
+  font-weight: 600;
   background: #eeeef1;
 }
 .tw-shadcn-sidebar [data-slot="sidebar-menu-sub-button"] {
@@ -71,21 +73,23 @@
   border: 0;
   background: transparent;
   font-size: 13px;
-  color: #72727d;
+  color: #737373;
   text-align: left;
   font-family: inherit;
 }
 .tw-shadcn-sidebar [data-slot="sidebar-menu-sub-button"][data-active="true"] {
   background: #efeff2;
-  color: #29292f;
+  color: #292929;
 }
-.tw-shadcn-sidebar [data-slot="sidebar-menu-sub-button"]:hover {
+@media (hover: hover) and (pointer: fine) {
+.tw-shadcn-sidebar [data-slot="sidebar-menu-sub-button"]:hover:not(:disabled) {
   background: #efeff2;
+}
 }
 .tw-shadcn-sidebar [data-slot="sidebar-menu-action"] {
   background: none;
   border: 0;
-  color: #8c8c95;
+  color: #8d8d8d;
   height: 24px;
   width: 24px;
   top: 6px;
@@ -96,7 +100,7 @@
   font-size: 10px;
   letter-spacing: 0.6px;
   font-weight: 500;
-  color: #9898a1;
+  color: #999999;
 }
 .tw-sidebar-brand {
   gap: 10px !important;
@@ -106,7 +110,7 @@
   width: 34px;
   height: 34px;
   border-radius: 8px;
-  background: #f0e9ff;
+  background: #ececec;
   display: grid;
   place-items: center;
   flex-shrink: 0;
@@ -121,14 +125,14 @@
   line-height: 1.2;
 }
 .tw-brand-name strong {
-  color: #202026;
+  color: #202020;
   font-size: 23px;
-  font-weight: 800;
+  font-weight: 600;
   letter-spacing: -0.8px;
 }
 .tw-brand-name > span {
   font-size: 10px;
-  color: #85858f;
+  color: #868686;
   margin-top: 2px;
 }
 .tw-shadcn-sidebar [data-slot="sidebar-footer"] {
@@ -149,23 +153,23 @@
 }
 .tw-account-copy > span {
   font-size: 11px;
-  color: #90909b;
+  color: #919191;
 }
 .tw-menu-subtitle {
   display: block;
-  color: #96969f;
+  color: #979797;
   font-size: 12px;
   font-weight: 400;
 }
 [data-slot="dropdown-menu-content"],
 [data-slot="sheet-content"],
 [data-slot="tooltip-content"] {
-  font-family: "Labil Grotesk", sans-serif;
+  font-family: var(--font-sans, "Geist", sans-serif);
   border-color: #e8e8ed;
 }
 [data-slot="dropdown-menu-content"] {
-  border-radius: 10px;
-  box-shadow: 0 4px 20px #20203010;
+  border-radius: 6px;
+  box-shadow: none;
 }
 [data-slot="dropdown-menu-item"] {
   gap: 9px;
@@ -186,7 +190,7 @@
   flex-shrink: 0;
   padding: 0 28px;
   border-color: #eeeef2;
-  border-radius: 12px 12px 0 0;
+  border-radius: 6px 6px 0 0;
   z-index: 20;
 }
 .tw-toolbar-left {
@@ -195,7 +199,7 @@
   font-weight: 500;
 }
 .tw-breadcrumb {
-  color: #8a8a96;
+  color: #8b8b8b;
 }
 .teacher-web .tw-content {
   flex: 1;
@@ -210,11 +214,11 @@
   font-size: 27px;
   line-height: 1.25;
   letter-spacing: -0.7px;
-  font-weight: 700;
+  font-weight: 600;
 }
 .teacher-workspace h2 {
   font-size: 18px;
-  font-weight: 650;
+  font-weight: 600;
   letter-spacing: -0.25px;
 }
 .tw-page-heading {
@@ -223,11 +227,11 @@
 .tw-page-heading p {
   margin-top: 8px;
   font-size: 14px;
-  color: #85858e;
+  color: #868686;
 }
 .tw-panel {
   border: 1px solid var(--tw-line);
-  border-radius: 12px;
+  border-radius: 6px;
   padding: 22px;
   box-shadow: none;
 }
@@ -244,28 +248,26 @@
     background-color 120ms ease-out;
 }
 .tw-button.tw-primary {
-  background: #5235e9;
-  border-color: #5235e9;
+  background: #484848;
+  border-color: #484848;
   box-shadow: none;
 }
-.tw-button.tw-primary:hover {
-  background: #4428d7;
+@media (hover: hover) and (pointer: fine) {
+.tw-button.tw-primary:hover:not(:disabled) {
+  background: #3b3b3b;
+}
 }
 .tw-button.tw-secondary {
-  color: #35353e;
-  border-color: #e6e6ec;
-  box-shadow: 0 1px 2px #20203005;
+  color: #363636;
+  border-color: #e6e6e6;
+  box-shadow: none;
 }
 .tw-button.tw-quiet {
-  color: #5235e9;
+  color: #484848;
   box-shadow: none;
 }
 .tw-button.tw-danger {
   box-shadow: none;
-}
-.tw-button:active {
-  transform: none;
-  scale: 0.96;
 }
 .tw-badge {
   font-size: 11px;
@@ -274,11 +276,11 @@
   padding: 3px 6px;
 }
 .tw-badge.blue {
-  color: #5a41c6;
-  background: #f0ecff;
+  color: #505050;
+  background: #eeeeee;
 }
 .tw-badge.white {
-  color: #777781;
+  color: #787878;
   background: #fff;
   padding-left: 0;
   font-size: 10px;
@@ -286,11 +288,11 @@
   letter-spacing: 0.8px;
 }
 .tw-badge.orange {
-  color: #6b4bce;
-  background: #f2edff;
+  color: #5b5b5b;
+  background: #efefef;
 }
 .tw-badge.gray {
-  color: #82828c;
+  color: #838383;
   background: #f4f4f6;
 }
 .tw-students-dashboard {
@@ -320,7 +322,7 @@
   border-color: #e8e8ec;
   padding: 12px;
   gap: 20px;
-  border-radius: 12px;
+  border-radius: 6px;
 }
 .tw-next-session > img {
   order: -1;
@@ -346,7 +348,7 @@
 .tw-next-copy p {
   margin: 0 0 18px;
   font-size: 12px;
-  color: #81818c;
+  color: #828282;
   gap: 5px;
 }
 .tw-next-copy .tw-button {
@@ -373,7 +375,7 @@
 }
 .tw-task-row > div > span {
   font-size: 11px;
-  color: #8c8c97;
+  color: #8d8d8d;
   margin-top: 3px;
 }
 .tw-task-icon {
@@ -388,7 +390,7 @@
 }
 .tw-task-row > svg {
   width: 14px;
-  color: #93939b;
+  color: #949494;
 }
 .tw-filter-bar {
   gap: 12px;
@@ -396,29 +398,29 @@
 }
 .tw-filter-bar .tw-field > span {
   font-size: 11px;
-  color: #888894;
+  color: #898989;
 }
 .tw-field {
   gap: 7px;
 }
 .tw-field > span {
   font-size: 12px;
-  color: #60606c;
+  color: #616161;
   font-weight: 500;
 }
 .tw-field :is(input, textarea, select) {
-  border: 1px solid #e5e5ec;
+  border: 1px solid #e6e6e6;
   border-radius: 7px;
   box-shadow: none;
   padding: 10px 12px;
   font-size: 14px;
   min-height: 39px;
   background: #fff;
-  color: #32323b;
+  color: #333333;
 }
 .tw-field :is(input, textarea, select):focus {
-  border-color: #8b78e9;
-  outline: 3px solid #5235e914;
+  border-color: #848484;
+  outline: 3px solid #48484814;
   outline-offset: 0;
 }
 .tw-segments {
@@ -432,14 +434,14 @@
   font-size: 12px;
   padding: 7px 10px;
   min-height: 30px;
-  color: #80808b;
+  color: #818181;
   font-weight: 450;
 }
 .tw-segments button[aria-pressed="true"] {
   background: #fff;
-  color: #35353d;
+  color: #363636;
   border-color: #e9e9ed;
-  box-shadow: 0 1px 2px #00000006;
+  box-shadow: none;
   font-weight: 550;
 }
 .tw-student-grid {
@@ -447,15 +449,17 @@
   gap: 18px;
 }
 .tw-student-card {
-  border: 1px solid #e9e9ef;
-  border-radius: 12px;
+  border: 1px solid #e9e9e9;
+  border-radius: 6px;
   padding: 20px;
   box-shadow: none;
   min-height: 235px;
 }
-.tw-student-card:hover {
-  border-color: #cbc2f0;
-  box-shadow: 0 2px 8px #25124b05;
+@media (hover: hover) and (pointer: fine) {
+.tw-student-card:hover:not(:disabled) {
+  border-color: #c7c7c7;
+  box-shadow: none;
+}
 }
 .tw-student-card h2 {
   font-size: 16px;
@@ -463,12 +467,12 @@
 }
 .tw-student-card p {
   font-size: 12px;
-  color: #7d7d88;
+  color: #7e7e7e;
   margin-top: 14px;
 }
 .tw-student-card .tw-subtle {
   font-size: 12px;
-  color: #7662c3;
+  color: #6d6d6d;
 }
 .tw-avatar {
   width: 38px;
@@ -480,12 +484,12 @@
   padding-top: 14px;
   margin-top: 18px;
   font-size: 11px;
-  color: #8b8b96;
+  color: #8c8c8c;
   border-color: #f0f0f4;
 }
 .tw-preview-caption {
   font-size: 11px;
-  color: #a0a0a9;
+  color: #a1a1a1;
   margin-top: 24px;
 }
 .tw-library-summary {
@@ -498,9 +502,9 @@
   width: 58px;
   height: 58px;
   margin: 0 auto 16px;
-  color: #765adb;
-  border-radius: 12px;
-  background: #f2edff;
+  color: #696969;
+  border-radius: 6px;
+  background: #efefef;
 }
 .tw-library-summary h2 {
   font-size: 14px;
@@ -508,14 +512,14 @@
 }
 .tw-library-summary p {
   font-size: 12px;
-  color: #8c8c98;
+  color: #8d8d8d;
   line-height: 1.6;
   margin-bottom: 15px;
 }
 .tw-library-count {
   display: block;
   font-size: 11px;
-  color: #9696a0;
+  color: #979797;
   margin-bottom: 16px;
 }
 .tw-library-summary .tw-button {
@@ -531,7 +535,7 @@
   font-size: 12px;
 }
 .tw-week-stat > svg {
-  color: #7052de;
+  color: #626262;
 }
 .tw-week-stat strong,
 .tw-week-stat span {
@@ -543,19 +547,19 @@
 .tw-week-stat span {
   font-size: 11px;
   margin-top: 3px;
-  color: #94949f;
+  color: #959595;
 }
 .tw-week-summary .tw-button {
   margin-top: 14px;
 }
 .tw-text-link {
-  color: #6c54cb;
+  color: #626262;
   font-size: 12px;
 }
 .tw-lesson-card {
   border: 1px solid #e9e9ee;
   box-shadow: none;
-  border-radius: 12px;
+  border-radius: 6px;
 }
 .tw-lesson-art {
   background: #f7f7f8 !important;
@@ -564,12 +568,12 @@
   margin: 8px;
 }
 .tw-lesson-art > span:first-child {
-  color: #6a54c1;
+  color: #616161;
 }
 .tw-lesson-art > span:last-child {
-  background: #eee8ff;
-  color: #5e47b6;
-  border-color: #e4ddf6;
+  background: #ebebeb;
+  color: #545454;
+  border-color: #e0e0e0;
 }
 .tw-lesson-copy h2 {
   font-size: 18px;
@@ -588,40 +592,40 @@
 .tw-template-card {
   box-shadow: none;
   border-width: 1px;
-  border-radius: 10px;
+  border-radius: 6px;
 }
 .tw-editor-aside,
 .tw-learner-preview,
 .tw-trust-panel,
 .tw-live-activity,
 .tw-camera-preview {
-  border-radius: 12px;
+  border-radius: 6px;
 }
 .tw-toggle[aria-checked="true"],
 .tw-day-options button[aria-pressed="true"] {
-  background: #5235e9;
+  background: #484848;
 }
 .tw-week-strip button.selected {
-  color: #5235e9;
-  border-color: #b5a5f0;
-  background: #f3efff;
+  color: #484848;
+  border-color: #aeaeae;
+  background: #f1f1f1;
 }
 .tw-toolbar [data-slot="sidebar-trigger"] {
   border: 0;
   background: transparent;
-  color: #80808b;
+  color: #818181;
 }
 .tw-teacher-avatar {
-  background: #eeebff;
-  color: #6a4dcc;
+  background: #ededed;
+  color: #5c5c5c;
   font-weight: 600;
 }
 .teacher-mobile .tw-toolbar {
   border-color: #f1f1f5;
 }
 .teacher-mobile .tw-navigation button[aria-current="page"] {
-  background: #f2efff;
-  color: #5235e9;
+  background: #f1f1f1;
+  color: #484848;
 }
 .teacher-mobile .tw-students-dashboard {
   grid-template-columns: 1fr;
@@ -677,7 +681,7 @@
 }
 .teacher-mobile .tw-panel {
   padding: 20px;
-  border-radius: 12px;
+  border-radius: 6px;
 }
 .teacher-mobile .tw-segments button {
   min-height: 36px;
@@ -784,11 +788,11 @@
 }
 
 .tw-field :is(input,textarea,select):focus { background:#fff; }
-.tw-week-strip button[aria-pressed="true"] { background:#f4f0ff; color:#5235e9; border-color:#c8baf4; }
-.tw-week-strip button.has-session::after { background:#7858d8; }
-.tw-message.mine { background:#f1ecff; border-color:#e3dbfa; }
-.tw-toggle[aria-pressed="true"] { background:#5235e9; }
-.teacher-workspace :is(button,a,input,textarea,select,summary):focus-visible { outline-color:#765adb; }
+.tw-week-strip button[aria-pressed="true"] { background:#f2f2f2; color:#484848; border-color:#c1c1c1; }
+.tw-week-strip button.has-session::after { background:#686868; }
+.tw-message.mine { background:#eeeeee; border-color:#dfdfdf; }
+.tw-toggle[aria-pressed="true"] { background:#484848; }
+.teacher-workspace :is(button,a,input,textarea,select,summary):focus-visible { outline-color:#696969; }
 
 /* Portaled sidebar content needs the same app-owned resets as the desktop shell. */
 .tw-shadcn-sidebar ul, .tw-shadcn-sidebar li { list-style: none; margin: 0; }
@@ -799,11 +803,11 @@
 /* Account content is portalled outside workspace tokens; keep a solid surface. */
 [data-slot="dropdown-menu-content"].tw-account-menu {
   background: #fff;
-  color: #242329;
+  color: #242424;
   opacity: 1;
   z-index: 160;
 }
 .tw-account-menu [data-slot="dropdown-menu-item"][data-highlighted] {
-  background: #f1edff;
-  color: #38236e;
+  background: #efefef;
+  color: #2d2d2d;
 }

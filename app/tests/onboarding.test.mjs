@@ -405,7 +405,7 @@ test("Persona shortcut and document fallback return to the correct teacher, adul
     assert.ok(!routeFor(document).includes("persona-link"));
   }
 });
-test("email entry is integrated into account choice while Google retains its labeled sample confirmation", () => {
+test("email entry is integrated into account choice while Google retains account confirmation", () => {
   for (const role of ["learner", "teacher"]) {
     const email = answers({ role, age: "18 or older" });
     assert.equal(nextStep("role", email), "account");

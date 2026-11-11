@@ -1,0 +1,46 @@
+[
+  {
+    "device": "iphone",
+    "outerWidth": 1100,
+    "columns": "353px",
+    "gridClient": 353,
+    "panelClient": 351,
+    "gridRendered": 353,
+    "panelRendered": 353,
+    "contentClient": 393,
+    "contentScroll": 393
+  },
+  {
+    "device": "iphone",
+    "outerWidth": 397,
+    "columns": "353px",
+    "gridClient": 353,
+    "panelClient": 351,
+    "gridRendered": 241.09002685546875,
+    "panelRendered": 241.09002685546875,
+    "contentClient": 393,
+    "contentScroll": 393
+  },
+  {
+    "device": "pixel-10",
+    "outerWidth": 1100,
+    "columns": "387px",
+    "gridClient": 387,
+    "panelClient": 385,
+    "gridRendered": 387,
+    "panelRendered": 387,
+    "contentClient": 427,
+    "contentScroll": 427
+  },
+  {
+    "device": "pixel-10",
+    "outerWidth": 397,
+    "columns": "387px",
+    "gridClient": 387,
+    "panelClient": 385,
+    "gridRendered": 238.62721252441406,
+    "panelRendered": 238.62721252441406,
+    "contentClient": 427,
+    "contentScroll": 427
+  }
+]

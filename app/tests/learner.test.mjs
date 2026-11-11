@@ -113,7 +113,7 @@ test("unavailable or malformed storage and failed writes never report a successf
   h.values.set(bookingStorageKey, "invalid JSON");
   await assert.rejects(instantBook(input(), slots, h.options), /could not be read/i);
   assert.equal(h.values.get(bookingStorageKey), "invalid JSON");
-  await assert.rejects(instantBook(input(), slots, { ...h.options, locks: null }), /Web Locks support/i);
+  await assert.rejects(instantBook(input(), slots, { ...h.options, locks: null }), /cannot reserve a time slot.*Try another browser/i);
 });
 
 test("cancelling a future booking releases its time and preserves the cancelled record", async () => {

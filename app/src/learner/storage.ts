@@ -43,7 +43,7 @@ export function subscribeBookings(callback: () => void) {
 async function exclusive<T>(options: StorageOptions, callback: () => T | Promise<T>): Promise<T> {
   const locks = options.locks !== undefined ? options.locks : (typeof navigator === "undefined" ? undefined : navigator.locks);
   // Without a shared origin lock, a second tab could overwrite a reservation.
-  if (!locks) throw new Error("This browser cannot safely reserve a time slot. Open the prototype in a browser with Web Locks support.");
+  if (!locks) throw new Error("This browser cannot reserve a time slot. Try another browser.");
   return locks.request(lockName, callback);
 }
 export type BookingInput = { teacherId: string; slotId: string; format: LessonFormat; replaceBookingId?: string; requestId?: string };

@@ -1,12 +1,12 @@
 .teacher-workspace {
-  --tw-blue: #5235e9;
-  --tw-blue-deep: #5235e9;
-  --tw-ink: #343947;
-  --tw-muted: #6c7280;
-  --tw-line: #e4e7ec;
-  --tw-orange: #fff0dc;
+  --tw-blue: #484848;
+  --tw-blue-deep: #484848;
+  --tw-ink: #393939;
+  --tw-muted: #727272;
+  --tw-line: #e7e7e7;
+  --tw-orange: #f2f2f2;
   --tw-paper: #fff;
-  font-family: "Labil Grotesk", Arial, sans-serif;
+  font-family: var(--font-sans, "Geist", sans-serif);
   color: var(--tw-ink);
   font-size: 15px;
   line-height: 1.5;
@@ -44,13 +44,13 @@
   font-size: 34px;
   line-height: 1.2;
   letter-spacing: -1px;
-  font-weight: 780;
+  font-weight: 600;
 }
 .teacher-workspace h2 {
   font-size: 20px;
   line-height: 1.35;
   letter-spacing: -0.3px;
-  font-weight: 750;
+  font-weight: 600;
 }
 .teacher-workspace h3 {
   font-size: 18px;
@@ -64,7 +64,7 @@
 }
 .teacher-workspace
   :is(button, a, input, textarea, select, summary):focus-visible {
-  outline: 3px solid #5235e9;
+  outline: 3px solid #484848;
   outline-offset: 4px;
 }
 .teacher-workspace img {
@@ -73,20 +73,20 @@
   -webkit-user-drag: none;
 }
 .teacher-workspace .peach {
-  background: #fff0df;
-  color: #9b510c;
+  background: #f2f2f2;
+  color: #5c5c5c;
 }
 .teacher-workspace .blue {
-  background: #e8f6fe;
-  color: #12698f;
+  background: #f4f4f4;
+  color: #595959;
 }
 .teacher-workspace .lilac {
-  background: #f0eafd;
-  color: #8051aa;
+  background: #ededed;
+  color: #616161;
 }
 .teacher-workspace .green {
-  background: #e9f7e8;
-  color: #467d47;
+  background: #f3f3f3;
+  color: #6d6d6d;
 }
 .teacher-web {
   position: relative;
@@ -118,7 +118,7 @@
 }
 .tw-brand > span {
   font-size: 32px;
-  font-weight: 850;
+  font-weight: 600;
   letter-spacing: -1.4px;
   line-height: 1;
 }
@@ -143,27 +143,27 @@
   gap: 14px;
   background: none;
   border: 2px solid transparent;
-  border-radius: 13px;
+  border-radius: 6px;
   padding: 13px 16px;
   color: var(--tw-muted);
-  font-weight: 650;
+  font-weight: 600;
   text-align: left;
 }
 .tw-navigation button[aria-current="page"] {
-  background: #f0ecff;
-  border-color: #d2edfc;
-  color: #5235e9;
+  background: #eeeeee;
+  border-color: #e8e8e8;
+  color: #484848;
 }
 .tw-navigation button:active {
-  transform: translateY(1px);
+  transform: none;
 }
 .tw-sidebar-tip {
   margin-top: auto;
   padding: 20px 15px;
   text-align: center;
-  border-radius: 19px;
-  background: #f4faff;
-  border: 1px solid #e0f0fa;
+  border-radius: 6px;
+  background: #f9f9f9;
+  border: 1px solid #ededed;
   display: flex;
   align-items: center;
   flex-direction: column;
@@ -176,7 +176,7 @@
 }
 .tw-sidebar-tip strong {
   font-size: 16px;
-  font-weight: 750;
+  font-weight: 600;
   line-height: 1.45;
 }
 .tw-sidebar-tip p {
@@ -227,10 +227,10 @@
   height: 35px;
   display: grid;
   place-items: center;
-  background: #fff0df;
-  color: #9b510c;
+  background: #f2f2f2;
+  color: #5c5c5c;
   border-radius: 50%;
-  font-weight: 750;
+  font-weight: 600;
 }
 .tw-teacher-avatar.large {
   width: 74px;
@@ -263,11 +263,11 @@
   gap: 18px;
 }
 .tw-toolbar-left {
-  font-weight: 650;
+  font-weight: 600;
   font-size: 14px;
 }
 .tw-breadcrumb {
-  color: #818794;
+  color: #878787;
   font-weight: 400;
   margin-left: 10px;
 }
@@ -285,13 +285,15 @@
   width: 40px;
   height: 40px;
   border: 0;
-  border-radius: 10px;
+  border-radius: 6px;
   background: none;
   color: var(--tw-muted);
   flex-shrink: 0;
 }
-.tw-icon-button:hover {
-  background: #f1f7fb;
+@media (hover: hover) and (pointer: fine) {
+.tw-icon-button:hover:not(:disabled) {
+  background: #f6f6f6;
+}
 }
 .tw-icon-button i {
   position: absolute;
@@ -300,7 +302,7 @@
   right: 9px;
   top: 8px;
   border: 2px solid #fff;
-  background: #f8a648;
+  background: #b1b1b1;
   border-radius: 50%;
 }
 .tw-content {
@@ -321,9 +323,9 @@
 }
 .tw-panel {
   border: 1px solid var(--tw-line);
-  border-bottom-width: 3px;
+  border-bottom-width: 1px;
   background: #fff;
-  border-radius: 19px;
+  border-radius: 6px;
   padding: 25px;
   margin-bottom: 22px;
 }
@@ -345,7 +347,7 @@
   margin-top: 0;
 }
 .tw-count {
-  color: #8b929d;
+  color: #919191;
   font-size: 15px;
   font-weight: 500;
   padding-left: 5px;
@@ -356,10 +358,10 @@
   justify-content: center;
   gap: 9px;
   min-height: 44px;
-  border-radius: 12px;
+  border-radius: 6px;
   padding: 11px 18px;
   border: 2px solid transparent;
-  font-weight: 750;
+  font-weight: 600;
   font-size: 14px;
   line-height: 1.3;
   letter-spacing: 0.1px;
@@ -371,29 +373,29 @@
   background: var(--tw-blue);
   color: #fff;
   border-color: var(--tw-blue);
-  box-shadow: 0 3px 0 #1292cf;
+  box-shadow: none;
 }
 .tw-button.tw-secondary {
   background: #fff;
-  color: #5235e9;
-  border-color: #e6e2f3;
-  box-shadow: 0 2px 0 #e6e2f3;
+  color: #484848;
+  border-color: #e4e4e4;
+  box-shadow: none;
 }
 .tw-button.tw-quiet {
   background: transparent;
-  color: #5235e9;
+  color: #484848;
   padding-left: 0;
   padding-right: 0;
   border-color: transparent;
 }
 .tw-button.tw-danger {
-  background: #fff0ee;
-  color: #b63b32;
-  border-color: #f1cec8;
-  box-shadow: 0 2px 0 #f1cec8;
+  background: #f3f3f3;
+  color: #555555;
+  border-color: #d5d5d5;
+  box-shadow: none;
 }
 .tw-button:active {
-  transform: translateY(2px);
+  transform: none;
   box-shadow: none;
 }
 .tw-actions {
@@ -410,29 +412,29 @@
   border-radius: 7px;
   padding: 4px 9px;
   font-size: 12px;
-  font-weight: 650;
+  font-weight: 600;
   line-height: 1.4;
   white-space: normal;
 }
 .tw-badge.blue {
-  background: #f0ecff;
-  color: #6348c8;
+  background: #eeeeee;
+  color: #575757;
 }
 .tw-badge.orange {
-  background: #fff0dc;
-  color: #9d5104;
+  background: #f2f2f2;
+  color: #5c5c5c;
 }
 .tw-badge.gray {
   background: #f1f3f6;
-  color: #636c7a;
+  color: #6b6b6b;
 }
 .tw-badge.green {
-  background: #edf8eb;
-  color: #467d47;
+  background: #f5f5f5;
+  color: #6d6d6d;
 }
 .tw-badge.white {
   background: #fff;
-  color: #6348c8;
+  color: #575757;
 }
 .tw-student-overview {
   display: grid;
@@ -442,12 +444,12 @@
 }
 .tw-next-session {
   position: relative;
-  background: #f4f0ff;
+  background: #f2f2f2;
   display: flex;
   align-items: center;
   min-height: 265px;
   padding: 28px 30px;
-  border-color: #c8e8f9;
+  border-color: #e2e2e2;
   overflow: hidden;
   margin-bottom: 0;
 }
@@ -467,7 +469,7 @@
   align-items: center;
   gap: 6px;
   font-size: 13px;
-  color: #537186;
+  color: #6c6c6c;
   margin-bottom: 21px;
 }
 .tw-next-session > img {
@@ -516,7 +518,7 @@
   width: 39px;
   height: 39px;
   flex-shrink: 0;
-  border-radius: 12px;
+  border-radius: 6px;
 }
 .tw-filter-bar {
   display: flex;
@@ -537,16 +539,16 @@
   min-width: 0;
 }
 .tw-field > span {
-  font-weight: 650;
+  font-weight: 600;
   font-size: 13px;
-  color: #606877;
+  color: #676767;
 }
 .tw-field :is(input, textarea, select) {
   width: 100%;
   min-width: 0;
   min-height: 44px;
-  border: 2px solid #e3e7ed;
-  border-radius: 11px;
+  border: 2px solid #e7e7e7;
+  border-radius: 6px;
   padding: 10px 13px;
   background: #fff;
   color: var(--tw-ink);
@@ -558,20 +560,20 @@
   line-height: 1.6;
 }
 .tw-field :is(input, textarea, select):focus {
-  border-color: #efa957;
-  background: #fffaf2;
+  border-color: #b2b2b2;
+  background: #fafafa;
 }
 .tw-field input::placeholder,
 .tw-field textarea::placeholder {
-  color: #8c939e;
+  color: #929292;
 }
 .tw-segments {
   display: flex;
   gap: 4px;
   flex-wrap: wrap;
   padding: 4px;
-  background: #f0f3f6;
-  border-radius: 12px;
+  background: #f3f3f3;
+  border-radius: 6px;
   width: max-content;
   max-width: 100%;
   margin-bottom: 24px;
@@ -583,17 +585,17 @@
   padding: 8px 15px;
   min-height: 36px;
   border: 1px solid transparent;
-  border-radius: 9px;
+  border-radius: 6px;
   background: none;
   font-size: 13px;
-  color: #6b7380;
+  color: #727272;
   font-weight: 600;
 }
 .tw-segments button[aria-pressed="true"] {
   background: #fff;
-  color: #9d5104;
-  border-color: #f0d9b9;
-  box-shadow: 0 2px 0 #e6e9ed;
+  color: #5c5c5c;
+  border-color: #dcdcdc;
+  box-shadow: none;
 }
 .tw-student-grid {
   display: grid;
@@ -602,8 +604,8 @@
 }
 .tw-student-card {
   border: 1px solid var(--tw-line);
-  border-bottom-width: 3px;
-  border-radius: 17px;
+  border-bottom-width: 1px;
+  border-radius: 6px;
   padding: 22px;
   background: #fff;
   text-align: left;
@@ -612,12 +614,14 @@
     transform 0.16s,
     border-color 0.16s;
 }
-.tw-student-card:hover {
-  transform: translateY(-3px);
-  border-color: #c6e6f8;
+@media (hover: hover) and (pointer: fine) {
+.tw-student-card:hover:not(:disabled) {
+  transform: none;
+  border-color: #e0e0e0;
+}
 }
 .tw-student-card:active {
-  transform: translateY(1px);
+  transform: none;
 }
 .tw-student-card-head {
   display: flex;
@@ -626,7 +630,7 @@
   margin-bottom: 17px;
 }
 .tw-student-card-head > svg {
-  color: #aab1bb;
+  color: #b0b0b0;
 }
 .tw-avatar {
   display: inline-flex;
@@ -637,7 +641,7 @@
   height: 48px;
   flex-shrink: 0;
   font-size: 16px;
-  font-weight: 750;
+  font-weight: 600;
 }
 .tw-avatar.large {
   width: 74px;
@@ -655,7 +659,7 @@
 }
 .tw-student-card > p {
   font-size: 14px;
-  color: #666e7b;
+  color: #6d6d6d;
   margin-top: 20px;
   min-height: 68px;
 }
@@ -667,22 +671,22 @@
   margin-top: 18px;
   border-top: 1px solid #f0f1f4;
   font-size: 12px;
-  color: #747d8a;
+  color: #7c7c7c;
 }
 .tw-text-link {
   display: inline-flex;
   align-items: center;
   gap: 6px;
   font-size: 13px;
-  font-weight: 650;
+  font-weight: 600;
   border: 0;
   background: none;
-  color: #5235e9;
+  color: #484848;
   padding: 6px 0;
 }
 .tw-preview-caption {
   font-size: 12px;
-  color: #828b97;
+  color: #8a8a8a;
   margin: 27px 0 !important;
 }
 .tw-profile-hero {
@@ -712,8 +716,8 @@
   min-width: 0;
 }
 .tw-goal-panel {
-  background: #fff9f0;
-  border-color: #f5e3c6;
+  background: #fafafa;
+  border-color: #e5e5e5;
   padding: 30px;
 }
 .tw-goal-panel h2 {
@@ -744,7 +748,7 @@
   display: flex;
   justify-content: space-between;
   gap: 25px;
-  border-top: 1px solid #edf0f3;
+  border-top: 1px solid #f0f0f0;
   padding: 16px 0;
   font-size: 14px;
 }
@@ -763,7 +767,7 @@
   width: 100%;
   padding: 18px;
   border: 1px solid var(--tw-line);
-  border-radius: 14px;
+  border-radius: 6px;
   background: #fff;
   text-align: left;
   color: var(--tw-ink);
@@ -786,20 +790,20 @@
   height: 40px;
   display: grid;
   place-items: center;
-  border-radius: 11px;
-  background: #f3efff;
-  color: #5235e9;
+  border-radius: 6px;
+  background: #f1f1f1;
+  color: #484848;
 }
 .tw-empty {
   padding: 50px 20px;
   text-align: center;
   color: var(--tw-muted);
-  border: 2px dashed #e4e9ef;
-  border-radius: 18px;
+  border: 2px dashed #e8e8e8;
+  border-radius: 6px;
 }
 .tw-empty > svg {
   margin-bottom: 16px;
-  color: #1599d0;
+  color: #818181;
 }
 .tw-empty h2 {
   margin-bottom: 8px;
@@ -809,10 +813,10 @@
   align-items: center;
   gap: 16px;
   border: 1px solid var(--tw-line);
-  border-bottom-width: 3px;
+  border-bottom-width: 1px;
   padding: 21px;
   background: #fff;
-  border-radius: 16px;
+  border-radius: 6px;
   width: 100%;
   text-align: left;
   color: var(--tw-ink);
@@ -837,21 +841,21 @@
   margin-bottom: 35px;
 }
 .tw-message {
-  border-radius: 15px 15px 15px 3px;
-  background: #f1f4f8;
+  border-radius: 6px 6px 6px 3px;
+  background: #f4f4f4;
   padding: 17px 20px;
   max-width: 78%;
   align-self: flex-start;
 }
 .tw-message.mine {
   align-self: flex-end;
-  background: #e9f7ff;
-  border-radius: 15px 15px 3px 15px;
+  background: #f5f5f5;
+  border-radius: 6px 6px 3px 6px;
 }
 .tw-message span {
   display: block;
   font-size: 11px;
-  color: #738094;
+  color: #7f7f7f;
   margin-top: 8px;
 }
 .tw-preserve {
@@ -870,8 +874,8 @@
 }
 .tw-lesson-card {
   border: 1px solid var(--tw-line);
-  border-bottom-width: 3px;
-  border-radius: 18px;
+  border-bottom-width: 1px;
+  border-radius: 6px;
   overflow: hidden;
   background: #fff;
   margin-bottom: 15px;
@@ -891,19 +895,19 @@
 }
 .tw-lesson-art > span {
   font-size: 23px;
-  font-weight: 750;
+  font-weight: 600;
   letter-spacing: -0.5px;
   transform: rotate(-5deg);
   background: #ffffffa0;
   padding: 5px 13px;
-  border-radius: 10px;
+  border-radius: 6px;
 }
 .tw-lesson-art > small {
   position: absolute;
   right: 15px;
   bottom: 12px;
   font-size: 12px;
-  font-weight: 650;
+  font-weight: 600;
 }
 .tw-lesson-card-body {
   padding: 21px;
@@ -932,10 +936,10 @@
   justify-content: space-between;
   gap: 8px;
   margin-top: 22px;
-  border-top: 1px solid #edf0f4;
+  border-top: 1px solid #f0f0f0;
   padding-top: 9px;
   font-size: 12px;
-  color: #7e8793;
+  color: #868686;
 }
 .tw-small-actions {
   display: flex;
@@ -962,7 +966,7 @@
   place-items: center;
   width: 64px;
   height: 64px;
-  border-radius: 20px;
+  border-radius: 6px;
   margin-bottom: 26px;
 }
 .tw-template-card p {
@@ -989,7 +993,7 @@
   margin-bottom: 15px;
 }
 .tw-editor-aside > section > svg {
-  color: #765adb;
+  color: #696969;
   margin-bottom: 17px;
 }
 .tw-editor-aside h2 {
@@ -1001,8 +1005,8 @@
   color: var(--tw-muted);
 }
 .tw-ai-panel {
-  background: #faf8ff;
-  border-color: #e7dfff;
+  background: #f9f9f9;
+  border-color: #e3e3e3;
 }
 .tw-private-notes {
   background: #fafbfd;
@@ -1023,15 +1027,15 @@
   margin-bottom: 22px;
 }
 .tw-block-number {
-  color: #9b510c;
-  background: #fff0dc;
+  color: #5c5c5c;
+  background: #f2f2f2;
   border-radius: 8px;
   display: grid;
   place-items: center;
   width: 32px;
   height: 32px;
   font-size: 13px;
-  font-weight: 700;
+  font-weight: 600;
 }
 .tw-block-tools {
   margin-left: auto;
@@ -1041,16 +1045,16 @@
 .tw-block-tools button {
   width: 30px;
   height: 30px;
-  border: 1px solid #e4e8ee;
+  border: 1px solid #e8e8e8;
   border-radius: 7px;
   background: #fff;
-  color: #737c89;
+  color: #7b7b7b;
 }
 .tw-block .tw-field:last-child {
   margin-bottom: 0;
 }
 .tw-brief {
-  background: #fffaf3;
+  background: #fbfbfb;
 }
 .tw-brief .tw-person-line {
   margin-bottom: 10px;
@@ -1058,7 +1062,7 @@
 .tw-brief p {
   margin-bottom: 0;
   font-size: 14px;
-  color: #846743;
+  color: #6b6b6b;
 }
 .tw-learner-preview {
   max-width: 800px;
@@ -1071,14 +1075,14 @@
   margin-top: 18px;
 }
 .tw-preview-block {
-  border-top: 1px solid #e7ebf0;
+  border-top: 1px solid #ebebeb;
   padding-top: 23px;
   margin-top: 25px;
 }
 .tw-preview-block > span {
   font-size: 12px;
-  color: #5235e9;
-  font-weight: 650;
+  color: #484848;
+  font-weight: 600;
 }
 .tw-preview-block h3 {
   margin: 9px 0;
@@ -1093,7 +1097,7 @@
   align-items: center;
   gap: 10px;
   border: 1px solid var(--tw-line);
-  border-radius: 12px;
+  border-radius: 6px;
   padding: 13px;
   background: #fff;
   color: var(--tw-ink);
@@ -1135,19 +1139,19 @@
   flex-direction: column;
   gap: 5px;
   padding: 14px 5px;
-  border: 2px solid #e9edf2;
-  border-radius: 14px;
+  border: 2px solid #ededed;
+  border-radius: 6px;
   background: #fff;
-  color: #757d89;
+  color: #7c7c7c;
 }
 .tw-week-strip button.today {
-  border-color: #9ed9f5;
-  background: #f0faff;
+  border-color: #cecece;
+  background: #f8f8f8;
 }
 .tw-week-strip button.selected {
-  border-color: #f0ad56;
-  background: #fff4e4;
-  color: #9b510c;
+  border-color: #b5b5b5;
+  background: #f5f5f5;
+  color: #5c5c5c;
 }
 .tw-week-strip span {
   font-size: 13px;
@@ -1163,7 +1167,7 @@
   background: transparent;
 }
 .tw-week-strip .has-session {
-  background: #5235e9;
+  background: #484848;
 }
 .tw-agenda-row {
   display: flex;
@@ -1171,8 +1175,8 @@
   gap: 20px;
   width: 100%;
   border: 1px solid var(--tw-line);
-  border-bottom-width: 3px;
-  border-radius: 16px;
+  border-bottom-width: 1px;
+  border-radius: 6px;
   background: #fff;
   padding: 25px;
   text-align: left;
@@ -1182,7 +1186,7 @@
 .tw-agenda-time {
   width: 125px;
   flex-shrink: 0;
-  border-right: 1px solid #e8edf2;
+  border-right: 1px solid #ececec;
 }
 .tw-agenda-time strong {
   display: block;
@@ -1206,7 +1210,7 @@
   color: var(--tw-muted);
 }
 .tw-agenda-copy small {
-  color: #ae6821;
+  color: #727272;
   margin-top: 4px;
 }
 .tw-day-options {
@@ -1217,41 +1221,41 @@
 }
 .tw-day-options button {
   border: 2px solid var(--tw-line);
-  border-bottom-width: 4px;
-  border-radius: 12px;
+  border-bottom-width: 1px;
+  border-radius: 6px;
   background: #fff;
-  color: #727b89;
+  color: #7a7a7a;
   padding: 12px 15px;
   font-size: 14px;
   font-weight: 600;
 }
 .tw-day-options .selected {
-  background: #fff0dc;
-  border-color: #f4b35e;
-  color: #9b510c;
+  background: #f2f2f2;
+  border-color: #bbbbbb;
+  color: #5c5c5c;
 }
 .tw-callout {
   display: flex;
   align-items: flex-start;
   gap: 13px;
   padding: 20px;
-  border-radius: 12px;
-  background: #f3f9fd;
-  color: #537080;
+  border-radius: 6px;
+  background: #f8f8f8;
+  color: #6b6b6b;
   font-size: 14px;
   margin: 20px 0;
 }
 .tw-error {
-  color: #b63b32;
+  color: #555555;
   font-size: 14px;
   padding: 15px;
-  background: #fff0ee;
-  border-radius: 10px;
+  background: #f3f3f3;
+  border-radius: 6px;
   margin-bottom: 20px !important;
 }
 .tw-pending {
-  background: #fffaf2;
-  border-color: #f4dfbd;
+  background: #fafafa;
+  border-color: #e1e1e1;
 }
 .tw-menu-row {
   display: flex;
@@ -1260,18 +1264,18 @@
   width: 100%;
   background: none;
   border: 0;
-  border-top: 1px solid #edf0f4;
+  border-top: 1px solid #f0f0f0;
   padding: 19px 0;
   text-align: left;
   color: var(--tw-ink);
   font-size: 15px;
 }
 .tw-menu-row > svg:first-child {
-  color: #73849a;
+  color: #828282;
 }
 .tw-menu-row > svg:last-child {
   margin-left: auto;
-  color: #9da8b7;
+  color: #a7a7a7;
 }
 .tw-lobby {
   max-width: 800px;
@@ -1286,8 +1290,8 @@
   align-items: center;
   justify-content: center;
   flex-direction: column;
-  background: #f0ecff;
-  border-radius: 16px;
+  background: #eeeeee;
+  border-radius: 6px;
   min-height: 260px;
   margin-bottom: 25px;
   padding: 30px;
@@ -1299,7 +1303,7 @@
 }
 .tw-camera-preview span {
   font-size: 13px;
-  color: #56809a;
+  color: #797979;
 }
 .tw-lobby .tw-subtle {
   margin: 20px 0;
@@ -1309,9 +1313,9 @@
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 16px;
-  background: #274557;
+  background: #404040;
   padding: 22px;
-  border-radius: 19px;
+  border-radius: 6px;
   margin-bottom: 24px;
 }
 .tw-live-people > div {
@@ -1321,8 +1325,8 @@
   flex-direction: column;
   gap: 20px;
   min-height: 190px;
-  border-radius: 14px;
-  background: #355368;
+  border-radius: 6px;
+  background: #4e4e4e;
   color: #fff;
 }
 .tw-live-people img {
@@ -1339,8 +1343,8 @@
   font-size: 11px;
 }
 .tw-live-activity {
-  background: #fffaf2;
-  border-color: #efdcbc;
+  background: #fafafa;
+  border-color: #dedede;
 }
 .tw-live-activity h2 {
   margin-top: 15px;
@@ -1365,16 +1369,16 @@
   font-size: 14px;
 }
 .tw-trust-panel {
-  background: #faf8ff;
-  border-color: #e7dfff;
+  background: #f9f9f9;
+  border-color: #e3e3e3;
 }
 .tw-trust-panel > svg {
-  color: #765adb;
+  color: #696969;
   margin-bottom: 15px;
 }
 .tw-trust-panel p {
   font-size: 14px;
-  color: #657b8c;
+  color: #787878;
 }
 .tw-trust-panel .tw-subtle {
   font-size: 12px;
@@ -1387,7 +1391,7 @@
   justify-content: space-between;
   gap: 16px;
   padding: 20px 0;
-  border-top: 1px solid #e7ecf2;
+  border-top: 1px solid #ebebeb;
 }
 .tw-setting-row strong,
 .tw-setting-row > div > span {
@@ -1403,8 +1407,8 @@
   width: 49px;
   height: 29px;
   border: 0;
-  border-radius: 30px;
-  background: #cfd6df;
+  border-radius: 6px;
+  background: #d5d5d5;
   padding: 3px;
 }
 .tw-toggle > span {
@@ -1413,21 +1417,21 @@
   height: 23px;
   border-radius: 50%;
   background: #fff;
-  box-shadow: 0 1px 3px #0002;
+  box-shadow: none;
   transition: transform 0.2s;
 }
 .tw-toggle.on {
-  background: #5235e9;
+  background: #484848;
 }
 .tw-toggle.on > span {
   transform: translateX(20px);
 }
 .teacher-workspace details {
-  border-bottom: 1px solid #e7ecf2;
+  border-bottom: 1px solid #ebebeb;
   padding: 18px 0;
 }
 .teacher-workspace summary {
-  font-weight: 650;
+  font-weight: 600;
   cursor: pointer;
 }
 .teacher-workspace details p {
@@ -1441,12 +1445,12 @@
   gap: 23px;
 }
 .tw-payout-summary .tw-panel {
-  background: #faf8ff;
-  border-color: #e7dfff;
+  background: #f9f9f9;
+  border-color: #e3e3e3;
 }
 .tw-payout-summary span {
   font-size: 14px;
-  color: #688496;
+  color: #7f7f7f;
 }
 .tw-payout-summary h2 {
   font-size: 33px;
@@ -1479,17 +1483,17 @@
   max-width: 600px;
   width: max-content;
   padding: 16px 20px;
-  border: 1px solid #cce6ef;
-  border-bottom-width: 3px;
-  background: #eefaff;
-  border-radius: 14px;
+  border: 1px solid #e1e1e1;
+  border-bottom-width: 1px;
+  background: #f8f8f8;
+  border-radius: 6px;
   font-size: 14px;
-  box-shadow: 0 8px 35px #18334715;
+  box-shadow: none;
 }
 .tw-notice button {
   border: 0;
   background: none;
-  color: #59778a;
+  color: #727272;
   font-size: 23px;
   line-height: 1;
   padding: 0;
@@ -1521,7 +1525,7 @@ body:has(.teacher-web) {
 }
 .teacher-mobile .flow-fixed-footer {
   background: #fff;
-  border-top: 1px solid #e4e9ef;
+  border-top: 1px solid #e8e8e8;
 }
 .mobile-app-viewport[data-platform="ios"]
   .teacher-mobile
@@ -1543,7 +1547,7 @@ body:has(.teacher-web) {
 .teacher-mobile .tw-toolbar-left {
   gap: 6px;
   font-size: 17px;
-  font-weight: 700;
+  font-weight: 600;
 }
 .teacher-mobile .tw-toolbar-right {
   gap: 8px;
@@ -1562,11 +1566,11 @@ body:has(.teacher-web) {
   gap: 5px;
   font-size: 11px;
   border: 0;
-  border-radius: 11px;
+  border-radius: 6px;
 }
 .teacher-mobile .tw-navigation button[aria-current="page"] {
-  background: #f3efff;
-  color: #5235e9;
+  background: #f1f1f1;
+  color: #484848;
 }
 .teacher-mobile .tw-content {
   padding: 24px 18px
@@ -1690,7 +1694,7 @@ body:has(.teacher-web) {
 }
 .teacher-mobile .tw-panel {
   padding: 21px;
-  border-radius: 16px;
+  border-radius: 6px;
   margin-bottom: 19px;
 }
 .teacher-mobile .tw-goal-panel h2 {
@@ -1756,7 +1760,7 @@ body:has(.teacher-web) {
 }
 .teacher-mobile .tw-week-strip button {
   padding: 10px 2px;
-  border-radius: 11px;
+  border-radius: 6px;
 }
 .teacher-mobile .tw-week-strip span {
   font-size: 11px;
@@ -2101,8 +2105,10 @@ body:has(.teacher-web) {
     transition: none !important;
     animation: none !important;
   }
-  .tw-student-card:hover {
+  @media (hover: hover) and (pointer: fine) {
+  .tw-student-card:hover:not(:disabled) {
     transform: none;
+  }
   }
 }
 .teacher-workspace :is(h1, h2, h3, p, strong) {
@@ -2114,7 +2120,7 @@ body:has(.teacher-web) {
     600 18px/1.5 "Labil Grotesk",
     Arial,
     sans-serif;
-  color: #567b91;
+  color: #757575;
   text-align: center;
 }
 .teacher-mobile .flow-screen,

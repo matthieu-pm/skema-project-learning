@@ -126,7 +126,7 @@ function SidebarProvider({
 
   return (
     <SidebarContext.Provider value={contextValue}>
-      <TooltipProvider delayDuration={0}>
+      <TooltipProvider delayDuration={350} skipDelayDuration={300}>
         <div
           data-slot="sidebar-wrapper"
           style={
@@ -537,6 +537,7 @@ function SidebarMenuButton({
     <Tooltip>
       <TooltipTrigger asChild>{button}</TooltipTrigger>
       <TooltipContent
+        className="tw-sidebar-tooltip"
         side="right"
         align="center"
         hidden={state !== "collapsed" || isMobile}

@@ -6,7 +6,7 @@ import {
   type PointerEvent,
   type ReactNode,
 } from "react";
-import * as Dialog from "@radix-ui/react-dialog";
+import { Dialog } from "radix-ui";
 import { createPortal } from "react-dom";
 import {
   BottomSheet,
@@ -27,8 +27,8 @@ import {
 } from "./components";
 import { lessonPublicationIssues, lessonPriceLabel } from "../lesson-settings";
 import { students, type Lesson } from "./model";
-import { BlockSummary, StudentBlock } from "./CourseContent";
-import { CourseProperties } from "./CourseProperties";
+import { StudentBlock } from "./CourseContent";
+import { BlockProperties, CourseProperties, LessonPropertiesFields, ModulePropertiesFields } from "./CourseProperties";
 import {
   cloneCourse,
   courseIssues,
@@ -208,6 +208,7 @@ export function LessonPlayer({ course: c, fitMobile = false }: { course: Course;
       {!finished && (
         <div className="ce-student-navigation">
           <Button
+            static
             kind="secondary"
             disabled={step === 0}
             onClick={() => setStep(step - 1)}
@@ -215,6 +216,7 @@ export function LessonPlayer({ course: c, fitMobile = false }: { course: Course;
             Previous
           </Button>
           <Button
+            static
             onClick={() =>
               step === sequence.length - 1
                 ? setFinished(true)
@@ -225,9 +227,6 @@ export function LessonPlayer({ course: c, fitMobile = false }: { course: Course;
           </Button>
         </div>
       )}
-      <small className="ce-simulation">
-        Student preview · responses and sharing are simulated
-      </small>
     </div>
   );
 }
@@ -266,6 +265,7 @@ function Editor({ lesson, navigate }: { lesson: Lesson; navigate: Navigate }) {
   } = useWorkspace();
   const keyboard = useKeyboard(),
     c = useMemo(() => fromLesson(lesson), [lesson]);
+  const editorRef = useRef<HTMLDivElement>(null);
   const builtInTemplates = useMemo(readyTemplates, []);
   const initial = useRef(c),
     [moduleId, setModuleId] = useState(c.modules[0]?.id),
@@ -372,25 +372,38 @@ function Editor({ lesson, navigate }: { lesson: Lesson; navigate: Navigate }) {
   };
   const changeModule = (m: CourseModule) =>
     commit({ ...c, modules: c.modules.map((x) => (x.id === m.id ? m : x)) });
-  const changeBlock = (b: CourseBlock) => {
-    if (selectedModule)
+  const changeBlock = (targetModuleId: string, b: CourseBlock) => {
+    const targetModule = c.modules.find((m) => m.id === targetModuleId);
+    if (targetModule?.blocks.some((block) => block.id === b.id))
       changeModule({
-        ...selectedModule,
-        blocks: selectedModule.blocks.map((x) => (x.id === b.id ? b : x)),
+        ...targetModule,
+        blocks: targetModule.blocks.map((x) => (x.id === b.id ? b : x)),
       });
   };
-  const selectModule = (m: CourseModule) => {
+  const showCanvasGroup = (targetId: string) => {
+    keyboard.hide();
+    setMoveMenu(null);
+    setMobilePanel("Canvas");
+    requestAnimationFrame(() => {
+      const target = document.getElementById(targetId);
+      if (!target || !editorRef.current?.contains(target)) return;
+      target.scrollIntoView({ block: "start", behavior: "instant" });
+      target.focus({ preventScroll: true });
+    });
+  };
+  const selectModule = (m: CourseModule, reveal = false) => {
     setModuleId(m.id);
     setBlockId(undefined);
     setTab("Module");
     setMoveMenu(null);
+    if (reveal) showCanvasGroup(`canvas-module-${m.id}`);
   };
-  const selectBlock = (m: CourseModule, b: CourseBlock, properties = false) => {
+  const selectBlock = (m: CourseModule, b: CourseBlock, reveal = false) => {
     setModuleId(m.id);
     setBlockId(b.id);
     setTab("Block");
     setMoveMenu(null);
-    if (properties) setMobilePanel("Properties");
+    if (reveal) showCanvasGroup(`canvas-block-${b.id}`);
   };
   const addBlock = (format: Format, usePurpose = purpose) => {
     if (!selectedModule) {
@@ -414,9 +427,9 @@ function Editor({ lesson, navigate }: { lesson: Lesson; navigate: Navigate }) {
     });
     setBlockId(block.id);
     setTab("Block");
-    setMobilePanel("Properties");
+    showCanvasGroup(`canvas-block-${block.id}`);
     setModal(null);
-    setNotice(`${format} block added. Edit its content in Block properties.`);
+    setNotice(`${format} block added. Edit its content on the canvas.`);
   };
   const addModule = (type: ModuleType) => {
     const m = createModule(type);
@@ -424,7 +437,7 @@ function Editor({ lesson, navigate }: { lesson: Lesson; navigate: Navigate }) {
     setModuleId(m.id);
     setBlockId(undefined);
     setTab("Module");
-    setMobilePanel("Properties");
+    showCanvasGroup(`canvas-module-${m.id}`);
     setModal(null);
   };
   const deleteModule = () => {
@@ -448,7 +461,7 @@ function Editor({ lesson, navigate }: { lesson: Lesson; navigate: Navigate }) {
   const save = (apply = false) => {
     if (apply && offline) {
       setErrors([
-        "You’re offline in this simulation. Reconnect in Account settings, then apply. Your draft is still editable.",
+        "You’re offline. Reconnect in Account settings, then publish. Your draft is still editable.",
       ]);
       return false;
     }
@@ -505,11 +518,11 @@ function Editor({ lesson, navigate }: { lesson: Lesson; navigate: Navigate }) {
     if (apply) {
       setModal(null);
       setNotice(
-        `Changes applied in this prototype${recipient ? ` for ${students.find((s) => s.id === recipient)?.name}` : ""}${asTemplate ? "; template saved" : ""}.`,
+        `Changes applied${recipient ? ` for ${students.find((s) => s.id === recipient)?.name}` : ""}${asTemplate ? "; template saved" : ""}.`,
       );
     } else
       setNotice(
-        "Changes saved on this device. The applied lesson is unchanged.",
+        "Draft saved. The published lesson is unchanged.",
       );
     return true;
   };
@@ -710,6 +723,7 @@ function Editor({ lesson, navigate }: { lesson: Lesson; navigate: Navigate }) {
   );
   return (
     <div
+      ref={editorRef}
       className={`ce-editor ${dragging ? "ce-dragging" : ""}`}
       onKeyDown={shortcuts}
     >
@@ -767,7 +781,7 @@ function Editor({ lesson, navigate }: { lesson: Lesson; navigate: Navigate }) {
             </div>
           </div>
           <div className="ce-tabs">
-            {["Modules", "Teach", "Practise", "Templates"].map((t) => (
+            {["Modules", "Teach", "Practice", "Templates"].map((t) => (
               <button
                 key={t}
                 aria-pressed={library === t}
@@ -780,9 +794,6 @@ function Editor({ lesson, navigate }: { lesson: Lesson; navigate: Navigate }) {
           <div className="ce-palette">
             {library === "Modules" ? (
               <>
-                <p>
-                  Choose a learning focus. Add any teaching or practice blocks.
-                </p>
                 <div className="ce-module-palette">
                   {moduleTypes.map((type) => (
                     <button key={type} onClick={() => addModule(type)}>
@@ -834,11 +845,8 @@ function Editor({ lesson, navigate }: { lesson: Lesson; navigate: Navigate }) {
                 <Icon name="plus" size={16} />
               </button>
             </div>
-            <p className="ce-outline-hint">
-              Drag the grip to reorder. More actions offers the same controls.
-            </p>
             {!c.modules.length && (
-              <p>Add a module to start building your lesson.</p>
+              <p className="ce-outline-empty">Add a module to start building your lesson.</p>
             )}
             {c.modules.map((m, i) => (
               <div className="ce-outline-group" key={m.id}>
@@ -849,7 +857,7 @@ function Editor({ lesson, navigate }: { lesson: Lesson; navigate: Navigate }) {
                   {grip({ moduleId: m.id }, m.title)}
                   <button
                     className="ce-outline-title"
-                    onClick={() => selectModule(m)}
+                    onClick={() => selectModule(m, true)}
                   >
                     <span>
                       {String(i + 1).padStart(2, "0")} · {m.title}
@@ -870,7 +878,7 @@ function Editor({ lesson, navigate }: { lesson: Lesson; navigate: Navigate }) {
                     {grip({ moduleId: m.id, blockId: b.id }, b.title)}
                     <button
                       className="ce-outline-title"
-                      onClick={() => selectBlock(m, b)}
+                      onClick={() => selectBlock(m, b, true)}
                     >
                       <span>{b.title}</span>
                       <small>
@@ -893,27 +901,24 @@ function Editor({ lesson, navigate }: { lesson: Lesson; navigate: Navigate }) {
           <div className="ce-canvas-label">
             <span>Module editor</span>
             <span className="ce-view-status">
-              <span>Teacher view</span>
               <Badge tone={applied ? "green" : "orange"}>{status}</Badge>
             </span>
           </div>
           <div className="ce-lesson-paper">
-            <div className="ce-lesson-heading">
-              <h1>{c.title || "Untitled lesson"}</h1>
-              <div className="ce-lesson-metadata">
-                <span>{c.language}</span>
-                <span>{c.level}</span>
-                <span>
-                  <Icon name="clock" size={14} />
-                  {totalMinutes(c)} min
-                </span>
-              </div>
-              <p>{c.goal || "Add a learning goal in Lesson properties."}</p>
+            <div
+              className="ce-lesson-heading ce-direct-lesson-heading"
+              role="group"
+              aria-label="Lesson details"
+              onFocusCapture={() => setTab("Lesson")}
+            >
+              <h1 className="ce-visually-hidden">{c.title || "Untitled lesson"}</h1>
+              <LessonPropertiesFields course={c} changeCourse={commit} presentation="canvas" />
             </div>
             {c.modules.map((m, i) => (
               <section
                 className={`ce-module ${selectedModule?.id === m.id ? "ce-module-selected" : ""}`}
                 key={m.id}
+                data-ce-module={m.id}
                 onDragOver={(e) => {
                   if (e.dataTransfer.types.includes("application/mimo-block"))
                     e.preventDefault();
@@ -928,7 +933,7 @@ function Editor({ lesson, navigate }: { lesson: Lesson; navigate: Navigate }) {
                       ![...teachFormats, ...practiceFormats].includes(
                         data.format,
                       ) ||
-                      !["Teach", "Practise"].includes(data.purpose)
+                      !["Teach", "Practice"].includes(data.purpose)
                     )
                       return;
                     const b = createBlock(data.format, data.purpose);
@@ -941,52 +946,36 @@ function Editor({ lesson, navigate }: { lesson: Lesson; navigate: Navigate }) {
                     setModuleId(m.id);
                     setBlockId(b.id);
                     setTab("Block");
+                    showCanvasGroup(`canvas-block-${b.id}`);
                   } catch {
                     /* Ignore unrelated drops. */
                   }
                 }}
               >
-                <button
-                  className="ce-module-heading"
-                  onClick={() => {
-                    selectModule(m);
-                    if (mobile) setMobilePanel("Properties");
-                  }}
+                <div
+                  id={`canvas-module-${m.id}`}
+                  className="ce-module-heading ce-direct-module-heading"
+                  role="group"
+                  aria-label="Module properties"
+                  tabIndex={-1}
+                  onFocusCapture={() => selectModule(m)}
                 >
-                  <span className="ce-number">
-                    {String(i + 1).padStart(2, "0")}
-                  </span>
-                  <span>
-                    <small>
-                      {m.type} · {m.minutes} min
-                    </small>
-                    <h2>{m.title}</h2>
-                    <p>{m.goal || "Add this module’s learning goal."}</p>
-                  </span>
-                  <Icon name="settings" size={18} />
-                </button>
+                  <span className="ce-number">{String(i + 1).padStart(2, "0")}</span>
+                  <ModulePropertiesFields module={m} changeModule={changeModule} presentation="canvas" />
+                </div>
                 {m.blocks.map((b) => (
                   <article
-                    className={`ce-canvas-block ${selectedBlock?.id === b.id ? "selected" : ""}`}
+                    id={`canvas-block-${b.id}`}
+                    className={`ce-canvas-block ce-direct-block ${selectedBlock?.id === b.id ? "selected" : ""}`}
                     key={b.id}
+                    role="group"
+                    aria-label="Block properties"
+                    tabIndex={-1}
+                    data-ce-block={b.id}
+                    onFocusCapture={() => selectBlock(m, b)}
                   >
-                    <button
-                      className="ce-block-select"
-                      onClick={() => selectBlock(m, b, mobile)}
-                      aria-label={`Edit ${b.title}`}
-                    >
-                      <span
-                        className={`ce-purpose ${b.purpose === "Teach" ? "teach" : "practice"}`}
-                      >
-                        {b.purpose}
-                      </span>
-                      <span>{b.format}</span>
-                      <Icon name="settings" size={16} />
-                    </button>
-                    <div onClick={() => selectBlock(m, b)}>
-                      <h3>{b.title}</h3>
-                      <p>{b.instructions}</p>
-                      <BlockSummary block={b} />
+                    <div className="ce-direct-block-fields">
+                      <BlockProperties block={b} change={(next) => changeBlock(m.id, next)} />
                     </div>
                   </article>
                 ))}
@@ -1008,7 +997,7 @@ function Editor({ lesson, navigate }: { lesson: Lesson; navigate: Navigate }) {
             </button>
           </div>
           <p className="ce-canvas-footnote">
-            Select a block to edit it. Preview shows one block at a time.
+            Changes update your draft. Preview shows one block at a time.
           </p>
           {lesson.publishedEditor && (
             <div className="ce-applied-link">
@@ -1034,7 +1023,7 @@ function Editor({ lesson, navigate }: { lesson: Lesson; navigate: Navigate }) {
           onTab={setTab}
           changeCourse={commit}
           changeModule={changeModule}
-          changeBlock={changeBlock}
+          changeBlock={(block) => { if (selectedModule) changeBlock(selectedModule.id, block); }}
           addModule={() => open("module")}
           deleteModule={deleteModule}
           addBlock={() => open("block")}
@@ -1064,7 +1053,7 @@ function Editor({ lesson, navigate }: { lesson: Lesson; navigate: Navigate }) {
               open("apply");
             }}
           >
-            Apply changes
+            Publish course
           </Button>
         </div>
       </EditorActions>
@@ -1076,7 +1065,7 @@ function Editor({ lesson, navigate }: { lesson: Lesson; navigate: Navigate }) {
               : modal === "preview"
                 ? "Preview lesson"
                 : modal === "apply"
-                  ? "Apply lesson changes"
+                  ? "Publish course"
                   : modal === "module"
                     ? "Add module"
                     : "Add block"
@@ -1106,7 +1095,7 @@ function Editor({ lesson, navigate }: { lesson: Lesson; navigate: Navigate }) {
             <>
               <p>Add content to {selectedModule?.title || "a module"}.</p>
               <div className="ce-tabs">
-                {(["Teach", "Practise"] as Purpose[]).map((p) => (
+                {(["Teach", "Practice"] as Purpose[]).map((p) => (
                   <button
                     key={p}
                     aria-pressed={purpose === p}
@@ -1125,12 +1114,8 @@ function Editor({ lesson, navigate }: { lesson: Lesson; navigate: Navigate }) {
           ) : (
             <>
               <p>
-                Apply this version for a student, save it as a reusable
+                Publish this version for a student, save it as a reusable
                 template, or do both.
-              </p>
-              <p className="ce-info">
-                Prototype only · changes and files stay in this browser. No
-                student is notified.
               </p>
               <Select
                 label="Student"
@@ -1176,7 +1161,7 @@ function Editor({ lesson, navigate }: { lesson: Lesson; navigate: Navigate }) {
               )}
               {errors.length > 0 && (
                 <div className="ce-warning" role="alert">
-                  <strong>Complete these before applying</strong>
+                  <strong>Complete these before publishing</strong>
                   {errors.map((s, i) => (
                     <p key={i}>{s}</p>
                   ))}
@@ -1186,7 +1171,7 @@ function Editor({ lesson, navigate }: { lesson: Lesson; navigate: Navigate }) {
                 <Button kind="secondary" onClick={() => setModal(null)}>
                   Keep editing
                 </Button>
-                <Button onClick={() => save(true)}>Apply changes</Button>
+                <Button onClick={() => save(true)}>Publish course</Button>
               </div>
             </>
           )}

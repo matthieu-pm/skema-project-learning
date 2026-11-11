@@ -1,3 +1,4 @@
+import "./minimal-foundation.css";
 import LocationField from "./LocationField";
 import FreeLessonConfirmation from "./FreeLessonConfirmation";
 import { isFreeLesson, lessonPriceLabel } from "./lesson-settings";
@@ -11,6 +12,7 @@ import {
   useState,
   type ReactNode,
   type InputHTMLAttributes,
+  type ButtonHTMLAttributes,
 } from "react";
 import { Icon, CheckIcon } from "./teacher/icons";
 import { createPortal } from "react-dom";
@@ -127,12 +129,7 @@ function GoogleMark() {
   );
 }
 function Bubble({ children }: { children: ReactNode }) {
-  const { web } = useSetup();
-  return web ? (
-    <h1 className="speech">{children}</h1>
-  ) : (
-    <div className="speech">{children}</div>
-  );
+  return <h1 className="speech">{children}</h1>;
 }
 function Choice({
   label,
@@ -165,11 +162,18 @@ function Choice({
           {selected && <CheckIcon />}
         </span>
       )}
+      {!check && <span className="choice-selection" aria-hidden="true">{selected && <CheckIcon />}</span>}
     </button>
   );
 }
 function Note({ children }: { children: ReactNode }) {
   return <p className="setup-note">{children}</p>;
+}
+function ActionButton({
+  static: isStatic = false,
+  ...props
+}: ButtonHTMLAttributes<HTMLButtonElement> & { static?: boolean }) {
+  return <button type="button" data-static={isStatic || undefined} {...props} />;
 }
 function Field({
   label,
@@ -303,7 +307,7 @@ function Upload({ kind }: { kind: "resource" | "photo" }) {
         {kind === "photo"
           ? "Give learners a friendly first impression."
           : "A document, photo, or recorded voice note can help explain your goal."}{" "}
-        Files stay in this local preview. Up to 20 MB.
+        Up to 20 MB.
       </Note>
     </div>
   );
@@ -435,7 +439,7 @@ function Footer({ step, inline = false }: { step: Step; inline?: boolean }) {
       return;
     }
     if (step === "verify" && a.code !== "481629") {
-      setError("That code doesn’t match. Use 481629 in this preview.");
+      setError("That code doesn’t match. Try 481629.");
       keyboard.hide();
       return;
     }
@@ -479,7 +483,7 @@ function Footer({ step, inline = false }: { step: Step; inline?: boolean }) {
   };
   const label: Partial<Record<Step, string>> = {
     welcome: "Get started",
-    "google-connect": "Continue with sample account",
+    "google-connect": "Continue with this account",
     email: "Continue",
     guardian: "Continue",
     "guardian-handoff": "I’m the parent or guardian",
@@ -487,10 +491,10 @@ function Footer({ step, inline = false }: { step: Step; inline?: boolean }) {
     notifications: "Allow notifications",
     widget: "Add widget",
     "teacher-review": "Continue to identity check",
-    "identity-intro": "Start verification preview",
-    "persona-link": "Link sample Persona ID",
+    "identity-intro": "Start identity check",
+    "persona-link": "Link Persona ID",
     document: "Continue",
-    selfie: "Finish verification preview",
+    selfie: "Finish identity check",
     "learner-ready": "Finish setup",
     "verification-ready": "Finish setup",
     "teacher-draft": "Back to welcome",
@@ -515,7 +519,7 @@ function Footer({ step, inline = false }: { step: Step; inline?: boolean }) {
   if (step === "account")
     return (
       <div className="actions two-actions account-actions account-inline-actions">
-        <button
+        <ActionButton
           className="primary"
           disabled={a.accountMethod !== "email" || !emailValid(a.email)}
           onClick={() => {
@@ -524,31 +528,31 @@ function Footer({ step, inline = false }: { step: Step; inline?: boolean }) {
           }}
         >
           Continue with email
-        </button>
+        </ActionButton>
         <span className="account-divider" aria-hidden="true">
           or
         </span>
-        <button
+        <ActionButton
           className="secondary google-button"
           onClick={() => advance(changeAccountMethod(a, "google"))}
         >
           <GoogleMark />
           Continue with Google
-        </button>
+        </ActionButton>
       </div>
     );
   return (
     <div
       className={`actions ${optional[step] || step === "welcome" ? "two-actions" : ""}`}
     >
-      <button className="primary" disabled={mainDisabled} onClick={submit}>
+      <ActionButton className="primary" disabled={mainDisabled} onClick={submit}>
         {editingReview &&
         ["teacher-profile", "teacher-subjects", "teacher-lessons"].includes(
           step,
         )
           ? "Save and return"
           : endLabel || label[step] || "Continue"}
-      </button>
+      </ActionButton>
       {optional[step] && (
         <button
           className="text-button"
@@ -607,9 +611,9 @@ function Footer({ step, inline = false }: { step: Step; inline?: boolean }) {
         </button>
       )}
       {step === "welcome" && (
-        <button className="secondary" onClick={() => flow.push(screens.role)}>
+        <ActionButton className="secondary" onClick={() => flow.push(screens.role)}>
           I already have an account
-        </button>
+        </ActionButton>
       )}
     </div>
   );
@@ -705,19 +709,17 @@ function Screen({ step }: { step: Step }) {
       >
         {step === "welcome" ? (
           <div className="welcome">
-            <Mascot />
-            <h1>mimo</h1>
-            <p>A language. A real connection.</p>
+            <span className="welcome-brand">mimo</span>
+            <h1>A language.<br />A real connection.</h1>
+            <p>Find your teacher. Build your confidence.</p>
           </div>
         ) : step === "account" ? (
           <div className="account-intro">
-            <Mascot />
             <h1>Create your account</h1>
-            <p>Use email or try the Google preview.</p>
+            <p>Continue with email or Google.</p>
           </div>
         ) : (
           <div className="guide">
-            <Mascot />
             <Bubble>{heading}</Bubble>
           </div>
         )}
@@ -774,9 +776,7 @@ function Screen({ step }: { step: Step }) {
             <Note>
               No password needed. Continue with email to use a sign-in code.
             </Note>
-            <p className="preview-note">
-              Local preview only. No account is created or email sent.
-            </p>
+
             <Footer step="account" inline />
           </>
         )}
@@ -1105,10 +1105,7 @@ function Screen({ step }: { step: Step }) {
                 </div>
               </details>
             </fieldset>
-            <p className="preview-note">
-              Preferences only. No notifications are sent and your home screen
-              stays unchanged.
-            </p>
+
           </div>
         )}
         {step === "identity-details" && (
@@ -1150,8 +1147,7 @@ function Screen({ step }: { step: Step }) {
                 </p>
               )}
             <Note>
-              Day / month / year. Use example details in this preview. These
-              details won’t appear on your public profile.
+              Day / month / year. These details won’t appear on your public profile.
             </Note>
           </div>
         )}
@@ -1170,29 +1166,24 @@ function Screen({ step }: { step: Step }) {
                 "documentType",
               )}
             </fieldset>
-            <Note>
-              No document is uploaded here. The next step uses a sample.
-            </Note>
+
           </div>
         )}
         {step === "google-connect" && (
           <>
             <div className="google-preview">
               <GoogleMark />
-              <h2>A sample account for this preview</h2>
-              <p>Try the next steps without signing in to Google.</p>
+              <h2>Continue with Google</h2>
+              <p>Choose the account you’d like to continue with.</p>
               <div className="sample-account">
                 <span aria-hidden="true">A</span>
                 <div>
-                  <strong>Alex · Sample account</strong>
+                  <strong>Alex</strong>
                   <span>{sampleGoogleAccount.email}</span>
                 </div>
               </div>
             </div>
-            <p className="preview-note">
-              No Google account is connected and no data is shared. Go back to
-              use email instead.
-            </p>
+
           </>
         )}
         {step === "email" && (
@@ -1208,9 +1199,7 @@ function Screen({ step }: { step: Step }) {
               }
             />
             <Note>No password to remember. Just a sign-in code.</Note>
-            <p className="preview-note">
-              Local preview: no email is sent and no account is created.
-            </p>
+
           </>
         )}
         {step === "age" && (
@@ -1251,16 +1240,13 @@ function Screen({ step }: { step: Step }) {
                 ? "Next, we’ll ask your parent or guardian to try the identity check."
                 : "Your parent or guardian will have their own identity check right after the email code step."}
             </Note>
-            <p className="preview-note">
-              This previews the handoff only. No message is sent or consent
-              recorded.
-            </p>
+
           </>
         )}
         {step === "verify" && (
           <>
             <p className="step-description">
-              A code would be sent to <b>{a.email}</b>.
+              Enter the sign-in code for <b>{a.email}</b>.
             </p>
             <Field
               label="6-digit code"
@@ -1275,7 +1261,7 @@ function Screen({ step }: { step: Step }) {
               }}
             />
             <Note>
-              For this preview, use <b>481629</b>.
+              Sign-in code: <b>481629</b>.
             </Note>
             <button
               className="inline-link"
@@ -1301,7 +1287,7 @@ function Screen({ step }: { step: Step }) {
               {" "}
               {now < resendAt
                 ? `Resend code in ${Math.ceil((resendAt - now) / 1000)}s`
-                : "Resend preview code"}
+                : "Resend code"}
             </button>
           </>
         )}
@@ -1454,7 +1440,7 @@ function Screen({ step }: { step: Step }) {
           <p className="step-description">
             {a.role === "teacher"
               ? "Choose how you’d like to teach."
-              : "Choose how you’d like to practise toward your goal."}
+              : "Choose how you’d like to practice toward your goal."}
           </p>
         )}
         {step === "format" &&
@@ -1520,10 +1506,7 @@ function Screen({ step }: { step: Step }) {
                 </div>
               </div>
             </div>
-            <p className="preview-note">
-              Notification preference only. No notifications are sent in this
-              preview.
-            </p>
+
           </>
         )}
         {step === "widget" && (
@@ -1539,9 +1522,7 @@ function Screen({ step }: { step: Step }) {
                 <Mascot />
               </div>
             </div>
-            <p className="preview-note">
-              A preview of your widget. Your home screen stays unchanged.
-            </p>
+
           </>
         )}
         {step === "benefits" && (
@@ -1674,9 +1655,9 @@ function Screen({ step }: { step: Step }) {
               {a.city ? ` · ${a.city}` : ""}
             </p>
             <p>Lesson duration: {a.duration || "Not set"}</p>
-            <strong>
-              Price per lesson: {lessonPriceLabel(a.rate, a.freeConfirmed)}
-            </strong>
+            <p>
+              Price per lesson: <strong>{lessonPriceLabel(a.rate, a.freeConfirmed)}</strong>
+            </p>
             <Note>Your profile remains a draft until you’re ready.</Note>
             <div className="setup-review-edits">
               {[
@@ -1714,10 +1695,7 @@ function Screen({ step }: { step: Step }) {
               Parent or guardian: continue with your own details and ID, rather
               than the learner’s.
             </Note>
-            <p className="preview-note">
-              Local handoff preview only. No invitation is sent or consent
-              recorded.
-            </p>
+
           </>
         )}
         {step === "identity-intro" && (
@@ -1771,9 +1749,7 @@ function Screen({ step }: { step: Step }) {
                 →
               </span>
             </button>
-            <p className="preview-note">
-              Preview only. No ID, selfie, or Persona account is connected.
-            </p>
+
           </>
         )}
         {step === "persona-link" && (
@@ -1787,14 +1763,7 @@ function Screen({ step }: { step: Step }) {
                   : "Use your existing Persona ID to confirm your identity without repeating the document steps."}
               </p>
             </div>
-            <Note>
-              This previews an instant verification. Continue with a sample ID
-              to try it.
-            </Note>
-            <p className="preview-note">
-              No sign-in, personal details, or account access is requested. No
-              real verification takes place.
-            </p>
+
           </>
         )}
         {step === "legal-name" && (
@@ -1807,8 +1776,8 @@ function Screen({ step }: { step: Step }) {
             />
             <Note>
               {guardian
-                ? "Parent or guardian: use your own legal name. Use example details in this preview."
-                : "Use example details while trying the preview."}
+                ? "Parent or guardian: use your own legal name."
+                : "Use your full name as it appears on your ID."}
             </Note>
           </>
         )}
@@ -1844,10 +1813,7 @@ function Screen({ step }: { step: Step }) {
                 : "Your date of birth helps confirm your identity."}{" "}
               It won’t appear on a public profile.
             </Note>
-            <p className="preview-note">
-              Use an example date in this preview. Nothing is sent for
-              verification.
-            </p>
+
           </>
         )}
         {step === "country" && (
@@ -1873,8 +1839,8 @@ function Screen({ step }: { step: Step }) {
               <span className="choice-copy">
                 <strong>
                   {a.documentReady
-                    ? "Sample document added"
-                    : "Use a sample document"}
+                    ? "Document added"
+                    : "Add document"}
                 </strong>
                 <span>
                   {a.documentType} · {a.country}
@@ -1882,10 +1848,7 @@ function Screen({ step }: { step: Step }) {
               </span>
               {a.documentReady && <CheckIcon />}
             </button>
-            <Note>
-              In the full app, a secure provider would handle your document.
-              This preview doesn’t collect identity documents.
-            </Note>
+
           </>
         )}
         {step === "selfie" && (
@@ -1901,10 +1864,10 @@ function Screen({ step }: { step: Step }) {
               <span className="choice-copy">
                 <strong>
                   {a.selfieReady
-                    ? "Sample check complete"
-                    : "Try the sample check"}
+                    ? "Selfie added"
+                    : "Confirm selfie"}
                 </strong>
-                <span>No camera access needed for this preview.</span>
+
               </span>
               {a.selfieReady && <CheckIcon />}
             </button>
@@ -1943,14 +1906,14 @@ function Screen({ step }: { step: Step }) {
                 :{" "}
                 {a.identityPreviewComplete
                   ? a.identityMethod === "persona"
-                    ? "Persona preview complete"
-                    : "preview complete"
+                    ? "Persona details complete"
+                    : "details complete"
                   : "to finish later"}
                 .
               </p>
             </div>
             <Note>
-              No identity verification was submitted. Choose your own teacher and explore available lesson times next.
+              Choose your teacher and explore available lesson times next.
             </Note>
           </>
         )}
@@ -1965,14 +1928,12 @@ function Screen({ step }: { step: Step }) {
                 {step === "teacher-draft"
                   ? "You can finish verification later."
                   : a.identityMethod === "persona"
-                    ? "You’ve tried the instant Persona verification preview."
-                    : "You’ve walked through the verification preview."}
+                    ? "Your Persona details are complete."
+                    : "Your identity details are complete."}
               </p>
             </div>
             <Note>
-              No verification was submitted. Your profile stays a local draft.
-              Next, explore your teaching workspace with sample learners and
-              sessions.
+              Explore your teaching workspace, students and sessions.
             </Note>
           </>
         )}

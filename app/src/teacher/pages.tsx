@@ -1,5 +1,6 @@
 import LocationField from "../LocationField";
 import FreeLessonConfirmation from "../FreeLessonConfirmation";
+import ProfilePortrait from "../ProfilePortrait";
 import {
   isFreeLesson,
   lessonDurations,
@@ -93,7 +94,7 @@ function Empty({ title, description }: { title: string; description: string }) {
   );
 }
 function StudentsPage({ navigate }: { navigate: Navigate }) {
-  const { sessions, profile, feedbackShared, lessons } = useWorkspace();
+  const { sessions, feedbackShared, lessons } = useWorkspace();
   const nextSession = sessions
     .filter((s) => s.status === "Confirmed" && s.date >= "2026-10-10")
     .sort((a, b) =>
@@ -112,15 +113,14 @@ function StudentsPage({ navigate }: { navigate: Navigate }) {
   return (
     <>
       <PageHeading
-        title={`Welcome back, ${profile.name}!`}
-        description="A good conversation starts with a little preparation."
+        title="Students"
+        description="Prepare a lesson, review a response, or pick up a conversation."
       />
       <div className="tw-students-dashboard">
         <div className="tw-dashboard-main">
           <SectionTitle>Your next session</SectionTitle>
           <Panel className="tw-next-session">
             <div className="tw-next-copy">
-              <Badge tone="white">Your next conversation</Badge>
               <h2>
                 {nextSession ? (
                   <>
@@ -154,11 +154,6 @@ function StudentsPage({ navigate }: { navigate: Navigate }) {
                 {nextSession ? "View session" : "View schedule"}
               </Button>
             </div>
-            <img
-              src="/assets/onboarding/nori.png"
-              alt="Nori, your teaching companion"
-              draggable={false}
-            />
           </Panel>
 
           <SectionTitle
@@ -255,7 +250,7 @@ function StudentsPage({ navigate }: { navigate: Navigate }) {
                 <strong>Feedback for Maya</strong>
                 <span>
                   {feedbackShared
-                    ? "Feedback shared in preview"
+                    ? "Feedback shared"
                     : "One short response to review"}
                 </span>
               </div>
@@ -272,7 +267,7 @@ function StudentsPage({ navigate }: { navigate: Navigate }) {
                 <strong>Léa’s lesson recap</strong>
                 <span>
                   {sessions.find((s) => s.id === "s5")?.recapShared
-                    ? "Shared in this preview"
+                    ? "Shared"
                     : "Ready for your final check"}
                 </span>
               </div>
@@ -348,9 +343,7 @@ function StudentsPage({ navigate }: { navigate: Navigate }) {
           </Panel>
         </aside>
       </div>
-      <p className="tw-preview-caption">
-        Sample workspace · Fictional learners · Changes stay in this preview
-      </p>
+
     </>
   );
 }
@@ -620,7 +613,7 @@ function MessagesPage({ id, navigate }: { id?: string; navigate: Navigate }) {
   return (
     <>
       <PageHeading
-        title="A conversation between lessons"
+        title="Messages"
         description="Private messages with your learners."
       />
       {!id ? (
@@ -653,7 +646,7 @@ function MessagesPage({ id, navigate }: { id?: string; navigate: Navigate }) {
                 <div className={`tw-message ${m.mine ? "mine" : ""}`} key={i}>
                   <p>{m.body}</p>
                   <span>
-                    {m.mine ? "Sent in this preview" : s.name.split(" ")[0]}
+                    {m.mine ? "Sent" : s.name.split(" ")[0]}
                   </span>
                 </div>
               ))}
@@ -678,7 +671,7 @@ function MessagesPage({ id, navigate }: { id?: string; navigate: Navigate }) {
                       ],
                     }));
                     setMessageDrafts((d) => ({ ...d, [s.id]: "" }));
-                  }, "Message sent in this preview.")
+                  }, "Message saved.")
                 }
               >
                 Send message
@@ -724,7 +717,7 @@ function SubmissionPage({
           nous avons beaucoup de travail. Par exemple, vingt minutes chaque
           lundi.”
         </blockquote>
-        <p className="tw-subtle">Submitted sample · Written response</p>
+        <p className="tw-subtle">Submitted · Written response</p>
       </Panel>
       <Panel>
         {preview ? (
@@ -736,7 +729,7 @@ function SubmissionPage({
                 onClick={() =>
                   attempt(
                     () => setFeedbackShared(true),
-                    "Private feedback shared in this preview.",
+                    "Private feedback shared.",
                   )
                 }
                 disabled={feedbackShared}
@@ -791,16 +784,6 @@ function LessonCard({
   const s = recipient ? findStudent(recipient) : null;
   return (
     <article className="tw-lesson-card">
-      <div
-        className={`tw-lesson-art ${l.language === "French" ? "peach" : "blue"}`}
-      >
-        <Icon
-          name={l.blocks[0]?.type === "Listening" ? "message" : "book"}
-          size={32}
-        />
-        <span>{l.language === "French" ? "Bonjour !" : "Hello there."}</span>
-        <small>{l.level}</small>
-      </div>
       <div className="tw-lesson-card-body">
         <div className="tw-lesson-meta">
           <span>
@@ -895,7 +878,7 @@ function LessonsPage({
         title={
           learner
             ? `Make it personal for ${learner.name.split(" ")[0]}`
-            : "Good lessons start with a small idea."
+            : "Lesson library"
         }
         description={
           learner
@@ -916,9 +899,8 @@ function LessonsPage({
       {tab === "Templates" ? (
         <>
           <div className="tw-template-intro">
-            <img src="/assets/onboarding/nori.png" alt="Nori" />
             <div>
-              <h2>A starting point, never a script.</h2>
+              <h2>Lesson templates</h2>
               <p>Short, editable activities. You bring the teaching.</p>
             </div>
           </div>
@@ -1042,7 +1024,7 @@ function LessonPreview({
   return (
     <>
       <PageHeading
-        title="Through your learner’s eyes"
+        title="Student preview"
         description={
           l.studentId
             ? `Visible to ${findStudent(l.studentId).name} when you share.`
@@ -1080,7 +1062,7 @@ function LessonPreview({
               onClick={() =>
                 attempt(
                   () => updateLesson(l.id, { status: "Approved" }),
-                  "Lesson approved for use in this preview.",
+                  "Lesson approved for use.",
                 )
               }
             >
@@ -1161,12 +1143,12 @@ function AiPage({ id, navigate }: { id?: string; navigate: Navigate }) {
   return (
     <>
       <PageHeading
-        title="A draft. Your judgment."
-        description="Sample AI assistance for a short, personal lesson."
+        title="Review AI draft"
+        description="AI assistance for a short, personal lesson."
       />
       {aiUnavailable ? (
         <Panel>
-          <h2>The sample draft is unavailable</h2>
+          <h2>The draft is unavailable</h2>
           <p>Your lesson is intact. You can continue preparing it yourself.</p>
           <Button onClick={() => navigate({ page: "editor", id: l.id })}>
             Continue manually
@@ -1175,7 +1157,7 @@ function AiPage({ id, navigate }: { id?: string; navigate: Navigate }) {
       ) : (
         <>
           <Panel className="tw-ai-review">
-            <Badge tone="orange">Unreviewed sample</Badge>
+            <Badge tone="orange">Unreviewed draft</Badge>
             <h2>One more question</h2>
             <p>
               Ask the learner to make the conversation last a little longer.
@@ -1210,7 +1192,7 @@ function AiPage({ id, navigate }: { id?: string; navigate: Navigate }) {
                             goal: "Keep a conversation going with a follow-up question.",
                             blocks: [
                               {
-                                ...createBlock("Role-play", "Practise"),
+                                ...createBlock("Role-play", "Practice"),
                                 title: "One more question",
                                 text: "After ordering, ask for a recommendation. Explain why you would choose it, then ask a follow-up question.",
                               },
@@ -1234,7 +1216,7 @@ function AiPage({ id, navigate }: { id?: string; navigate: Navigate }) {
                   status: "Draft",
                 });
                 setNotice(
-                  "Sample activity added for you to edit. It is not shared.",
+                  "Activity added for you to edit. It is not shared.",
                 );
                 navigate({ page: "editor", id: l.id });
               }}
@@ -1261,7 +1243,7 @@ function SharePage({ id, navigate }: { id?: string; navigate: Navigate }) {
   return (
     <>
       <PageHeading
-        title="One lesson. One learner."
+        title="Share lesson"
         description="Check the recipient and visible material before sharing."
       />
       <Panel>
@@ -1283,12 +1265,12 @@ function SharePage({ id, navigate }: { id?: string; navigate: Navigate }) {
                     status: "Shared",
                     sharedVersion: learnerMaterial(l),
                   }),
-                `Lesson shared with ${s.name.split(" ")[0]} in this preview.`,
+                `Lesson shared with ${s.name.split(" ")[0]}.`,
               )
             }
           >
             {l.status === "Shared"
-              ? "Shared in preview"
+              ? "Shared"
               : "Confirm & share lesson"}
           </Button>
           <Button
@@ -1319,7 +1301,7 @@ function AvailabilityPage() {
   return (
     <>
       <PageHeading
-        title="Teach when it works for you."
+        title="Availability"
         description="Choose your open hours. Existing bookings stay reserved."
       />
       <Panel>
@@ -1336,8 +1318,7 @@ function AvailabilityPage() {
         />
         {a.zone !== "Europe/Paris" && (
           <p className="tw-error" role="alert">
-            This preview supports Europe/Paris. Switch back before saving; no
-            time-zone conversion service is connected.
+            Choose Europe/Paris to save your availability.
           </p>
         )}
         <h2>Your teaching days</h2>
@@ -1396,7 +1377,7 @@ function AvailabilityPage() {
             }
             attempt(
               () => setAvailabilitySaved(true),
-              "Availability saved in this preview. Confirmed bookings are preserved.",
+              "Availability saved. Confirmed bookings are preserved.",
             );
           }}
         >
@@ -1486,7 +1467,7 @@ function SessionPage({ id, navigate }: { id?: string; navigate: Navigate }) {
                   }
                   attempt(
                     () => updateSession(s.id, { status: "Confirmed" }),
-                    "Meeting confirmed in this preview.",
+                    "Meeting confirmed.",
                   );
                 }}
               >
@@ -1519,9 +1500,7 @@ function SessionPage({ id, navigate }: { id?: string; navigate: Navigate }) {
                   ? `The original booking on ${dateLabel(s.date)} at ${s.time} is retained until confirmation.`
                   : "The request is still unconfirmed."}
               </p>
-              <p className="tw-subtle">
-                Simulate the learner’s response in this preview.
-              </p>
+
               <div className="tw-actions">
                 <Button
                   onClick={() => {
@@ -1546,7 +1525,7 @@ function SessionPage({ id, navigate }: { id?: string; navigate: Navigate }) {
                           status: "Confirmed",
                           pending: undefined,
                         }),
-                      "New time confirmed in this preview.",
+                      "New time confirmed.",
                     );
                   }}
                 >
@@ -1679,8 +1658,6 @@ function ReschedulePage({ id, navigate }: { id?: string; navigate: Navigate }) {
             </p>
             <p>
               The original booking stays in place until the learner accepts.
-              Commercial change terms are not defined in this prototype; no
-              charges are applied.
             </p>
             <div className="tw-actions">
               <Button
@@ -1695,7 +1672,7 @@ function ReschedulePage({ id, navigate }: { id?: string; navigate: Navigate }) {
                   if (
                     attempt(
                       () => updateSession(s.id, { pending: { date, time } }),
-                      "Alternative time proposed in this preview.",
+                      "Alternative time proposed.",
                     )
                   )
                     navigate({ page: "session", id: s.id });
@@ -1783,13 +1760,9 @@ function CancelPage({ id, navigate }: { id?: string; navigate: Navigate }) {
           {dateLabel(s.date)} · {s.time}
         </h2>
         <p>
-          Cancelling releases the time and marks the session as cancelled in
-          this preview.
+          Cancelling releases the time and marks the session as cancelled.
         </p>
-        <p className="tw-subtle">
-          Cancellation fees, deadlines, and refunds are undecided. This
-          prototype makes no charge or refund.
-        </p>
+
         {confirm && (
           <div className="tw-callout">
             <p>
@@ -1814,7 +1787,7 @@ function CancelPage({ id, navigate }: { id?: string; navigate: Navigate }) {
                       status: "Cancelled",
                       pending: undefined,
                     }),
-                  "Cancellation confirmed in this preview.",
+                  "Cancellation confirmed.",
                 )
               )
                 navigate({ page: "session", id: s.id });
@@ -1918,7 +1891,7 @@ function IssuePage({ id, navigate }: { id?: string; navigate: Navigate }) {
   );
 }
 function LobbyPage({ id, navigate }: { id?: string; navigate: Navigate }) {
-  const { sessions, lessons, offline } = useWorkspace();
+  const { sessions, lessons, offline, profile } = useWorkspace();
   const s = sessions.find((s) => s.id === id)!;
   const l = lessons.find((l) => l.id === s.lessonId);
   const [mic, setMic] = useState(true),
@@ -1927,16 +1900,15 @@ function LobbyPage({ id, navigate }: { id?: string; navigate: Navigate }) {
   return (
     <>
       <PageHeading
-        title="Ready for a real conversation?"
+        title="Lesson lobby"
         description={`${findStudent(s.studentId).name} · ${s.duration} minutes · Online`}
       />
       <Panel className="tw-lobby">
         <div className="tw-camera-preview">
-          <img
-            src="/assets/onboarding/nori.png"
-            alt="Nori in the sample camera preview"
-          />
-          <span>{camera ? "Sample camera preview" : "Sample camera off"}</span>
+          <span className="tw-teacher-avatar large">
+            {profile.name === "Gilbert" ? <ProfilePortrait id="gilbert" initials="G" /> : profile.name.slice(0, 1).toUpperCase()}
+          </span>
+          <span>{camera ? "Camera preview" : "Camera off"}</span>
         </div>
         <div className="tw-actions">
           <Button kind="secondary" onClick={() => setMic(!mic)}>
@@ -1946,10 +1918,7 @@ function LobbyPage({ id, navigate }: { id?: string; navigate: Navigate }) {
             Camera {camera ? "on" : "off"}
           </Button>
         </div>
-        <p className="tw-subtle">
-          Local call simulation. No camera, microphone, or video service is
-          connected.
-        </p>
+
         {failed && (
           <p className="tw-error" role="alert">
             Connection unavailable. Reconnect in Account settings, then retry.
@@ -1957,7 +1926,7 @@ function LobbyPage({ id, navigate }: { id?: string; navigate: Navigate }) {
         )}
         {(!l || l.status === "Draft") && (
           <p className="tw-callout">
-            Approve a prepared lesson before joining this simulation.
+            Approve a prepared lesson before joining the session.
           </p>
         )}
         <Button
@@ -1971,7 +1940,7 @@ function LobbyPage({ id, navigate }: { id?: string; navigate: Navigate }) {
             navigate({ page: "live", id: s.id });
           }}
         >
-          {failed ? "Reconnect & join" : "Join sample session"}
+          {failed ? "Reconnect & join" : "Join session"}
         </Button>
       </Panel>
       <Button
@@ -1984,7 +1953,7 @@ function LobbyPage({ id, navigate }: { id?: string; navigate: Navigate }) {
   );
 }
 function LivePage({ id, navigate }: { id?: string; navigate: Navigate }) {
-  const { sessions, lessons, updateSession, offline } = useWorkspace();
+  const { sessions, lessons, updateSession, offline, profile } = useWorkspace();
   const s = sessions.find((s) => s.id === id)!;
   const l = lessons.find((l) => l.id === s.lessonId)!;
   const [block, setBlock] = useState(0);
@@ -2004,8 +1973,8 @@ function LivePage({ id, navigate }: { id?: string; navigate: Navigate }) {
       <PageHeading
         title={
           s.format === "Online"
-            ? "A conversation, together."
-            : "Your in-person lesson."
+            ? "Online lesson"
+            : "In-person lesson"
         }
         description={`${findStudent(s.studentId).name} · ${l.title}`}
       />
@@ -2030,11 +1999,13 @@ function LivePage({ id, navigate }: { id?: string; navigate: Navigate }) {
             <span>{findStudent(s.studentId).name}</span>
           </div>
           <div>
-            <img src="/assets/onboarding/nori.png" alt="Teacher sample tile" />
+            <span className="tw-teacher-avatar large">
+              {profile.name === "Gilbert" ? <ProfilePortrait id="gilbert" initials="G" /> : profile.name.slice(0, 1).toUpperCase()}
+            </span>
             <span>You · Teacher</span>
           </div>
           <Badge tone="white">
-            {s.format === "Online" ? "Sample call" : "In-person preview"} · 1:1
+            {s.format === "Online" ? "Online session" : "In-person lesson"} · 1:1
           </Badge>
         </div>
       )}
@@ -2141,12 +2112,12 @@ function RecapPage({
               onClick={() =>
                 attempt(
                   () => updateSession(s.id, { recapShared: true }),
-                  `Private recap shared with ${name.split(" ")[0]} in this preview.`,
+                  `Private recap shared with ${name.split(" ")[0]}.`,
                 )
               }
             >
               {s.recapShared
-                ? "Recap shared in preview"
+                ? "Recap shared"
                 : "Confirm & share recap"}
             </Button>
             <Button
@@ -2171,7 +2142,7 @@ function RecapPage({
                 updateSession(s.id, { recap: v, recapShared: false })
               }
               multiline
-              placeholder="What did they practise? What improved?"
+              placeholder="What did they practice? What improved?"
             />
             <TextField
               label="Optional next practice"
@@ -2192,7 +2163,7 @@ function RecapPage({
               <Button
                 kind="secondary"
                 onClick={() =>
-                  attempt(() => {}, "Recap draft saved in this preview.")
+                  attempt(() => {}, "Recap draft saved.")
                 }
               >
                 Save draft
@@ -2217,19 +2188,19 @@ function ProfilePage({
       <PageHeading
         title={
           preview
-            ? "Your teaching, at a glance."
-            : "Your teaching. Your own style."
+            ? "Teaching profile preview"
+            : "Teaching profile"
         }
         description={
           preview
-            ? "A local preview of the public teaching details."
+            ? "Your public teaching details."
             : "A profile learners can get to know."
         }
       />
       <Panel className="tw-teaching-profile">
         <div className="tw-profile-hero">
           <span className="tw-teacher-avatar large">
-            {p.name.slice(0, 1).toUpperCase()}
+            {p.name === "Gilbert" ? <ProfilePortrait id="gilbert" initials="G" /> : p.name.slice(0, 1).toUpperCase()}
           </span>
           <div>
             <h2>{p.name}</h2>
@@ -2237,7 +2208,7 @@ function ProfilePage({
               {p.languages} · {p.levels}
             </p>
           </div>
-          <Badge tone="orange">Local profile draft</Badge>
+          <Badge tone="orange">Profile draft</Badge>
         </div>
         <blockquote>{p.approach}</blockquote>
         <div className="tw-profile-facts">
@@ -2303,19 +2274,19 @@ function ProfilePage({
             <Icon name="person" />
             <h2>
               {p.identity
-                ? "Identity preview complete"
-                : "A little trust goes a long way."}
+                ? "Identity details complete"
+                : "Identity check"}
             </h2>
             <p>
               {p.identity
-                ? "You completed a sample check. No identity has been verified."
-                : "You can finish the sample identity preview whenever you’re ready."}
+                ? "Your identity details are complete."
+                : "You can finish your identity check whenever you’re ready."}
             </p>
             <Button
               kind="secondary"
               onClick={() => navigate({ page: "identity", tab: "intro" })}
             >
-              Open identity preview
+              Open identity check
             </Button>
             <p className="tw-subtle">
               Identity and teaching qualifications are separate.
@@ -2385,7 +2356,7 @@ function ProfileEditPage({
                   if (
                     attempt(() => {
                       setSavedProfile({ ...p });
-                    }, "Teaching profile updated in this preview. Existing booking terms are preserved.")
+                    }, "Teaching profile updated. Existing booking terms are preserved.")
                   )
                     navigate(returnLessonId ? { page: "editor", id: returnLessonId } : { page: "profile" });
                 }}
@@ -2480,19 +2451,18 @@ function SettingsPage() {
   return (
     <>
       <PageHeading
-        title="A workspace that’s yours."
-        description="Account preferences and preview controls."
+        title="Account settings"
+        description="Account preferences and connection settings."
       />
       <Panel>
-        <SectionTitle>Preview connection</SectionTitle>
+        <SectionTitle>Connection</SectionTitle>
         <p>
-          Try the recovery paths without connecting external services. Failed
-          saves and sharing keep the draft.
+          Your draft remains editable if saving or sharing fails.
         </p>
         <div className="tw-setting-row">
           <div>
             <strong>Connection available</strong>
-            <span>Used for sample sharing and confirmations</span>
+            <span>Sharing and booking confirmations</span>
           </div>
           <button
             className={`tw-toggle ${!offline ? "on" : ""}`}
@@ -2506,14 +2476,14 @@ function SettingsPage() {
         </div>
         <div className="tw-setting-row">
           <div>
-            <strong>AI sample available</strong>
-            <span>Optional sample draft, always teacher-reviewed</span>
+            <strong>AI drafts available</strong>
+            <span>Optional drafts, always teacher-reviewed</span>
           </div>
           <button
             className={`tw-toggle ${!aiUnavailable ? "on" : ""}`}
             role="switch"
             aria-checked={!aiUnavailable}
-            aria-label="AI sample available"
+            aria-label="AI drafts available"
             onClick={() => setAiUnavailable((v) => !v)}
           >
             <span />
@@ -2521,12 +2491,8 @@ function SettingsPage() {
         </div>
       </Panel>
       <Panel>
-        <SectionTitle>Privacy in this preview</SectionTitle>
-        <p>
-          Messages, feedback, and teaching notes use local sample data. No
-          email, recording, calendar, payment, or AI request is sent. Reloading
-          resets workspace edits.
-        </p>
+        <SectionTitle>App access</SectionTitle>
+
         <div className="tw-actions">
           <a className="tw-button tw-secondary" href="/?teacher=1&view=web">
             Open web app
@@ -2549,7 +2515,7 @@ function HelpPage() {
   return (
     <>
       <PageHeading
-        title="A little help, right here."
+        title="Help"
         description="Keep your focus on the conversation."
       />
       <Panel>
@@ -2564,15 +2530,11 @@ function HelpPage() {
           ],
           [
             "What happens when sharing fails?",
-            "The draft stays editable and is never marked as sent. Restore the preview connection in Account settings, then retry.",
+            "The draft stays editable and is never marked as sent. Restore the connection in Account settings, then retry.",
           ],
           [
             "How does a time change work?",
             "Propose a replacement and wait for the learner to accept. The original confirmed booking stays reserved until the new time is confirmed.",
-          ],
-          [
-            "What is connected in this preview?",
-            "The screens and local state are interactive. Video, AI, identity, calendars, payments, and message delivery are simulations. Workspace changes reset on reload.",
           ],
         ].map(([q, a]) => (
           <details key={q}>
@@ -2590,39 +2552,33 @@ function PayoutPage() {
   return (
     <>
       <PageHeading
-        title="Your teaching deserves clarity."
-        description="A payout concept with sample data. No money moves."
+        title="Payout"
+        description="Track session earnings and payout status."
       />
       <div className="tw-payout-summary">
         <Panel>
-          <span>Sample session earnings</span>
+          <span>Session earnings</span>
           <h2>€120.00</h2>
-          <p>4 completed sample sessions</p>
+          <p>4 completed sessions</p>
         </Panel>
         <Panel>
-          <span>Sample transfer</span>
+          <span>Transfer</span>
           <h2>{setup ? status : "Setup needed"}</h2>
           <p>
             {status === "Pending"
               ? "Waiting for a provider status update"
-              : "Sample provider state"}
+              : "Provider status"}
           </p>
         </Panel>
       </div>
       <Panel>
         <SectionTitle>Payout details</SectionTitle>
-        <p>
-          Provider, fees, transfer timing, and automatic versus requested
-          payouts are undecided.
-        </p>
+
         {!setup ? (
           <>
-            <p>
-              A real provider would collect payout details securely. This sample
-              does not request bank information.
-            </p>
+
             <Button onClick={() => setSetup(true)}>
-              Try sample provider setup
+              Set up payouts
             </Button>
           </>
         ) : (
@@ -2636,24 +2592,24 @@ function PayoutPage() {
                     : "gray"
               }
             >
-              {status === "Paid" ? "Payout received · Sample" : status}
+              {status === "Paid" ? "Payout received" : status}
             </Badge>
             <p>
               {status === "Pending"
-                ? "Pending is still waiting, not failed. No duplicate transfer is initiated."
+                ? "Waiting for a provider status update."
                 : status === "Action needed"
-                  ? "Follow the sample provider instructions: check your payout setup. No bank details are collected."
-                  : "This is a sample completed transfer; no payment has been made."}
+                  ? "Check your payout setup and try again."
+                  : "Transfer complete."}
             </p>
             <Select
-              label="Simulate provider status"
+              label="Provider status"
               value={status}
               options={["Pending", "Action needed", "Paid"]}
               onChange={setStatus}
             />
             {status === "Action needed" && (
               <Button kind="secondary" onClick={() => setStatus("Pending")}>
-                Confirm sample setup & recheck
+                Confirm setup & recheck
               </Button>
             )}
           </>
@@ -2688,19 +2644,17 @@ function IdentityPage({
   return (
     <>
       <PageHeading
-        title="A little trust goes a long way."
-        description="Sample identity preview. No real verification is submitted."
+        title="Identity check"
       />
       <Panel>
         {step === "intro" ? (
           <>
             <p>
-              Identity is separate from teaching qualifications. Choose a local
-              preview route.
+              Choose how to complete your identity check.
             </p>
             <div className="tw-actions">
               <Button onClick={() => next("name")}>
-                Use sample document route
+                Use a document
               </Button>
               <Button kind="secondary" onClick={() => next("persona")}>
                 Link Persona ID
@@ -2720,13 +2674,10 @@ function IdentityPage({
               src="/assets/onboarding/persona.png"
               alt="Persona"
             />
-            <h2>Link a sample Persona ID</h2>
-            <p>
-              No Persona account is connected. This confirms a local sample link
-              only.
-            </p>
+            <h2>Link your Persona ID</h2>
+
             <div className="tw-actions">
-              <Button onClick={finish}>Confirm sample link</Button>
+              <Button onClick={finish}>Confirm link</Button>
               <Button kind="secondary" onClick={() => next("name")}>
                 Use a document instead
               </Button>
@@ -2808,25 +2759,17 @@ function IdentityPage({
           </>
         ) : step === "document" ? (
           <>
-            <h2>Use a sample document</h2>
+            <h2>Add a document</h2>
             <p>
-              No document upload is collected. {a.country} · {a.documentType}
+              {a.country} · {a.documentType}
             </p>
-            <Button onClick={() => next("selfie")}>Use sample document</Button>
+            <Button onClick={() => next("selfie")}>Add document</Button>
           </>
         ) : (
           <>
-            <img
-              className="tw-identity-nori"
-              src="/assets/onboarding/nori.png"
-              alt="Nori"
-            />
-            <h2>Confirm the sample check</h2>
-            <p>
-              No camera or selfie is collected. Your identity has not been
-              verified.
-            </p>
-            <Button onClick={finish}>Complete sample preview</Button>
+            <h2>Confirm your details</h2>
+
+            <Button onClick={finish}>Complete identity check</Button>
           </>
         )}
       </Panel>

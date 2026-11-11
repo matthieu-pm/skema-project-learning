@@ -22,7 +22,7 @@ const review = (id: string, author: string, rating: number, text: string): Revie
 const additionalProfiles: [string, string, string[], LessonFormat[], string, number, string][] = [
   ["amina", "Amina Diallo", ["French", "English"], ["Online", "In person"], "Paris", 24, "Find your words through friendly everyday conversation."],
   ["lucas-t", "Lucas Bernard", ["English", "French"], ["Online"], "Lille", 18, "Travel, conversation and practical English for your next step."],
-  ["ines", "Inès Laurent", ["French", "Spanish"], ["Online", "In person"], "Paris", 32, "A calm space to practise pronunciation and conversation."],
+  ["ines", "Inès Laurent", ["French", "Spanish"], ["Online", "In person"], "Paris", 32, "A calm space to practice pronunciation and conversation."],
   ["hugo", "Hugo Moreau", ["French", "German"], ["In person"], "Paris", 26, "Clear explanations and useful language for everyday situations."],
   ["ana", "Ana López", ["Spanish", "French"], ["Online", "In person"], "Paris", 23, "Build confidence with small conversations and patient feedback."],
   ["oliver", "Oliver Brown", ["English"], ["Online"], "London", 34, "Practical English for work, interviews and daily life."],
@@ -37,13 +37,13 @@ const additionalProfiles: [string, string, string[], LessonFormat[], string, num
   ["james", "James Taylor", ["English", "German"], ["Online"], "Manchester", 36, "Speaking practice for work and the everyday situations that matter."],
   ["aiko", "Aiko Mori", ["Japanese", "French"], ["Online"], "Osaka", 24, "Friendly Japanese lessons with real-life phrases and patient feedback."],
   ["camille", "Camille Roux", ["French", "Spanish"], ["Online", "In person"], "Paris", 22, "Turn everyday situations into simple, useful speaking practice."],
-  ["felix", "Felix Fischer", ["German", "English"], ["Online"], "Munich", 33, "Understand natural speech and practise responding with confidence."],
+  ["felix", "Felix Fischer", ["German", "English"], ["Online"], "Munich", 33, "Understand natural speech and practice responding with confidence."],
   ["valentina", "Valentina Romano", ["Italian", "English"], ["Online", "In person"], "Paris", 26, "Warm, practical lessons with time to try, pause and ask questions."],
   ["tom", "Tom Evans", ["English", "French"], ["Online"], "Bristol", 20, "Make room for conversation with lessons built around your interests."],
 ];
 export const teachers: Teacher[] = [
   { id: "gilbert", name: "Gilbert", languages: ["French", "English"], formats: ["Online", "In person"], city: "Paris", rate: 30, duration: 30, color: "#eee4ff", bio: "Patient, practical conversation for everyday life. We work on the situations that matter to you, at your pace.", reviews: [review("c1", "Léa", 5, "Gilbert made it easy to speak without worrying about every mistake."), review("c2", "Alex", 5, "Helpful corrections and useful phrases for my week."), review("c3", "Sam", 4, "A clear lesson with plenty of conversation.")] },
-  { id: "diego", name: "Diego García", languages: ["Spanish", "English"], formats: ["Online"], city: "Madrid", rate: 22, duration: 45, color: "#fff0d8", bio: "Build confidence through relaxed conversation, travel situations and pronunciation practice.", reviews: [review("d1", "Lucas", 5, "We practised exactly what I needed for my trip."), review("d2", "Lou", 5, "Encouraging, clear and easy to talk to.")] },
+  { id: "diego", name: "Diego García", languages: ["Spanish", "English"], formats: ["Online"], city: "Madrid", rate: 22, duration: 45, color: "#fff0d8", bio: "Build confidence through relaxed conversation, travel situations and pronunciation practice.", reviews: [review("d1", "Lucas", 5, "We practiced exactly what I needed for my trip."), review("d2", "Lou", 5, "Encouraging, clear and easy to talk to.")] },
   { id: "emma", name: "Emma Wilson", languages: ["English", "German"], formats: ["Online", "In person"], city: "Paris", rate: 35, duration: 45, color: "#e0f2ff", bio: "Feel more comfortable at work, in interviews and in everyday conversations. Personal feedback after each lesson.", reviews: [review("e1", "Maya", 5, "Useful practice for presenting my ideas at work."), review("e2", "Noah", 4, "Emma helped me find words and keep the conversation going.")] },
   { id: "yuki", name: "Yuki Tanaka", languages: ["Japanese", "English"], formats: ["Online"], city: "Lyon", rate: 25, duration: 45, color: "#ffe7ee", bio: "Learn natural Japanese with small, manageable steps and real-life conversation.", reviews: [] },
   { id: "sofia", name: "Sofia Rossi", languages: ["Italian", "French"], formats: ["Online", "In person"], city: "Paris", rate: 20, duration: 45, color: "#e6f3df", bio: "Friendly lessons built around food, culture, travel and the conversations you want to have.", reviews: [review("s1", "Camille", 4, "A friendly teacher with lots of practical examples."), review("s2", "Robin", 5, "I felt comfortable trying new words.")] },
@@ -51,7 +51,7 @@ export const teachers: Teacher[] = [
     id, name, languages, formats, city, rate, duration: index % 3 === 0 ? 30 : 45, bio,
     color: ["#eee4ff", "#fff0d8", "#e0f2ff", "#ffe7ee", "#e6f3df"][index % 5],
     reviews: index === 8 ? [] : [
-      review(`${id}-1`, "Alex", index % 4 === 0 ? 4 : 5, "I had time to practise and ask questions at my own pace."),
+      review(`${id}-1`, "Alex", index % 4 === 0 ? 4 : 5, "I had time to practice and ask questions at my own pace."),
       review(`${id}-2`, "Sam", index % 3 === 0 ? 4 : 5, "Clear explanations and useful feedback for my next conversation."),
       review(`${id}-3`, "Charlie", index % 2 === 0 ? 5 : 4, "A thoughtful lesson built around what I wanted to learn."),
     ],

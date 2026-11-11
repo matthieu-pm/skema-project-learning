@@ -206,7 +206,7 @@ export default function ModuleResults({
       return true;
     } catch {
       setError(
-        "Feedback could not be saved in this browser. Keep this page open and try Save feedback again.",
+        "Feedback could not be saved. Keep this page open and try Save feedback again.",
       );
       setMessage("");
       return false;
@@ -218,7 +218,7 @@ export default function ModuleResults({
       [result.id]: { ...book[result.id], [blockId]: value },
     };
     setBook(next);
-    save(next, "Feedback draft saved in this browser.");
+    save(next, "Feedback draft saved.");
   };
   const activeBlock = result?.blocks.find((b) =>
     blockSelection?.result === result.id && b.id === blockSelection.block
@@ -235,10 +235,7 @@ export default function ModuleResults({
           Completed blocks and student responses will appear here, ready for
           your feedback.
         </p>
-        <p className="mr-muted">
-          This prototype uses sample submissions. New lessons do not generate
-          student results automatically.
-        </p>
+
       </Panel>
     );
   const rows = book[result.id] || {},
@@ -257,13 +254,14 @@ export default function ModuleResults({
     <div className="mr-results" ref={contentRef}>
       <Panel className="mr-module-context">
         <div className="mr-heading">
-          <Badge tone="lilac">Sample student work</Badge>
+          <Badge tone="lilac">Student work</Badge>
           <span>Submitted {result.completedAt}</span>
         </div>
         {busy && <p role="status">Finish or cancel the audio recording before switching blocks or modules.</p>}
         <fieldset className="mr-module-select" disabled={busy}>
         <Select
           label="Completed module"
+          disabled={busy}
           value={result.id}
           onChange={(id) => {
             setSelected(id);
@@ -302,10 +300,7 @@ export default function ModuleResults({
           Viewed content, teacher review and demonstrated skills are separate.
           No proficiency level is inferred from completion.
         </p>
-        <p className="mr-muted">
-          Drafts stay private in this browser. Sharing and submission history
-          are simulated.
-        </p>
+
         </details>
       </Panel>
       {result.blocks.length > 0 && (
@@ -315,13 +310,13 @@ export default function ModuleResults({
             <span>{unreviewed} unreviewed · {pending} ready to share · {shared} shared</span>
           </div>
           <div className="mr-block-nav-controls">
-            <Button kind="secondary" disabled={busy || activeIndex <= 0} onClick={() => chooseBlock(result.blocks[activeIndex - 1].id)}>Previous block</Button>
+            <Button static kind="secondary" disabled={busy || activeIndex <= 0} onClick={() => chooseBlock(result.blocks[activeIndex - 1].id)}>Previous block</Button>
             <fieldset disabled={busy}>
-              <Select label="Jump to block" value={activeBlock?.id || ""} onChange={chooseBlock}
+              <Select label="Jump to block" disabled={busy} value={activeBlock?.id || ""} onChange={chooseBlock}
                 options={result.blocks.map((b, i) => ({ value: b.id, label: `${i + 1}. ${b.title} — ${blockReviewLabel(b, rows[b.id])}` }))} />
             </fieldset>
-            <Button kind="secondary" disabled={busy || activeIndex >= result.blocks.length - 1} onClick={() => chooseBlock(result.blocks[activeIndex + 1].id)}>Next block</Button>
-            <Button disabled={busy || !nextUnreviewed} onClick={() => nextUnreviewed && chooseBlock(nextUnreviewed)}>Next unreviewed</Button>
+            <Button static kind="secondary" disabled={busy || activeIndex >= result.blocks.length - 1} onClick={() => chooseBlock(result.blocks[activeIndex + 1].id)}>Next block</Button>
+            <Button static disabled={busy || !nextUnreviewed} onClick={() => nextUnreviewed && chooseBlock(nextUnreviewed)}>Next unreviewed</Button>
           </div>
           <p className="mr-muted" role="status">
             {busy ? "Finish or cancel recording before navigating." : unreviewed === 0 ? "No unreviewed responses. Draft feedback may still need sharing." : !nextUnreviewed && blockReviewLabel(activeBlock!, rows[activeBlock!.id]) === "Unreviewed" ? "This is the last unreviewed response." : "Unreviewed means no student-facing feedback yet. Draft feedback stays private until shared."}
@@ -426,8 +421,8 @@ export default function ModuleResults({
                 <p className="mr-muted">
                   {feedback.shared
                     ? changed
-                      ? "Edited draft · previous feedback shared in preview"
-                      : "Shared in preview"
+                      ? "Edited draft · previous feedback shared"
+                      : "Shared"
                     : "Private draft · not shared"}
                 </p>
                 {feedback.shared && (
@@ -454,7 +449,7 @@ export default function ModuleResults({
         <h2>Feedback for this module</h2>
         <p>
           {pending} {pending === 1 ? "block has" : "blocks have"} feedback ready
-          to share · {shared} shared in preview
+          to share · {shared} shared
         </p>
         {error && (
           <p role="alert" className="mr-error">
@@ -484,7 +479,7 @@ export default function ModuleResults({
             onClick={() =>
               save(
                 book,
-                "Feedback saved in this browser. No additional feedback has been shared.",
+                "Feedback saved. No additional feedback has been shared.",
               )
             }
           >
@@ -505,7 +500,7 @@ export default function ModuleResults({
               }
               save(
                 shareModuleFeedback(result, book, new Date().toISOString()),
-                "Feedback shared in preview. No real student was notified.",
+                "Feedback shared.",
               );
             }}
           >

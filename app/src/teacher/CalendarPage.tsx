@@ -1,4 +1,5 @@
 import { useState, type CSSProperties } from "react";
+import SelectControl from "../SelectControl";
 import {
   Button,
   Icon,
@@ -67,7 +68,7 @@ export function CalendarPage({ navigate }: { navigate: Navigate }) {
   return (
     <>
       <PageHeading
-        title="Your teaching calendar"
+        title="Schedule"
         description="Make room for every one-to-one lesson."
         action={
           <Button
@@ -126,17 +127,13 @@ export function CalendarPage({ navigate }: { navigate: Navigate }) {
           </span>
           <label>
             <span className="tw-cal-filter-label">Show</span>
-            <select
+            <SelectControl
               aria-label="Filter calendar sessions"
               value={filter}
-              onChange={(e) => setFilter(e.target.value)}
-            >
-              {["All sessions", "Confirmed", "Requests", "Completed"].map(
-                (item) => (
-                  <option key={item}>{item}</option>
-                ),
-              )}
-            </select>
+              onChange={setFilter}
+              options={["All sessions", "Confirmed", "Requests", "Completed"]}
+              native={mobile}
+            />
           </label>
         </div>
         {view === "Month" ? (
@@ -291,9 +288,7 @@ export function CalendarPage({ navigate }: { navigate: Navigate }) {
           </span>
         </div>
       </section>
-      <p className="tw-preview-caption">
-        Sample calendar · “Today” is 10 October 2026 · No calendar integration
-      </p>
+
     </>
   );
 }

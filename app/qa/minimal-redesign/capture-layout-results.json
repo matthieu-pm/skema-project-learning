@@ -1,0 +1,42 @@
+[
+  {
+    "name": "learner-search-desktop-1440",
+    "client": 1208,
+    "scroll": 1208,
+    "document": 1440,
+    "viewport": 1440
+  },
+  {
+    "name": "teacher-students-desktop-1440",
+    "client": 1208,
+    "scroll": 1208,
+    "document": 1440,
+    "viewport": 1440
+  },
+  {
+    "name": "teacher-schedule-desktop-1440",
+    "client": 1208,
+    "scroll": 1208,
+    "document": 1440,
+    "viewport": 1440
+  },
+  {
+    "name": "teacher-editor-desktop-1440",
+    "client": 1208,
+    "scroll": 1208,
+    "document": 1440,
+    "viewport": 1440
+  },
+  {
+    "name": "teacher-results-desktop-1440",
+    "client": 1208,
+    "scroll": 1208,
+    "document": 1440,
+    "viewport": 1440
+  },
+  {
+    "name": "learner-search-pixel",
+    "client": 427,
+    "scroll": 427
+  }
+]

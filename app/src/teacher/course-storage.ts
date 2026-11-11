@@ -10,7 +10,12 @@ const key = "mimo.lesson-library.v1";
 type Library = { version: 1; lessons: Lesson[]; templates: CourseTemplate[] };
 export function readLibrary(): Library {
   try {
-    const parsed = JSON.parse(localStorage.getItem(key) || "null");
+    const parsed = JSON.parse(
+      localStorage.getItem(key) || "null",
+      // Only canonicalize the old stored enum, including saved/applied courses.
+      // User-authored text and the stored snapshot itself remain untouched.
+      (field, value) => field === "purpose" && value === "Practise" ? "Practice" : value,
+    );
     if (
       parsed?.version === 1 &&
       Array.isArray(parsed.lessons) &&

@@ -1,4 +1,6 @@
 import { useId, type ReactNode } from "react";
+import SelectControl from "../SelectControl";
+import ProfilePortrait from "../ProfilePortrait";
 import { KeyboardInput, KeyboardTextarea, useKeyboard } from "../mobile";
 import { students, type Route } from "./model";
 import { useWorkspace } from "./context";
@@ -65,30 +67,26 @@ export function Select({
   value,
   onChange,
   options,
+  disabled = false,
 }: {
   label: string;
   value: string;
   onChange: (v: string) => void;
   options: (string | { value: string; label: string })[];
+  disabled?: boolean;
 }) {
+  const { mobile } = useWorkspace();
   return (
     <label className="tw-field">
       <span>{label}</span>
-      <select
+      <SelectControl
         aria-label={label}
         value={value}
-        onChange={(e) => onChange(e.target.value)}
-      >
-        {options.map((o) =>
-          typeof o === "string" ? (
-            <option key={o}>{o}</option>
-          ) : (
-            <option key={o.value} value={o.value}>
-              {o.label}
-            </option>
-          ),
-        )}
-      </select>
+        onChange={onChange}
+        options={options}
+        native={mobile}
+        disabled={disabled}
+      />
     </label>
   );
 }
@@ -98,20 +96,24 @@ export function Button({
   kind = "primary",
   disabled = false,
   icon,
+  static: isStatic = false,
 }: {
   children: ReactNode;
   onClick: () => void;
   kind?: "primary" | "secondary" | "quiet" | "danger";
   disabled?: boolean;
   icon?: string;
+  static?: boolean;
 }) {
   return (
     <button
+      type="button"
       className={`tw-button tw-${kind}`}
+      data-static={isStatic || undefined}
       onClick={onClick}
       disabled={disabled}
     >
-      {icon && <Icon name={icon} size={18} />}
+      {icon && <Icon name={icon} size={18} strokeWidth={2} />}
       <span>{children}</span>
     </button>
   );
@@ -129,7 +131,7 @@ export function Avatar({ id, size = "" }: { id: string; size?: string }) {
   const s = students.find((s) => s.id === id)!;
   return (
     <span className={`tw-avatar ${s.color} ${size}`} aria-hidden="true">
-      {s.initials}
+      <ProfilePortrait id={`student-${s.id}`} initials={s.initials} />
     </span>
   );
 }

@@ -58,7 +58,7 @@ test("all seven assessed formats validate teacher keys; open responses stay teac
     "Quiz",
     "Fill the gap",
   ]) {
-    const b = createBlock(format, "Practise");
+    const b = createBlock(format, "Practice");
     assert.equal(autoAssessed(b), true, format);
     assert.deepEqual(blockIssues(b), [], format);
     if (["Flashcards", "Vocabulary recall"].includes(format)) {
@@ -79,11 +79,11 @@ test("all seven assessed formats validate teacher keys; open responses stay teac
     "Document",
     "Role-play",
   ])
-    assert.equal(autoAssessed(createBlock(format, "Practise")), false);
-  const quiz = createBlock("Quiz", "Practise");
+    assert.equal(autoAssessed(createBlock(format, "Practice")), false);
+  const quiz = createBlock("Quiz", "Practice");
   quiz.answer = "Not an option";
   assert.ok(blockIssues(quiz).some((x) => x.includes("quiz options")));
-  const sentence = createBlock("Sentence construction", "Practise");
+  const sentence = createBlock("Sentence construction", "Practice");
   sentence.answer = "A sentence the tiles cannot construct";
   assert.ok(blockIssues(sentence).some((x) => x.includes("sentence tiles")));
 });
@@ -200,4 +200,51 @@ test("explicit saves persist one draft and keep applied snapshots and other less
   });
   assert.throws(() => writeDraft(lesson, []), /Storage full/);
   delete globalThis.localStorage;
+});
+
+test("saved legacy practice purposes normalize without rewriting authored text or stored snapshots", async () => {
+  const { readLibrary } = await import("../src/teacher/course-storage.ts");
+  const content = readyTemplates()[0].content;
+  content.title = "Practise at the café";
+  content.goal = "Practise making a polite request.";
+  content.modules[0].blocks[0].purpose = "Practise";
+  content.modules[0].blocks[0].instructions = "Practise saying your order.";
+  const publishedAt = "2026-11-05T00:00:00Z";
+  const raw = JSON.stringify({
+    version: 1,
+    lessons: [{
+      ...initialLessons()[0],
+      course: content,
+      savedEditor: content,
+      publishedEditor: { content, studentId: "lea", appliedAt: publishedAt },
+    }],
+    templates: [{ id: "legacy-template", name: "Practise template", level: "A1", content, own: true }],
+  });
+  const previous = Object.getOwnPropertyDescriptor(globalThis, "localStorage");
+  let stored = raw;
+  Object.defineProperty(globalThis, "localStorage", {
+    configurable: true,
+    value: {
+      getItem: (key) => key === "mimo.lesson-library.v1" ? stored : null,
+      setItem: (_key, value) => { stored = value; },
+    },
+  });
+  try {
+    const library = readLibrary();
+    const lesson = library.lessons[0];
+    for (const course of [lesson.course, lesson.savedEditor, lesson.publishedEditor.content, library.templates[0].content]) {
+      assert.equal(course.modules[0].blocks[0].purpose, "Practice");
+      assert.equal(course.title, "Practise at the café");
+      assert.equal(course.goal, "Practise making a polite request.");
+      assert.equal(course.modules[0].blocks[0].instructions, "Practise saying your order.");
+      assert.equal(course.modules[0].id, content.modules[0].id);
+    }
+    assert.equal(lesson.publishedEditor.appliedAt, publishedAt);
+    assert.equal(lesson.publishedEditor.studentId, "lea");
+    assert.equal(library.templates[0].name, "Practise template");
+    assert.equal(stored, raw);
+  } finally {
+    if (previous) Object.defineProperty(globalThis, "localStorage", previous);
+    else delete globalThis.localStorage;
+  }
 });

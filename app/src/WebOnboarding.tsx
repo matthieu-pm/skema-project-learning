@@ -44,7 +44,7 @@ function sectionFor(step: Step) {
       "selfie",
     ].includes(step)
   )
-    return "Identity preview";
+    return "Identity check";
   if (finished.has(step)) return "Your setup is ready";
   if (
     [
@@ -86,7 +86,7 @@ export default function WebOnboarding({
     optionalIdentity,
   } = setupProgress(answers, step);
   const section = optionalIdentity
-    ? "Optional identity preview"
+    ? "Optional identity check"
     : sectionFor(step);
 
   // Shared content/actions use the mobile flow's interface in a desktop shell.
@@ -175,11 +175,9 @@ export default function WebOnboarding({
         >
           {children(flow)}
         </section>
-        <p className="web-setup-preview">
-          Local preview · Your answers stay in this session.
-        </p>
+
         <a className="web-mobile-link" href="/?view=mobile">
-          Try the mobile preview <Icon name="arrow" size={14} />
+          Open mobile app <Icon name="arrow" size={14} />
         </a>
       </div>
     </div>

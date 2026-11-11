@@ -37,7 +37,7 @@ export function BlockProperties({
       <Select
         label="Block purpose"
         value={b.purpose}
-        options={["Teach", "Practise"]}
+        options={["Teach", "Practice"]}
         onChange={(v) => edit({ purpose: v as Purpose })}
       />
       <Select
@@ -396,9 +396,7 @@ export function BlockProperties({
           >
             Add {b.format.toLowerCase()} clip
           </Button>
-          <p className="tw-subtle">
-            Files stay on this device. Sample playback uses the transcript.
-          </p>
+
         </>
       )}
       {!vocabulary &&
@@ -532,7 +530,7 @@ export function BlockProperties({
           {b.filename && <p>{b.filename}</p>}
         </>
       )}
-      {b.purpose === "Practise" && !autoAssessed(b) && (
+      {b.purpose === "Practice" && !autoAssessed(b) && (
         <p className="ce-info">
           Responses go to the teacher for review. No automatic grade.
         </p>
@@ -547,6 +545,54 @@ export function BlockProperties({
       )}
     </>
   );
+}
+
+export function LessonPropertiesFields({
+  course: c,
+  changeCourse,
+  presentation = "sidebar",
+}: {
+  course: Course;
+  changeCourse: (course: Course) => void;
+  presentation?: "sidebar" | "canvas";
+}) {
+  const title = <TextField label="Lesson title" value={c.title} onChange={(value) => changeCourse({ ...c, title: value })} />;
+  const goal = <TextField label="Lesson learning goal" multiline value={c.goal} onChange={(value) => changeCourse({ ...c, goal: value })} />;
+  const language = <Select label="Language" value={c.language} options={["French", "English", "Spanish", "German", "Italian", "Japanese", c.language].filter((value, index, all) => all.indexOf(value) === index)} onChange={(value) => changeCourse({ ...c, language: value })} />;
+  const level = <Select label="Level" value={c.level} options={["A1", "A2", "B1", "B2", "C1", "C2"]} onChange={(value) => changeCourse({ ...c, level: value })} />;
+  return presentation === "canvas" ? (
+    <div className="ce-direct-lesson-fields">
+      <div className="ce-direct-title">{title}</div>
+      <div className="ce-direct-metadata">
+        {language}
+        {level}
+        <span className="ce-direct-duration">{totalMinutes(c)} min</span>
+      </div>
+      <div className="ce-direct-goal">{goal}</div>
+    </div>
+  ) : <>{title}{goal}{language}{level}</>;
+}
+
+export function ModulePropertiesFields({
+  module: m,
+  changeModule,
+  presentation = "sidebar",
+}: {
+  module: CourseModule;
+  changeModule: (module: CourseModule) => void;
+  presentation?: "sidebar" | "canvas";
+}) {
+  const type = <Select label="Module type" value={m.type} options={[...moduleTypes]} onChange={(value) => changeModule({ ...m, type: value as ModuleType })} />;
+  const title = <TextField label="Module title" value={m.title} onChange={(value) => changeModule({ ...m, title: value })} />;
+  const goal = <TextField label="Module learning goal" multiline value={m.goal} onChange={(value) => changeModule({ ...m, goal: value })} />;
+  const minutes = <TextField label="Estimated minutes" type="number" min="1" max="240" value={String(m.minutes)} onChange={(value) => changeModule({ ...m, minutes: Number(value) })} />;
+  return presentation === "canvas" ? (
+    <div className="ce-direct-module-fields">
+      <div className="ce-direct-title">{title}</div>
+      <div className="ce-direct-metadata">{type}{minutes}</div>
+      <div className="ce-direct-goal">{goal}</div>
+    </div>
+  ) : <>{type}{title}{goal}{minutes}</>;
 }
 
 export function CourseProperties({
@@ -589,37 +635,7 @@ export function CourseProperties({
         {tab === "Lesson" ? (
           <>
             <h2>Lesson properties</h2>
-            <TextField
-              label="Lesson title"
-              value={c.title}
-              onChange={(v) => changeCourse({ ...c, title: v })}
-            />
-            <TextField
-              label="Lesson learning goal"
-              multiline
-              value={c.goal}
-              onChange={(v) => changeCourse({ ...c, goal: v })}
-            />
-            <Select
-              label="Language"
-              value={c.language}
-              options={[
-                "French",
-                "English",
-                "Spanish",
-                "German",
-                "Italian",
-                "Japanese",
-                c.language,
-              ].filter((v, i, a) => a.indexOf(v) === i)}
-              onChange={(v) => changeCourse({ ...c, language: v })}
-            />
-            <Select
-              label="Level"
-              value={c.level}
-              options={["A1", "A2", "B1", "B2", "C1", "C2"]}
-              onChange={(v) => changeCourse({ ...c, level: v })}
-            />
+            <LessonPropertiesFields course={c} changeCourse={changeCourse} />
             <section className="ce-duration">
               <strong>Total lesson time · {totalMinutes(c)} min</strong>
               {c.modules.map((x) => (
@@ -635,33 +651,7 @@ export function CourseProperties({
             <h2>Module properties</h2>
             {m ? (
               <>
-                <Select
-                  label="Module type"
-                  value={m.type}
-                  options={[...moduleTypes]}
-                  onChange={(v) =>
-                    changeModule({ ...m, type: v as ModuleType })
-                  }
-                />
-                <TextField
-                  label="Module title"
-                  value={m.title}
-                  onChange={(v) => changeModule({ ...m, title: v })}
-                />
-                <TextField
-                  label="Module learning goal"
-                  multiline
-                  value={m.goal}
-                  onChange={(v) => changeModule({ ...m, goal: v })}
-                />
-                <TextField
-                  label="Estimated minutes"
-                  type="number"
-                  min="1"
-                  max="240"
-                  value={String(m.minutes)}
-                  onChange={(v) => changeModule({ ...m, minutes: Number(v) })}
-                />
+                <ModulePropertiesFields module={m} changeModule={changeModule} />
                 <Button kind="danger" onClick={deleteModule}>
                   Delete module
                 </Button>

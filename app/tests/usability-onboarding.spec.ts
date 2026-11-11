@@ -28,7 +28,7 @@ for (const presentation of ["web", "mobile"] as const) {
     await proceed("account");
     await current().getByRole("button", { name: "Continue with Google", exact: true }).click();
     await expectStep("google-connect");
-    await action("Continue with sample account").click();
+    await action("Continue with this account").click();
     await expectStep("age");
     await choice("18 or older").click();
     await proceed("language");

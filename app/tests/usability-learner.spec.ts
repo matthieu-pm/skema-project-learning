@@ -1,4 +1,5 @@
 import { test, expect, type Page } from "@playwright/test";
+import { expectSelectedChoice, selectChoice } from "./helpers/select";
 
 const current = (page: Page, mobile = false) => mobile ? page.getByTestId("flow-current") : page.locator(".lw-web-main");
 
@@ -6,22 +7,24 @@ test("search retains filters while sorting and opens full reviews", async ({ pag
   await page.goto("/?learner=1&view=web&flow=search");
   await expect(page.locator(".lw-teacher-card")).toHaveCount(25);
   await page.screenshot({ path: "qa/usability-feedback/desktop-search.png" });
-  await page.getByLabel("Language", { exact: true }).selectOption("French");
+  const language = page.getByRole("combobox", { name: "Language", exact: true });
+  const sorting = page.getByRole("combobox", { name: "Sort by", exact: true });
+  await selectChoice(page, language, "French");
   await page.getByRole("button", { name: "In person", exact: true }).click();
   await page.getByRole("button", { name: "Tomorrow", exact: true }).click();
-  await page.getByLabel("Sort by").selectOption("Price (lowest to highest)");
+  await selectChoice(page, sorting, "Price (lowest to highest)");
   const prices = await page.locator(".lw-card-bottom > strong").allTextContents();
   const values = prices.map(value => Number(value.match(/\d+/)?.[0]));
   expect(values.length).toBeGreaterThan(2);
   expect(values).toEqual([...values].sort((a, b) => a - b));
-  await page.getByLabel("Sort by").selectOption("Rating (highest first)");
+  await selectChoice(page, sorting, "Rating (highest first)");
   const ratings = await page.locator(".lw-rating strong").allTextContents();
   expect(ratings.map(Number)).toEqual(ratings.map(Number).sort((a, b) => b - a));
   await page.locator(".lw-rating").first().click();
   await expect(page.getByRole("heading", { name: /^Reviews for / })).toBeVisible();
   await page.getByRole("button", { name: "Go back", exact: true }).click();
-  await expect(page.getByLabel("Language", { exact: true })).toHaveValue("French");
-  await expect(page.getByLabel("Sort by")).toHaveValue("Rating (highest first)");
+  await expectSelectedChoice(language, "French");
+  await expectSelectedChoice(sorting, "Rating (highest first)");
   await expect(page.getByRole("button", { name: "Tomorrow", exact: true })).toHaveAttribute("aria-pressed", "true");
   await page.getByRole("button", { name: "View profile", exact: true }).first().click();
   await expect(page.getByRole("button", { name: "Send a message", exact: true })).toBeInViewport();
