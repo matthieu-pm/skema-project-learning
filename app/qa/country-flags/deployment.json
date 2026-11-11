@@ -1,0 +1,47 @@
+{
+  "projectName": "mimo-prototype",
+  "projectId": "prj_SEpdrBUQD5HcdNc5GRT73OKvrcrm",
+  "team": "matthieu-pm",
+  "teamId": "team_KddvwwnftxOOhP8UymRnP0PX",
+  "production": {
+    "id": "dpl_B1TRgCALrz3wUoCdMX3mQEKxy7Rj",
+    "url": "https://mimo-prototype-five.vercel.app",
+    "deploymentUrl": "https://mimo-prototype-7ldh60zvq-matthieu-pm.vercel.app",
+    "readyState": "READY",
+    "target": "production",
+    "previousDeploymentId": "dpl_EGMohvRMF5HziG5XL3BVntLYhyjm"
+  },
+  "scope": [
+    "Decorative country flags in onboarding, profile/location displays, identity checks and country menus",
+    "250 locally served SVG flag assets with retained license and provenance; original text, values, keyboard and privacy behavior preserved"
+  ],
+  "method": "Fresh isolated app snapshot uploaded with Vercel CLI --prod --skip-domain, then Ready production build promoted through authenticated Vercel API.",
+  "source": {
+    "fileCount": 480,
+    "manifest": "source-manifest.json",
+    "matchedCurrentAndStaging": true,
+    "deltaFromPriorProduction": "10 existing integration/guidance files changed; 4 shared country files and 252 flag asset/license/provenance files added; no removals. All 23 test files, protected runtime, configuration and dependencies unchanged.",
+    "excluded": [
+      "node_modules",
+      ".git",
+      ".vercel",
+      "dist",
+      "qa",
+      "test-results",
+      "playwright-report",
+      ".env*",
+      "*.log"
+    ]
+  },
+  "build": "Vercel npm ci and npm run build passed TypeScript/Vite/Sites packaging and all 28 protected runtime hashes.",
+  "verification": "Prior final local build, 7 existing select browser cases, 5 location units, 250-country/250-location lookup smoke check and native WebKit proof remain valid for this unchanged flag snapshot. Frozen-source audit and diff check passed. See verification.md for limits.",
+  "aliasVerification": {
+    "alias": "mimo-prototype-five.vercel.app",
+    "deploymentId": "dpl_B1TRgCALrz3wUoCdMX3mQEKxy7Rj",
+    "projectId": "prj_SEpdrBUQD5HcdNc5GRT73OKvrcrm",
+    "method": "Authenticated get_alias after promotion"
+  },
+  "hostedUi": "Not fetched or re-tested; readiness and stable alias verified through Vercel metadata API.",
+  "authentication": "Inherited Vercel Authentication retained",
+  "git": "No commit or push"
+}

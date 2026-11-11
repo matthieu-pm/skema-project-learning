@@ -52,6 +52,6 @@ Captures: `onboarding-review.png`, `onboarding-country.png`, `app-profile.png` a
 
 ## Release status and limits
 
-The country-flag changes are locally verified. No deployment or Git publication is recorded for this revision. Prior production releases remain documented in `context.md` with their own source snapshots and verification limits.
+The user subsequently explicitly requested production deployment. The unchanged verified country-flag snapshot was deployed and promoted as `dpl_B1TRgCALrz3wUoCdMX3mQEKxy7Rj`, Ready/production. The alias API confirms `mimo-prototype-five.vercel.app` maps to that exact deployment in the existing mimo-prototype project. All 480 frozen source files matched current source and staging; the remote build and all 28 protected runtime hashes passed. Inherited authentication remains enabled. Hosted UI was not fetched or re-tested. Record: `deployment.json`. No Git commit or push occurred.
 
 Actual phone flag appearance and live Photon suggestion options were not checked in native review. The existing phone select case provides shared-control coverage, and the location units use controlled data rather than a live geocoder. No physical-device or comprehensive accessibility audit is claimed. The verification agent made no product-source or test edits.
