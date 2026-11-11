@@ -1,5 +1,6 @@
 import { Button, Select, TextField } from "./components";
-import { MediaUpload } from "./CourseContent";
+import { InlineField } from "./InlineField";
+import { MediaUpload, Picture } from "./CourseContent";
 import {
   autoAssessed,
   blockIssues,
@@ -22,10 +23,14 @@ import {
 export function BlockProperties({
   block: b,
   change,
+  inline = false,
 }: {
   block: CourseBlock;
   change: (b: CourseBlock) => void;
+  inline?: boolean;
 }) {
+  const Field = inline ? InlineField : TextField;
+  const MediaDetails = inline ? "details" : "div";
   const edit = (patch: Partial<CourseBlock>) => change({ ...b, ...patch });
   const vocabulary = [
     "Flashcards",
@@ -34,29 +39,34 @@ export function BlockProperties({
   ].includes(b.format);
   return (
     <>
-      <Select
-        label="Block purpose"
-        value={b.purpose}
-        options={["Teach", "Practise"]}
-        onChange={(v) => edit({ purpose: v as Purpose })}
-      />
-      <Select
-        label="Block type"
-        value={b.format}
-        options={[
-          ...new Set([
-            b.format,
-            ...(b.purpose === "Teach" ? teachFormats : practiceFormats),
-          ]),
-        ]}
-        onChange={(v) => edit({ format: v as Format })}
-      />
-      <TextField
+      {!inline && (
+        <>
+          <Select
+            label="Block purpose"
+            value={b.purpose}
+            options={["Teach", "Practise"]}
+            onChange={(v) => edit({ purpose: v as Purpose })}
+          />
+          <Select
+            label="Block type"
+            value={b.format}
+            options={[
+              ...new Set([
+                b.format,
+                ...(b.purpose === "Teach" ? teachFormats : practiceFormats),
+              ]),
+            ]}
+            onChange={(v) => edit({ format: v as Format })}
+          />
+        </>
+      )}
+      <Field
+        {...(inline ? { className: "ce-inline-block-title", multiline: true } : {})}
         label="Block title"
         value={b.title}
         onChange={(v) => edit({ title: v })}
       />
-      <TextField
+      <Field
         label="Student instructions"
         multiline
         value={b.instructions}
@@ -69,91 +79,97 @@ export function BlockProperties({
             Add the foreign language, English meaning, picture and pronunciation
             for each card.
           </p>
-          {b.words.map((w, i) => (
-            <section className="ce-property-item" key={w.id}>
-              <strong>Card {i + 1}</strong>
-              <TextField
-                label={`Word or phrase ${i + 1}`}
-                value={w.word}
-                onChange={(v) =>
-                  edit({
-                    words: b.words.map((x) =>
-                      x.id === w.id ? { ...x, word: v } : x,
-                    ),
-                  })
-                }
-              />
-              <TextField
-                label={`English meaning ${i + 1}`}
-                value={w.meaning}
-                onChange={(v) =>
-                  edit({
-                    words: b.words.map((x) =>
-                      x.id === w.id ? { ...x, meaning: v } : x,
-                    ),
-                  })
-                }
-              />
-              <Select
-                label={`Library picture ${i + 1}`}
-                value={w.picture}
-                options={["☕", "🍵", "🍎", "📚", "🏠", "✈️", "⚖️", "↔️", "💬"]}
-                onChange={(v) =>
-                  edit({
-                    words: b.words.map((x) =>
-                      x.id === w.id
-                        ? { ...x, picture: v, imageId: undefined }
-                        : x,
-                    ),
-                  })
-                }
-              />
-              <MediaUpload
-                label={`Upload card picture ${i + 1}`}
-                accept="image/*"
-                onSave={(assetId) =>
-                  edit({
-                    words: b.words.map((x) =>
-                      x.id === w.id ? { ...x, imageId: assetId } : x,
-                    ),
-                  })
-                }
-              />
-              <TextField
-                label={`Pronunciation text ${i + 1}`}
-                value={w.pronunciation}
-                onChange={(v) =>
-                  edit({
-                    words: b.words.map((x) =>
-                      x.id === w.id ? { ...x, pronunciation: v } : x,
-                    ),
-                  })
-                }
-              />
-              <MediaUpload
-                label={`Upload pronunciation ${i + 1}`}
-                accept="audio/*"
-                onSave={(assetId) =>
-                  edit({
-                    words: b.words.map((x) =>
-                      x.id === w.id ? { ...x, assetId } : x,
-                    ),
-                  })
-                }
-              />
-              <p className="tw-subtle">
-                Without an audio file, preview uses generated pronunciation.
-              </p>
-              <Button
-                kind="quiet"
-                onClick={() =>
-                  edit({ words: b.words.filter((x) => x.id !== w.id) })
-                }
-              >
-                Delete card {i + 1}
-              </Button>
-            </section>
-          ))}
+          <div className={inline ? "ce-inline-vocabulary" : "ce-property-list"}>
+            {b.words.map((w, i) => (
+              <section className="ce-property-item" key={w.id}>
+                <strong>Card {i + 1}</strong>
+                {inline && <Picture assetId={w.imageId} picture={w.picture} alt={w.meaning} />}
+                <Field
+                  label={`Word or phrase ${i + 1}`}
+                  value={w.word}
+                  onChange={(v) =>
+                    edit({
+                      words: b.words.map((x) =>
+                        x.id === w.id ? { ...x, word: v } : x,
+                      ),
+                    })
+                  }
+                />
+                <Field
+                  label={`English meaning ${i + 1}`}
+                  value={w.meaning}
+                  onChange={(v) =>
+                    edit({
+                      words: b.words.map((x) =>
+                        x.id === w.id ? { ...x, meaning: v } : x,
+                      ),
+                    })
+                  }
+                />
+                <MediaDetails className="ce-card-media">
+                  {inline && <summary>Picture and pronunciation</summary>}
+                  <Select
+                    label={`Library picture ${i + 1}`}
+                    value={w.picture}
+                    options={["☕", "🍵", "🍎", "📚", "🏠", "✈️", "⚖️", "↔️", "💬"]}
+                    onChange={(v) =>
+                      edit({
+                        words: b.words.map((x) =>
+                          x.id === w.id
+                            ? { ...x, picture: v, imageId: undefined }
+                            : x,
+                        ),
+                      })
+                    }
+                  />
+                  <MediaUpload
+                    label={`Upload card picture ${i + 1}`}
+                    accept="image/*"
+                    onSave={(assetId) =>
+                      edit({
+                        words: b.words.map((x) =>
+                          x.id === w.id ? { ...x, imageId: assetId } : x,
+                        ),
+                      })
+                    }
+                  />
+                  <Field
+                    label={`Pronunciation text ${i + 1}`}
+                    value={w.pronunciation}
+                    onChange={(v) =>
+                      edit({
+                        words: b.words.map((x) =>
+                          x.id === w.id ? { ...x, pronunciation: v } : x,
+                        ),
+                      })
+                    }
+                  />
+                  <MediaUpload
+                    label={`Upload pronunciation ${i + 1}`}
+                    accept="audio/*"
+                    onSave={(assetId) =>
+                      edit({
+                        words: b.words.map((x) =>
+                          x.id === w.id ? { ...x, assetId } : x,
+                        ),
+                      })
+                    }
+                  />
+                  <p className="tw-subtle">
+                    Without an audio file, preview uses generated pronunciation.
+                  </p>
+                </MediaDetails>
+                <Button
+                  kind="quiet"
+                  onClick={() =>
+                    edit({ words: b.words.filter((x) => x.id !== w.id) })
+                  }
+                >
+                  Delete card {i + 1}
+                </Button>
+              </section>
+            ))}
+          </div>
           <Button
             kind="secondary"
             icon="plus"
@@ -172,7 +188,7 @@ export function BlockProperties({
       )}
       {b.format === "Sentence construction" && (
         <>
-          <TextField
+          <Field
             label="English translation"
             value={b.translation}
             onChange={(v) => edit({ translation: v })}
@@ -184,7 +200,7 @@ export function BlockProperties({
           </p>
           {b.parts.map((p, i) => (
             <section key={p.id} className="ce-property-item">
-              <TextField
+              <Field
                 label={`Sentence part ${i + 1}`}
                 value={p.text}
                 onChange={(v) => {
@@ -207,7 +223,7 @@ export function BlockProperties({
                 }
               />
               {(!partRoles.includes(p.role) || p.role === "Custom") && (
-                <TextField
+                <Field
                   label={`Custom role ${i + 1}`}
                   value={p.role === "Custom" ? "" : p.role}
                   onChange={(v) =>
@@ -219,7 +235,7 @@ export function BlockProperties({
                   }
                 />
               )}
-              <TextField
+              <Field
                 label={`Explanation or substitution ${i + 1}`}
                 value={p.note}
                 onChange={(v) =>
@@ -278,7 +294,7 @@ export function BlockProperties({
           </h3>
           {b.pairs.map((p, i) => (
             <section key={p.id} className="ce-property-item">
-              <TextField
+              <Field
                 label={`Item ${i + 1}`}
                 value={p.left}
                 onChange={(v) =>
@@ -289,7 +305,7 @@ export function BlockProperties({
                   })
                 }
               />
-              <TextField
+              <Field
                 label={`${b.format === "Matching pairs" ? "Matching answer" : "Correct group"} ${i + 1}`}
                 value={p.right}
                 onChange={(v) =>
@@ -327,7 +343,7 @@ export function BlockProperties({
           </h3>
           {b.clips.map((c, i) => (
             <section className="ce-property-item" key={c.id}>
-              <TextField
+              <Field
                 label={`Clip title ${i + 1}`}
                 value={c.title}
                 onChange={(v) =>
@@ -350,7 +366,7 @@ export function BlockProperties({
                 }
               />
               {c.filename && <small>{c.filename}</small>}
-              <TextField
+              <Field
                 multiline
                 label={`Transcript ${i + 1}`}
                 value={c.transcript}
@@ -362,7 +378,7 @@ export function BlockProperties({
                   })
                 }
               />
-              <TextField
+              <Field
                 label={`Model response to repeat ${i + 1}`}
                 value={c.answer}
                 onChange={(v) =>
@@ -409,7 +425,7 @@ export function BlockProperties({
           "Audio",
           "Video",
         ].includes(b.format) && (
-          <TextField
+          <Field
             label={
               b.format === "Fill the gap"
                 ? "Sentence with a gap (use ___)"
@@ -431,7 +447,7 @@ export function BlockProperties({
           <h3>Answer options</h3>
           {b.choices.map((choice, i) => (
             <div className="ce-property-item" key={i}>
-              <TextField
+              <Field
                 label={`Option ${i + 1}`}
                 value={choice}
                 onChange={(v) =>
@@ -480,7 +496,7 @@ export function BlockProperties({
           "Vocabulary recall",
           "Quiz",
         ].includes(b.format) && (
-          <TextField
+          <Field
             label="Correct answer"
             value={b.answer}
             onChange={(v) => edit({ answer: v })}
@@ -495,7 +511,7 @@ export function BlockProperties({
           "Quiz",
         ].includes(b.format) && (
           <>
-            <TextField
+            <Field
               label="Other accepted answers (one per line)"
               multiline
               value={b.alternatives}
@@ -509,6 +525,7 @@ export function BlockProperties({
         )}
       {b.format === "Image" && (
         <>
+          {inline && <Picture assetId={b.assetId} picture={b.picture} alt={b.text} />}
           <Select
             label="Library image"
             value={b.picture}

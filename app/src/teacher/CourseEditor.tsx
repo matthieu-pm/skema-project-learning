@@ -27,8 +27,9 @@ import {
 } from "./components";
 import { lessonPublicationIssues, lessonPriceLabel } from "../lesson-settings";
 import { students, type Lesson } from "./model";
-import { BlockSummary, StudentBlock } from "./CourseContent";
-import { CourseProperties } from "./CourseProperties";
+import { StudentBlock } from "./CourseContent";
+import { BlockProperties, CourseProperties } from "./CourseProperties";
+import { InlineField } from "./InlineField";
 import {
   cloneCourse,
   courseIssues,
@@ -286,6 +287,7 @@ function Editor({ lesson, navigate }: { lesson: Lesson; navigate: Navigate }) {
     [moveMenu, setMoveMenu] = useState<string | null>(null),
     [dragging, setDragging] = useState(false);
   const cleanupDrag = useRef<(() => void) | undefined>(undefined);
+  const inlineEdit = useRef<{ field: HTMLElement; recorded: boolean } | null>(null);
   const histories = editorHistories[lesson.id] || { past: [], future: [] };
   const selectedModule =
       c.modules.find((m) => m.id === moduleId) || c.modules[0],
@@ -304,17 +306,22 @@ function Editor({ lesson, navigate }: { lesson: Lesson; navigate: Navigate }) {
         : "Draft";
   const commit = (next: Course) => {
     if (JSON.stringify(next) === JSON.stringify(c)) return;
-    setEditorHistories((h) => ({
-      ...h,
-      [lesson.id]: {
-        past: [...(h[lesson.id]?.past || []), structuredClone(c)].slice(-80),
-        future: [],
-      },
-    }));
+    // Treat one continuous canvas field edit as one Undo action.
+    if (!inlineEdit.current?.recorded) {
+      setEditorHistories((h) => ({
+        ...h,
+        [lesson.id]: {
+          past: [...(h[lesson.id]?.past || []), structuredClone(c)].slice(-80),
+          future: [],
+        },
+      }));
+    }
+    if (inlineEdit.current) inlineEdit.current.recorded = true;
     updateLesson(lesson.id, coursePatch(next));
     setErrors([]);
   };
   const undo = (redo = false) => {
+    inlineEdit.current = null;
     const stack = redo ? histories.future : histories.past,
       next = stack.at(-1);
     if (!next) return;
@@ -372,11 +379,11 @@ function Editor({ lesson, navigate }: { lesson: Lesson; navigate: Navigate }) {
   };
   const changeModule = (m: CourseModule) =>
     commit({ ...c, modules: c.modules.map((x) => (x.id === m.id ? m : x)) });
-  const changeBlock = (b: CourseBlock) => {
-    if (selectedModule)
+  const changeBlock = (b: CourseBlock, inModule = selectedModule) => {
+    if (inModule)
       changeModule({
-        ...selectedModule,
-        blocks: selectedModule.blocks.map((x) => (x.id === b.id ? b : x)),
+        ...inModule,
+        blocks: inModule.blocks.map((x) => (x.id === b.id ? b : x)),
       });
   };
   const selectModule = (m: CourseModule) => {
@@ -414,9 +421,9 @@ function Editor({ lesson, navigate }: { lesson: Lesson; navigate: Navigate }) {
     });
     setBlockId(block.id);
     setTab("Block");
-    setMobilePanel("Properties");
+    setMobilePanel("Canvas");
     setModal(null);
-    setNotice(`${format} block added. Edit its content in Block properties.`);
+    setNotice(`${format} block added. Type directly in the canvas.`);
   };
   const addModule = (type: ModuleType) => {
     const m = createModule(type);
@@ -424,7 +431,7 @@ function Editor({ lesson, navigate }: { lesson: Lesson; navigate: Navigate }) {
     setModuleId(m.id);
     setBlockId(undefined);
     setTab("Module");
-    setMobilePanel("Properties");
+    setMobilePanel("Canvas");
     setModal(null);
   };
   const deleteModule = () => {
@@ -712,6 +719,20 @@ function Editor({ lesson, navigate }: { lesson: Lesson; navigate: Navigate }) {
     <div
       className={`ce-editor ${dragging ? "ce-dragging" : ""}`}
       onKeyDown={shortcuts}
+      onFocusCapture={(e) => {
+        const field = e.target;
+        if (
+          field instanceof HTMLElement &&
+          field.matches("input,textarea") &&
+          field.closest(".ce-canvas")
+        ) {
+          if (inlineEdit.current?.field !== field)
+            inlineEdit.current = { field, recorded: false };
+        } else inlineEdit.current = null;
+      }}
+      onBlurCapture={(e) => {
+        if (inlineEdit.current?.field === e.target) inlineEdit.current = null;
+      }}
     >
       {errors.length > 0 && !modal && (
         <div className="ce-warning" role="alert">
@@ -899,16 +920,41 @@ function Editor({ lesson, navigate }: { lesson: Lesson; navigate: Navigate }) {
           </div>
           <div className="ce-lesson-paper">
             <div className="ce-lesson-heading">
-              <h1>{c.title || "Untitled lesson"}</h1>
+              <div role="heading" aria-level={1}>
+                <InlineField
+                  className="ce-inline-lesson-title"
+                  label="Lesson title"
+                  multiline
+                  value={c.title}
+                  placeholder="Untitled lesson"
+                  onChange={(title) => commit({ ...c, title })}
+                />
+              </div>
               <div className="ce-lesson-metadata">
-                <span>{c.language}</span>
-                <span>{c.level}</span>
+                <Select
+                  label="Language"
+                  value={c.language}
+                  options={[...new Set([c.language, "French", "English", "Spanish", "German", "Italian", "Japanese"])]}
+                  onChange={(language) => commit({ ...c, language })}
+                />
+                <Select
+                  label="Level"
+                  value={c.level}
+                  options={["A1", "A2", "B1", "B2", "C1", "C2"]}
+                  onChange={(level) => commit({ ...c, level })}
+                />
                 <span>
                   <Icon name="clock" size={14} />
                   {totalMinutes(c)} min
                 </span>
               </div>
-              <p>{c.goal || "Add a learning goal in Lesson properties."}</p>
+              <InlineField
+                label="Lesson learning goal"
+                multiline
+                value={c.goal}
+                placeholder="Add a learning goal…"
+                onChange={(goal) => commit({ ...c, goal })}
+              />
             </div>
             {c.modules.map((m, i) => (
               <section
@@ -946,34 +992,73 @@ function Editor({ lesson, navigate }: { lesson: Lesson; navigate: Navigate }) {
                   }
                 }}
               >
-                <button
-                  className="ce-module-heading"
-                  onClick={() => {
-                    selectModule(m);
-                    if (mobile) setMobilePanel("Properties");
-                  }}
-                >
+                <div className="ce-module-heading">
                   <span className="ce-number">
                     {String(i + 1).padStart(2, "0")}
                   </span>
-                  <span>
-                    <small>
-                      {m.type} · {m.minutes} min
-                    </small>
-                    <h2>{m.title}</h2>
-                    <p>{m.goal || "Add this module’s learning goal."}</p>
-                  </span>
-                  <Icon name="settings" size={18} />
-                </button>
+                  <div
+                    className="ce-module-heading-content"
+                    onFocusCapture={() => selectModule(m)}
+                  >
+                    <div className="ce-inline-module-metadata">
+                      <Select
+                        label="Module type"
+                        value={m.type}
+                        options={[...moduleTypes]}
+                        onChange={(type) => changeModule({ ...m, type: type as ModuleType })}
+                      />
+                      <InlineField
+                        label="Estimated minutes"
+                        type="number"
+                        min="1"
+                        max="240"
+                        value={String(m.minutes)}
+                        onChange={(minutes) => changeModule({ ...m, minutes: Number(minutes) })}
+                      />
+                      <small>min</small>
+                    </div>
+                    <div role="heading" aria-level={2}>
+                      <InlineField
+                        className="ce-inline-module-title"
+                        label="Module title"
+                        multiline
+                        value={m.title}
+                        placeholder="Untitled module"
+                        onChange={(title) => changeModule({ ...m, title })}
+                      />
+                    </div>
+                    <InlineField
+                      label="Module learning goal"
+                      multiline
+                      value={m.goal}
+                      placeholder="Add this module’s learning goal…"
+                      onChange={(goal) => changeModule({ ...m, goal })}
+                    />
+                  </div>
+                  <button
+                    className="tw-icon-button"
+                    aria-label={`Settings for ${m.title}`}
+                    onClick={() => {
+                      selectModule(m);
+                      if (mobile) {
+                        keyboard.hide();
+                        setMobilePanel("Properties");
+                      }
+                    }}
+                  >
+                    <Icon name="settings" size={18} />
+                  </button>
+                </div>
                 {m.blocks.map((b) => (
                   <article
                     className={`ce-canvas-block ${selectedBlock?.id === b.id ? "selected" : ""}`}
                     key={b.id}
+                    onFocusCapture={() => selectBlock(m, b)}
                   >
                     <button
                       className="ce-block-select"
                       onClick={() => selectBlock(m, b, mobile)}
-                      aria-label={`Edit ${b.title}`}
+                      aria-label={`Settings for ${b.title}`}
                     >
                       <span
                         className={`ce-purpose ${b.purpose === "Teach" ? "teach" : "practice"}`}
@@ -983,10 +1068,8 @@ function Editor({ lesson, navigate }: { lesson: Lesson; navigate: Navigate }) {
                       <span>{b.format}</span>
                       <Icon name="settings" size={16} />
                     </button>
-                    <div onClick={() => selectBlock(m, b)}>
-                      <h3>{b.title}</h3>
-                      <p>{b.instructions}</p>
-                      <BlockSummary block={b} />
+                    <div className="ce-inline-block-content">
+                      <BlockProperties inline block={b} change={(next) => changeBlock(next, m)} />
                     </div>
                   </article>
                 ))}
@@ -1008,7 +1091,7 @@ function Editor({ lesson, navigate }: { lesson: Lesson; navigate: Navigate }) {
             </button>
           </div>
           <p className="ce-canvas-footnote">
-            Select a block to edit it. Preview shows one block at a time.
+            Type directly in the lesson to edit. Preview shows the student view.
           </p>
           {lesson.publishedEditor && (
             <div className="ce-applied-link">
@@ -1034,7 +1117,7 @@ function Editor({ lesson, navigate }: { lesson: Lesson; navigate: Navigate }) {
           onTab={setTab}
           changeCourse={commit}
           changeModule={changeModule}
-          changeBlock={changeBlock}
+          changeBlock={(next) => changeBlock(next)}
           addModule={() => open("module")}
           deleteModule={deleteModule}
           addBlock={() => open("block")}
