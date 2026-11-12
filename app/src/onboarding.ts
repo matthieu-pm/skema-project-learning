@@ -31,6 +31,8 @@ export type Answers = {
   teachingLevelsByLanguage?: Record<string, string[]>;
   teachingExperience?: string;
   meetingFormatDeferred?: boolean;
+  /** Learner chose "Keep my schedule flexible" (no preferred days or time). */
+  scheduleFlexible?: boolean;
   approach: string;
   duration: string;
   rate: string;
@@ -148,7 +150,7 @@ export function toggleLearningLanguage(
     learningLevels,
   };
 }
-export const sharedSteps = ["welcome", "role", "account"] as const;
+export const sharedSteps = ["welcome", "role", "entry", "account"] as const;
 export const identitySteps = [
   "identity-intro",
   "identity-details",
@@ -179,17 +181,26 @@ export const verificationExit = (a: Answers): Step =>
     : needsGuardian(a)
       ? "language"
       : "learner-ready";
+// Only what a learner needs before booking. Confidence, challenges, meeting
+// preferences, notifications and adult identity checks are completed later
+// from Profile, which keeps the sign-up path short.
 export const learnerSteps = [
   "language",
   "level",
-  "learner-confidence",
-  "learner-challenges",
   "learner-goal",
-  "learner-preferences",
-  "extras",
-  ...identitySteps,
   "learner-ready",
 ] as const;
+export const laterLearnerSteps = [
+  "learner-confidence",
+  "learner-challenges",
+  "learner-preferences",
+  "extras",
+] as const;
+/**
+ * "entry" (create an account or log in) is a counted sign-up step after the role;
+ * "login" is the returning-user path and sits outside the sign-up progress.
+ */
+export const entrySteps = ["entry", "login"] as const;
 export const teacherSteps = [
   "teacher-profile",
   "teacher-subjects",
@@ -200,6 +211,8 @@ export const teacherSteps = [
 ] as const;
 export const stepIds = [
   ...sharedSteps,
+  ...entrySteps,
+  ...laterLearnerSteps,
   "email",
   "google-connect",
   "age",
@@ -290,7 +303,8 @@ export function setupProgress(a: Answers, step: Step) {
               identitySteps.some((item) => item === value),
           )
         : route.slice(0, route.indexOf("teacher-review") + 1)
-      : route;
+      : route.filter((value) => value !== "welcome");
+  // Welcome is not a numbered step, so counting starts at 1 on the role screen.
   const index = Math.max(0, sequence.indexOf(step));
   const total = Math.max(1, sequence.length);
   const finished = [

@@ -47,7 +47,7 @@ export default function BookingCalendar({ slots, slotId, onSelect, now, children
     </section>
     <section className="lw-booking-times" aria-label="Available times">
       <h2>{new Intl.DateTimeFormat("en-GB", { weekday: "short", day: "numeric", month: "short", timeZone: "UTC" }).format(dateFor(chosenDay))}</h2>
-      <p className="lw-muted">Available times · 24-hour</p>
+      <p className="lw-muted">Available times</p>
       <div className="lw-booking-time-list">{daySlots.length ? daySlots.map(slot => <button className="lw-slot" aria-pressed={slot.id === slotId} key={slot.id} onClick={() => onSelect(slot.id)}><strong>{time(slot.start)}</strong>{slot.id === slotId && <Icon name="check" size={16} />}</button>) : <p className="lw-muted">No times left on this date. Choose another available date.</p>}</div>
       {children}
     </section>

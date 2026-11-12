@@ -20,10 +20,10 @@ import {
 } from "../src/onboarding.ts";
 const answers = (patch) => ({ ...initialAnswers, ...patch });
 
-test("learner confidence names the selected language context and challenges accept presets, text or both", () => {
+test("confidence and challenges moved out of sign-up but keep their validation for Profile", () => {
   const a = answers({ role: "learner", learningLanguages: ["French"] });
-  assert.equal(nextStep("learner-confidence", a), "learner-challenges");
-  assert.equal(nextStep("learner-challenges", a), "learner-goal");
+  // Optional screens are completed later from Profile, not during sign-up.
+  for (const later of ["learner-confidence", "learner-challenges", "learner-preferences", "extras"]) assert.ok(!routeFor(a).includes(later), later);
   assert.equal(validStep("learner-confidence", a), false);
   assert.equal(validStep("learner-confidence", { ...a, speakingConfidence: "I’m finding my confidence" }), true);
   for (const patch of [{}, { speakingChallenges: ["Pronunciation"] }, { challengeDetails: "I freeze when someone replies quickly." }, { speakingChallenges: ["Pronunciation"], challengeDetails: "Fast speech is hard." }]) {
@@ -53,11 +53,14 @@ test("learner route groups related decisions and keeps independent language leve
     "language",
     "level",
     "learner-goal",
-    "learner-preferences",
-    "extras",
   ])
     assert.ok(route.includes(step), step);
   for (const retired of [
+    "learner-confidence",
+    "learner-challenges",
+    "learner-preferences",
+    "extras",
+    "identity-intro",
     "email",
     "topic",
     "personal-goal",
@@ -73,13 +76,16 @@ test("learner route groups related decisions and keeps independent language leve
     assert.ok(!route.includes(retired), retired);
   assert.equal(new Set(route).size, route.length);
   assert.equal(route.at(-1), "learner-ready");
+  // Short sign-up: welcome, role, create/log-in choice, account, age, code, language, level, goal, summary.
+  assert.ok(route.length <= 10, `adult learner route has ${route.length} screens`);
 });
-test("teacher setup reaches review in eight screens with profile, subjects and lesson details grouped", () => {
+test("teacher setup reaches review in nine screens with profile, subjects and lesson details grouped", () => {
   const a = answers({ role: "teacher", format: "In person" }),
     route = routeFor(a);
   assert.deepEqual(route.slice(0, route.indexOf("teacher-review") + 1), [
     "welcome",
     "role",
+    "entry",
     "account",
     "verify",
     "teacher-profile",
@@ -256,7 +262,7 @@ test("teachers provide birth date only in grouped identity details and never the
   assert.equal(nextStep("identity-details", teacher), "document-details");
   assert.equal(route.filter((s) => s === "identity-details").length, 1);
   assert.ok(
-    routeFor(answers({ role: "learner" })).includes("identity-details"),
+    routeFor(answers({ role: "learner", age: "Under 18" })).includes("identity-details"),
   );
 });
 test("birth date retains calendar, future-date and formatting validation within the grouped identity form", () => {
@@ -292,14 +298,12 @@ test("birth date retains calendar, future-date and formatting validation within 
   assert.equal(formatDateOfBirth("15061995"), "15/06/1995");
   assert.equal(formatDateOfBirth("15/06/199"), "15/06/199");
 });
-test("learner extras keep notification and widget choices without forced daily commitments", () => {
+test("learner sign-up ends after the goal, without forced daily commitments", () => {
   const a = answers({ role: "learner" }),
     route = routeFor(a);
-  for (const step of ["routine", "daily-goal", "commitment", "reminders"])
+  for (const step of ["routine", "daily-goal", "commitment", "reminders", "extras"])
     assert.ok(!route.includes(step));
-  assert.equal(nextStep("learner-goal", a), "learner-preferences");
-  assert.equal(nextStep("learner-preferences", a), "extras");
-  assert.equal(nextStep("extras", a), "identity-intro");
+  assert.equal(nextStep("learner-goal", a), "learner-ready");
   assert.equal(validStep("extras", a), true);
   assert.equal(a.notifications, false);
   assert.equal(a.widget, false);
@@ -309,17 +313,14 @@ test("guardian verification remains explicit, happens once and resumes learner s
   for (const age of ["18 or older", "Under 18"]) {
     const a = answers({ role: "learner", age }),
       route = routeFor(a);
+    // Only minors verify during sign-up (the guardian's ID); adults verify later from Profile.
     for (const step of identitySteps)
-      assert.equal(route.filter((s) => s === step).length, 1, step);
-    assert.equal(
-      nextStep("extras", a),
-      age === "Under 18" ? "learner-ready" : "identity-intro",
-    );
+      assert.equal(route.filter((s) => s === step).length, age === "Under 18" ? 1 : 0, step);
     assert.equal(route.includes("guardian-handoff"), age === "Under 18");
     assert.equal(needsGuardian(a), age === "Under 18");
     assert.equal(
       nextStep("selfie", a),
-      age === "Under 18" ? "language" : "learner-ready",
+      age === "Under 18" ? "language" : null,
     );
     assert.equal(
       nextStep("verify", a),
@@ -376,7 +377,7 @@ test("multiple learner languages retain separate level choices and clear deselec
   assert.deepEqual(a.learningLanguages, ["French", "Spanish"]);
   assert.equal(nextStep("language", a), "level-French");
   assert.equal(nextStep("level-French", a), "level-Spanish");
-  assert.equal(nextStep("level-Spanish", a), "learner-confidence");
+  assert.equal(nextStep("level-Spanish", a), "learner-goal");
   assert.equal(validStep("level-French", a), false);
   a = { ...a, learningLevels: { French: "A1", Spanish: "B2" } };
   assert.equal(validStep("level-French", a), true);
@@ -390,7 +391,6 @@ test("multiple learner languages retain separate level choices and clear deselec
 test("Persona shortcut and document fallback return to the correct teacher, adult or guardian route", () => {
   for (const [role, age, end] of [
     ["teacher", "18 or older", "verification-ready"],
-    ["learner", "18 or older", "learner-ready"],
     ["learner", "Under 18", "language"],
   ]) {
     const a = answers({ role, age, identityMethod: "persona" }),
@@ -408,7 +408,8 @@ test("Persona shortcut and document fallback return to the correct teacher, adul
 test("email entry is integrated into account choice while Google retains its labeled sample confirmation", () => {
   for (const role of ["learner", "teacher"]) {
     const email = answers({ role, age: "18 or older" });
-    assert.equal(nextStep("role", email), "account");
+    assert.equal(nextStep("role", email), "entry");
+    assert.equal(nextStep("entry", email), "account");
     assert.equal(
       nextStep("account", email),
       role === "teacher" ? "verify" : "age",
@@ -439,7 +440,7 @@ test("Google minor account still collects guardian email and the explicit adult 
   assert.equal(nextStep("guardian", a), "guardian-handoff");
   assert.equal(nextStep("guardian-handoff", a), "identity-intro");
   assert.equal(nextStep("selfie", a), "language");
-  assert.equal(nextStep("extras", a), "learner-ready");
+  assert.equal(nextStep("learner-goal", a), "learner-ready");
 });
 test("switching account method clears stale verification while preserving a same-method email draft", () => {
   const google = answers({
@@ -479,9 +480,11 @@ test("greeting-only stops stay removed from every active route", () => {
           assert.ok(!route.includes(retired));
           assert.ok(!stepIds.includes(retired));
         }
+        // Welcome leads to the learn/teach choice; the Create an account / Log in choice follows it.
         assert.equal(nextStep("welcome", a), "role");
-        assert.ok(route.includes("document"));
-        assert.ok(route.includes("selfie"));
+        const verifiesNow = role === "teacher" || age === "Under 18";
+        assert.equal(route.includes("document"), verifiesNow);
+        assert.equal(route.includes("selfie"), verifiesNow);
       }
 });
 test("teacher review cannot bypass missing required details after an edit or Back navigation", () => {
@@ -507,7 +510,7 @@ test("teacher review cannot bypass missing required details after an edit or Bac
 test("teacher progress separates eight setup screens from the optional identity check", async () => {
   const { setupProgress } = await import("../src/onboarding.ts");
   const a = answers({ role: "teacher" });
-  assert.equal(setupProgress(a, "account").total, 8);
+  assert.equal(setupProgress(a, "account").total, 9);
   assert.equal(setupProgress(a, "teacher-review").percent, 100);
   assert.deepEqual(setupProgress(a, "identity-intro"), {
     index: 0,
@@ -537,4 +540,15 @@ test("free lessons require explicit confirmation while unset pricing remains an 
     validStep("teacher-lessons", answers({ rate: "-1", freeConfirmed: true })),
     false,
   );
+});
+
+test("the create-or-log-in choice is a counted step after the role; log in stays outside sign-up", async () => {
+  const { entrySteps } = await import("../src/onboarding.ts");
+  assert.deepEqual([...entrySteps], ["entry", "login"]);
+  for (const role of ["learner", "teacher"]) {
+    const a = answers({ role, age: "18 or older" }), route = routeFor(a);
+    assert.equal(nextStep("role", a), "entry");
+    assert.equal(nextStep("entry", a), "account");
+    assert.ok(!route.includes("login"));
+  }
 });

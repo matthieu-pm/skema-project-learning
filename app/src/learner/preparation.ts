@@ -17,10 +17,11 @@ course.modules.forEach((module, m) => {
   });
 });
 const cafe: Preparation = { id: "cafe-a2-v1", teacherId: "gilbert", course };
-export const preparationIdForTeacher = (teacherId: string) => teacherId === cafe.teacherId ? cafe.id : undefined;
-export function preparationFor(booking: Pick<Booking, "teacherId" | "preparationId">): Preparation | undefined {
+// The café assignment is French; it is only attached to a Gilbert lesson booked in French.
+export const preparationIdForTeacher = (teacherId: string, language?: string) => teacherId === cafe.teacherId && (!language || language === "French") ? cafe.id : undefined;
+export function preparationFor(booking: Pick<Booking, "teacherId" | "preparationId" | "language">): Preparation | undefined {
   // Explicit compatibility for existing Gilbert sample bookings without an ID.
-  const id = booking.preparationId ?? preparationIdForTeacher(booking.teacherId);
+  const id = booking.preparationId ?? preparationIdForTeacher(booking.teacherId, booking.language);
   return id === cafe.id && booking.teacherId === cafe.teacherId ? cafe : undefined;
 }
 export const preparationBlocks = (preparation: Preparation) => preparation.course.modules.flatMap(module => module.blocks.map(block => ({ module, block })));
@@ -60,7 +61,7 @@ function readStore(options: Options): Store {
     const data: unknown = JSON.parse(raw);
     if (!isRecord(data) || data.version !== 1 || !isRecord(data.sessions)) throw new Error();
     return data as Store;
-  } catch { throw new Error("Saved preparation could not be read. Reload and try again; your saved work has not been replaced."); }
+  } catch { throw new Error("Saved preparation couldn’t be read. Reload and try again; your saved work hasn’t been replaced."); }
 }
 function validAttempt(value: unknown, block: CourseBlock): value is BlockAttempt {
   if (!isRecord(value) || !isRecord(value.answers)) return false;
@@ -78,7 +79,7 @@ function progressFrom(store: Store, booking: Booking, preparation: Preparation):
   if (!isRecord(progress) || !isRecord(progress.blocks) || !Object.entries(progress.blocks).every(([id, attempt]) => {
     const entry = preparationBlocks(preparation).find(({ block }) => block.id === id);
     return entry && validAttempt(attempt, entry.block);
-  })) throw new Error("Saved preparation could not be read. Reload and try again; your saved work has not been replaced.");
+  })) throw new Error("Saved preparation couldn’t be read. Reload and try again; your saved work hasn’t been replaced.");
   return progress;
 }
 export function readPreparation(booking: Booking, options: Options = {}): PreparationProgress {
@@ -89,14 +90,14 @@ export async function savePreparation(booking: Booking, blockId: string, attempt
   const preparation = preparationFor(booking), block = preparation && preparationBlocks(preparation).find(entry => entry.block.id === blockId)?.block;
   if (booking.status !== "confirmed" || !preparation || !block || !validAttempt(attempt, block)) throw new Error("This session or preparation block is unavailable. Your saved work is unchanged.");
   const locks = options.locks !== undefined ? options.locks : navigator.locks;
-  if (!locks) throw new Error("This browser cannot safely save preparation. Use a browser with Web Locks support.");
+  if (!locks) throw new Error("Your progress couldn’t be saved. Try again in a moment.");
   const snapshot = structuredClone(attempt);
   return locks.request(preparationStorageKey, () => {
     const store = readStore(options), progress = progressFrom(store, booking, preparation);
     const completedAt = progress.blocks[blockId]?.completedAt ?? (attemptComplete(block, snapshot) ? (options.now ?? new Date()).toISOString() : undefined);
     const next = { blocks: { ...progress.blocks, [blockId]: { ...snapshot, completedAt } } };
     try { storageFor(options).setItem(preparationStorageKey, JSON.stringify({ ...store, sessions: { ...store.sessions, [sessionKey(booking, preparation)]: next } })); }
-    catch { throw new Error("Your progress could not be saved. Keep this page open and try saving again."); }
+    catch { throw new Error("Your progress couldn’t be saved. Keep this page open and try saving again."); }
     if (typeof window !== "undefined") window.dispatchEvent(new Event(changed));
     return next;
   });

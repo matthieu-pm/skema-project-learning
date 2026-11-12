@@ -11,12 +11,12 @@ export function Button({ children, onClick, secondary = false, danger = false, d
 }) {
   return <button className={`lw-button ${secondary ? "lw-secondary" : "lw-primary"} ${danger ? "lw-danger" : ""}`} onClick={onClick} disabled={disabled}>{icon && <Icon name={icon} size={18} />}<span>{children}</span></button>;
 }
-export function Field({ label, value, onChange, multiline = false, placeholder, maxLength, icon }: {
-  label: string; value: string; onChange: (value: string) => void; multiline?: boolean; placeholder?: string; maxLength?: number; icon?: string;
+export function Field({ label, value, onChange, multiline = false, placeholder, maxLength, icon, type = "text", autoComplete }: {
+  label: string; value: string; onChange: (value: string) => void; multiline?: boolean; placeholder?: string; maxLength?: number; icon?: string; type?: string; autoComplete?: string;
 }) {
   const mobile = useContext(LearnerPresentation), keyboard = useKeyboard(), id = useId();
-  const props = { id, value, onChange: (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => onChange(event.target.value), placeholder, maxLength, onBlur: () => { if (mobile) keyboard.hide(); } };
-  return <label className="lw-field" htmlFor={id}><span>{label}</span>{icon && <Icon name={icon} size={18} className="lw-field-icon" />}{multiline ? mobile ? <KeyboardTextarea {...props} rows={4} /> : <textarea {...props} rows={4} /> : mobile ? <KeyboardInput {...props} /> : <input {...props} />}</label>;
+  const props = { id, value, autoComplete, onChange: (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => onChange(event.target.value), placeholder, maxLength, onBlur: () => { if (mobile) keyboard.hide(); } };
+  return <label className="lw-field" htmlFor={id}><span>{label}</span>{icon && <Icon name={icon} size={18} className="lw-field-icon" />}{multiline ? mobile ? <KeyboardTextarea {...props} rows={4} /> : <textarea {...props} rows={4} /> : mobile ? <KeyboardInput {...props} type={type} /> : <input {...props} type={type} />}</label>;
 }
 export function Select({ label, value, options, onChange }: { label: string; value: string; options: string[]; onChange: (value: string) => void }) {
   const id = useId();
@@ -38,6 +38,16 @@ export function LearnerAvatar({ name = "Alex", large = false }: { name?: string;
   const id = learnerPortraits[name];
   const initials = name.split(" ").map(part => part[0]).slice(0, 2).join("");
   return <span className={`lw-avatar lw-learner-avatar ${large ? "large" : ""}`} aria-hidden="true">{id ? <ProfilePortrait id={id} initials={initials} /> : initials}</span>;
+}
+/**
+ * One text-only tag for every status or label in the learner app (no icons).
+ * live = happening now (green + pulse) · upcoming = booked/next (brand purple)
+ * done = completed (green) · success = saved/complete (green) · danger = cancelled (red)
+ * neutral = descriptive labels (skills, "Today").
+ */
+export type TagTone = "live" | "upcoming" | "done" | "success" | "danger" | "neutral";
+export function Tag({ tone = "neutral", children }: { tone?: TagTone; children: ReactNode }) {
+  return <span className={`lw-tag lw-tag-${tone}`}>{tone === "live" && <span className="lw-tag-dot" aria-hidden="true" />}<span>{children}</span></span>;
 }
 export function Panel({ children, className = "" }: { children: ReactNode; className?: string }) {
   return <section className={`lw-panel ${className}`}>{children}</section>;

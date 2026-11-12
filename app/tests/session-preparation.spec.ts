@@ -6,8 +6,8 @@ for (const mobile of [false, true]) {
     await page.goto(`/?learner=1&view=${mobile ? "mobile" : "web"}&flow=lessons`);
     const screen = () => current(page, mobile);
     const click = (name: string) => screen().getByRole("button", { name, exact: true }).click();
-    const count = (value: number) => expect(screen().getByText(`${value} of 9 blocks complete`, { exact: true })).toBeVisible();
-    await click("Prepare for your lesson"); await count(0); await click("Start preparation");
+    const count = (value: number) => expect(screen().getByText(`${value} of 9 blocks done`, { exact: true })).toBeVisible();
+    await screen().locator(".lw-lesson-upcoming").getByRole("button", { name: "Prepare for your lesson", exact: true }).click(); await count(0); await click("Start preparation");
     // Navigation alone cannot complete an activity.
     await click("Next block"); await count(0); await click("Previous");
     await expect(screen().getByRole("button", { name: "Reveal answer", exact: true })).toHaveCount(0);
@@ -50,6 +50,8 @@ test("new bookings open preparation, draft answers survive reload and a failed s
   await page.goto("/?learner=1&view=web&flow=search");
   await page.getByRole("textbox", { name: "Search teachers", exact: true }).fill("Gilbert");
   await page.locator(".lw-slot").first().click();
+  // The café preparation belongs to Gilbert's French lessons.
+  await page.getByRole("group", { name: "Lesson language" }).getByRole("button", { name: "French" }).click();
   await page.getByRole("button", { name: "Continue to payment", exact: true }).click();
   await page.getByRole("button", { name: /^Pay €/ }).click();
   await page.getByRole("button", { name: "Prepare for your lesson", exact: true }).click();
@@ -58,14 +60,14 @@ test("new bookings open preparation, draft answers survive reload and a failed s
   await answer.fill("un caf");
   await expect(page.locator(".lw-preparation-save-status")).not.toContainText("Saving");
   await page.getByRole("button", { name: "Return to curriculum", exact: true }).click();
-  await page.getByRole("button", { name: "Back to session", exact: true }).click();
+  await page.getByRole("button", { name: "Back to lesson", exact: true }).click();
   const bookingId = await page.evaluate(() => JSON.parse(localStorage.getItem("mimo.learner-bookings.v1")!).bookings.find((booking: { id: string }) => booking.id.startsWith("booking-")).id);
   await page.goto(`/?learner=1&view=web&flow=preparation&bookingId=${bookingId}`);
   await page.getByRole("button", { name: "Start preparation", exact: true }).click(); await expect(answer).toHaveValue("un caf");
   await page.evaluate(() => { Storage.prototype.setItem = () => { throw new Error("full"); }; });
   await answer.fill("un café");
-  await expect(page.getByRole("alert")).toContainText("could not be saved");
-  await expect(page.getByText("0 of 9 blocks complete", { exact: true })).toBeVisible();
+  await expect(page.getByRole("alert")).toContainText("couldn’t be saved");
+  await expect(page.getByText("0 of 9 blocks done", { exact: true })).toBeVisible();
   await expect(page.getByRole("button", { name: "Next block", exact: true })).toBeDisabled();
   await page.reload(); await page.getByRole("button", { name: "Start preparation", exact: true }).click(); await expect(answer).toHaveValue("un caf");
 });
@@ -73,10 +75,11 @@ test("unassigned, cancelled and missing sessions have explicit preparation recov
   await page.goto("/?learner=1&view=web&flow=preparation&bookingId=sample-past");
   await expect(page.getByRole("heading", { name: "No preparation assigned yet", exact: true })).toBeVisible();
   await page.getByRole("button", { name: "Ask your teacher", exact: true }).click();
-  await expect(page.getByRole("heading", { name: "Message Emma", exact: true })).toBeVisible();
+  await expect(page.getByRole("log", { name: "Conversation with Emma Wilson" })).toBeVisible();
   await page.goto("/?learner=1&view=web&flow=lessons"); await page.getByRole("button", { name: "Cancel", exact: true }).click();
   await page.getByRole("button", { name: "Cancel lesson", exact: true }).click();
-  await expect(page.getByRole("heading", { name: "No upcoming lessons", exact: true })).toBeVisible();
+  await expect(page.getByRole("tab", { name: /^Your lessons/ })).toHaveAttribute("aria-selected", "true");
+  await expect(page.locator(".lw-lesson-upcoming")).toHaveCount(0);
   await page.goto("/?learner=1&view=web&flow=preparation&bookingId=sample-upcoming");
   await expect(page.getByRole("heading", { name: "This session was cancelled", exact: true })).toBeVisible();
   await page.goto("/?learner=1&view=web&flow=preparation&bookingId=missing");

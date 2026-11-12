@@ -6,15 +6,15 @@ for (const mobile of [false, true]) {
     await page.goto(`/?view=${mobile ? "mobile" : "web"}`);
     const current = () => mobile ? page.getByTestId("flow-current") : page.getByTestId("web-onboarding-current");
     const action = (name: string) => (mobile ? page.getByTestId("flow-fixed-footer") : current()).getByRole("button", { name, exact: true });
-    await expect(action("I already have an account")).toBeVisible();
     await action("Get started").click();
     await current().getByRole("button", { name: /I want to teach/ }).click();
     await expect(current().getByRole("heading", { name: "Your lessons. Real connections.", exact: true })).toBeVisible();
     await expect(current()).toContainText("Create lessons you can edit and reuse.");
     await expect(current()).toContainText("in-person or online meetups");
     await action("Continue").click();
+    await current().getByRole("button", { name: /^Create an account/ }).click();
     await current().getByRole("button", { name: "Continue with Google", exact: true }).click();
-    await action("Continue with sample account").click();
+    await action("Continue as Alex").click();
     await current().getByRole("textbox", { name: "Display name", exact: true }).fill("Nina");
     await current().getByRole("textbox", { name: "Your approach, in a sentence", exact: true }).fill("Practical conversations and thoughtful feedback.");
     await current().getByRole("textbox", { name: "Language teaching experience", exact: true }).fill("I have taught adult language learners for three years.");

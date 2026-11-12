@@ -32,13 +32,14 @@ for (const mobile of [false, true]) {
     await expect(curriculum.getByText("Matching pairs", { exact: true })).toBeVisible();
     const widths = await screen().locator(".lw-content").evaluate(el => ({ client: el.clientWidth, scroll: el.scrollWidth }));
     expect(widths.scroll).toBeLessThanOrEqual(widths.client + 1);
-    if (mobile) for (const name of ["Home", "Lessons", "Search", "Profile"]) await expect(page.getByTestId("flow-fixed-footer").getByRole("button", { name, exact: true })).toBeVisible();
+    if (mobile) for (const name of ["Home", "Lessons", "Search", "Messages"]) await expect(page.getByTestId("flow-fixed-footer").getByRole("button", { name, exact: true })).toBeVisible();
     await screen().getByRole("button", { name: "Book with Gilbert", exact: true }).click();
     await expect(screen().getByRole("region", { name: "Choose a lesson date" })).toBeVisible();
     await expect(screen().getByRole("button", { name: "Continue to payment", exact: true })).toBeDisabled();
     await page.getByRole("button", { name: "Go back", exact: true }).click();
     await screen().getByRole("button", { name: "Ask about this lesson", exact: true }).click();
-    await expect(screen().getByRole("textbox", { name: "Your message", exact: true })).toBeVisible();
+    // Messaging opens the chat thread with a composer.
+    await expect(page.getByRole("textbox", { name: "Message Gilbert", exact: true })).toBeVisible();
   });
 }
 
@@ -49,7 +50,7 @@ test("public curriculum deep links and teachers without published lessons recove
   await expect(page.getByText(/No lesson outlines published yet/)).toBeVisible();
   await expect(page.getByRole("button", { name: "View curriculum", exact: true })).toHaveCount(0);
   await page.getByRole("button", { name: "Ask about lessons", exact: true }).click();
-  await expect(page.getByRole("textbox", { name: "Your message", exact: true })).toBeVisible();
+  await expect(page.getByRole("textbox", { name: /^Message / })).toBeVisible();
   await page.goto("/?learner=1&view=web&flow=curriculum&teacherId=yuki");
   await expect(page.getByRole("heading", { name: "No lesson outline published yet", exact: true })).toBeVisible();
   await page.getByRole("button", { name: "View teacher profile", exact: true }).click();

@@ -169,3 +169,37 @@
 .verification-info { display: grid; gap: 20px; }
 .verification-info-item { padding: 0; background: none; border: 0; box-shadow: none; }
 .verification-info-item p { font-size: 14px; line-height: 1.5; margin: 6px 0 0; }
+
+/* Onboarding polish (12 Nov 2026): one spacing rhythm and a calmer type scale on the phone flow. */
+.updated-onboarding .guide{margin-bottom:18px;gap:16px}
+.updated-onboarding .speech{font-size:17px;line-height:1.4;padding:13px 15px}
+.updated-onboarding .step-description{font-size:15px;line-height:1.5;color:#727272}
+.updated-onboarding .setup-group{gap:22px}
+.updated-onboarding .setup-group>.step-description{margin:0 2px -4px}
+.updated-onboarding .setup-section legend{font-size:15px;font-weight:800;line-height:1.3;color:#3f3f3f;letter-spacing:-.1px;margin-bottom:10px}
+.updated-onboarding .setup-compact{gap:10px}
+.updated-onboarding .setup-compact .choice,
+.updated-onboarding .setup-section>.choice{min-height:52px;padding:10px 14px;gap:8px;border-radius:12px}
+.updated-onboarding .setup-compact .choice strong,
+.updated-onboarding .setup-section>.choice strong{font-size:15px;line-height:1.25;font-weight:800}
+.updated-onboarding .setup-section>.choice{margin-top:10px}
+.updated-onboarding .setup-compact .checkbox,
+.updated-onboarding .setup-section>.choice .checkbox{width:20px;height:20px;border-radius:6px}
+.updated-onboarding .setup-compact .checkbox svg,
+.updated-onboarding .setup-section>.choice .checkbox svg{width:16px;height:16px}
+.updated-onboarding .setup-field{font-size:15px;gap:8px}
+.updated-onboarding .setup-field input,.updated-onboarding .setup-field textarea{font-size:16px;min-height:52px;padding:13px 15px;border-radius:12px}
+.updated-onboarding .setup-note{font-size:14px;line-height:1.5;padding:14px 16px;border-radius:12px}
+.updated-onboarding .inline-link{color:var(--primary-shadow);font-size:14px;padding:12px 0 0;text-align:left}
+.updated-onboarding .choice strong{letter-spacing:-.1px}
+
+/* Entry and log-in screens (12 Nov 2026). */
+.updated-onboarding .entry-intro { padding-top: 24px; margin-bottom: 24px; }
+.updated-onboarding .entry-options { gap: 12px; }
+.updated-onboarding .entry-options .choice { min-height: 84px; padding: 16px; }
+
+/* One brand purple across onboarding and the app (matches the workspace accent #6844d9). */
+.learning-app{--primary:#6844d9;--primary-shadow:#4f2fb3}
+.learning-app:not(.teacher-theme) .progress>span:after{background:#9b85ea}
+/* Sentence-case buttons, matching desktop onboarding and the app. */
+.learning-app .primary,.learning-app .secondary,.learning-app .text-button{text-transform:none;letter-spacing:0;font-size:16px}

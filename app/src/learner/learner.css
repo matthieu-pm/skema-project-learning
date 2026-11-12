@@ -280,3 +280,48 @@ body:has(.learner-web) { height: 100dvh; overflow: hidden; }
   .learner-workspace .lw-button { transition: background-color 120ms ease-out; }
   .learner-workspace .lw-button:active:not(:disabled) { transform: none; }
 }
+
+/* Student flow handoff (12 Nov 2026): comparison, checkout, lessons, calendar and profile. */
+.lw-applied-filters { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; margin-top: 16px; padding-top: 14px; border-top: 1px solid var(--lw-line); font-size: 12px; }
+.lw-applied-filters > span { color: var(--lw-muted); margin-right: 2px; }
+.lw-applied-filters > button:not(.lw-text-button) { display: inline-flex; align-items: center; gap: 5px; border: 1px solid #c9bdf0; background: #f4f0ff; color: #4d32b0; border-radius: 999px; padding: 4px 9px 4px 11px; font-size: 12px; font-weight: 600; }
+.lw-applied-filters .lw-text-button { font-size: 12px !important; margin-left: 4px; }
+.lw-checkout-facts { margin: 0; }
+.lw-meeting-details { display: flex; gap: 12px; align-items: flex-start; padding: 14px; border: 1px solid var(--lw-line); border-radius: 12px; background: #faf9fc; }
+.lw-meeting-details p { color: var(--lw-muted); font-size: 13px; margin-top: 2px; }
+.lw-recap-modules, .lw-recap-words { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
+.lw-recap-modules li { display: flex; gap: 10px; align-items: flex-start; }
+.lw-recap-modules li span { display: grid; }
+.lw-recap-modules small { color: var(--lw-muted); font-size: 13px; }
+.lw-recap-words { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); }
+.lw-recap-words li { border: 1px solid var(--lw-line); border-radius: 10px; padding: 10px 12px; display: grid; }
+.lw-recap-words span { color: var(--lw-muted); font-size: 13px; }
+.lw-profile-shortcuts { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; }
+.lw-shortcut { display: flex; align-items: center; gap: 12px; text-align: left; padding: 16px; cursor: pointer; }
+.lw-shortcut > span { flex: 1; display: grid; }
+.lw-shortcut small { color: var(--lw-muted); font-size: 12px; }
+.lw-learner-profile { display: flex; align-items: center; gap: 14px; }
+.lw-learner-profile > div { flex: 1; min-width: 0; }
+.lw-learner-calendar { display: grid; gap: 16px; }
+.lw-calendar-toolbar { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 12px; }
+.lw-calendar-nav { display: flex; align-items: center; gap: 8px; min-width: 0; }
+.lw-calendar-nav h2 { font-size: 16px; min-width: 0; text-align: center; }
+.lw-calendar-week { display: grid; gap: 12px; }
+.lw-calendar-day h3 { display: flex; align-items: center; gap: 8px; margin-bottom: 6px; }
+.lw-calendar-day ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+.lw-today-tag { font-size: 11px; font-weight: 650; color: #5235e9; background: #f0ebff; border-radius: 5px; padding: 1px 6px; }
+.lw-calendar-entry { width: 100%; display: flex; align-items: center; gap: 14px; text-align: left; border: 1px solid var(--lw-line); border-left: 3px solid #5235e9; border-radius: 10px; background: #fff; padding: 10px 12px; }
+.lw-calendar-entry-time { display: grid; font-size: 13px; min-width: 46px; }
+.lw-calendar-entry-time span { color: var(--lw-muted); font-size: 12px; }
+.lw-calendar-entry-info { flex: 1; min-width: 0; display: grid; }
+.lw-calendar-entry-info span { color: var(--lw-muted); font-size: 12px; }
+.lw-calendar-month button { aspect-ratio: auto; min-height: 40px; }
+.lw-phone-actions { position: absolute; left: 0; right: 0; z-index: 15; display: flex; align-items: center; gap: 12px; padding: 12px 16px; background: #fff; border-top: 1px solid var(--lw-line); box-shadow: 0 -6px 16px rgba(30, 20, 60, .06); }
+.lw-phone-actions .lw-button { flex: 1; }
+.lw-phone-total { display: grid; font-size: 12px; color: var(--lw-muted); }
+.lw-phone-total strong { font-size: 18px; color: var(--lw-ink); }
+.learner-mobile .lw-content:has(.lw-checkout-facts) { padding-bottom: calc(var(--flow-footer-height, 70px) + var(--mobile-safe-area-height) + 100px); }
+.learner-mobile .lw-calendar-toolbar { flex-direction: column; align-items: stretch; }
+.learner-mobile .lw-calendar-nav { justify-content: space-between; }
+.learner-workspace details summary { cursor: pointer; font-weight: 650; }
+.learner-workspace details p { margin-top: 6px; color: var(--lw-muted); }

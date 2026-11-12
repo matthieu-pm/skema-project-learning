@@ -56,7 +56,7 @@
 .learner-workspace .lw-field :is(input, select, textarea), .teacher-workspace .tw-field :is(input, select, textarea) { border: 1px solid #dcdce0; border-radius: 7px; min-height: 40px; box-shadow: 0 1px 2px #00000004; color: var(--workspace-ink); }
 .lw-field > span, .learner-workspace legend, .tw-field > span { color: #505158; font-size: 12px; font-weight: 550; }
 .lw-search-controls { background: #fafafa; padding: 18px 20px; border-radius: 10px; }
-.lw-search-fields { grid-template-columns: minmax(0, 1fr) 220px; }
+.lw-search-fields { grid-template-columns: minmax(0, 1fr) 200px 170px; }
 .lw-field:has(> .lw-field-icon) { position: relative; }
 .lw-field > .lw-field-icon { position: absolute; bottom: 13px; left: 11px; color: #767680; pointer-events: none; }
 .learner-workspace .lw-field:has(> .lw-field-icon) input { padding-left: 36px; }
@@ -207,7 +207,8 @@
 .learner-mobile .lw-teacher-identity h2 { font-size: 18px; }
 .learner-mobile .lw-avatar { border-radius: 50%; }
 .learner-mobile .lw-search-controls { padding: 16px; }
-.learner-mobile .lw-search-fields { grid-template-columns: minmax(0, 1fr) 140px; gap: 12px; }
+.learner-mobile .lw-search-fields { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 12px; }
+.learner-mobile .lw-search-fields > :first-child { grid-column: 1 / -1; }
 .learner-mobile .lw-filter-row { gap: 14px 22px; }
 .learner-mobile .lw-navigation button { font-size: 12px; min-height: 53px; padding: 5px 2px; }
 .learner-mobile .lw-navigation button[aria-current="page"] { background: #f4f1fc; color: #5736af; }
@@ -339,3 +340,219 @@
   .av-save { width: 100%; justify-content: space-between; }
   .av-day { grid-template-columns: minmax(0, 1fr); gap: 6px; }
 }
+
+/* Lesson cards: one list with a status badge, the lesson's details and its progress. */
+.learner-workspace .lw-lesson-card { display: grid; grid-template-columns: minmax(0, 1fr) minmax(150px, max-content); grid-template-areas: "head head" "body actions"; align-items: start; gap: 14px 28px; padding: 20px 22px; }
+.lw-lesson-card-head { grid-area: head; display: flex; align-items: center; gap: 10px; flex-wrap: wrap; font-size: 13px; }
+.lw-lesson-card-body { grid-area: body; display: grid; gap: 10px; min-width: 0; }
+.lw-lesson-card-body h3 { font-size: 17px; font-weight: 650; letter-spacing: -.2px; }
+.lw-lesson-meta { display: flex; align-items: center; gap: 10px; font-size: 13px; color: var(--workspace-muted, #6c7280); }
+.lw-lesson-meta .lw-avatar { width: 28px; height: 28px; border-radius: 50%; flex-shrink: 0; }
+.lw-lesson-meta .lw-name-link { display: inline; font: inherit; font-weight: 600; color: var(--workspace-ink, #343947); padding: 0; border: 0; background: none; }
+.lw-no-material { font-size: 13px; }
+.lw-lesson-card .lw-preparation-summary { margin: 0; border-top: 0; max-width: none; padding: 12px 14px; border-radius: 10px; background: #f8f7fb; display: grid; gap: 8px; }
+.lw-lesson-card .lw-preparation-summary h3 { display: none; }
+.lw-lesson-card .lw-lesson-actions { grid-area: actions; min-width: 150px; }
+.lw-lesson-badge { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 600; padding: 3px 9px; border-radius: 999px; background: #f0f0f2; color: #55555e; }
+.lw-lesson-badge.is-ongoing { background: #e8f6ec; color: #2f7a46; }
+.lw-lesson-badge.is-ongoing::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
+.lw-lesson-badge.is-upcoming { background: #f0ebff; color: #5235e9; }
+.lw-lesson-card.lw-lesson-past { background: #fcfcfd; }
+.learner-mobile .lw-lesson-card { grid-template-columns: minmax(0, 1fr); grid-template-areas: "head" "body" "actions"; padding: 16px; }
+.learner-mobile .lw-lesson-card .lw-lesson-actions { flex-direction: row; flex-wrap: wrap; min-width: 0; }
+@media (max-width: 900px) {
+  .learner-web .lw-lesson-card { grid-template-columns: minmax(0, 1fr); grid-template-areas: "head" "body" "actions"; }
+  .learner-web .lw-lesson-card .lw-lesson-actions { flex-direction: row; flex-wrap: wrap; }
+}
+@media (min-width: 901px) { .learner-web .lw-lesson-card .lw-lesson-actions { flex-direction: column; align-items: stretch; } }
+.lw-lesson-meta > span { display: block; line-height: 1.45; }
+
+/* Tag — the single status/label component for the learner app. */
+.learner-workspace .lw-tag { display: inline-flex; align-items: center; gap: 4px; height: 22px; padding: 0 8px; border: 1px solid transparent; border-radius: 999px; font-size: 12px; line-height: 1; font-weight: 600; letter-spacing: 0; white-space: nowrap; vertical-align: middle; width: fit-content; flex-shrink: 0; }
+.learner-workspace .lw-tag > span:last-child { display: block; transform: translateY(.5px); }
+.learner-workspace .lw-tag svg { width: 12px; height: 12px; }
+.learner-workspace .lw-tag-live { background: #e7f6ec; border-color: #c4e8d0; color: #1f7a3f; }
+.learner-workspace .lw-tag-upcoming { background: #f1edff; border-color: #ddd3ff; color: #4a2fd6; }
+.learner-workspace .lw-tag-done { background: #e7f6ec; border-color: #c4e8d0; color: #1f7a3f; }
+.learner-workspace .lw-tag-success { background: #e7f6ec; border-color: #c4e8d0; color: #1f7a3f; }
+.learner-workspace .lw-tag-danger { background: #fdeeee; border-color: #f6d0d0; color: #b42f2f; }
+.learner-workspace .lw-tag-neutral { background: #fff; border-color: #e3e3e8; color: #55555f; }
+.learner-workspace .lw-tag-dot { width: 6px; height: 6px; border-radius: 50%; background: currentColor; animation: lw-tag-pulse 1.6s ease-in-out infinite; }
+@keyframes lw-tag-pulse { 50% { opacity: .35; } }
+@media (prefers-reduced-motion: reduce) { .learner-workspace .lw-tag-dot { animation: none; } }
+/* Inline confirmation text (not a tag). */
+.learner-workspace .lw-notice { display: flex; align-items: center; gap: 8px; font-size: 14px; color: #1f7a3f; }
+.learner-workspace .lw-tags { display: flex; flex-wrap: wrap; gap: 6px; }
+
+/* Navigation: icon wrapper keeps the unread badge pinned to the chat icon. */
+.lw-nav-icon { position: relative; display: inline-flex; }
+.lw-navigation button[aria-current="page"] .lw-nav-icon svg { color: var(--workspace-accent); }
+.lw-nav-badge { position: absolute; top: -5px; right: -8px; min-width: 16px; height: 16px; padding: 0 4px; border-radius: 999px; background: #e5484d; color: #fff; font-size: 10px; font-weight: 700; line-height: 16px; text-align: center; border: 2px solid #fff; box-sizing: content-box; }
+.lw-profile-button[aria-current="page"] { background: #f1edff; color: #4a2fd6; }
+
+/* Facts and headings with leading icons. */
+.lw-icon-facts dt { display: flex; align-items: center; gap: 6px; }
+.lw-icon-facts dt svg { color: #8a8794; }
+.lw-icon-facts > div { grid-template-columns: 150px minmax(0, 1fr); }
+.learner-mobile .lw-icon-facts > div { grid-template-columns: 140px minmax(0, 1fr); }
+.lw-icon-heading { display: flex; align-items: center; gap: 8px; }
+.lw-icon-heading svg { color: var(--workspace-accent); }
+
+/* Calendar: green = booked (today or later), brand purple = completed. */
+.lw-day-dot { display: inline-block; width: 6px; height: 6px; border-radius: 50%; }
+.lw-day-dot.is-booked { background: #1f9d4d; }
+.lw-day-dot.is-past { background: var(--workspace-accent, #5235e9); }
+.learner-workspace .lw-calendar-month button > .lw-day-dot { position: absolute; bottom: 5px; left: calc(50% - 3px); width: 6px; height: 6px; }
+.learner-workspace .lw-calendar-month button[aria-pressed="true"] > .lw-day-dot { box-shadow: 0 0 0 2px #fff; }
+.lw-calendar-legend { display: flex; gap: 16px; font-size: 12px; color: #6c6c75; }
+.lw-calendar-legend > span { display: inline-flex; align-items: center; gap: 6px; }
+.learner-workspace .lw-calendar-entry.is-booked { border-left-color: #1f9d4d; }
+.learner-workspace .lw-calendar-entry.is-past { border-left-color: var(--workspace-accent, #5235e9); background: #fbfaff; }
+
+/* Messages inbox. */
+.lw-inbox { list-style: none; margin: 0; padding: 0; border: 1px solid var(--workspace-line, #e6e6e9); border-radius: 12px; overflow: hidden; background: #fff; }
+.lw-inbox li + li { border-top: 1px solid var(--workspace-line, #e6e6e9); }
+.lw-inbox-row { width: 100%; display: flex; align-items: center; gap: 12px; padding: 14px 16px; border: 0; background: #fff; text-align: left; }
+.lw-inbox-row .lw-avatar { width: 44px; height: 44px; border-radius: 50%; flex-shrink: 0; }
+.lw-inbox-text { flex: 1; min-width: 0; display: grid; gap: 3px; }
+.lw-inbox-text > span { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+.lw-inbox-text strong { font-size: 15px; font-weight: 600; }
+.lw-inbox-text small { font-size: 12px; color: #77777f; flex-shrink: 0; }
+.lw-inbox-preview { font-size: 13px; color: #6c6c75; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; min-width: 0; }
+.lw-unread { min-width: 20px; height: 20px; padding: 0 6px; border-radius: 999px; background: #1f9d4d; color: #fff; font-size: 11px; font-weight: 700; line-height: 20px; text-align: center; flex-shrink: 0; }
+
+/* Chat thread (WhatsApp-like). */
+.lw-chat-thread { display: flex; flex-direction: column; gap: 4px; }
+.lw-chat-day { text-align: center; margin: 12px 0 8px !important; }
+.lw-chat-day span { display: inline-block; font-size: 11px; font-weight: 600; color: #63636c; background: #f0eff4; border-radius: 8px; padding: 4px 10px; }
+.lw-chat-row { display: flex; justify-content: flex-start; }
+.lw-chat-row.is-mine { justify-content: flex-end; }
+.lw-bubble { position: relative; max-width: 78%; padding: 8px 12px 6px; border-radius: 16px 16px 16px 4px; background: #f2f1f6; color: #24232a; font-size: 14px; line-height: 1.45; overflow-wrap: anywhere; white-space: pre-wrap; }
+.is-mine .lw-bubble { border-radius: 16px 16px 4px 16px; background: var(--workspace-accent, #5235e9); color: #fff; }
+.lw-bubble small { display: flex; align-items: center; justify-content: flex-end; gap: 3px; margin-top: 2px; font-size: 10.5px; opacity: .7; }
+.lw-typing { display: inline-flex; gap: 4px; padding: 12px 14px; }
+.lw-typing span { width: 6px; height: 6px; border-radius: 50%; background: #9a98a3; animation: lw-typing 1.2s infinite ease-in-out; }
+.lw-typing span:nth-child(2) { animation-delay: .15s; } .lw-typing span:nth-child(3) { animation-delay: .3s; }
+@keyframes lw-typing { 0%, 60%, 100% { transform: translateY(0); opacity: .5; } 30% { transform: translateY(-3px); opacity: 1; } }
+@media (prefers-reduced-motion: reduce) { .lw-typing span { animation: none; } }
+.lw-chat-empty { display: grid; justify-items: center; gap: 8px; text-align: center; padding: 32px 16px; color: #6c6c75; }
+.lw-chat-empty strong { color: #24232a; font-size: 16px; }
+.lw-composer { display: grid; gap: 8px; }
+.lw-composer > div { display: flex; align-items: center; gap: 8px; }
+.lw-composer input { flex: 1; min-width: 0; height: 44px; border: 1px solid #dcdbe2; border-radius: 22px; padding: 0 16px; font: inherit; font-size: 15px; background: #fff; outline: none; }
+.lw-composer input:focus { border-color: #b8a6e8; box-shadow: 0 0 0 3px #efe9ff; }
+.lw-send { width: 44px; height: 44px; border-radius: 50%; border: 0; display: grid; place-items: center; background: var(--workspace-accent, #5235e9); color: #fff; flex-shrink: 0; }
+.lw-send:disabled { background: #d9d6e3; opacity: 1 !important; }
+/* Web thread sits in a fixed-height panel. */
+.learner-web .lw-chat { display: grid; grid-template-rows: auto minmax(0, 1fr) auto; height: calc(100dvh - 68px - 80px); padding: 0; overflow: hidden; }
+.lw-chat-top { display: flex; align-items: center; gap: 12px; padding: 14px 18px; border-bottom: 1px solid var(--workspace-line, #e6e6e9); }
+.lw-chat-top > div { flex: 1; display: grid; }
+.lw-chat-top small, .lw-chat-person small { font-size: 12px; color: #77777f; }
+.lw-chat-top .lw-avatar { width: 40px; height: 40px; border-radius: 50%; }
+.learner-web .lw-chat-scroll { overflow-y: auto; padding: 8px 18px 16px; background: #fbfbfd; }
+.learner-web .lw-chat .lw-composer { padding: 12px 18px; border-top: 1px solid var(--workspace-line, #e6e6e9); }
+/* Phone thread: own header, no tab bar, composer above the keyboard. */
+.lw-chat-header { justify-content: flex-start !important; gap: 8px; }
+.lw-chat-person { display: flex; align-items: center; gap: 10px; border: 0; background: none; padding: 0; text-align: left; min-width: 0; }
+.lw-chat-person > span { display: grid; min-width: 0; }
+.lw-chat-person strong { font-size: 15px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.lw-chat-person .lw-avatar { width: 36px; height: 36px; border-radius: 50%; }
+.learner-mobile .lw-content.lw-chat-screen { padding: 8px 12px calc(76px + var(--mobile-safe-area-height)); background: #fbfbfd; min-height: 100%; gap: 0; }
+.lw-chat-composer-bar { position: absolute; left: 0; right: 0; z-index: 15; padding: 8px 10px; background: #fff; border-top: 1px solid var(--workspace-line, #e6e6e9); }
+.learner-workspace .lw-calendar-days button > .lw-day-dot.is-booked, .learner-workspace .lw-calendar-legend .lw-day-dot.is-booked { background: #1f9d4d; }
+.learner-workspace .lw-calendar-days button > .lw-day-dot.is-past, .learner-workspace .lw-calendar-legend .lw-day-dot.is-past { background: var(--workspace-accent, #5235e9); }
+.learner-workspace .lw-calendar-days button[aria-pressed="true"] > .lw-day-dot { box-shadow: 0 0 0 2px #fff; }
+.lw-icon-facts dt { align-items: flex-start; } .lw-icon-facts dt svg { margin-top: 2px; }
+
+/* Spacing scale (12 Nov 2026): 4 · 8 · 12 · 16 · 24 · 32. One value per role, every learner screen. */
+.learner-workspace { --lw-gap-page: 24px; --lw-pad-panel: 24px; --lw-gap-stack: 16px; --lw-gap-actions: 12px; --lw-gap-list: 12px; }
+.learner-mobile.learner-workspace { --lw-gap-page: 16px; --lw-pad-panel: 16px; --lw-gap-stack: 12px; --lw-gap-actions: 8px; --lw-gap-list: 12px; }
+.learner-workspace .lw-content { gap: var(--lw-gap-page); }
+.learner-workspace .lw-content .lw-panel,
+.learner-workspace .lw-content .lw-lesson-card,
+.learner-workspace .lw-content .lw-teacher-card,
+.learner-workspace .lw-content .lw-search-controls,
+.learner-workspace .lw-content .lw-profile-hero,
+.learner-workspace .lw-content .lw-home-welcome,
+.learner-workspace .lw-content .lw-shortcut { padding: var(--lw-pad-panel); }
+.learner-workspace .lw-content .lw-chat { padding: 0; }
+.learner-workspace .lw-stack, .learner-workspace .lw-panel.lw-stack { gap: var(--lw-gap-stack); }
+.learner-workspace .lw-inline-actions, .learner-workspace .lw-lesson-actions { gap: var(--lw-gap-actions); }
+.learner-workspace .lw-teacher-results, .learner-workspace .lw-profile-shortcuts, #lw-panel-lessons { gap: var(--lw-gap-list); }
+.learner-workspace .lw-panel > h2 { margin-bottom: 12px; }
+.learner-workspace .lw-panel.lw-stack > h2 { margin-bottom: 0; }
+.learner-workspace .lw-page-heading p { margin-top: 8px; }
+.learner-workspace .lw-facts { margin-top: 0; gap: 12px; }
+.learner-workspace .lw-section-heading { margin-bottom: calc(var(--lw-gap-page) * -0.5); }
+.learner-mobile .lw-content { padding-left: 16px; padding-right: 16px; padding-top: 20px; }
+
+/* Review pass 1 fixes. */
+/* Month grid: fixed-height cells on web so the selected day's lessons stay in view. */
+.learner-web .learner-workspace .lw-calendar-month button, .learner-web .lw-calendar-month button { aspect-ratio: auto; height: 56px; }
+/* Calendar entry status uses the calendar's own colour rule (green booked, purple completed). */
+.lw-calendar-entry-status { font-size: 12px; font-weight: 600; white-space: nowrap; }
+.lw-calendar-entry.is-booked .lw-calendar-entry-status { color: #1f7a3f; }
+.lw-calendar-entry.is-past .lw-calendar-entry-status { color: var(--workspace-accent, #5235e9); }
+/* Gaps inside cards follow the stack token. */
+.learner-workspace .lw-content .lw-lesson-card { gap: var(--lw-gap-stack) 28px; }
+.learner-workspace .lw-content .lw-teacher-card, .learner-workspace .lw-content .lw-home-welcome, .learner-workspace .lw-content .lw-public-lessons { gap: var(--lw-gap-stack); }
+.learner-workspace .lw-content .lw-profile-hero { gap: var(--lw-gap-stack); }
+.learner-workspace .lw-content .lw-profile-hero > * + * { margin-top: 0; }
+/* Phone chat background fills the screen. */
+.learner-mobile .lw-chat-scroll-mobile, .learner-mobile .lw-chat-scroll-mobile .mobile-scroll-content { background: #fbfbfd; }
+/* Phone lesson details: buttons in an even two-column grid, primary spans both. */
+.learner-mobile .lw-content .lw-panel .lw-inline-actions { display: grid; grid-template-columns: 1fr 1fr; }
+.learner-mobile .lw-content .lw-panel .lw-inline-actions > .lw-primary:first-child { grid-column: 1 / -1; }
+.learner-mobile .lw-content .lw-panel .lw-inline-actions > :only-child { grid-column: 1 / -1; }
+/* Phone tabs align left like web. */
+.learner-mobile .lw-lesson-tabs { justify-content: flex-start; gap: 16px; }
+/* Secondary buttons size to their label. */
+.learner-workspace .lw-panel.lw-stack > .lw-button { justify-self: start; align-self: start; width: auto; }
+/* Count inside a tab uses the pill shape. */
+.learner-workspace .lw-lesson-tabs button > span { border-radius: 999px; padding: 1px 7px; }
+/* FAQ disclosure markers use a chevron instead of the browser triangle. */
+.learner-workspace details > summary { list-style: none; }
+.learner-workspace details > summary:not(:has(svg)) { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 4px 0; }
+.learner-workspace details > summary::-webkit-details-marker { display: none; }
+.learner-workspace details > summary:not(:has(svg))::after { content: ""; width: 7px; height: 7px; border-right: 2px solid #8a8794; border-bottom: 2px solid #8a8794; transform: rotate(45deg); transition: transform 150ms ease-out; flex-shrink: 0; }
+.learner-workspace details[open] > summary:not(:has(svg))::after { transform: rotate(-135deg); }
+@media (prefers-reduced-motion: reduce) { .learner-workspace details > summary:not(:has(svg))::after { transition: none; } }
+
+/* Review pass 2 fixes. */
+.lw-error-line { display: block; }
+.lw-error-line + .lw-error-line { margin-top: 4px; }
+/* Inbox rows never push the time or unread count off screen. */
+.lw-inbox-text > span { min-width: 0; }
+.lw-inbox-preview { flex: 1; }
+/* Selected calendar day: outlined, so it isn't mistaken for "completed" purple and its dot stays visible. */
+.learner-workspace .lw-calendar-days button[aria-pressed="true"] { background: #fff; color: #24232a; border: 2px solid var(--workspace-accent, #5235e9); }
+.learner-workspace .lw-calendar-days button[aria-pressed="true"] > .lw-day-dot { box-shadow: none; }
+.learner-workspace .lw-calendar-days button[aria-pressed="true"] > .lw-day-dot.is-booked { background: #1f9d4d; }
+.learner-workspace .lw-calendar-days button[aria-pressed="true"] > .lw-day-dot.is-past { background: var(--workspace-accent, #5235e9); }
+/* Recap topics are a real sequence, so they're numbered. */
+.lw-recap-modules li { align-items: center; }
+.lw-recap-index { display: inline-grid; place-items: center; width: 24px; height: 24px; border-radius: 50%; background: #f1edff; color: #4a2fd6; font-size: 12px; font-weight: 700; flex-shrink: 0; }
+
+/* Review round 2 fixes. */
+.learner-mobile .lw-avatar.large, .learner-mobile .lw-learner-avatar.large { border-radius: 50%; }
+.learner-mobile .lw-panel { padding: var(--lw-pad-panel); }
+.learner-workspace .lw-success { gap: var(--lw-gap-stack); }
+/* One tab style: dark label with a brand underline, for lesson and curriculum tabs alike. */
+.learner-workspace .lw-lesson-tabs button[aria-selected="true"], .learner-workspace .lw-curriculum-tabs > button[aria-selected="true"] { color: var(--workspace-ink, #24232a); border-bottom-color: var(--workspace-accent, #6844d9); }
+/* Calendar rows: status comes from the Tag; the row edge stays neutral so colours never conflict. */
+.learner-workspace .lw-calendar-entry.is-booked, .learner-workspace .lw-calendar-entry.is-past { border-left-color: var(--workspace-line, #e4e0eb); background: #fff; }
+.learner-workspace .lw-faq > summary { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 4px 0; }
+.learner-workspace .lw-faq > summary > svg { color: #8a8794; transition: transform 150ms ease-out; flex-shrink: 0; }
+.learner-workspace .lw-faq[open] > summary > svg { transform: rotate(180deg); }
+@media (prefers-reduced-motion: reduce) { .learner-workspace .lw-faq > summary > svg { transition: none; } }
+
+/* Review round 3 fixes. */
+/* Preparation pages follow the same page spacing as every other learner page. */
+.learner-web .lw-preparation-overview-content { padding: 36px clamp(24px, 4vw, 64px) 48px; gap: var(--lw-gap-page); }
+.learner-mobile .lw-preparation-overview-content { padding: 20px 16px 24px; gap: var(--lw-gap-page); }
+/* One brand purple: tags, chips, nav and accents all use the workspace accent. */
+.learner-workspace .lw-tag-upcoming { color: var(--workspace-accent, #6844d9); }
+.learner-workspace .lw-profile-button[aria-current="page"], .learner-workspace .lw-recap-index { color: var(--workspace-accent, #6844d9); }
+.learner-workspace .lw-chips button[aria-pressed="true"], .learner-mobile .lw-navigation button[aria-current="page"] { color: var(--workspace-accent, #6844d9); }
+/* A selected past day stays fully legible. */
+.learner-workspace .lw-calendar-days button[aria-pressed="true"] { opacity: 1; }
