@@ -23,74 +23,61 @@ for (const presentation of ["web", "mobile"] as const) {
     const choice = (name: string) => current().getByRole("button", { name, exact: true });
 
     await action("Get started").click();
+    // Choose learn or teach first, then create an account or log in.
     await expectStep("role");
     await current().getByRole("button", { name: /I want to learn/ }).click();
-    await proceed("account");
+    await proceed("entry");
+    await current().getByRole("button", { name: /^Create an account/ }).click();
+    await expectStep("account");
     await current().getByRole("button", { name: "Continue with Google", exact: true }).click();
     await expectStep("google-connect");
-    await action("Continue with sample account").click();
+    await action("Continue as Alex").click();
     await expectStep("age");
     await choice("18 or older").click();
     await proceed("language");
     await choice("Spanish").click();
     await proceed("level");
     await current().getByRole("button", { name: /^A1 / }).click();
-    await proceed("learner-confidence");
-
-    await expect(current()).toContainText("How confident do you feel speaking Spanish?");
-    await expect(action("Continue")).toBeDisabled();
-    await current().getByRole("button", { name: /^I’m finding my confidence/ }).click();
-    await proceed("learner-challenges");
-    for (const label of ["Fear of mistakes", "Finding the right words", "Understanding replies", "Pronunciation"]) {
-      await expect(choice(label)).toHaveAttribute("aria-pressed", "false");
-    }
-    const challenge = current().getByRole("textbox", { name: "Something else? Tell us in your own words (optional)", exact: true });
-    await challenge.fill("I need more time to reply in a conversation.");
-    await challenge.blur();
-    if (presentation === "mobile") {
-      await expect(page.getByTestId("keyboard-dock")).toHaveAttribute("data-visible", "false");
-    }
-    await proceed("learner-goal");
-
-    await page.getByRole("button", { name: "Go back", exact: true }).click();
-    await expectStep("learner-challenges");
-    await expect(current().getByRole("textbox", { name: "Something else? Tell us in your own words (optional)", exact: true })).toHaveValue("I need more time to reply in a conversation.");
+    // Optional screens (confidence, challenges, preferences, extras, ID) are now in Profile.
     await proceed("learner-goal");
     await expect(action("Continue")).toBeDisabled();
     await choice("Travel").click();
     await choice("Work").click();
     await expect(choice("Travel")).toHaveAttribute("aria-pressed", "true");
-    await expect(choice("Work")).toHaveAttribute("aria-pressed", "true");
     await choice("Travel").click();
     await expect(choice("Travel")).toHaveAttribute("aria-pressed", "false");
-    await expect(action("Continue")).toBeEnabled();
     await choice("Work").click();
     await expect(action("Continue")).toBeDisabled();
     const goal = current().getByRole("textbox", { name: "My goal in my own words (optional)", exact: true });
     await goal.fill("Order a meal confidently.");
     await goal.blur();
-    await expect(action("Continue")).toBeDisabled();
     await choice("Travel").click();
     await choice("Work").click();
-    await proceed("learner-preferences");
-
-    await choice("Online").click();
-    await expect(current().getByRole("combobox", { name: "City or neighbourhood (optional)", exact: true })).toHaveCount(0);
-    await choice("In person").click();
-    await expect(choice("Online")).toHaveAttribute("aria-pressed", "true");
-    await expect(choice("In person")).toHaveAttribute("aria-pressed", "true");
-    await expect(current().getByRole("combobox", { name: "City or neighbourhood (optional)", exact: true })).toBeVisible();
-    await proceed("extras");
-    await proceed("identity-intro");
-    await action("Finish verification later").click();
-    await expectStep("learner-ready");
+    await proceed("learner-ready");
     await expect(current()).toContainText("Travel · Work");
-    await expect(current()).toContainText("Speaking: I’m finding my confidence");
-    await expect(current()).toContainText("I need more time to reply in a conversation.");
     await expect(current()).toContainText("Order a meal confidently.");
-    await expect(current()).toContainText("Online & In person");
-    await expect(current()).not.toContainText("Find a match");
+    await expect(current()).not.toContainText(/preview|sample/i);
     await action("Find a teacher").click();
     await expect(page.locator(`.learner-${presentation}`)).toBeVisible();
+    // One tap from the setup summary lands on teacher results with the setup language applied and removable.
+    await expect(page.getByRole("heading", { name: "Find a teacher", exact: true }).last()).toBeVisible();
+    await expect(page.getByLabel("Applied filters").last()).toContainText("Spanish");
+    await expect(page.getByRole("button", { name: "Remove filter: Spanish" }).last()).toBeVisible();
+  });
+}
+
+for (const presentation of ["web", "mobile"] as const) {
+  test(`${presentation} returning learner logs in with Google and lands on Home`, async ({ page }) => {
+    await page.goto(`/?view=${presentation}`);
+    const current = () => presentation === "web" ? page.getByTestId("web-onboarding-current") : page.getByTestId("flow-current");
+    const start = presentation === "web" ? current() : page.getByTestId("flow-fixed-footer");
+    await start.getByRole("button", { name: "Get started", exact: true }).click();
+    await current().getByRole("button", { name: /I want to learn/ }).click();
+    await start.getByRole("button", { name: "Continue", exact: true }).click();
+    await current().getByRole("button", { name: /^Log in/ }).click();
+    await expect(current().getByRole("heading", { name: "Welcome back", exact: true })).toBeVisible();
+    await current().getByRole("button", { name: "Continue with Google", exact: true }).click();
+    await expect(page.locator(`.learner-${presentation}`)).toBeVisible();
+    await expect(page.getByRole("heading", { name: "A little conversation goes a long way", exact: true }).last()).toBeVisible();
   });
 }

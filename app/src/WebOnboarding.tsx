@@ -1,3 +1,4 @@
+import ViewSwitch from "./ViewSwitch";
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import type { FlowControls, FlowScreen } from "./mobile/FlowStack";
 import { setupProgress, type Answers, type Step } from "./onboarding";
@@ -44,7 +45,7 @@ function sectionFor(step: Step) {
       "selfie",
     ].includes(step)
   )
-    return "Identity preview";
+    return "Identity check";
   if (finished.has(step)) return "Your setup is ready";
   if (
     [
@@ -86,7 +87,7 @@ export default function WebOnboarding({
     optionalIdentity,
   } = setupProgress(answers, step);
   const section = optionalIdentity
-    ? "Optional identity preview"
+    ? "Optional identity check"
     : sectionFor(step);
 
   // Shared content/actions use the mobile flow's interface in a desktop shell.
@@ -137,7 +138,8 @@ export default function WebOnboarding({
           ) : (
             <span className="web-back-placeholder" />
           )}
-          <div
+          {/* Log in is outside sign-up, so it shows no progress. */}
+          {step === "login" ? <span className="progress" aria-hidden="true" style={{ visibility: "hidden" }} /> : <div
             className="progress"
             role="progressbar"
             aria-label="Setup progress"
@@ -146,7 +148,8 @@ export default function WebOnboarding({
             aria-valuenow={progress}
           >
             <span style={{ width: progress + "%" }} />
-          </div>
+          </div>}
+          <ViewSwitch web inline />
           <a
             className="web-setup-brand"
             href="/?view=web"
@@ -162,7 +165,7 @@ export default function WebOnboarding({
           <span>
             {finished.has(step)
               ? "Ready for the next step"
-              : !answers.role ? "Choose your path" : "Step " + (index + 1) + " of " + total}
+              : !answers.role ? "Choose your path" : step === "login" ? "" : "Step " + (index + 1) + " of " + total}
           </span>
         </div>
         <section
@@ -175,12 +178,6 @@ export default function WebOnboarding({
         >
           {children(flow)}
         </section>
-        <p className="web-setup-preview">
-          Local preview · Your answers stay in this session.
-        </p>
-        <a className="web-mobile-link" href="/?view=mobile">
-          Try the mobile preview <Icon name="arrow" size={14} />
-        </a>
       </div>
     </div>
   );

@@ -15,6 +15,7 @@ import {
 } from "react";
 import { Icon, CheckIcon } from "./teacher/icons";
 import { createPortal } from "react-dom";
+import ViewSwitch from "./ViewSwitch";
 const TeacherWorkspace = lazy(() => import("./teacher/TeacherWorkspace"));
 const LearnerWorkspace = lazy(() => import("./learner/LearnerWorkspace"));
 const WebOnboarding = lazy(() => import("./WebOnboarding"));
@@ -82,7 +83,7 @@ type SetupContext = {
   editingReview: boolean;
   setEditingReview: (value: boolean) => void;
   reset: () => void;
-  openWorkspace: () => void;
+  openWorkspace: (options?: { returning?: boolean }) => void;
   web: boolean;
 };
 const Setup = createContext<SetupContext>(null!);
@@ -308,7 +309,7 @@ function Upload({ kind }: { kind: "resource" | "photo" }) {
         {kind === "photo"
           ? "Give learners a friendly first impression."
           : "A document, photo, or recorded voice note can help explain your goal."}{" "}
-        Files stay in this local preview. Up to 20 MB.
+        Up to 20 MB.
       </Note>
     </div>
   );
@@ -320,12 +321,13 @@ const headings: Partial<Record<Step, string>> = {
   "learner-confidence": "How confident do you feel speaking?",
   "learner-challenges": "What makes speaking difficult?",
   "learner-goal": "What would you love to do?",
+  entry: "How would you like to continue?",
   "learner-preferences": "When and how would you like to meet?",
   extras: "Make Mimo work for you",
   "identity-details": "Your identity details",
   "document-details": "About your identity document",
   account: "Create your account",
-  "google-connect": "Try Google sign-in",
+  "google-connect": "Choose your Google account",
   role: "What brings you here?",
   email: "First, a place to keep your progress.",
   age: "Which age range are you in?",
@@ -360,7 +362,7 @@ const headings: Partial<Record<Step, string>> = {
   document: "Next, add your identity document.",
   selfie: "One last check: confirm it’s you.",
   "guardian-handoff": "It’s your parent or guardian’s turn.",
-  "learner-ready": "Your learning setup is ready!",
+  "learner-ready": "Your learning setup is ready",
   "verification-ready": "Your profile is ready for the next step.",
   "teacher-draft": "Your teaching profile is a draft.",
 };
@@ -381,7 +383,7 @@ function Header({ step }: { step: Step }) {
       >
         <Icon name="back" />
       </button>
-      {
+      {step !== "login" &&
         <div
           className="progress"
           role="progressbar"
@@ -394,7 +396,7 @@ function Header({ step }: { step: Step }) {
         </div>
       }
       <span className="setup-step-count">
-        {answers.role ? `${index + 1}/${total}` : ""}
+        {answers.role && step !== "login" ? `${index + 1}/${total}` : ""}
       </span>
     </nav>
   );
@@ -448,8 +450,9 @@ function Footer({ step, inline = false }: { step: Step; inline?: boolean }) {
       openWorkspace();
       return;
     }
+    // Choose learn/teach first, then create an account or log in.
     if (step === "verify" && a.code !== "481629") {
-      setError("That code doesn’t match. Use 481629 in this preview.");
+      setError("That code doesn’t match. Check the latest email from Mimo and try again.");
       keyboard.hide();
       return;
     }
@@ -493,7 +496,7 @@ function Footer({ step, inline = false }: { step: Step; inline?: boolean }) {
   };
   const label: Partial<Record<Step, string>> = {
     welcome: "Get started",
-    "google-connect": "Continue with sample account",
+    "google-connect": "Continue as Alex",
     email: "Continue",
     guardian: "Continue",
     "guardian-handoff": "I’m the parent or guardian",
@@ -501,10 +504,10 @@ function Footer({ step, inline = false }: { step: Step; inline?: boolean }) {
     notifications: "Allow notifications",
     widget: "Add widget",
     "teacher-review": "Continue to identity check",
-    "identity-intro": "Start verification preview",
-    "persona-link": "Link sample Persona ID",
+    "identity-intro": "Start verification",
+    "persona-link": "Link Persona ID",
     document: "Continue",
-    selfie: "Finish verification preview",
+    selfie: "Finish verification",
     "learner-ready": "Finish setup",
     "verification-ready": "Finish setup",
     "teacher-draft": "Back to welcome",
@@ -525,7 +528,7 @@ function Footer({ step, inline = false }: { step: Step; inline?: boolean }) {
           time: a.time,
         } as Record<string, unknown>
       )[step]);
-  if (step === "account" && !inline) return null;
+  if ((step === "account" && !inline) || step === "entry" || step === "login") return null;
   if (step === "account")
     return (
       <div className="actions two-actions account-actions account-inline-actions">
@@ -553,7 +556,7 @@ function Footer({ step, inline = false }: { step: Step; inline?: boolean }) {
     );
   return (
     <div
-      className={`actions ${optional[step] || step === "welcome" ? "two-actions" : ""}`}
+      className={`actions ${optional[step] ? "two-actions" : ""}`}
     >
       <button className="primary" disabled={mainDisabled} onClick={submit}>
         {editingReview &&
@@ -618,11 +621,6 @@ function Footer({ step, inline = false }: { step: Step; inline?: boolean }) {
           }}
         >
           {optional[step]}
-        </button>
-      )}
-      {step === "welcome" && (
-        <button className="secondary" onClick={() => flow.push(screens.role)}>
-          I already have an account
         </button>
       )}
     </div>
@@ -727,12 +725,49 @@ function Screen({ step }: { step: Step }) {
           <div className="account-intro">
             <Mascot />
             <h1>Create your account</h1>
-            <p>Use email or try the Google preview.</p>
+            <p>Use your email or continue with Google.</p>
+          </div>
+        ) : step === "login" ? (
+          <div className="account-intro entry-intro">
+            <Mascot />
+            <h1>Welcome back</h1>
+            <p>Log in with the Google account you used to sign up.</p>
           </div>
         ) : (
           <div className="guide">
             <Mascot />
             <Bubble>{heading}</Bubble>
+          </div>
+        )}
+        {step === "entry" && (
+          <p className="step-description">
+            New to Mimo? Create an account. Been here before? Log in.
+          </p>
+        )}
+        {step === "entry" && (
+          <div className="options entry-options">
+            <Choice
+              label="Create an account"
+              description={a.role === "teacher" ? "Set up your teaching profile in a few steps." : "Set up your profile in a few steps."}
+              icon="conversation"
+              selected={false}
+              onClick={() => { keyboard.hide(); flow.push(screens.account); }}
+            />
+            <Choice
+              label="Log in"
+              description="Pick up where you left off."
+              icon="book"
+              selected={false}
+              onClick={() => { keyboard.hide(); flow.push(screens.login); }}
+            />
+          </div>
+        )}
+        {step === "login" && (
+          <div className="actions account-inline-actions">
+            <button className="secondary google-button" onClick={() => { keyboard.hide(); setup.openWorkspace({ returning: true }); }}>
+              <GoogleMark />
+              Continue with Google
+            </button>
           </div>
         )}
         {step === "role" && (
@@ -760,6 +795,7 @@ function Screen({ step }: { step: Step }) {
           </div>
         )}
         {step === "role" && a.role === "teacher" && <div className="teacher-value"><h2>Your lessons. Real connections.</h2><p>Create lessons you can edit and reuse. Connect with students through in-person or online meetups.</p></div>}
+        {step === "role" && a.role === "learner" && <div className="teacher-value learner-value"><h2>Your teacher. Your pace.</h2><p>Choose a teacher who fits your goals. Meet one-to-one online or in person, and prepare with short activities before each lesson.</p></div>}
         {step === "account" && (
           <>
             <Field
@@ -789,9 +825,6 @@ function Screen({ step }: { step: Step }) {
             <Note>
               No password needed. Continue with email to use a sign-in code.
             </Note>
-            <p className="preview-note">
-              Local preview only. No account is created or email sent.
-            </p>
             <Footer step="account" inline />
           </>
         )}
@@ -800,6 +833,11 @@ function Screen({ step }: { step: Step }) {
             <p className="step-description">
               Let learners get to know you. You can edit this profile later.
             </p>
+            {/* Media first, so the optional photo/video is visible without scrolling. */}
+            <details className="setup-optional">
+              <summary>Add a photo or video (optional)</summary>
+              <Upload kind="photo" />
+            </details>
             <Field
               label="Display name"
               autoComplete="given-name"
@@ -813,7 +851,7 @@ function Screen({ step }: { step: Step }) {
               </p>
             )}
             <Field
-              label="Your approach, in a sentence"
+              label="Your teaching approach"
               multiline
               maxLength={300}
               placeholder="Practical conversation, at your pace."
@@ -825,12 +863,8 @@ function Screen({ step }: { step: Step }) {
                 Add a short description of at least 5 characters.
               </p>
             )}
-            <Field label="Language teaching experience" multiline maxLength={2000} value={a.teachingExperience || ""} onChange={event => update({ teachingExperience: event.target.value })} />
-            <p className="step-description">Describe your teaching background, the learners you’ve worked with, and your approach.</p>
-            <details className="setup-optional">
-              <summary>Add a photo or video (optional)</summary>
-              <Upload kind="photo" />
-            </details>
+            <Field label="Language teaching experience (optional)" multiline maxLength={2000} value={a.teachingExperience || ""} onChange={event => update({ teachingExperience: event.target.value })} />
+            <p className="step-description">Your teaching or tutoring background and the learners you’ve helped.</p>
           </div>
         )}
         {step === "teacher-subjects" && (
@@ -1005,7 +1039,7 @@ function Screen({ step }: { step: Step }) {
                     label={day}
                     check
                     selected={a.days.includes(day)}
-                    onClick={() => toggle("days", day)}
+                    onClick={() => update({ days: a.days.includes(day) ? a.days.filter(v => v !== day) : [...a.days, day], scheduleFlexible: false })}
                   />
                 ))}
               </div>
@@ -1018,16 +1052,16 @@ function Screen({ step }: { step: Step }) {
                     key={time}
                     label={time}
                     selected={a.time === time}
-                    onClick={() => update({ time })}
+                    onClick={() => update({ time, scheduleFlexible: false })}
                   />
                 ))}
               </div>
-              <button
-                className="inline-link"
-                onClick={() => update({ time: "", days: [] })}
-              >
-                Keep my schedule flexible
-              </button>
+              <Choice
+                label="Keep my schedule flexible"
+                check
+                selected={!!a.scheduleFlexible}
+                onClick={() => update(a.scheduleFlexible ? { scheduleFlexible: false } : { time: "", days: [], scheduleFlexible: true })}
+              />
             </fieldset>
           </div>
         )}
@@ -1083,10 +1117,6 @@ function Screen({ step }: { step: Step }) {
                 </div>
               </details>
             </fieldset>
-            <p className="preview-note">
-              Preferences only. No notifications are sent and your home screen
-              stays unchanged.
-            </p>
           </div>
         )}
         {step === "identity-details" && (
@@ -1128,8 +1158,7 @@ function Screen({ step }: { step: Step }) {
                 </p>
               )}
             <Note>
-              Day / month / year. Use example details in this preview. These
-              details won’t appear on your public profile.
+              Day / month / year. This won’t appear on your public profile.
             </Note>
           </div>
         )}
@@ -1157,20 +1186,16 @@ function Screen({ step }: { step: Step }) {
           <>
             <div className="google-preview">
               <GoogleMark />
-              <h2>A sample account for this preview</h2>
-              <p>Try the next steps without signing in to Google.</p>
+              <h2>Choose an account</h2>
+              <p>to continue to Mimo</p>
               <div className="sample-account">
                 <span aria-hidden="true">A</span>
                 <div>
-                  <strong>Alex · Sample account</strong>
+                  <strong>Alex</strong>
                   <span>{sampleGoogleAccount.email}</span>
                 </div>
               </div>
             </div>
-            <p className="preview-note">
-              No Google account is connected and no data is shared. Go back to
-              use email instead.
-            </p>
           </>
         )}
         {step === "email" && (
@@ -1186,9 +1211,6 @@ function Screen({ step }: { step: Step }) {
               }
             />
             <Note>No password to remember. Just a sign-in code.</Note>
-            <p className="preview-note">
-              Local preview: no email is sent and no account is created.
-            </p>
           </>
         )}
         {step === "age" && (
@@ -1226,13 +1248,9 @@ function Screen({ step }: { step: Step }) {
             )}
             <Note>
               {a.accountMethod === "google"
-                ? "Next, we’ll ask your parent or guardian to try the identity check."
+                ? "Next, your parent or guardian will confirm their identity."
                 : "Your parent or guardian will have their own identity check right after the email code step."}
             </Note>
-            <p className="preview-note">
-              This previews the handoff only. No message is sent or consent
-              recorded.
-            </p>
           </>
         )}
         {step === "verify" && (
@@ -1253,7 +1271,7 @@ function Screen({ step }: { step: Step }) {
               }}
             />
             <Note>
-              For this preview, use <b>481629</b>.
+              Enter the 6-digit code we sent to your email.
             </Note>
             <button
               className="inline-link"
@@ -1279,7 +1297,7 @@ function Screen({ step }: { step: Step }) {
               {" "}
               {now < resendAt
                 ? `Resend code in ${Math.ceil((resendAt - now) / 1000)}s`
-                : "Resend preview code"}
+                : "Resend code"}
             </button>
           </>
         )}
@@ -1340,7 +1358,7 @@ function Screen({ step }: { step: Step }) {
                 </div>
                 <div>
                   <strong>More languages</strong>
-                  <span>Coming soon!</span>
+                  <span>Coming soon</span>
                 </div>
               </div>
             ) : (
@@ -1498,10 +1516,6 @@ function Screen({ step }: { step: Step }) {
                 </div>
               </div>
             </div>
-            <p className="preview-note">
-              Notification preference only. No notifications are sent in this
-              preview.
-            </p>
           </>
         )}
         {step === "widget" && (
@@ -1517,9 +1531,6 @@ function Screen({ step }: { step: Step }) {
                 <Mascot />
               </div>
             </div>
-            <p className="preview-note">
-              A preview of your widget. Your home screen stays unchanged.
-            </p>
           </>
         )}
         {step === "benefits" && (
@@ -1597,7 +1608,7 @@ function Screen({ step }: { step: Step }) {
         {step === "approach" && (
           <>
             <Field
-              label="Your approach, in a sentence"
+              label="Your teaching approach"
               multiline
               maxLength={300}
               placeholder="Practical conversation, at your pace."
@@ -1692,10 +1703,6 @@ function Screen({ step }: { step: Step }) {
               Parent or guardian: continue with your own details and ID, rather
               than the learner’s.
             </Note>
-            <p className="preview-note">
-              Local handoff preview only. No invitation is sent or consent
-              recorded.
-            </p>
           </>
         )}
         {step === "identity-intro" && (
@@ -1749,9 +1756,6 @@ function Screen({ step }: { step: Step }) {
                 →
               </span>
             </button>
-            <p className="preview-note">
-              Preview only. No ID, selfie, or Persona account is connected.
-            </p>
           </>
         )}
         {step === "persona-link" && (
@@ -1766,13 +1770,8 @@ function Screen({ step }: { step: Step }) {
               </p>
             </div>
             <Note>
-              This previews an instant verification. Continue with a sample ID
-              to try it.
+              Link the Persona ID you already use to confirm it’s you.
             </Note>
-            <p className="preview-note">
-              No sign-in, personal details, or account access is requested. No
-              real verification takes place.
-            </p>
           </>
         )}
         {step === "legal-name" && (
@@ -1785,8 +1784,8 @@ function Screen({ step }: { step: Step }) {
             />
             <Note>
               {guardian
-                ? "Parent or guardian: use your own legal name. Use example details in this preview."
-                : "Use example details while trying the preview."}
+                ? "Parent or guardian: use your own legal name, as it appears on your ID."
+                : "Use your name as it appears on your ID."}
             </Note>
           </>
         )}
@@ -1822,10 +1821,6 @@ function Screen({ step }: { step: Step }) {
                 : "Your date of birth helps confirm your identity."}{" "}
               It won’t appear on a public profile.
             </Note>
-            <p className="preview-note">
-              Use an example date in this preview. Nothing is sent for
-              verification.
-            </p>
           </>
         )}
         {step === "country" && (
@@ -1851,8 +1846,8 @@ function Screen({ step }: { step: Step }) {
               <span className="choice-copy">
                 <strong>
                   {a.documentReady
-                    ? "Sample document added"
-                    : "Use a sample document"}
+                    ? "Document added"
+                    : "Add your document"}
                 </strong>
                 <span>
                   {a.documentType} · {a.country}
@@ -1861,8 +1856,7 @@ function Screen({ step }: { step: Step }) {
               {a.documentReady && <CheckIcon />}
             </button>
             <Note>
-              In the full app, a secure provider would handle your document.
-              This preview doesn’t collect identity documents.
+              Your document is checked securely and never shown on your profile.
             </Note>
           </>
         )}
@@ -1879,10 +1873,10 @@ function Screen({ step }: { step: Step }) {
               <span className="choice-copy">
                 <strong>
                   {a.selfieReady
-                    ? "Sample check complete"
-                    : "Try the sample check"}
+                    ? "Selfie check complete"
+                    : "Take a selfie"}
                 </strong>
-                <span>No camera access needed for this preview.</span>
+                <span>A quick check that it’s really you.</span>
               </span>
               {a.selfieReady && <CheckIcon />}
             </button>
@@ -1891,7 +1885,7 @@ function Screen({ step }: { step: Step }) {
         {step === "learner-ready" && (
           <>
             <div className="setup-summary">
-              <h2>Your languages</h2>
+              <h2>Your setup</h2>
               {a.learningLanguages.map((language) => (
                 <p key={language}>
                   <strong>{language}</strong> ·{" "}
@@ -1901,34 +1895,17 @@ function Screen({ step }: { step: Step }) {
                 </p>
               ))}
               {a.personalGoal && <blockquote>{a.personalGoal}</blockquote>}
-              <p>{a.learningGoals.join(" · ") || a.topic}</p>
-              <p>Speaking: {a.speakingConfidence}</p>
-              {a.speakingChallenges.length > 0 && <p>{a.speakingChallenges.join(" · ")}</p>}
-              {a.challengeDetails && <p>{a.challengeDetails}</p>}
-              <p>
-                {learningFormats.join(" & ") || "Flexible format"}
-                {learningFormats.includes("In person") && a.city ? ` · ${a.city}` : ""}
-              </p>
-              <p>
-                {a.days.join(" & ") || "Flexible days"} ·{" "}
-                {a.time || "Flexible time"}
-              </p>
-              {setup.resource && <p>Attached: {setup.resource.name}</p>}
-              <p>
-                {guardian
-                  ? "Parent or guardian verification"
-                  : "Identity verification"}
-                :{" "}
-                {a.identityPreviewComplete
-                  ? a.identityMethod === "persona"
-                    ? "Persona preview complete"
-                    : "preview complete"
-                  : "to finish later"}
-                .
-              </p>
+              <p><strong>Goals</strong> · {a.learningGoals.join(" · ") || a.topic}</p>
+              {guardian && (
+                <p>
+                  Parent or guardian verification:{" "}
+                  {a.identityPreviewComplete ? "done" : "to finish later"}
+                </p>
+              )}
             </div>
             <Note>
-              No identity verification was submitted. Choose your own teacher and explore available lesson times next.
+              Next, choose a teacher and a time. You can add your speaking
+              confidence, challenges and availability anytime in Profile.
             </Note>
           </>
         )}
@@ -1943,13 +1920,12 @@ function Screen({ step }: { step: Step }) {
                 {step === "teacher-draft"
                   ? "You can finish verification later."
                   : a.identityMethod === "persona"
-                    ? "You’ve tried the instant Persona verification preview."
-                    : "You’ve walked through the verification preview."}
+                    ? "Verified with Persona."
+                    : "Identity verified."}
               </p>
             </div>
             <Note>
-              No verification was submitted. Your profile stays a local draft.
-              Next, explore your teaching workspace with sample learners and
+              Next, explore your teaching workspace with your students and
               sessions.
             </Note>
           </>
@@ -1988,7 +1964,7 @@ const screens = Object.fromEntries(
       headerHeight: 54,
       footer: () => <MobileFooter step={step} />,
       footerHeight:
-        step === "account"
+        step === "account" || step === "entry" || step === "login"
           ? 0
           : [
                 "welcome",
@@ -2024,6 +2000,7 @@ export default function Prototype() {
     () => ["teacher", "learner"].some(key => new URLSearchParams(window.location.search).get(key) === "1"),
   );
   const web = new URLSearchParams(window.location.search).get("view") === "web";
+  const [returning, setReturning] = useState(false);
   const keyboard = useKeyboard();
   useEffect(
     () => () => {
@@ -2058,11 +2035,11 @@ export default function Prototype() {
       >
         {teacher ? <TeacherWorkspace
           mobile={!web}
-          answers={answers.role === "teacher" ? answers : undefined}
-        /> : <LearnerWorkspace mobile={!web} answers={answers.role === "learner" ? answers : undefined} />}
+          answers={answers.role === "teacher" && !returning ? answers : undefined}
+        /> : <LearnerWorkspace mobile={!web} answers={answers.role === "learner" && !returning ? answers : undefined} />}
       </Suspense>
     );
-    return web ? createPortal(workspace, document.body) : workspace;
+    return <>{web ? createPortal(workspace, document.body) : workspace}{!web && <ViewSwitch web={false} />}</>;
   }
   const webFlow = (
     <Suspense
@@ -2107,12 +2084,15 @@ export default function Prototype() {
         setEditingReview,
         reset,
         web,
-        openWorkspace: () => {
+        openWorkspace: (options) => {
           keyboard.hide();
+          // A returning user logs in to their existing account and lands on Home.
+          setReturning(!!options?.returning);
           setWorkspaceOpen(true);
         },
       }}
     >
+      {!web && <ViewSwitch web={false} />}
       {web ? (
         createPortal(webFlow, document.body)
       ) : (

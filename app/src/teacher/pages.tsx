@@ -1,3 +1,4 @@
+import { TeacherReviews } from "./TeacherReviews";
 import TeacherLanguagePicker from "../TeacherLanguagePicker";
 import { initialAnswers, teacherLanguageLevels, toggleTeachingLanguage, setTeacherLevels } from "../onboarding";
 import AvailabilityPage from "./AvailabilityPage";
@@ -2179,6 +2180,7 @@ function ProfilePage({
           </>
         )}
       </Panel>
+      {!preview && <TeacherReviews teacherId={p.name === "Gilbert" ? "gilbert" : undefined} />}
       {!preview && (
         <div className="tw-columns">
           <Panel>

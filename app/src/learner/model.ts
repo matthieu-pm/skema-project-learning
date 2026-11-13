@@ -10,10 +10,15 @@ export type Booking = {
   format: LessonFormat; status: "confirmed" | "cancelled"; paymentStatus: "paid";
   rate: number; duration: number; review?: { rating: number; text: string; date: string };
   requestId?: string; preparationId?: string;
+  /** The lesson language chosen at booking; older bookings fall back to lessonLanguageFor(). */
+  language?: string;
+  /** Set only when the learner explicitly completes the simulated session. */
+  completedAt?: string;
 };
 export type SearchFilters = {
-  language?: string; formats?: LessonFormat[]; day?: "Any day" | "Today" | "Tomorrow"; query?: string;
+  language?: string; formats?: LessonFormat[]; day?: "Any day" | "Today" | "Tomorrow"; query?: string; maxPrice?: number;
 };
+export const priceCaps = [20, 25, 30, 35] as const;
 export type SortOption = "Soonest available" | "Rating (highest first)" | "Price (lowest to highest)";
 export type LessonCategory = "Ongoing" | "Upcoming" | "Past";
 
@@ -105,7 +110,8 @@ export function availableSlots(teacherId: string, slots: Slot[], bookings: Booki
   return slots.filter((slot) => slot.teacherId === teacherId && Date.parse(slot.start) > now.getTime()
     && (!day || parisDay(new Date(slot.start)) === day)
     && (!filters.formats?.length || filters.formats.includes(slot.format))
-    && !bookings.some((booking) => booking.status === "confirmed" && booking.teacherId === teacherId && overlaps(slot, booking)))
+    // A learner can't attend two lessons at once, so any of their confirmed lessons blocks an overlapping slot.
+    && !bookings.some((booking) => booking.status === "confirmed" && !booking.completedAt && overlaps(slot, booking)))
     .sort((a, b) => Date.parse(a.start) - Date.parse(b.start) || a.format.localeCompare(b.format));
 }
 export function filterTeachers(source: Teacher[], slots: Slot[], bookings: Booking[], now: Date, filters: SearchFilters = {}, sort: SortOption = "Soonest available"): Teacher[] {
@@ -113,6 +119,7 @@ export function filterTeachers(source: Teacher[], slots: Slot[], bookings: Booki
   const nextSlots = new Map(source.map((teacher) => [teacher.id, availableSlots(teacher.id, slots, bookings, now, filters)]));
   return source.filter((teacher) => (!filters.language || teacher.languages.includes(filters.language))
     && (!filters.formats?.length || teacher.formats.some((format) => filters.formats!.includes(format)))
+    && (filters.maxPrice === undefined || teacher.rate <= filters.maxPrice)
     && (!query || `${teacher.name} ${teacher.languages.join(" ")} ${teacher.city} ${teacher.bio}`.toLocaleLowerCase().includes(query))
     && (!(filters.day && filters.day !== "Any day") || nextSlots.get(teacher.id)!.length > 0))
     .sort((a, b) => {
@@ -124,11 +131,32 @@ export function filterTeachers(source: Teacher[], slots: Slot[], bookings: Booki
 }
 export function classifyLesson(booking: Booking, now: Date): LessonCategory | null {
   if (booking.status === "cancelled") return null;
+  // An explicitly completed session is finished even if its scheduled end has not passed.
+  if (booking.completedAt) return "Past";
   if (now.getTime() < Date.parse(booking.start)) return "Upcoming";
   return now.getTime() < Date.parse(booking.end) ? "Ongoing" : "Past";
 }
 export function fixtureBookings(now: Date): Booking[] {
   const day = parisDay(now);
   const make = (id: string, teacher: Teacher, start: Date): Booking => ({ id, teacherId: teacher.id, slotId: `sample-${id}`, start: start.toISOString(), end: new Date(start.getTime() + teacher.duration * 60_000).toISOString(), format: "Online", status: "confirmed", paymentStatus: "paid", rate: teacher.rate, duration: teacher.duration });
-  return [make("sample-ongoing", teachers[0], new Date(now.getTime() - 15 * 60_000)), make("sample-upcoming", teachers[0], parisTime(addDays(day, 1), 13)), make("sample-past", teachers[2], parisTime(addDays(day, -2), 14))];
+  return [
+    { ...make("sample-ongoing", teachers[0], new Date(now.getTime() - 15 * 60_000)), language: "French" },
+    { ...make("sample-upcoming", teachers[0], parisTime(addDays(day, 1), 13)), language: "French" },
+    { ...make("sample-past", teachers[2], parisTime(addDays(day, -2), 14)), language: "English" },
+  ];
+}
+
+/**
+ * The lesson language to preselect for a teacher: the active search language
+ * when the teacher offers it, otherwise the only language that fits the learner,
+ * otherwise none — a multilingual teacher then needs an explicit choice.
+ */
+export function defaultLessonLanguage(teacher: Pick<Teacher, "languages">, searchLanguage?: string, learnerLanguages: string[] = []): string | undefined {
+  if (searchLanguage && teacher.languages.includes(searchLanguage)) return searchLanguage;
+  const shared = teacher.languages.filter(language => learnerLanguages.includes(language));
+  if (shared.length === 1) return shared[0];
+  return teacher.languages.length === 1 ? teacher.languages[0] : undefined;
+}
+export function lessonLanguageFor(booking: Pick<Booking, "language" | "teacherId">): string {
+  return booking.language ?? teachers.find(teacher => teacher.id === booking.teacherId)?.languages[0] ?? "Language";
 }

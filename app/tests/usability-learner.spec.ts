@@ -33,23 +33,41 @@ for (const mobile of [false, true]) {
     await page.goto(`/?learner=1&view=${mobile ? "mobile" : "web"}&flow=search`);
     const screen = () => current(page, mobile);
     if (mobile) {
-      await expect(screen().getByRole("heading", { name: "A teacher for your next step.", exact: true })).toBeVisible();
+      await expect(screen().getByRole("heading", { name: "Find a teacher", exact: true })).toBeVisible();
       await expect(screen().locator(".lw-teacher-card")).toHaveCount(25);
       await page.screenshot({ path: "qa/usability-feedback/mobile-search.png" });
     }
     await screen().locator(".lw-slot").first().click();
+    // A multilingual teacher needs an explicit lesson language before payment.
+    const language = screen().getByRole("group", { name: "Lesson language" });
+    if (await language.count()) await language.getByRole("button").first().click();
     await screen().getByRole("button", { name: "Continue to payment", exact: true }).click();
     await expect(screen().getByRole("heading", { name: "Review and pay", exact: true })).toBeVisible();
     await expect(screen()).not.toContainText(/demo|placeholder|test.card|pending|awaiting confirmation/i);
-    await screen().getByRole("button", { name: /^Pay €/ }).click();
+    // On phones the pay action sits in a fixed checkout footer above the tab bar.
+    const pay = (mobile ? page.getByRole("region", { name: "Payment" }) : screen()).getByRole("button", { name: /^Pay €/ });
+    await expect(pay).toBeInViewport();
+    await pay.click();
     await expect(screen().getByRole("heading", { name: "You’re booked!", exact: true })).toBeVisible();
-    await screen().getByRole("button", { name: "View upcoming lessons", exact: true }).click();
-    await expect(screen().getByRole("tab", { name: /^Upcoming/ })).toHaveAttribute("aria-selected", "true");
-    await expect(screen().locator(".lw-lesson-card")).toHaveCount(2);
-    await screen().getByRole("tab", { name: /^Ongoing/ }).click();
+    if (mobile) await expect(page.getByRole("region", { name: "Payment" })).toHaveCount(0);
+    await screen().getByRole("button", { name: "View your lessons", exact: true }).click();
+    // One list of lessons (live, upcoming, completed) beside a calendar tab.
+    await expect(screen().getByRole("tab", { name: /^Your lessons/ })).toHaveAttribute("aria-selected", "true");
+    await expect(screen().locator(".lw-lesson-card")).toHaveCount(4);
+    await expect(screen().locator(".lw-lesson-upcoming")).toHaveCount(2);
     await expect(screen().getByRole("button", { name: "Join lesson", exact: true })).toBeVisible();
-    await screen().getByRole("tab", { name: /^Past/ }).click();
-    await expect(screen().getByRole("button", { name: "Leave a review", exact: true })).toBeVisible();
+    // A completed lesson card has two actions; reviewing happens from its recap.
+    const completed = screen().locator(".lw-lesson-past");
+    await expect(completed.getByRole("button", { name: "View recap", exact: true })).toBeVisible();
+    await expect(completed.getByRole("button", { name: "Book again", exact: true })).toBeVisible();
+    await expect(completed.locator(".lw-lesson-actions .lw-button")).toHaveCount(2);
+    await expect(completed.locator(".lw-preparation-summary")).toHaveCount(0);
+    await screen().getByRole("tab", { name: "Your calendar", exact: true }).click();
+    // Same calendar component as the teacher workspace.
+    await expect(screen().locator(".tw-full-calendar")).toBeVisible();
+    await expect(screen().locator(".tw-cal-month-event, .tw-cal-timed-event").first()).toBeVisible();
+    await screen().getByRole("tab", { name: /^Your lessons/ }).click();
+    await completed.getByRole("button", { name: "View recap", exact: true }).click();
     await screen().getByRole("button", { name: "Leave a review", exact: true }).click();
     const nav = mobile ? page.getByTestId("flow-fixed-footer").getByRole("navigation", { name: "Learning workspace" }) : page.getByRole("navigation", { name: "Learning workspace" });
     await expect(nav.getByRole("button")).toHaveCount(4);
@@ -57,8 +75,10 @@ for (const mobile of [false, true]) {
     await screen().getByRole("button", { name: "5 stars", exact: true }).click();
     await screen().getByRole("textbox", { name: "Your review", exact: true }).fill("Patient explanations and useful practice.");
     await screen().getByRole("button", { name: "Save review", exact: true }).click();
-    await expect(screen().getByRole("status")).toContainText("Your review is saved");
-    await nav.getByRole("button", { name: "Profile", exact: true }).click();
+    await expect(screen().getByRole("status")).toContainText("Review saved");
+    // Profile now sits in the top-right corner; Messages took its place in the tab bar.
+    await expect(nav.getByRole("button", { name: "Messages", exact: true })).toBeVisible();
+    await page.locator(".lw-profile-button").last().click();
     await expect(screen().getByRole("heading", { name: "Your learning profile", exact: true })).toBeVisible();
     await expect.poll(() => screen().locator(".lw-learner-profile img").evaluate((node: HTMLImageElement) => node.complete && node.naturalWidth > 0)).toBe(true);
     await page.screenshot({ path: `qa/usability-feedback/${mobile ? "mobile" : "desktop"}-learner-profile.png` });

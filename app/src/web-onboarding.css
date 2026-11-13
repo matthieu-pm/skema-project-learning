@@ -14,8 +14,8 @@ body:has(.web-onboarding) #root {
   color: #272330;
   --paper: #fff;
   --line: #e9e7ee;
-  --primary: #8050d6;
-  --primary-shadow: #6238b0;
+  --primary: #6844d9;
+  --primary-shadow: #4f2fb3;
 }
 .web-onboarding *,
 .web-onboarding *::before,
@@ -53,7 +53,7 @@ body:has(.web-onboarding) #root {
 }
 .web-onboarding .web-back:hover {
   background: #f6f3fb;
-  color: #6238b0;
+  color: #4f2fb3;
 }
 .web-onboarding .web-setup-header .progress {
   height: 9px;
@@ -66,7 +66,7 @@ body:has(.web-onboarding) #root {
   display: none;
 }
 .web-onboarding .web-setup-brand {
-  color: #6238b0;
+  color: #4f2fb3;
   font-size: 23px;
   letter-spacing: -1px;
   font-weight: 900;
@@ -212,7 +212,7 @@ body:has(.web-onboarding) #root {
   font-weight: 700;
 }
 .web-onboarding .actions > .secondary {
-  color: #6238b0;
+  color: #4f2fb3;
   background: white;
 }
 .web-onboarding .actions.account-actions > .secondary {
@@ -242,7 +242,7 @@ body:has(.web-onboarding) #root {
 .web-onboarding .choice.selected {
   background: #f7f2ff;
   border-color: #a17adf;
-  color: #6238b0;
+  color: #4f2fb3;
   box-shadow: 0 2px 0 #e5d5fc;
 }
 .web-onboarding .choice strong {
@@ -282,8 +282,8 @@ body:has(.web-onboarding) #root {
   border-width: 1.5px;
 }
 .web-onboarding .selected .checkbox {
-  background: #8050d6;
-  border-color: #8050d6;
+  background: #6844d9;
+  border-color: #6844d9;
   color: white;
 }
 .web-onboarding .checkbox svg {
@@ -367,7 +367,7 @@ body:has(.web-onboarding) #root {
   color: #817b89;
 }
 .web-onboarding .inline-link {
-  color: #8050d6;
+  color: #6844d9;
 }
 .web-onboarding .inline-link:disabled {
   color: #afafaf;
@@ -395,7 +395,7 @@ body:has(.web-onboarding) #root {
   background: #fcfbfe;
 }
 .web-onboarding a:focus-visible {
-  outline: 3px solid #8050d6;
+  outline: 3px solid #6844d9;
   outline-offset: 4px;
   border-radius: 4px;
 }

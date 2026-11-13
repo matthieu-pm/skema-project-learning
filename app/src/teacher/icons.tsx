@@ -34,6 +34,19 @@ import {
   HeadphonesIcon,
   File01Icon,
   TextFontIcon,
+  StarIcon,
+  SentIcon,
+  RepeatIcon,
+  PencilEdit02Icon,
+  LanguageSquareIcon,
+  Target02Icon,
+  CreditCardIcon,
+  CheckmarkCircle02Icon,
+  Note01Icon,
+  BubbleChatIcon,
+  Globe02Icon,
+  SmartPhone01Icon,
+  LaptopIcon,
 } from "@hugeicons/core-free-icons";
 import type { SVGProps } from "react";
 
@@ -72,6 +85,19 @@ const icons: Record<string, IconSvgElement> = {
   audio: HeadphonesIcon,
   document: File01Icon,
   text: TextFontIcon,
+  star: StarIcon,
+  send: SentIcon,
+  repeat: RepeatIcon,
+  edit: PencilEdit02Icon,
+  language: LanguageSquareIcon,
+  target: Target02Icon,
+  card: CreditCardIcon,
+  "check-circle": CheckmarkCircle02Icon,
+  note: Note01Icon,
+  chat: BubbleChatIcon,
+  globe: Globe02Icon,
+  phone: SmartPhone01Icon,
+  laptop: LaptopIcon,
 };
 type Props = Omit<SVGProps<SVGSVGElement>, "strokeWidth"> & {
   size?: number;

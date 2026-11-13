@@ -2,10 +2,10 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import {
   teachers, createSlots, fixtureBookings, availableSlots, filterTeachers,
-  classifyLesson, ratingSummary, parisDay, parisTime, addDays,
+  classifyLesson, ratingSummary, parisDay, parisTime, addDays, defaultLessonLanguage, lessonLanguageFor,
 } from "../src/learner/model.ts";
 import {
-  bookingStorageKey, readBookings, instantBook, cancelBooking, saveReview,
+  bookingStorageKey, readBookings, instantBook, cancelBooking, saveReview, completeSession,
 } from "../src/learner/storage.ts";
 
 const now = new Date("2026-11-11T08:00:00Z");
@@ -18,7 +18,7 @@ function harness(seed = []) {
 }
 const slots = createSlots(now);
 const online = availableSlots("gilbert", slots, [], now, { formats: ["Online"] })[0];
-const input = (slot = online, extra = {}) => ({ teacherId: slot.teacherId, slotId: slot.id, format: slot.format, ...extra });
+const input = (slot = online, extra = {}) => ({ teacherId: slot.teacherId, slotId: slot.id, format: slot.format, language: "French", ...extra });
 
 test("catalog ratings equal the complete visible review list and new teachers have a neutral state", () => {
   assert.equal(teachers.length, 25);
@@ -108,12 +108,12 @@ test("retrying the same payment request returns its saved receipt without duplic
 
 test("unavailable or malformed storage and failed writes never report a successful payment", async () => {
   const h = harness();
-  await assert.rejects(instantBook(input(), slots, { ...h.options, storage: { getItem() { throw new Error("denied"); }, setItem() {} } }), /could not be read.*no payment/i);
-  await assert.rejects(instantBook(input(), slots, { ...h.options, storage: { getItem: () => null, setItem() { throw new Error("quota"); } } }), /could not be saved.*no payment/i);
+  await assert.rejects(instantBook(input(), slots, { ...h.options, storage: { getItem() { throw new Error("denied"); }, setItem() {} } }), /couldn’t be read.*no payment/i);
+  await assert.rejects(instantBook(input(), slots, { ...h.options, storage: { getItem: () => null, setItem() { throw new Error("quota"); } } }), /couldn’t be saved.*no payment/i);
   h.values.set(bookingStorageKey, "invalid JSON");
-  await assert.rejects(instantBook(input(), slots, h.options), /could not be read/i);
+  await assert.rejects(instantBook(input(), slots, h.options), /couldn’t be read/i);
   assert.equal(h.values.get(bookingStorageKey), "invalid JSON");
-  await assert.rejects(instantBook(input(), slots, { ...h.options, locks: null }), /Web Locks support/i);
+  await assert.rejects(instantBook(input(), slots, { ...h.options, locks: null }), /couldn’t reserve this time/i);
 });
 
 test("cancelling a future booking releases its time and preserves the cancelled record", async () => {
@@ -129,7 +129,7 @@ test("rescheduling is atomic and keeps the original receipt when a replacement i
   const h = harness();
   const booking = await instantBook(input(), slots, h.options);
   const replacement = availableSlots("gilbert", slots, [booking], now)[0];
-  await assert.rejects(instantBook({ ...input(replacement), replaceBookingId: booking.id }, slots, { ...h.options, storage: { getItem: h.options.storage.getItem, setItem() { throw new Error("quota"); } } }), /could not be saved/i);
+  await assert.rejects(instantBook({ ...input(replacement), replaceBookingId: booking.id }, slots, { ...h.options, storage: { getItem: h.options.storage.getItem, setItem() { throw new Error("quota"); } } }), /couldn’t be saved/i);
   assert.equal(readBookings([], h.options)[0].start, booking.start);
   const changed = await instantBook({ ...input(replacement), replaceBookingId: booking.id }, slots, h.options);
   assert.equal(changed.id, booking.id);
@@ -145,4 +145,65 @@ test("reviews save only after a completed lesson and retain a browser-local snap
   assert.equal(saved.find((b) => b.id === seed[2].id).review.text, "Useful feedback.");
   assert.equal(readBookings(seed, h.options).find((b) => b.id === seed[2].id).review.rating, 5);
   assert.equal(seed[2].review, undefined);
+});
+
+test("search language carries into booking and a multilingual teacher is never booked in another language silently", async () => {
+  const sofia = teachers.find((t) => t.id === "sofia");
+  assert.deepEqual(sofia.languages, ["Italian", "French"]);
+  assert.equal(defaultLessonLanguage(sofia, "French"), "French");
+  assert.equal(defaultLessonLanguage(sofia, undefined, ["French", "English"]), "French");
+  assert.equal(defaultLessonLanguage(sofia, undefined, []), undefined);
+  assert.equal(defaultLessonLanguage(teachers.find((t) => t.id === "louis")), "French");
+  const h = harness();
+  const slot = availableSlots("sofia", slots, [], now, { formats: ["Online"] })[0];
+  await assert.rejects(instantBook({ teacherId: "sofia", slotId: slot.id, format: "Online" }, slots, h.options), /Choose a lesson language/);
+  await assert.rejects(instantBook({ teacherId: "sofia", slotId: slot.id, format: "Online", language: "German" }, slots, h.options), /Choose a lesson language/);
+  const booking = await instantBook({ teacherId: "sofia", slotId: slot.id, format: "Online", language: "French" }, slots, h.options);
+  assert.equal(booking.language, "French");
+  assert.equal(lessonLanguageFor(booking), "French");
+  const later = availableSlots("sofia", slots, [booking], now, { formats: ["Online"] })[1];
+  await assert.rejects(instantBook({ teacherId: "sofia", slotId: later.id, format: "Online", language: "Italian", replaceBookingId: booking.id }, slots, h.options), /keeps the original lesson language/);
+  const moved = await instantBook({ teacherId: "sofia", slotId: later.id, format: "Online", replaceBookingId: booking.id }, slots, h.options);
+  assert.equal(moved.id, booking.id);
+  assert.equal(moved.language, "French");
+  assert.equal(readBookings([], h.options).filter((b) => b.status === "confirmed").length, 1);
+});
+
+test("price cap combines with language and format filters", () => {
+  const capped = filterTeachers(teachers, slots, [], now, { language: "French", formats: ["Online"], maxPrice: 25 }, "Price (lowest to highest)");
+  assert.ok(capped.length > 0);
+  assert.ok(capped.every((t) => t.rate <= 25 && t.languages.includes("French") && t.formats.includes("Online")));
+  assert.deepEqual(capped.map((t) => t.rate), [...capped.map((t) => t.rate)].sort((a, b) => a - b));
+  assert.equal(filterTeachers(teachers, slots, [], now, { maxPrice: 1 }).length, 0);
+});
+
+test("only an explicit completion moves a started lesson to Past; future lessons cannot be completed", async () => {
+  const h = harness(fixtureBookings(now));
+  const [ongoing, upcoming] = readBookings(undefined, h.options);
+  assert.equal(classifyLesson(ongoing, now), "Ongoing");
+  await assert.rejects(completeSession(upcoming.id, h.options), /has started/);
+  const updated = await completeSession(ongoing.id, h.options);
+  const done = updated.find((b) => b.id === ongoing.id);
+  assert.ok(done.completedAt);
+  assert.equal(classifyLesson(done, now), "Past");
+  const reviewed = await saveReview(ongoing.id, { rating: 5, text: "Great practice." }, h.options);
+  assert.equal(reviewed.find((b) => b.id === ongoing.id).review.rating, 5);
+  assert.equal(reviewed.find((b) => b.id === upcoming.id).review, undefined);
+});
+
+test("chat keeps the sent message, marks it read and counts teacher replies as unread", async () => {
+  const { sendMessage, readStore, conversation, unreadCount, inbox } = await import("../src/learner/messages.ts");
+  const values = new Map(), storage = { getItem: (k) => values.get(k) ?? null, setItem: (k, v) => values.set(k, v) };
+  const seeded = readStore({ storage, now });
+  // A returning learner has their current teacher plus three past teachers, all read.
+  assert.deepEqual(inbox(seeded).map((row) => row.teacherId), ["gilbert", "emma", "sofia", "diego"]);
+  assert.equal(unreadCount(seeded), 0);
+  sendMessage("marco", "  Ciao!  ", { storage, now });
+  const store = readStore({ storage, now });
+  const thread = conversation(store, "marco");
+  assert.equal(thread.length, 1);
+  assert.equal(thread[0].text, "Ciao!");
+  assert.equal(unreadCount(store, "marco"), 0);
+  assert.equal(inbox(store).length, 5);
+  assert.throws(() => sendMessage("marco", "   ", { storage, now }), /Write a message/);
 });

@@ -1502,3 +1502,106 @@
 .ce-use-lesson [data-use-errors]:focus { outline: 2px solid #5235e9; outline-offset: 3px; }
 .ce-sheet .ce-use-lesson .ce-actions { flex-direction: column; align-items: stretch; }
 .ce-use-lesson .ce-prototype-notice { margin: 0; }
+
+/* ---------- Canvas-first editor (13 Nov 2026) ---------- */
+.ce-layout.ce-canvas-first { grid-template-columns: minmax(0, 1fr) clamp(320px, 34%, 440px); background: #f7f7fa; }
+.ce-canvas-column { position: relative; display: flex; flex-direction: column; min-width: 0; min-height: 0; }
+.teacher-web .tw-editor-content .ce-canvas-first .ce-canvas-column { height: 100%; overflow: hidden; }
+.teacher-web .tw-editor-content .ce-canvas-first .ce-canvas { flex: 1; height: auto; padding-top: 16px; }
+/* Toolbar: real, discoverable buttons with a boundary, tint, icons and chevrons. */
+.ce-toolbar { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; padding: 12px 20px; border-bottom: 1px solid var(--tw-line); background: #fff; flex: none; }
+.ce-toolbar .ce-history { display: flex; gap: 2px; margin-right: 4px; }
+.ce-toolbar .tw-badge { margin-left: auto; }
+.ce-tool-button { display: inline-flex; align-items: center; gap: 8px; min-height: 36px; padding: 6px 12px; border: 1px solid #d9d3ec; border-radius: 10px; background: #f6f3ff; color: #3d2d86; font-size: 13px; font-weight: 600; }
+.ce-tool-button:hover { background: #ede7ff; border-color: #c6bbe8; }
+.ce-tool-button[aria-pressed="true"] { background: #e6ddff; border-color: #a996e6; }
+.ce-tool-button:focus-visible { outline: 3px solid var(--tw-blue, #6844d9); outline-offset: 2px; }
+/* Outline: an overlay with its own scroll, so the canvas never moves underneath it. */
+.ce-outline-overlay { position: absolute; z-index: 20; top: 61px; left: 12px; bottom: 12px; width: min(360px, calc(100% - 24px)); display: flex; flex-direction: column; background: #fff; border: 1px solid var(--tw-line); border-radius: 14px; box-shadow: 0 18px 40px rgba(30, 20, 60, .16); overflow: hidden; }
+.ce-outline-overlay-heading { display: flex; align-items: center; justify-content: space-between; padding: 12px 14px; border-bottom: 1px solid var(--tw-line); }
+.ce-outline-overlay .ce-outline-list { flex: 1; min-height: 0; overflow: auto; overscroll-behavior: contain; padding: 10px 12px 16px; }
+.ce-outline-tools { display: flex; flex-wrap: wrap; gap: 4px; margin-bottom: 6px; }
+.ce-outline-list .ce-outline-row { display: flex; align-items: center; gap: 4px; }
+.ce-outline-list .ce-outline-title { flex: 1; min-width: 0; text-align: left; }
+.ce-outline-toggle { flex: none; }
+.ce-sheet .ce-outline-list { padding: 4px 2px 24px; }
+/* Module and block contextual actions. */
+.ce-item-actions { display: flex; gap: 2px; margin-left: auto; flex: none; }
+.ce-danger-icon { color: #b42f2f; }
+.ce-block-header { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
+.ce-block-format { font-size: 12px; color: var(--tw-muted); }
+.ce-block-settings { margin: 0 0 10px; border: 1px solid var(--tw-line); border-radius: 10px; background: #fafafc; }
+.ce-block-settings > summary { list-style: none; display: flex; align-items: center; gap: 6px; padding: 7px 10px; font-size: 12px; font-weight: 600; color: var(--tw-muted); cursor: pointer; }
+.ce-block-settings > summary::-webkit-details-marker { display: none; }
+.ce-block-settings-body { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; padding: 0 10px 10px; }
+/* Repeated items: drag handle plus earlier/later buttons. */
+.ce-seq-row { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+.ce-seq-controls { display: inline-flex; gap: 2px; align-self: flex-end; }
+.ce-seq-controls button { width: 28px; height: 28px; display: grid; place-items: center; border: 1px solid var(--tw-line); border-radius: 7px; background: #fff; color: var(--tw-muted); }
+.ce-seq-grip { cursor: grab; touch-action: none; }
+.ce-seq-dragging { opacity: .55; outline: 2px dashed #a996e6; outline-offset: 2px; }
+/* Upload drop zones. */
+.ce-dropzone { border: 1.5px dashed #cfc8e2; border-radius: 10px; padding: 10px 12px; background: #fcfbff; transition: background-color 120ms ease-out, border-color 120ms ease-out; }
+.ce-dropzone label { display: grid; gap: 4px; }
+.ce-drop-label { font-weight: 600; font-size: 13px; }
+.ce-dropzone small { color: var(--tw-muted); }
+.ce-dropzone.ce-drop-over { background: #efe9ff; border-color: var(--tw-blue, #6844d9); }
+.ce-dropzone [role="alert"] { color: #b42f2f; margin: 6px 0 0; font-size: 13px; }
+/* Templates picker. */
+.ce-templates { display: grid; gap: 12px; }
+.ce-templates .ce-template { display: grid; gap: 6px; padding: 14px; border: 1px solid var(--tw-line); border-radius: 12px; }
+.ce-template-outline summary { cursor: pointer; font-size: 13px; font-weight: 600; }
+.ce-template-outline ol { margin: 8px 0 0; padding-left: 20px; font-size: 13px; display: grid; gap: 3px; }
+/* Live student preview: a real 393 × 780 phone viewport, scaled to fit. */
+.ce-live-preview { display: flex; flex-direction: column; min-width: 0; min-height: 0; background: #f3f2f7; border-left: 1px solid var(--tw-line); }
+.teacher-web .tw-editor-content .ce-live-preview { height: 100%; }
+.ce-live-toolbar { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 12px 16px; min-height: 61px; border-bottom: 1px solid var(--tw-line); background: #fff; font-size: 13px; font-weight: 600; }
+.ce-live-toolbar > span { display: inline-flex; align-items: center; gap: 6px; }
+.ce-live-following { color: var(--tw-muted); font-weight: 500; }
+.ce-live-stage { flex: 1; min-height: 0; display: flex; align-items: flex-start; justify-content: center; padding: 16px; overflow: hidden; }
+.ce-live-frame { position: relative; flex: none; border-radius: 28px; box-shadow: 0 0 0 8px #1d1b22, 0 18px 40px rgba(20, 15, 40, .25); overflow: hidden; background: #fff; }
+.ce-live-frame > .ce-live-screen { position: absolute; top: 0; left: 0; transform-origin: top left; }
+.ce-live-screen { display: flex; flex-direction: column; background: #fff; }
+.ce-live-heading { flex: none; display: grid; gap: 2px; padding: 22px 18px 12px; border-bottom: 1px solid var(--tw-line); }
+.ce-live-heading small { color: var(--tw-muted); font-size: 12px; }
+.ce-live-heading strong { font-size: 16px; }
+.ce-live-body { flex: 1; min-height: 0; overflow-y: auto; overflow-x: hidden; overscroll-behavior: contain; padding: 16px 18px; }
+.ce-live-body img, .ce-live-body video, .ce-live-body audio { max-width: 100%; }
+.ce-live-nav { flex: none; display: flex; gap: 8px; padding: 12px 18px 20px; border-top: 1px solid var(--tw-line); background: #fff; }
+.ce-live-nav .tw-button { flex: 1; }
+.ce-live-empty { padding: 24px; color: var(--tw-muted); }
+/* Phone: native width, no nested decorative frame. */
+.ce-live-native { border-left: 0; background: transparent; }
+.ce-live-native .ce-live-toolbar { min-height: 0; border: 0; padding: 0 0 10px; background: transparent; }
+.ce-live-native .ce-live-screen { border: 1px solid var(--tw-line); border-radius: 14px; overflow: hidden; }
+.ce-live-native .ce-live-body { overflow: visible; }
+.ce-live-native[data-keyboard="true"] .ce-live-heading, .ce-live-native[data-keyboard="true"] .ce-live-nav { display: none; }
+.ce-mode-switch { display: none; }
+@container course-editor (max-width:900px) {
+  .ce-mode-switch { display: flex; border: 1px solid var(--tw-line); border-radius: 12px; overflow: hidden; margin-bottom: 12px; }
+  .ce-mode-switch button { flex: 1; padding: 11px 6px; border: 0; background: #fff; color: var(--tw-muted); font-size: 13px; }
+  .ce-mode-switch button[aria-selected="true"] { background: #f0ebff; color: var(--tw-blue); font-weight: 700; }
+  .ce-layout.ce-canvas-first { display: block; background: transparent; border: 0; }
+  .ce-layout.ce-canvas-first[data-mobile-panel="Canvas"] > .ce-canvas-column { display: flex; }
+  .ce-layout.ce-canvas-first[data-mobile-panel="Preview"] > .ce-canvas-column { display: none; }
+  .ce-canvas-first .ce-toolbar { padding: 0 0 10px; border: 0; background: transparent; }
+  .ce-canvas-first .ce-tool-button { min-height: 40px; }
+  .ce-block-settings-body { grid-template-columns: 1fr; }
+}
+/* Footer band alignment: the sidebar container's inset padding would lift its footer
+   8px above the editor's. Remove only the bottom inset on the editor page, so the
+   "Settings" separator and the Back / Save draft / Use lesson separator share one line. */
+.teacher-web .tw-editor-sidebar[data-slot="sidebar-container"],
+.teacher-web .tw-editor-sidebar [data-slot="sidebar-container"],
+.teacher-web [data-slot="sidebar-container"]:has(.tw-editor-sidebar),
+.teacher-web [data-slot="sidebar"]:has(.tw-editor-sidebar) [data-slot="sidebar-container"] { padding-bottom: 0; }
+/* Compact block settings disclosure. */
+.ce-canvas-block > .ce-block-settings { padding: 0; margin: 0 14px 10px; min-height: 0; }
+.ce-canvas-block > .ce-block-header { padding: 12px 14px 4px; cursor: auto; }
+/* Phone preview: keep activity navigation above the teacher action bar and tab bar. */
+.teacher-mobile .ce-mode-switch, .teacher-mobile .ce-live-native { margin-left: 12px; margin-right: 12px; }
+.teacher-mobile .ce-live-native .ce-live-nav { position: sticky; bottom: calc(var(--flow-footer-height, 70px) + var(--mobile-safe-area-height, 34px) + 84px); z-index: 2; box-shadow: 0 -6px 14px rgba(30, 20, 60, .06); }
+.teacher-mobile .ce-live-native { padding-bottom: calc(var(--flow-footer-height, 70px) + var(--mobile-safe-area-height, 34px) + 96px); }
+.teacher-mobile .ce-live-native .ce-live-toolbar { flex-wrap: wrap; }
+.teacher-mobile .ce-live-native .ce-live-screen { overflow: visible; }
+.teacher-mobile .ce-live-native .ce-live-nav { border-radius: 0 0 14px 14px; }

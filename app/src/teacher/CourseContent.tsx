@@ -32,45 +32,70 @@ export function useMedia(assetId?: string) {
   }, [assetId]);
   return url;
 }
+const MAX_BYTES = 20 * 1024 * 1024;
+/** True when a file matches an accept list such as "image/*" or "audio/*,video/*". */
+function fileMatches(file: File, accept: string) {
+  return accept.split(",").map((rule) => rule.trim()).some((rule) => rule.endsWith("/*") ? file.type.startsWith(rule.slice(0, -1)) : file.type === rule || file.name.toLowerCase().endsWith(rule));
+}
+/**
+ * Labelled drop zone with a file-chooser fallback. Single-asset fields accept one
+ * file; playlists (multiple) append every valid file in order. Errors never
+ * remove existing content.
+ */
 export function MediaUpload({
   label,
   accept,
   onSave,
+  multiple = false,
+  onSaveMany,
 }: {
   label: string;
   accept: string;
   onSave: (assetId: string, filename: string) => void;
+  multiple?: boolean;
+  onSaveMany?: (files: { assetId: string; filename: string }[]) => void;
 }) {
   const [error, setError] = useState(""),
-    [busy, setBusy] = useState(false);
+    [busy, setBusy] = useState(false),
+    [over, setOver] = useState(false);
+  const handle = async (list: FileList | null) => {
+    const files = [...(list || [])];
+    if (!files.length) return;
+    setError("");
+    if (!multiple && files.length > 1) { setError("Drop one file here. This field holds a single file."); return; }
+    const wrong = files.find((file) => !fileMatches(file, accept));
+    if (wrong) { setError(`${wrong.name} isn’t a supported file type here.`); return; }
+    const large = files.find((file) => file.size > MAX_BYTES);
+    if (large) { setError(`${large.name} is larger than 20 MB. Choose a smaller file.`); return; }
+    setBusy(true);
+    try {
+      const saved: { assetId: string; filename: string }[] = [];
+      for (const file of files) saved.push({ assetId: await saveMedia(file), filename: file.name });
+      if (multiple && onSaveMany) onSaveMany(saved);
+      else onSave(saved[0].assetId, saved[0].filename);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "File couldn’t be saved. Try a smaller file.");
+    } finally {
+      setBusy(false);
+    }
+  };
   return (
-    <div className="ce-upload">
+    <div
+      className={`ce-upload ce-dropzone ${over ? "ce-drop-over" : ""}`}
+      onDragOver={(e) => { if (e.dataTransfer.types.includes("Files")) { e.preventDefault(); e.stopPropagation(); setOver(true); } }}
+      onDragLeave={(e) => { if (!e.currentTarget.contains(e.relatedTarget as Node)) setOver(false); }}
+      onDrop={(e) => { if (!e.dataTransfer.types.includes("Files")) return; e.preventDefault(); e.stopPropagation(); setOver(false); void handle(e.dataTransfer.files); }}
+    >
       <label>
-        {label}
+        <span className="ce-drop-label">{label}</span>
+        <small>Drop {multiple ? "files" : "a file"} here or choose {multiple ? "files" : "a file"} · up to 20 MB each</small>
         <input
           aria-label={label}
           disabled={busy}
           type="file"
           accept={accept}
-          onChange={async (e) => {
-            const file = e.target.files?.[0];
-            if (!file) return;
-            setBusy(true);
-            setError("");
-            try {
-              const mediaId = await saveMedia(file);
-              onSave(mediaId, file.name);
-            } catch (err) {
-              setError(
-                err instanceof Error
-                  ? err.message
-                  : "File could not be saved. Try a smaller file.",
-              );
-            } finally {
-              setBusy(false);
-              e.target.value = "";
-            }
-          }}
+          multiple={multiple}
+          onChange={async (e) => { await handle(e.target.files); e.target.value = ""; }}
         />
       </label>
       {busy && <small role="status">Saving file on this device…</small>}

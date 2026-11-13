@@ -1,0 +1,89 @@
+/* Same calendar as the teacher workspace; phone rules mirrored from teacher/calendar.css. */
+.lw-shared-calendar { background: #fff; font-family: inherit; font-size: 14px; line-height: 1.4; }
+.lw-shared-calendar .tw-cal-navigation .lw-icon-button { width: 32px; height: 32px; }
+.learner-workspace .lw-shared-calendar button { font: inherit; }
+.learner-mobile .tw-cal-controls {
+  padding: 14px 10px 10px;
+  gap: 12px;
+}
+.learner-mobile .tw-cal-navigation {
+  width: 100%;
+  flex-wrap: wrap;
+}
+.learner-mobile .tw-cal-navigation h2 {
+  font-size: 15px;
+  margin-left: 2px;
+}
+.learner-mobile .tw-cal-views {
+  width: 100%;
+}
+.learner-mobile .tw-cal-views button {
+  flex: 1;
+  height: 34px;
+}
+.learner-mobile .tw-cal-meta {
+  padding: 0 10px 12px;
+  font-size: 11px;
+}
+.learner-mobile .tw-cal-filter-label {
+  display: none;
+}
+.learner-mobile .tw-cal-month-cell {
+  min-height: 88px;
+  padding: 3px;
+}
+.learner-mobile .tw-cal-month-weekdays span {
+  font-size: 10px;
+}
+.learner-mobile .tw-cal-month-event {
+  padding: 3px;
+  font-size: 10px;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0;
+}
+.learner-mobile .tw-cal-month-event strong {
+  display: none;
+}
+.learner-mobile .tw-cal-month-initials {
+  display: inline;
+}
+.learner-mobile .tw-cal-time-heading,
+.learner-mobile .tw-cal-time-grid {
+  grid-template-columns: 34px repeat(var(--cal-columns), minmax(0, 1fr));
+}
+.learner-mobile .tw-cal-time-heading button > span {
+  font-size: 9px;
+}
+.learner-mobile .tw-cal-time-zone {
+  font-size: 8px;
+}
+.learner-mobile .tw-cal-time-labels span {
+  font-size: 9px;
+  padding: 0;
+}
+.learner-mobile .tw-calendar-week .tw-cal-timed-event {
+  left: 1px;
+  right: 1px;
+  border-left-width: 2px;
+  padding: 2px;
+  column-gap: 1px;
+}
+.learner-mobile .tw-calendar-week .tw-cal-event-name,
+.learner-mobile .tw-calendar-week .tw-cal-event-duration {
+  display: none;
+}
+.learner-mobile .tw-calendar-week .tw-cal-event-initials {
+  display: block;
+  font-size: 10px;
+}
+.learner-mobile .tw-calendar-week .tw-cal-event-time {
+  font-size: 9px;
+}
+.learner-mobile .tw-cal-footer {
+  padding: 10px;
+  font-size: 10px;
+}
+.learner-mobile .tw-cal-legend {
+  gap: 8px;
+}

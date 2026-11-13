@@ -28,6 +28,8 @@ test("the assigned cafe lesson has stable block identities, matches the public o
   assert.equal(preparationFor({ teacherId: "gilbert", preparationId: "unknown" }), undefined);
   assert.equal(preparationFor({ teacherId: "diego", preparationId: preparation.id }), undefined);
   assert.equal(preparationFor({ teacherId: "diego" }), undefined);
+  // The French café assignment is not attached to a Gilbert lesson booked in English.
+  assert.equal(preparationFor({ teacherId: "gilbert", language: "English" }), undefined);
   assert.ok(!JSON.stringify(preparation).includes('"notes"'));
 });
 test("completion requires all recall cards, submitted/revealed answers, acknowledged teaching and submitted open responses", () => {
@@ -60,17 +62,17 @@ test("failed saves and unreadable storage preserve prior work; cancelled and unk
   await savePreparation(booking, block.id, finished(block), h.options);
   const before = h.values.get(preparationStorageKey);
   const broken = { ...h.options, storage: { getItem: h.storage.getItem, setItem() { throw new Error("full"); } } };
-  await assert.rejects(savePreparation(booking, sequence[1].block.id, finished(sequence[1].block), broken), /could not be saved/);
+  await assert.rejects(savePreparation(booking, sequence[1].block.id, finished(sequence[1].block), broken), /couldn’t be saved/);
   assert.equal(h.values.get(preparationStorageKey), before);
   await assert.rejects(savePreparation({ ...booking, status: "cancelled" }, block.id, finished(block), h.options), /unavailable/);
   await assert.rejects(savePreparation(booking, "another-block", finished(block), h.options), /unavailable/);
   h.values.set(preparationStorageKey, "broken");
-  await assert.rejects(savePreparation(booking, block.id, finished(block), h.options), /could not be read/);
+  await assert.rejects(savePreparation(booking, block.id, finished(block), h.options), /couldn’t be read/);
   assert.equal(h.values.get(preparationStorageKey), "broken");
 });
 test("new bookings attach the versioned preparation and rescheduling preserves its identity and progress", async () => {
   const h = harness(), slots = createSlots(now), open = availableSlots("gilbert", slots, [], now, { formats: ["Online"] });
-  const first = await instantBook({ teacherId: "gilbert", slotId: open[0].id, format: "Online" }, slots, { ...h.options, seed: [] });
+  const first = await instantBook({ teacherId: "gilbert", slotId: open[0].id, format: "Online", language: "French" }, slots, { ...h.options, seed: [] });
   assert.equal(first.preparationId, preparation.id);
   await savePreparation(first, sequence[0].block.id, finished(sequence[0].block), h.options);
   const next = await instantBook({ teacherId: "gilbert", slotId: open[1].id, format: "Online", replaceBookingId: first.id }, slots, h.options);
