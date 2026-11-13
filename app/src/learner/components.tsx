@@ -34,6 +34,8 @@ const learnerPortraits: Record<string, string> = {
   Alex: "reviewer-alex", You: "reviewer-alex", Sam: "reviewer-sam", Lou: "reviewer-lou",
   Camille: "reviewer-camille", Robin: "reviewer-robin", Charlie: "reviewer-charlie",
 };
+/** Portrait id for a fictional learner name, shared with the teacher workspace. */
+export const learnerPortraitId = (name: string) => learnerPortraits[name];
 export function LearnerAvatar({ name = "Alex", large = false }: { name?: string; large?: boolean }) {
   const id = learnerPortraits[name];
   const initials = name.split(" ").map(part => part[0]).slice(0, 2).join("");

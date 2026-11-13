@@ -11,7 +11,9 @@ for (const mobile of [false, true]) {
     const calendar = () => screen().getByRole("region", { name: "Choose a lesson date" });
     const times = () => screen().getByRole("region", { name: "Available times", exact: true });
     const proceed = () => screen().getByRole("button", { name: "Continue to payment", exact: true });
-    await expect(proceed()).toBeDisabled();
+    // Continue stays enabled; the status line shows whether a time is selected.
+    const selection = () => screen().locator(".lw-selection-status");
+    await expect(selection()).toHaveText(/^Choose /);
     await expect(calendar().getByRole("button", { name: "Previous month" })).toBeDisabled();
     await calendar().getByRole("button", { name: "Next month" }).click();
     await expect(calendar().getByRole("heading", { name: "December 2026" })).toBeVisible();
@@ -19,12 +21,13 @@ for (const mobile of [false, true]) {
     await date.press("Enter");
     await expect(times().getByRole("heading", { name: "Tue 1 Dec", exact: true })).toBeVisible();
     await times().getByRole("button", { name: "09:00", exact: true }).click();
+    await expect(selection()).toContainText("09:00");
     await expect(proceed()).toBeEnabled();
     await calendar().getByRole("button", { name: "Wednesday, 2 December 2026", exact: true }).click();
-    await expect(proceed()).toBeDisabled();
+    await expect(selection()).toHaveText(/^Choose /);
     await times().getByRole("button", { name: "09:00", exact: true }).click();
     await screen().getByRole("button", { name: "In person", exact: true }).click();
-    await expect(proceed()).toBeDisabled();
+    await expect(selection()).toHaveText(/^Choose /);
     await calendar().getByRole("button", { name: "Next month" }).click();
     await calendar().getByRole("button", { name: "Wednesday, 2 December 2026", exact: true }).click();
     await expect(calendar().getByRole("button", { name: "Thursday, 3 December 2026", exact: true })).toBeDisabled();

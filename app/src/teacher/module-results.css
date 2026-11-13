@@ -199,16 +199,14 @@
 
 /* Keep the two teacher tasks one click apart instead of stacking both lists. */
 .tw-module-views {
-  background: #fff;
-  padding: 10px 0 18px;
+  padding: 0 0 4px;
 }
 .tw-module-views .tw-segments {
   margin: 0;
 }
+/* The view switch scrolls with the page (it used to stay pinned over the list). */
 .teacher-web .tw-module-views {
-  position: sticky;
-  top: 0;
-  z-index: 6;
+  position: static;
 }
 .tw-module-empty {
   color: var(--tw-muted);

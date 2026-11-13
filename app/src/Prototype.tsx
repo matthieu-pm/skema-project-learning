@@ -15,6 +15,7 @@ import {
 } from "react";
 import { Icon, CheckIcon } from "./teacher/icons";
 import { createPortal } from "react-dom";
+import ViewSwitch from "./ViewSwitch";
 const TeacherWorkspace = lazy(() => import("./teacher/TeacherWorkspace"));
 const LearnerWorkspace = lazy(() => import("./learner/LearnerWorkspace"));
 const WebOnboarding = lazy(() => import("./WebOnboarding"));
@@ -832,6 +833,11 @@ function Screen({ step }: { step: Step }) {
             <p className="step-description">
               Let learners get to know you. You can edit this profile later.
             </p>
+            {/* Media first, so the optional photo/video is visible without scrolling. */}
+            <details className="setup-optional">
+              <summary>Add a photo or video (optional)</summary>
+              <Upload kind="photo" />
+            </details>
             <Field
               label="Display name"
               autoComplete="given-name"
@@ -845,7 +851,7 @@ function Screen({ step }: { step: Step }) {
               </p>
             )}
             <Field
-              label="Your approach, in a sentence"
+              label="Your teaching approach"
               multiline
               maxLength={300}
               placeholder="Practical conversation, at your pace."
@@ -857,12 +863,8 @@ function Screen({ step }: { step: Step }) {
                 Add a short description of at least 5 characters.
               </p>
             )}
-            <Field label="Language teaching experience" multiline maxLength={2000} value={a.teachingExperience || ""} onChange={event => update({ teachingExperience: event.target.value })} />
-            <p className="step-description">Describe your teaching background, the learners you’ve worked with, and your approach.</p>
-            <details className="setup-optional">
-              <summary>Add a photo or video (optional)</summary>
-              <Upload kind="photo" />
-            </details>
+            <Field label="Language teaching experience (optional)" multiline maxLength={2000} value={a.teachingExperience || ""} onChange={event => update({ teachingExperience: event.target.value })} />
+            <p className="step-description">Your teaching or tutoring background and the learners you’ve helped.</p>
           </div>
         )}
         {step === "teacher-subjects" && (
@@ -1606,7 +1608,7 @@ function Screen({ step }: { step: Step }) {
         {step === "approach" && (
           <>
             <Field
-              label="Your approach, in a sentence"
+              label="Your teaching approach"
               multiline
               maxLength={300}
               placeholder="Practical conversation, at your pace."
@@ -2037,7 +2039,7 @@ export default function Prototype() {
         /> : <LearnerWorkspace mobile={!web} answers={answers.role === "learner" && !returning ? answers : undefined} />}
       </Suspense>
     );
-    return web ? createPortal(workspace, document.body) : workspace;
+    return <>{web ? createPortal(workspace, document.body) : workspace}{!web && <ViewSwitch web={false} />}</>;
   }
   const webFlow = (
     <Suspense
@@ -2090,6 +2092,7 @@ export default function Prototype() {
         },
       }}
     >
+      {!web && <ViewSwitch web={false} />}
       {web ? (
         createPortal(webFlow, document.body)
       ) : (

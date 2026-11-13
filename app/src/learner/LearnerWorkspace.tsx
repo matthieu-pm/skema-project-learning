@@ -1,3 +1,4 @@
+import ViewSwitch from "../ViewSwitch";
 import { createContext, useContext, useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 import { createPortal } from "react-dom";
 import { initialAnswers, languageChoices, learnerFormatChoices, learningFormatsFor, levelChoices, type Answers, type LearningFormat } from "../onboarding";
@@ -12,7 +13,7 @@ import LessonRecap from "./LessonRecap";
 import BookingCalendar from "./BookingCalendar";
 import LessonCurriculum, { TeacherLessons, type LessonSection } from "./LessonCurriculum";
 import { publicLessonFor } from "./curriculum";
-import SessionPreparation, { PreparationSummary } from "./SessionPreparation";
+import SessionPreparation, { PreparationSummary, usePreparationBack } from "./SessionPreparation";
 import { preparationFor } from "./preparation";
 import "./learner.css";
 import "./curriculum.css";
@@ -73,7 +74,9 @@ function Navigation({ route, navigate }: { route: Route; navigate: Navigate }) {
 }
 function Toolbar({ route, navigate, back, canGoBack }: { route: Route; navigate: Navigate; back: () => void; canGoBack: boolean }) {
   const { mobile } = useLearner();
-  return <header className="lw-toolbar"><div>{canGoBack && <button className="lw-icon-button" onClick={back} aria-label="Go back"><Icon name="back" /></button>}<span>{mobile ? titleFor(route) : <>Mimo <span className="lw-breadcrumb">/ {titleFor(route)}</span></>}</span></div><div><button className="lw-icon-button lw-profile-button" aria-label="Your profile" aria-current={activeTab(route) === "profile" ? "page" : undefined} onClick={() => navigate({ page: "profile" })}><Icon name="person" /></button></div></header>;
+  // In an open preparation block, Back returns to the module list first.
+  const blockBack = usePreparationBack(), inBlock = route.page === "preparation" && blockBack;
+  return <header className="lw-toolbar"><div>{(canGoBack || inBlock) && <button className="lw-icon-button" onClick={inBlock ? blockBack : back} aria-label={inBlock ? "Back to modules" : "Go back"}><Icon name="back" /></button>}<span>{mobile ? titleFor(route) : <>Mimo <span className="lw-breadcrumb">/ {titleFor(route)}</span></>}</span></div><div>{!mobile && <ViewSwitch web inline />}<button className="lw-icon-button lw-profile-button" aria-label="Your profile" aria-current={activeTab(route) === "profile" ? "page" : undefined} onClick={() => navigate({ page: "profile" })}><Icon name="person" /></button></div></header>;
 }
 /** WhatsApp-style chat header: back, teacher, and a tap target to their profile. */
 function ChatHeader({ teacher, back, navigate }: { teacher: Teacher; back: () => void; navigate: Navigate }) {
@@ -125,22 +128,29 @@ function BookPage({ teacher, route, navigate }: { teacher: Teacher; route: Route
   const [language, setLanguage] = useState<string | undefined>(() => replacing ? lessonLanguageFor(replacing) : [route.language, fallbackLanguage].find(value => value && teacher.languages.includes(value)));
   const open = availableSlots(teacher.id, slots, bookings, now, { formats: [format] });
   const selected = open.find(slot => slot.id === slotId);
-  const status = !language ? "Choose a lesson language to continue" : selected ? `${language} · ${dateText(selected.start)} · ${format}` : "Select a time to continue";
+  const [missing, setMissing] = useState("");
+  const status = selected && language ? `${language} · ${dateText(selected.start)} · ${format}` : !language ? "Choose a lesson language and a time" : "Choose a time to continue";
+  const proceed = () => {
+    if (!language) { setMissing(`Choose the language for this lesson: ${teacher.languages.join(" or ")}.`); document.querySelector<HTMLElement>('[aria-label="Lesson language"] button')?.focus(); return; }
+    if (!selected) { setMissing("Choose a date, then a time for your lesson."); document.querySelector<HTMLElement>(".lw-booking-time-list .lw-slot, .lw-booking-calendar button:not(:disabled)")?.focus(); return; }
+    navigate({ page: "checkout", teacherId: teacher.id, slotId, format, language, replaceBookingId: route.replaceBookingId });
+  };
   return <><Heading title={route.replaceBookingId ? "Choose a new time" : "Choose your lesson"} description={route.replaceBookingId ? undefined : "A little time. A real conversation."} />
     <div className="lw-booking-layout">
       <section className="lw-booking-person">
         <TeacherIdentity teacher={teacher} navigate={navigate} large />
         <h2>{language ? `${language} conversation` : "Choose your lesson language"}</h2>
-        {replacing ? <p className="lw-muted">Lesson language: <strong>{language}</strong> (kept from your booking)</p> : teacher.languages.length > 1 && <fieldset><legend>Lesson language</legend><div className="lw-chips">{teacher.languages.map(value => <button key={value} aria-pressed={value === language} onClick={() => setLanguage(value)}>{value}{value === language && <Icon name="check" size={14} />}</button>)}</div></fieldset>}
+        {replacing ? <p className="lw-muted">Lesson language: <strong>{language}</strong> (kept from your booking)</p> : teacher.languages.length > 1 && <fieldset><legend>Lesson language</legend><div className="lw-chips" role="group" aria-label="Lesson language">{teacher.languages.map(value => <button key={value} aria-pressed={value === language} onClick={() => { setLanguage(value); setMissing(""); }}>{value}{value === language && <Icon name="check" size={14} />}</button>)}</div></fieldset>}
         <details className="lw-booking-about" open={!mobile}><summary>About this lesson</summary><p>{teacher.bio}</p></details>
         <div className="lw-booking-meta"><span><Icon name="clock" size={17} />{teacher.duration} minutes</span><span><Icon name="wallet" size={17} />{currency(teacher.rate)} per lesson</span><span><Icon name="globe" size={17} />Times in Paris time</span></div>
         <fieldset><legend>Lesson format</legend><div className="lw-chips">{teacher.formats.map(value => <button key={value} aria-pressed={value === format} onClick={() => { setFormat(value); setSlotId(""); }}>{value}{value === format && <Icon name="check" size={14} />}</button>)}</div></fieldset>
       </section>
-      <BookingCalendar key={format} slots={open} slotId={slotId} onSelect={setSlotId} now={now}>
+      <BookingCalendar key={format} slots={open} slotId={slotId} onSelect={id => { setSlotId(id); if (id) setMissing(""); }} now={now}>
         <div className="lw-booking-summary">
           <div className="lw-total"><span>{teacher.duration} minutes</span><strong>{currency(teacher.rate)}</strong></div>
           <p className="lw-selection-status" role="status">{status}</p>
-          <Button icon={route.replaceBookingId ? "calendar" : "card"} disabled={!selected || !language} onClick={() => navigate({ page: "checkout", teacherId: teacher.id, slotId, format, language, replaceBookingId: route.replaceBookingId })}>{route.replaceBookingId ? "Review new time" : "Continue to payment"}</Button>
+          {missing && <ErrorMessage>{missing}</ErrorMessage>}
+          <Button icon={route.replaceBookingId ? "calendar" : "card"} onClick={proceed}>{route.replaceBookingId ? "Review new time" : "Continue to payment"}</Button>
         </div>
       </BookingCalendar>
     </div>
@@ -209,7 +219,7 @@ function LessonsPage({ route, navigate }: { route: Route; navigate: Navigate }) 
     {route.notice && <p role="status" className="lw-notice"><Icon name="check-circle" size={18} />{route.notice}</p>}
     <div className="lw-lesson-tabs" role="tablist" aria-label="Lessons view" onKeyDown={event => { if (!["ArrowLeft", "ArrowRight"].includes(event.key)) return; const next = tab === "lessons" ? "calendar" : "lessons"; setTab(next); document.getElementById(`lw-tab-${next}`)?.focus(); }}>{tabs.map(([value, label]) => <button key={value} role="tab" id={`lw-tab-${value}`} tabIndex={tab === value ? 0 : -1} aria-selected={tab === value} aria-controls={`lw-panel-${value}`} onClick={() => setTab(value)}>{label}{value === "lessons" && <span>{lessons.length}</span>}</button>)}</div>
     {tab === "lessons" ? <div id="lw-panel-lessons" role="tabpanel" aria-labelledby="lw-tab-lessons" className="lw-stack">{lessons.length ? lessons.map(({ booking }) => <LessonCard key={booking.id} booking={booking} navigate={navigate} />) : <Empty title="No lessons yet" action={<Button icon="search" onClick={() => navigate({ page: "search" })}>Find a teacher</Button>}>Book a time that works for you. Your lessons and progress will appear here.</Empty>}</div>
-      : <div id="lw-panel-calendar" role="tabpanel" aria-labelledby="lw-tab-calendar"><Panel><LearnerCalendar bookings={bookings} now={now} initialDay={route.day} initialView={route.view || (mobile ? "Day" : "Week")} onOpen={bookingId => navigate({ page: "lesson", bookingId })} /></Panel></div>}</>;
+      : <div id="lw-panel-calendar" role="tabpanel" aria-labelledby="lw-tab-calendar"><LearnerCalendar bookings={bookings} now={now} initialDay={route.day} initialView={route.view || (mobile ? "Month" : "Week")} onOpen={bookingId => navigate({ page: "lesson", bookingId })} /></div>}</>;
 }
 function MeetingDetails({ booking, teacher, live = false }: { booking: Booking; teacher: Teacher; live?: boolean }) {
   return booking.format === "Online"

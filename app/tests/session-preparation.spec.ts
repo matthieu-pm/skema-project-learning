@@ -59,7 +59,7 @@ test("new bookings open preparation, draft answers survive reload and a failed s
   const answer = page.getByRole("textbox", { name: "What is “a coffee” in French?", exact: true });
   await answer.fill("un caf");
   await expect(page.locator(".lw-preparation-save-status")).not.toContainText("Saving");
-  await page.getByRole("button", { name: "Return to curriculum", exact: true }).click();
+  await page.getByRole("button", { name: "Back to modules", exact: true }).click();
   await page.getByRole("button", { name: "Back to lesson", exact: true }).click();
   const bookingId = await page.evaluate(() => JSON.parse(localStorage.getItem("mimo.learner-bookings.v1")!).bookings.find((booking: { id: string }) => booking.id.startsWith("booking-")).id);
   await page.goto(`/?learner=1&view=web&flow=preparation&bookingId=${bookingId}`);

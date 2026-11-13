@@ -203,3 +203,12 @@
 .learning-app:not(.teacher-theme) .progress>span:after{background:#9b85ea}
 /* Sentence-case buttons, matching desktop onboarding and the app. */
 .learning-app .primary,.learning-app .secondary,.learning-app .text-button{text-transform:none;letter-spacing:0;font-size:16px}
+
+/* Mobile / Web review switch, pinned to the top centre of every screen. */
+.view-switch{position:fixed;z-index:2147483000;top:8px;left:50%;transform:translateX(-50%);display:flex;gap:2px;padding:3px;border:1px solid #e3e1ea;border-radius:999px;background:rgba(255,255,255,.94);box-shadow:0 4px 14px rgba(30,20,60,.12);font:600 13px/1 'Labil Grotesk',Arial,sans-serif;backdrop-filter:blur(6px)}
+.view-switch button{display:inline-flex;align-items:center;gap:6px;height:30px;padding:0 12px;border:0;border-radius:999px;background:transparent;color:#5b5868;cursor:pointer}
+.view-switch button[aria-pressed="true"]{background:#6844d9;color:#fff}
+.view-switch button:focus-visible{outline:3px solid #6844d9;outline-offset:2px}
+@media print{.view-switch{display:none}}
+.view-switch.view-switch-inline{position:static;transform:none;box-shadow:none;background:#f6f5f9;flex:none}
+.view-switch.view-switch-inline button{height:28px;padding:0 10px;font-size:12px}

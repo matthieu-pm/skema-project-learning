@@ -16,8 +16,8 @@ for (const mobile of [false, true]) {
     await current().getByRole("button", { name: "Continue with Google", exact: true }).click();
     await action("Continue as Alex").click();
     await current().getByRole("textbox", { name: "Display name", exact: true }).fill("Nina");
-    await current().getByRole("textbox", { name: "Your approach, in a sentence", exact: true }).fill("Practical conversations and thoughtful feedback.");
-    await current().getByRole("textbox", { name: "Language teaching experience", exact: true }).fill("I have taught adult language learners for three years.");
+    await current().getByRole("textbox", { name: "Your teaching approach", exact: true }).fill("Practical conversations and thoughtful feedback.");
+    await current().getByRole("textbox", { name: "Language teaching experience (optional)", exact: true }).fill("I have taught adult language learners for three years.");
     await action("Continue").click();
     const search = () => current().getByRole("combobox", { name: "Languages you teach", exact: true });
     await search().fill("French"); await current().getByRole("option", { name: "French", exact: true }).click();
@@ -120,9 +120,7 @@ test("unfinished private drafts save and optional module fields do not prevent a
   await title.fill("A private café draft");
   await canvas.getByLabel("Module title (optional)", { exact: true }).first().fill("");
   await canvas.getByLabel("Module learning goal (optional)", { exact: true }).first().fill("");
-  await page.getByRole("button", { name: "Preview lesson", exact: true }).click();
-  await expect(page.getByRole("dialog").locator(".ce-student-heading")).toContainText("Warm-up");
-  await page.getByRole("button", { name: "Close dialog", exact: true }).click();
+  await expect(page.getByRole("region", { name: "Student preview" }).locator(".ce-live-heading")).toContainText("Warm-up");
   await page.getByRole("button", { name: "Use lesson", exact: true }).click();
   const dialog = page.getByRole("dialog");
   await dialog.getByRole("checkbox", { name: /Assign to a student/ }).check();

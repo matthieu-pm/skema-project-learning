@@ -46,10 +46,14 @@ test('phone entry selects mobile and respects explicit web override', async ({ b
   }
 });
 
-test('teacher entry selects desktop and keeps the explicit mobile workspace link', async ({ page }) => {
+test('teacher entry selects desktop and the Mobile / Web switch opens the mobile workspace', async ({ page }) => {
   await page.goto('/?teacher=1');
   await expect(page.locator('.teacher-web')).toBeVisible();
-  await page.locator('.tw-device-link').click();
+  await page.getByRole('group', { name: 'Choose presentation' }).getByRole('button', { name: 'Mobile' }).click();
   await expect(page.locator('.teacher-mobile')).toBeVisible();
   expect(new URL(page.url()).searchParams.get('view')).toBe('mobile');
+  expect(new URL(page.url()).searchParams.get('teacher')).toBe('1');
+  // The switch also leads back to the desktop presentation.
+  await page.getByRole('group', { name: 'Choose presentation' }).getByRole('button', { name: 'Web' }).click();
+  await expect(page.locator('.teacher-web')).toBeVisible();
 });

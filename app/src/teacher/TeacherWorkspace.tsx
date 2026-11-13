@@ -1,3 +1,4 @@
+import ViewSwitch from "../ViewSwitch";
 import { teacherEntryRoute } from "./entry-route";
 import { useEffect, useState, type CSSProperties } from "react";
 import {
@@ -113,11 +114,7 @@ function Toolbar({
         </span>
       </div>
       <div className="tw-toolbar-right">
-        {!mobile && (
-          <a className="tw-device-link" href="/?teacher=1&view=mobile">
-            Mobile app <Icon name="arrow" size={16} />
-          </a>
-        )}
+        {!mobile && <ViewSwitch web inline />}
         <button
           className="tw-icon-button"
           aria-label="Open messages"

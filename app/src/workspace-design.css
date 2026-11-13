@@ -556,3 +556,44 @@
 .learner-workspace .lw-chips button[aria-pressed="true"], .learner-mobile .lw-navigation button[aria-current="page"] { color: var(--workspace-accent, #6844d9); }
 /* A selected past day stays fully legible. */
 .learner-workspace .lw-calendar-days button[aria-pressed="true"] { opacity: 1; }
+
+/* Booking: date picker on top, times as wrapping rows beneath it (not a narrow column). */
+.learner-workspace .lw-booking-layout { grid-template-columns: minmax(240px, .8fr) minmax(0, 1.6fr); grid-template-areas: "person calendar" "person times"; }
+.learner-workspace .lw-booking-person { grid-area: person; border-right: 1px solid var(--workspace-line); }
+.learner-workspace .lw-booking-calendar { grid-area: calendar; padding-bottom: 12px; }
+.learner-workspace .lw-booking-times { grid-area: times; border-left: 0; border-top: 1px solid var(--workspace-line); padding-top: 20px; }
+.learner-workspace .lw-booking-time-list { grid-template-columns: repeat(auto-fill, minmax(96px, 1fr)); gap: 8px; margin-block: 14px 18px; }
+.learner-workspace .lw-booking-time-list .lw-slot { justify-content: center; min-height: 40px; padding: 8px 10px; }
+.learner-workspace .lw-booking-time-list .lw-slot svg { position: static; margin-left: 6px; }
+.learner-workspace .lw-booking-times .lw-booking-summary { max-width: 420px; }
+@media (max-width: 1100px) { .learner-web .lw-booking-layout { grid-template-columns: minmax(0, 1fr); grid-template-areas: "person" "calendar" "times"; } .learner-web .lw-booking-person { border-right: 0; border-bottom: 1px solid var(--workspace-line); } }
+.learner-mobile .lw-booking-layout { grid-template-columns: minmax(0, 1fr); grid-template-areas: "person" "calendar" "times"; }
+.learner-mobile .lw-booking-person { border-right: 0; }
+.learner-mobile .lw-booking-time-list { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.learner-workspace .lw-booking-calendar .lw-calendar-days button { aspect-ratio: auto; height: 44px; }
+.learner-workspace .lw-booking-calendar .lw-calendar-days { gap: 4px; }
+.learner-mobile .lw-booking-calendar .lw-calendar-days button { height: 40px; }
+
+/* Teacher profile: reviews from students (same review data students see). */
+.teacher-workspace .tw-reviews { display: grid; gap: 18px; }
+.tw-reviews-heading { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+.tw-reviews-heading h2 { margin: 0; font-size: 18px; }
+.tw-reviews-summary { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 28px; align-items: center; padding: 16px; border: 1px solid var(--workspace-line); border-radius: 10px; background: #fafafb; }
+.tw-reviews-score { display: grid; justify-items: start; gap: 2px; }
+.tw-reviews-score strong { font-size: 36px; line-height: 1; letter-spacing: -1px; }
+.tw-reviews-score small { color: var(--workspace-muted, #6c7280); font-size: 12px; }
+.tw-stars { color: #b7791f; letter-spacing: 1px; font-size: 14px; }
+.tw-reviews-breakdown { margin: 0; display: grid; gap: 6px; }
+.tw-reviews-breakdown > div { display: grid; grid-template-columns: 34px minmax(0, 1fr); align-items: center; gap: 8px; font-size: 12px; }
+.tw-reviews-breakdown dt { color: var(--workspace-muted, #6c7280); }
+.tw-reviews-breakdown dd { margin: 0; display: grid; grid-template-columns: minmax(0, 1fr) 18px; align-items: center; gap: 8px; }
+.tw-reviews-bar { height: 6px; border-radius: 999px; background: #ececf0; overflow: hidden; }
+.tw-reviews-bar > span { display: block; height: 100%; border-radius: 999px; background: var(--workspace-accent, #6844d9); }
+.tw-reviews-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 0; }
+.tw-reviews-list li { display: flex; gap: 12px; padding: 14px 0; border-top: 1px solid var(--workspace-line); }
+.tw-reviews-list li:first-child { border-top: 0; padding-top: 0; }
+.tw-reviews-list .tw-avatar { width: 36px; height: 36px; border-radius: 50%; flex-shrink: 0; overflow: hidden; display: grid; place-items: center; background: #eee8fb; font-weight: 600; }
+.tw-review-meta { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.tw-review-meta small { color: var(--workspace-muted, #6c7280); }
+.tw-reviews-list p { margin: 4px 0 0; }
+.teacher-mobile .tw-reviews-summary { grid-template-columns: minmax(0, 1fr); gap: 14px; }

@@ -53,12 +53,13 @@ test("canvas edits, grouped undo, preview and saved/applied versions stay consis
   await expect(page.getByRole("dialog")).toContainText("un pain");
   await expect(page.getByRole("dialog")).not.toContainText("une baguette");
   await page.getByRole("button", { name: "Close dialog", exact: true }).click();
-  await page.getByRole("button", { name: "Preview lesson", exact: true }).click();
-  await page.getByRole("dialog").getByRole("textbox").fill("une baguette");
-  await page.getByRole("dialog").getByRole("button", { name: "Submit answer", exact: true }).click();
-  await page.getByRole("dialog").getByRole("button", { name: "Reveal answer", exact: true }).click();
-  await expect(page.getByRole("dialog")).toContainText("une baguette");
-  await page.getByRole("button", { name: "Close dialog", exact: true }).click();
+  // The live student preview beside the canvas follows the edited block.
+  const preview = page.getByRole("region", { name: "Student preview" });
+  await word.focus();
+  await preview.getByRole("textbox").fill("une baguette");
+  await preview.getByRole("button", { name: "Submit answer", exact: true }).click();
+  await preview.getByRole("button", { name: "Reveal answer", exact: true }).click();
+  await expect(preview).toContainText("une baguette");
   await page.reload();
   await expect(title).toHaveValue("At the bakery today");
   await expect(word).toHaveValue("une baguette");
@@ -72,7 +73,7 @@ test("editing other modules and adding a quiz keeps all content and answer keys 
   const modules = canvas.locator(".ce-module");
   const pairs = modules.nth(1).locator(".ce-canvas-block").nth(1);
   await pairs.getByLabel("Matching answer 1", { exact: true }).fill("one coffee");
-  await expect(page.locator(".ce-properties").getByLabel("Matching answer 1", { exact: true })).toHaveValue("one coffee");
+  await expect(pairs.getByLabel("Matching answer 1", { exact: true })).toHaveValue("one coffee");
   const sentence = modules.nth(2).locator(".ce-canvas-block").nth(1);
   await sentence.getByLabel("Sentence part 3", { exact: true }).fill("un thé");
   await expect(sentence.getByLabel("Correct answer", { exact: true })).toHaveValue("Je voudrais un thé");
@@ -117,16 +118,17 @@ for (const pixel of [false, true]) {
     await word.fill("une baguette");
     await word.blur();
     await expect(current.locator('.ce-layout')).toHaveAttribute("data-mobile-panel", "Canvas");
-    await current.getByRole("button", { name: "Elements", exact: true }).click();
-    await current.getByRole("button", { name: "Undo", exact: true }).click();
-    await current.getByRole("button", { name: "Canvas", exact: true }).click();
+    await current.getByLabel("Lesson tools").getByRole("button", { name: "Undo", exact: true }).click();
     await expect(word).toHaveValue("un café");
     await page.getByRole("button", { name: "Save draft", exact: true }).click();
     const widths = await current.locator(".tw-content").evaluate(el => ({ client: el.clientWidth, scroll: el.scrollWidth }));
     expect(widths.scroll).toBeLessThanOrEqual(widths.client + 1);
     await page.screenshot({ path: `qa/inline-editor/${pixel ? "pixel" : "iphone"}.png` });
-    await page.getByRole("button", { name: "Preview lesson", exact: true }).click();
-    await expect(page.locator(".ce-phone-actions")).toHaveCount(0);
+    // Edit lesson / Student preview switch at the same block; preview navigation stays above the action bar.
+    await current.getByRole("tab", { name: "Student preview", exact: true }).click();
+    await expect(current.getByRole("region", { name: "Student preview" })).toBeVisible();
     await expect(page.getByTestId("keyboard-dock")).toHaveAttribute("data-visible", "false");
+    const clear = await page.evaluate(() => { const nav = document.querySelector(".ce-live-nav")!.getBoundingClientRect(), bar = document.querySelector(".ce-phone-actions")!.getBoundingClientRect(); return nav.bottom <= bar.top + 1; });
+    expect(clear).toBe(true);
   });
 }

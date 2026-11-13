@@ -1,4 +1,15 @@
-import { useEffect, useRef, useState, type ReactNode } from "react";
+import { useEffect, useRef, useState, useSyncExternalStore, type ReactNode } from "react";
+
+/**
+ * While a block is open, the header back arrow returns to the module list instead
+ * of leaving preparation (it replaces the old "Return to curriculum" link).
+ */
+let backHandler: (() => void) | null = null;
+const backListeners = new Set<() => void>();
+const setBackHandler = (handler: (() => void) | null) => { backHandler = handler; backListeners.forEach(listener => listener()); };
+export function usePreparationBack() {
+  return useSyncExternalStore(listener => { backListeners.add(listener); return () => { backListeners.delete(listener); }; }, () => backHandler);
+}
 import { MobileScroll, useKeyboard, useKeyboardInsets } from "../mobile";
 import { Icon } from "../teacher/icons";
 import { accepts, answerKey, autoAssessed, type CourseBlock } from "../teacher/course";
@@ -62,6 +73,13 @@ export default function SessionPreparation({ booking, mobile, active = true, onS
     });
     return () => cancelAnimationFrame(frame);
   }, [mobile, isKeyboardVisible, keyboardHeight, selected]);
+  const blockOpen = !!selected && active;
+  useEffect(() => {
+    if (!blockOpen) return;
+    const handler = () => { keyboard.hide(); stopSpeech(); setSelected(null); };
+    setBackHandler(handler);
+    return () => { if (backHandler === handler) setBackHandler(null); };
+  }, [blockOpen]);
   if (booking.status !== "confirmed") return <Empty title="This session was cancelled" action={<Button secondary icon="back" onClick={onSession}>Back to lesson</Button>}>Its preparation is no longer available.</Empty>;
   if (!preparation) return <Empty title="No preparation assigned yet" action={<Button secondary onClick={onMessage}>Ask your teacher</Button>}>Your teacher can add modules for this session.</Empty>;
   if (loadError) return <div className="lw-preparation-error"><ErrorMessage>{loadError}</ErrorMessage><Button onClick={reload}>Reload progress</Button><Button secondary icon="back" onClick={onSession}>Back to lesson</Button></div>;
@@ -81,7 +99,7 @@ export default function SessionPreparation({ booking, mobile, active = true, onS
         {error && <div className="lw-preparation-save-error"><ErrorMessage>{error}</ErrorMessage><Button secondary disabled={!!pending} onClick={() => update(current.block, {})}>Try saving again</Button></div>}
         <p className="lw-preparation-save-status" role="status">{pending ? "Saving progress…" : error ? "Your latest changes have not been saved." : "Progress saves automatically. You can come back to unfinished blocks."}</p>
       </div></Scroll></div>
-      <footer className="lw-preparation-controls"><div><Button secondary disabled={index === 0 || !!pending || !!error} onClick={() => select(sequence[index - 1].block.id)}>Previous</Button><Button disabled={!!pending || !!error} onClick={() => select(index === sequence.length - 1 ? null : sequence[index + 1].block.id)}>{index === sequence.length - 1 ? "View preparation" : "Next block"}</Button></div><button className="lw-text-button" disabled={!!pending || !!error} onClick={() => select(null)}>Return to curriculum</button></footer>
+      <footer className="lw-preparation-controls"><div><Button secondary disabled={index === 0 || !!pending || !!error} onClick={() => select(sequence[index - 1].block.id)}>Previous</Button><Button disabled={!!pending || !!error} onClick={() => select(index === sequence.length - 1 ? null : sequence[index + 1].block.id)}>{index === sequence.length - 1 ? "View preparation" : "Next block"}</Button></div></footer>
     </> : <Scroll mobile={mobile} className="lw-preparation-overview-scroll"><div className="lw-preparation-overview-content"><div className="lw-page-heading"><div><p className="lw-muted">{preparation.course.language} · {preparation.course.level} · {lessonPhase(booking) === "Past" ? "After your lesson" : lessonPhase(booking) === "Ongoing" ? "During your lesson" : "Before your lesson"}</p><h1>{preparation.course.title}</h1><p>{lessonPhase(booking) === "Past" ? "Practice what you covered so it sticks." : lessonPhase(booking) === "Ongoing" ? "Use these activities during your lesson." : "Complete these activities to get ready for your conversation."}</p></div><Button secondary icon="back" onClick={onSession}>Back to lesson</Button></div><Panel className="lw-session-preparation"><h2>{lessonPhase(booking) === "Past" ? (done ? "Your practice is complete" : "Your practice") : lessonPhase(booking) === "Ongoing" ? "Lesson material" : done ? "Your preparation is complete" : "Your preparation"}</h2><Progress {...counts} />{done ? <p>You’ve completed all the blocks. Bring your questions to the lesson. You can revisit your answers at any time.</p> : <p>Your answers save automatically.</p>}<Button icon={done ? "check" : "book"} onClick={() => select(firstUnfinished.block.id)}>{done ? "Review your answers" : lessonPhase(booking) === "Past" ? (counts.completed ? "Continue practicing" : "Start practicing") : lessonPhase(booking) === "Ongoing" ? "Open lesson material" : counts.completed ? "Continue preparation" : "Start preparation"}</Button></Panel>
       <div className="lw-curriculum-modules">{preparation.course.modules.map((module, m) => <details className="lw-curriculum-module lw-assigned-module" key={module.id} open={module.id === firstUnfinished.module.id}><summary><span className="lw-module-number">{String(m + 1).padStart(2, "0")}</span><span><strong>{module.title}</strong><small>{module.blocks.filter(block => progress.blocks[block.id]?.completedAt).length} of {module.blocks.length} {module.blocks.length === 1 ? "block" : "blocks"} complete · {module.minutes} min</small></span><Icon name="down" size={18} /></summary><ul>{module.blocks.map(block => <li key={block.id}><button onClick={() => select(block.id)}><Icon name={progress.blocks[block.id]?.completedAt ? "check" : "circle"} size={18} /><span>{block.title}<small>{block.purpose}</small></span><span>{progress.blocks[block.id]?.completedAt ? "Complete" : "Open"}</span><Icon name="arrow" size={16} /></button></li>)}</ul></details>)}</div></div></Scroll>}
   </div>;

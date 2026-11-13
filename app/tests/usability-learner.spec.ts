@@ -63,7 +63,9 @@ for (const mobile of [false, true]) {
     await expect(completed.locator(".lw-lesson-actions .lw-button")).toHaveCount(2);
     await expect(completed.locator(".lw-preparation-summary")).toHaveCount(0);
     await screen().getByRole("tab", { name: "Your calendar", exact: true }).click();
-    await expect(screen().locator(".lw-calendar-entry").first()).toBeVisible();
+    // Same calendar component as the teacher workspace.
+    await expect(screen().locator(".tw-full-calendar")).toBeVisible();
+    await expect(screen().locator(".tw-cal-month-event, .tw-cal-timed-event").first()).toBeVisible();
     await screen().getByRole("tab", { name: /^Your lessons/ }).click();
     await completed.getByRole("button", { name: "View recap", exact: true }).click();
     await screen().getByRole("button", { name: "Leave a review", exact: true }).click();

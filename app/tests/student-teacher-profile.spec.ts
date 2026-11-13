@@ -35,7 +35,9 @@ for (const mobile of [false, true]) {
     if (mobile) for (const name of ["Home", "Lessons", "Search", "Messages"]) await expect(page.getByTestId("flow-fixed-footer").getByRole("button", { name, exact: true })).toBeVisible();
     await screen().getByRole("button", { name: "Book with Gilbert", exact: true }).click();
     await expect(screen().getByRole("region", { name: "Choose a lesson date" })).toBeVisible();
-    await expect(screen().getByRole("button", { name: "Continue to payment", exact: true })).toBeDisabled();
+    // Continue stays enabled and explains what is missing instead of silently doing nothing.
+    await screen().getByRole("button", { name: "Continue to payment", exact: true }).click();
+    await expect(screen().getByRole("alert")).toContainText(/Choose (the language|a date)/);
     await page.getByRole("button", { name: "Go back", exact: true }).click();
     await screen().getByRole("button", { name: "Ask about this lesson", exact: true }).click();
     // Messaging opens the chat thread with a composer.

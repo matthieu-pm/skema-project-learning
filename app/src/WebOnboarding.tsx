@@ -1,3 +1,4 @@
+import ViewSwitch from "./ViewSwitch";
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import type { FlowControls, FlowScreen } from "./mobile/FlowStack";
 import { setupProgress, type Answers, type Step } from "./onboarding";
@@ -148,6 +149,7 @@ export default function WebOnboarding({
           >
             <span style={{ width: progress + "%" }} />
           </div>}
+          <ViewSwitch web inline />
           <a
             className="web-setup-brand"
             href="/?view=web"

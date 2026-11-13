@@ -1,3 +1,4 @@
+import { SequenceControls, reorder } from "./SequenceItem";
 import { Button, Select, TextField } from "./components";
 import { InlineField } from "./InlineField";
 import { MediaUpload, Picture } from "./CourseContent";
@@ -82,8 +83,8 @@ export function BlockProperties({
           </p>
           <div className={inline ? "ce-inline-vocabulary" : "ce-property-list"}>
             {b.words.map((w, i) => (
-              <section className="ce-property-item" key={w.id}>
-                <strong>Card {i + 1}</strong>
+              <section className="ce-property-item" key={w.id} data-seq-list={`${b.id}-words`} data-seq-index={i}>
+                <div className="ce-seq-row"><strong>Card {i + 1}</strong>{inline && <SequenceControls list={`${b.id}-words`} index={i} count={b.words.length} label={`card ${i + 1}`} onMove={(to) => edit({ words: reorder(b.words, i, to) })} />}</div>
                 {inline && <Picture assetId={w.imageId} picture={w.picture} alt={w.meaning} />}
                 <Field
                   label={`Word or phrase ${i + 1}`}
@@ -200,7 +201,8 @@ export function BlockProperties({
             tiles.
           </p>
           {b.parts.map((p, i) => (
-            <section key={p.id} className="ce-property-item">
+            <section key={p.id} className="ce-property-item" data-seq-list={`${b.id}-parts`} data-seq-index={i}>
+              {inline && <SequenceControls list={`${b.id}-parts`} index={i} count={b.parts.length} label={`sentence part ${i + 1}`} onMove={(to) => edit({ parts: reorder(b.parts, i, to) })} />}
               <Field
                 label={`Sentence part ${i + 1}`}
                 value={p.text}
@@ -294,7 +296,8 @@ export function BlockProperties({
               : "Items and correct groups"}
           </h3>
           {b.pairs.map((p, i) => (
-            <section key={p.id} className="ce-property-item">
+            <section key={p.id} className="ce-property-item" data-seq-list={`${b.id}-pairs`} data-seq-index={i}>
+              {inline && <SequenceControls list={`${b.id}-pairs`} index={i} count={b.pairs.length} label={`item ${i + 1}`} onMove={(to) => edit({ pairs: reorder(b.pairs, i, to) })} />}
               <Field
                 label={`Item ${i + 1}`}
                 value={p.left}
@@ -343,7 +346,8 @@ export function BlockProperties({
             {b.format === "Audio" ? "Listening playlist" : "Video playlist"}
           </h3>
           {b.clips.map((c, i) => (
-            <section className="ce-property-item" key={c.id}>
+            <section className="ce-property-item" key={c.id} data-seq-list={`${b.id}-clips`} data-seq-index={i}>
+              {inline && <SequenceControls list={`${b.id}-clips`} index={i} count={b.clips.length} label={`clip ${i + 1}`} onMove={(to) => edit({ clips: reorder(b.clips, i, to) })} />}
               <Field
                 label={`Clip title ${i + 1}`}
                 value={c.title}
@@ -413,6 +417,13 @@ export function BlockProperties({
           >
             Add {b.format.toLowerCase()} clip
           </Button>
+          <MediaUpload
+            label={`Add ${b.format.toLowerCase()} files`}
+            accept={b.format === "Audio" ? "audio/*" : "video/*"}
+            multiple
+            onSave={() => undefined}
+            onSaveMany={(files) => edit({ clips: [...b.clips, ...files.map((file) => ({ id: id(), title: file.filename.replace(/\.[^.]+$/, ""), transcript: "", answer: "", assetId: file.assetId, filename: file.filename }))] })}
+          />
           <p className="tw-subtle">
             Files stay on this device. Sample playback uses the transcript.
           </p>

@@ -1,83 +1,111 @@
-import { useState } from "react";
+import { useState, type CSSProperties } from "react";
 import { Icon } from "../teacher/icons";
-import { addDays, classifyLesson, lessonLanguageFor, parisDay, teachers, type Booking } from "./model";
+import { calendarDates, calendarTitle, moveCalendar, sessionColumns, timeMinutes, type CalendarView } from "../teacher/calendar";
+import type { Session } from "../teacher/model";
+import { classifyLesson, lessonLanguageFor, parisDay, teachers, type Booking } from "./model";
 import { preparationFor } from "./preparation";
-import { Tag } from "./components";
+import "../teacher/calendar.css";
+import "./learner-calendar.css";
 
-export type CalendarView = "Day" | "Week" | "Month";
-const views: CalendarView[] = ["Day", "Week", "Month"];
-const noon = (day: string) => new Date(`${day}T12:00:00Z`);
-const format = (day: string, options: Intl.DateTimeFormatOptions) => new Intl.DateTimeFormat("en-GB", { timeZone: "UTC", ...options }).format(noon(day));
-const time = (value: string) => new Intl.DateTimeFormat("en-GB", { timeZone: "Europe/Paris", hour: "2-digit", minute: "2-digit" }).format(new Date(value));
-const weekStart = (day: string) => addDays(day, -((noon(day).getUTCDay() + 6) % 7));
-const monthStart = (day: string) => `${day.slice(0, 7)}-01`;
-function shiftMonth(day: string, delta: number) {
-  const date = noon(monthStart(day));
-  date.setUTCMonth(date.getUTCMonth() + delta);
-  return date.toISOString().slice(0, 10);
-}
-const status = (booking: Booking, now: Date) => {
-  const category = classifyLesson(booking, now);
-  return category === "Past" ? { label: "Completed", tone: "done" as const, kind: "past" } : category === "Ongoing" ? { label: "Live now", tone: "live" as const, kind: "booked" } : { label: "Upcoming", tone: "upcoming" as const, kind: "booked" };
-};
+export type { CalendarView };
+const time = (value: string) => new Intl.DateTimeFormat("en-GB", { timeZone: "Europe/Paris", hour: "2-digit", minute: "2-digit", hourCycle: "h23" }).format(new Date(value));
+const dayLabel = (day: string) => new Date(`${day}T12:00:00`).toLocaleDateString("en-GB", { weekday: "long", day: "numeric", month: "long" });
+type Event = { booking: Booking; date: string; time: string; duration: number; tone: "confirmed" | "completed"; name: string; initials: string; title: string };
 
-/** A read-only presentation of the same booking records shown in Lessons. */
+/**
+ * The student's lessons in the same calendar component the teacher workspace uses
+ * (same markup, styles, Day/Week/Month controls and event colours), filled from the
+ * learner's own booking records.
+ */
 export default function LearnerCalendar({ bookings, now, initialDay, initialView, onOpen }: {
   bookings: Booking[]; now: Date; initialDay?: string; initialView?: CalendarView; onOpen: (bookingId: string) => void;
 }) {
   const today = parisDay(now);
   const [view, setView] = useState<CalendarView>(initialView || "Week");
-  const [day, setDay] = useState(initialDay || today);
-  const scheduled = bookings.filter(booking => booking.status === "confirmed").sort((a, b) => Date.parse(a.start) - Date.parse(b.start));
-  const on = (value: string) => scheduled.filter(booking => parisDay(new Date(booking.start)) === value);
-  const step = (delta: number) => setDay(view === "Day" ? addDays(day, delta) : view === "Week" ? addDays(day, delta * 7) : shiftMonth(day, delta));
-  const title = view === "Day" ? format(day, { weekday: "long", day: "numeric", month: "long" })
-    : view === "Week" ? `${format(weekStart(day), { day: "numeric", month: "short" })} – ${format(addDays(weekStart(day), 6), { day: "numeric", month: "short", year: "numeric" })}`
-    : format(day, { month: "long", year: "numeric" });
-  const entry = (booking: Booking) => {
-    const teacher = teachers.find(value => value.id === booking.teacherId);
-    const state = status(booking, now);
-    return <li key={booking.id}><button className={`lw-calendar-entry is-${state.kind}`} onClick={() => onOpen(booking.id)}>
-      <span className="lw-calendar-entry-time"><strong>{time(booking.start)}</strong><span>{time(booking.end)}</span></span>
-      <span className="lw-calendar-entry-info"><strong>{preparationFor(booking)?.course.title || `${lessonLanguageFor(booking)} conversation`}</strong><span>{teacher?.name} · {lessonLanguageFor(booking)} · {booking.format}</span></span>
-      <Tag tone={state.tone}>{state.label}</Tag>
-    </button></li>;
-  };
-  const dayList = (value: string, showEmpty = true) => {
-    const items = on(value);
-    if (!items.length && !showEmpty) return null;
-    return <section key={value} className="lw-calendar-day" aria-label={format(value, { weekday: "long", day: "numeric", month: "long" })}>
-      {view !== "Day" && <h3>{format(value, { weekday: "short", day: "numeric", month: "short" })}{value === today && <Tag>Today</Tag>}</h3>}
-      {items.length ? <ul>{items.map(entry)}</ul> : <p className="lw-muted">No lessons.</p>}
-    </section>;
-  };
-  const first = noon(monthStart(day)), offset = (first.getUTCDay() + 6) % 7;
-  const daysInMonth = new Date(Date.UTC(first.getUTCFullYear(), first.getUTCMonth() + 1, 0)).getUTCDate();
-  return <div className="lw-learner-calendar">
-    <div className="lw-calendar-toolbar">
-      <div className="lw-chips" role="group" aria-label="Calendar view">{views.map(value => <button key={value} aria-pressed={view === value} onClick={() => setView(value)}>{value}</button>)}</div>
-      <div className="lw-calendar-nav">
-        <button className="lw-icon-button" aria-label={`Previous ${view.toLowerCase()}`} onClick={() => step(-1)}><Icon name="back" size={16} /></button>
-        <h2 aria-live="polite">{title}</h2>
-        <button className="lw-icon-button" aria-label={`Next ${view.toLowerCase()}`} onClick={() => step(1)}><Icon name="arrow" size={16} /></button>
-        <button className="lw-text-button" onClick={() => setDay(today)} disabled={day === today}>Today</button>
+  const [date, setDate] = useState(initialDay || today);
+  const dates = calendarDates(date, view);
+  const events: Event[] = bookings.filter(booking => booking.status === "confirmed").map(booking => {
+    const name = teachers.find(value => value.id === booking.teacherId)?.name || "Teacher";
+    return {
+      booking, date: parisDay(new Date(booking.start)), time: time(booking.start), duration: booking.duration,
+      tone: classifyLesson(booking, now) === "Past" ? "completed" : "confirmed",
+      name, initials: name.split(" ").map(part => part[0]).slice(0, 2).join(""),
+      title: preparationFor(booking)?.course.title || `${lessonLanguageFor(booking)} conversation`,
+    };
+  });
+  const visible = events.filter(event => dates.includes(event.date)).sort((a, b) => `${a.date}${a.time}`.localeCompare(`${b.date}${b.time}`));
+  const start = Math.min(8, ...visible.map(event => Math.floor(timeMinutes(event.time) / 60)));
+  const end = Math.max(20, ...visible.map(event => Math.ceil((timeMinutes(event.time) + event.duration) / 60)));
+  const hours = Array.from({ length: end - start }, (_, i) => start + i);
+  const label = (event: Event) => `${event.title} with ${event.name}, ${dayLabel(event.date)}, ${event.time}, ${event.duration} minutes, ${event.tone === "completed" ? "Completed" : "Upcoming"}`;
+  const openDay = (day: string) => { setDate(day); setView("Day"); };
+  return (
+    <section className={`teacher-workspace lw-shared-calendar tw-full-calendar tw-calendar-${view.toLowerCase()}`} aria-label={`${view} calendar`}>
+      <div className="tw-cal-controls">
+        <div className="tw-cal-navigation">
+          <button className="tw-cal-today" onClick={() => setDate(today)}>Today</button>
+          <button className="lw-icon-button" aria-label={`Previous ${view.toLowerCase()}`} onClick={() => setDate(moveCalendar(date, view, -1))}><Icon name="back" size={18} /></button>
+          <button className="lw-icon-button" aria-label={`Next ${view.toLowerCase()}`} onClick={() => setDate(moveCalendar(date, view, 1))}><Icon name="arrow" size={18} /></button>
+          <h2 aria-live="polite">{calendarTitle(date, view)}</h2>
+        </div>
+        <div className="tw-cal-views" role="group" aria-label="Calendar view">
+          {(["Day", "Week", "Month"] as CalendarView[]).map(item => <button key={item} aria-pressed={view === item} onClick={() => setView(item)}>{item}</button>)}
+        </div>
       </div>
-    </div>
-    {view === "Day" && dayList(day)}
-    {view === "Week" && <div className="lw-calendar-week">{Array.from({ length: 7 }, (_, i) => dayList(addDays(weekStart(day), i)))}</div>}
-    {view === "Month" && <>
-      <div className="lw-calendar-weekdays" aria-hidden="true">{["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"].map(value => <span key={value}>{value}</span>)}</div>
-      <div className="lw-calendar-days lw-calendar-month">
-        {Array.from({ length: offset }, (_, i) => <span key={`empty-${i}`} />)}
-        {Array.from({ length: daysInMonth }, (_, i) => {
-          const value = `${day.slice(0, 7)}-${String(i + 1).padStart(2, "0")}`, items = on(value), count = items.length;
-          // Green: booked today or later. Brand purple: lessons already done.
-          const kind = items.some(booking => status(booking, now).kind === "booked") ? "booked" : "past";
-          return <button key={value} aria-pressed={value === day} aria-current={value === today ? "date" : undefined} aria-label={`${format(value, { weekday: "long", day: "numeric", month: "long" })}${count ? `, ${count} ${count === 1 ? "lesson" : "lessons"}` : ""}`} onClick={() => { setDay(value); requestAnimationFrame(() => document.getElementById("lw-calendar-selected")?.scrollIntoView({ block: "nearest", behavior: "smooth" })); }}>{i + 1}{count > 0 && <span className={`lw-day-dot is-${kind}`} />}</button>;
-        })}
+      {view === "Month" ? (
+        <>
+          <div className="tw-cal-month-weekdays">{["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"].map(day => <span key={day}>{day}</span>)}</div>
+          <div className="tw-cal-month-grid">
+            {dates.map(day => (
+              <div key={day} className={`tw-cal-month-cell ${day.slice(0, 7) !== date.slice(0, 7) ? "outside" : ""} ${day === today ? "today" : ""}`}>
+                <button className="tw-cal-date" aria-label={`Open ${dayLabel(day)}`} onClick={() => openDay(day)}>{Number(day.slice(-2))}</button>
+                <div className="tw-cal-month-events">
+                  {visible.filter(event => event.date === day).map(event => (
+                    <button key={event.booking.id} className={`tw-cal-month-event ${event.tone}`} aria-label={label(event)} onClick={() => onOpen(event.booking.id)}>
+                      <span>{event.time}</span><strong>{event.name.split(" ")[0]}</strong><span className="tw-cal-month-initials">{event.initials}</span>
+                    </button>
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
+        </>
+      ) : (
+        <>
+          <div className="tw-cal-time-heading" style={{ "--cal-columns": dates.length } as CSSProperties}>
+            <span className="tw-cal-time-zone">Paris</span>
+            {dates.map(day => (
+              <button key={day} className={day === today ? "today" : ""} aria-label={`Open ${dayLabel(day)}`} onClick={() => openDay(day)}>
+                <span>{new Date(`${day}T12:00:00`).toLocaleDateString("en-GB", { weekday: "short" })}</span><strong>{Number(day.slice(-2))}</strong>
+              </button>
+            ))}
+          </div>
+          <div className="tw-cal-time-grid" style={{ "--cal-columns": dates.length, "--cal-hours": hours.length } as CSSProperties}>
+            <div className="tw-cal-time-labels">{hours.map(hour => <div key={hour}><span>{String(hour).padStart(2, "0")}:00</span></div>)}</div>
+            {dates.map(day => (
+              <div key={day} className={`tw-cal-day-column ${day === today ? "today" : ""}`} aria-label={dayLabel(day)}>
+                {hours.map(hour => <div className="tw-cal-hour-line" key={hour} />)}
+                {sessionColumns(visible.filter(event => event.date === day).map(event => ({ ...event, id: event.booking.id }) as unknown as Session)).map(({ session, column, columns }) => {
+                  const event = session as unknown as Event;
+                  return (
+                    <button key={event.booking.id} className={`tw-cal-timed-event ${event.tone}`} aria-label={label(event)} onClick={() => onOpen(event.booking.id)}
+                      style={{ left: `calc(${(column / columns) * 100}% + 2px)`, width: `calc(${100 / columns}% - 4px)`, top: `${((timeMinutes(event.time) - start * 60) / 60) * 72}px`, height: `${Math.max((event.duration / 60) * 72, 32)}px` }}>
+                      <strong className="tw-cal-event-name">{event.name.split(" ")[0]}</strong>
+                      <strong className="tw-cal-event-initials">{event.initials}</strong>
+                      <span className="tw-cal-event-time">{event.time}<span className="tw-cal-event-duration"> · {event.duration} min</span></span>
+                      {view === "Day" && <span className="tw-cal-event-detail">{event.title} · {event.booking.format}</span>}
+                    </button>
+                  );
+                })}
+              </div>
+            ))}
+          </div>
+        </>
+      )}
+      <div className="tw-cal-footer">
+        <div className="tw-cal-legend"><span className="confirmed">Upcoming</span><span className="completed">Completed</span></div>
+        <span>{visible.length} {visible.length === 1 ? "lesson" : "lessons"}</span>
       </div>
-      <p className="lw-calendar-legend"><span><span className="lw-day-dot is-booked" />Upcoming</span><span><span className="lw-day-dot is-past" />Completed</span></p>
-      <div id="lw-calendar-selected">{dayList(day)}</div>
-    </>}
-  </div>;
+    </section>
+  );
 }

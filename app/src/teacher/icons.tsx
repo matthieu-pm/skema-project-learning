@@ -45,6 +45,8 @@ import {
   Note01Icon,
   BubbleChatIcon,
   Globe02Icon,
+  SmartPhone01Icon,
+  LaptopIcon,
 } from "@hugeicons/core-free-icons";
 import type { SVGProps } from "react";
 
@@ -94,6 +96,8 @@ const icons: Record<string, IconSvgElement> = {
   note: Note01Icon,
   chat: BubbleChatIcon,
   globe: Globe02Icon,
+  phone: SmartPhone01Icon,
+  laptop: LaptopIcon,
 };
 type Props = Omit<SVGProps<SVGSVGElement>, "strokeWidth"> & {
   size?: number;

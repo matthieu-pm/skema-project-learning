@@ -29,7 +29,8 @@ import {
 import { lessonPublicationIssues, lessonPriceLabel } from "../lesson-settings";
 import { students, type Lesson } from "./model";
 import { StudentBlock } from "./CourseContent";
-import { BlockProperties, CourseProperties } from "./CourseProperties";
+import { BlockProperties } from "./CourseProperties";
+import { LiveLessonPreview } from "./LiveLessonPreview";
 import { InlineField } from "./InlineField";
 import {
   cloneCourse,
@@ -287,11 +288,14 @@ function Editor({ lesson, navigate }: { lesson: Lesson; navigate: Navigate }) {
     [blockId, setBlockId] = useState<string | undefined>(
       c.modules[0]?.blocks[0]?.id,
     ),
-    [tab, setTab] = useState("Lesson"),
-    [library, setLibrary] = useState("Modules"),
-    [mobilePanel, setMobilePanel] = useState("Canvas"),
+    [mobilePanel, setMobilePanel] = useState<"Canvas" | "Preview">("Canvas"),
+    [outlineOpen, setOutlineOpen] = useState(false),
+    [collapsed, setCollapsed] = useState<Set<string>>(() => new Set()),
+    [moveTarget, setMoveTarget] = useState(""),
+    [templateQuery, setTemplateQuery] = useState(""),
+    [templateError, setTemplateError] = useState(""),
     [modal, setModal] = useState<
-      "preview" | "published" | "block" | "module" | "apply" | null
+      "preview" | "published" | "block" | "module" | "apply" | "templates" | null
     >(null),
     [purpose, setPurpose] = useState<Purpose>("Teach"),
     [recipient, setRecipient] = useState(""),
@@ -301,7 +305,7 @@ function Editor({ lesson, navigate }: { lesson: Lesson; navigate: Navigate }) {
     [errors, setErrors] = useState<string[]>([]),
     [moveMenu, setMoveMenu] = useState<string | null>(null),
     [dragging, setDragging] = useState(false);
-  const useHelpId = useId();
+  const useHelpId = useId(), outlineId = useId();
   const [useErrors, setUseErrors] = useState<UseErrors>({ content: [] }), [busy, setBusy] = useState(false);
   const processing = useRef(false), useTrigger = useRef<HTMLButtonElement>(null), useDialog = useRef<HTMLDivElement>(null);
   const closeUse = () => { if (processing.current) return; setModal(null); requestAnimationFrame(() => useTrigger.current?.focus()); };
@@ -373,6 +377,18 @@ function Editor({ lesson, navigate }: { lesson: Lesson; navigate: Navigate }) {
     return () => window.removeEventListener("beforeunload", beforeUnload);
   }, [changed]);
   useEffect(() => () => cleanupDrag.current?.(), []);
+  // Files dropped outside an upload area must not replace content or open the file in the browser.
+  useEffect(() => {
+    const guard = (event: DragEvent) => {
+      if (!event.dataTransfer?.types.includes("Files")) return;
+      if (event.target instanceof Element && event.target.closest(".ce-dropzone")) return;
+      event.preventDefault();
+      if (event.type === "drop") setNotice("Drop files onto an upload area inside a block.");
+    };
+    window.addEventListener("dragover", guard);
+    window.addEventListener("drop", guard);
+    return () => { window.removeEventListener("dragover", guard); window.removeEventListener("drop", guard); };
+  }, [setNotice]);
   // Do not intercept native text-field undo or keyboard shortcuts in another view.
   const shortcuts = (e: React.KeyboardEvent) => {
     if (e.key === "Escape") setMoveMenu(null);
@@ -413,16 +429,15 @@ function Editor({ lesson, navigate }: { lesson: Lesson; navigate: Navigate }) {
   const selectModule = (m: CourseModule) => {
     setModuleId(m.id);
     setBlockId(undefined);
-    setTab("Module");
     setMoveMenu(null);
   };
-  const selectBlock = (m: CourseModule, b: CourseBlock, properties = false) => {
+  const selectBlock = (m: CourseModule, b: CourseBlock) => {
     setModuleId(m.id);
     setBlockId(b.id);
-    setTab("Block");
     setMoveMenu(null);
-    if (properties) setMobilePanel("Properties");
   };
+  // Outline jumps keep the canvas where the teacher is working.
+  const reveal = (targetId: string) => requestAnimationFrame(() => document.getElementById(targetId)?.scrollIntoView({ block: "start", behavior: "smooth" }));
   const addBlock = (format: Format, usePurpose = purpose) => {
     if (!selectedModule) {
       open("module");
@@ -444,7 +459,6 @@ function Editor({ lesson, navigate }: { lesson: Lesson; navigate: Navigate }) {
       blocks: [...selectedModule.blocks, block],
     });
     setBlockId(block.id);
-    setTab("Block");
     setMobilePanel("Canvas");
     setModal(null);
     setNotice(`${format} block added. Type directly in the canvas.`);
@@ -454,27 +468,24 @@ function Editor({ lesson, navigate }: { lesson: Lesson; navigate: Navigate }) {
     commit({ ...c, modules: [...c.modules, m] });
     setModuleId(m.id);
     setBlockId(undefined);
-    setTab("Module");
     setMobilePanel("Canvas");
     setModal(null);
   };
-  const deleteModule = () => {
-    if (!selectedModule) return;
+  const deleteModule = (target: CourseModule) => {
     commit({
       ...c,
-      modules: c.modules.filter((m) => m.id !== selectedModule.id),
+      modules: c.modules.filter((m) => m.id !== target.id),
     });
     setBlockId(undefined);
-    setNotice("Module deleted. Use Undo to restore it.");
+    setNotice(`${moduleHeading(target)} deleted. Use Undo to restore it.`);
   };
-  const deleteBlock = () => {
-    if (!selectedModule || !selectedBlock) return;
+  const deleteBlock = (inModule: CourseModule, target: CourseBlock) => {
     changeModule({
-      ...selectedModule,
-      blocks: selectedModule.blocks.filter((b) => b.id !== selectedBlock.id),
+      ...inModule,
+      blocks: inModule.blocks.filter((b) => b.id !== target.id),
     });
     setBlockId(undefined);
-    setNotice("Block deleted. Use Undo to restore it.");
+    setNotice(`${target.title || "Block"} deleted. Use Undo to restore it.`);
   };
   const save = () => {
     const next: Lesson = { ...lesson, ...coursePatch(structuredClone(c)), savedEditor: structuredClone(c), savedAt: new Date().toISOString() };
@@ -507,26 +518,43 @@ function Editor({ lesson, navigate }: { lesson: Lesson; navigate: Navigate }) {
       setUseErrors({ content: [reason instanceof Error && reason.message.includes("could not be read") ? reason.message : "The selected actions could not be saved. No assignment or template was created. Keep your choices and try again after freeing browser storage."] });
     } finally { processing.current = false; setBusy(false); }
   };
-  const useTemplate = (content: Course) => {
+  /** Insert independent copies of a template's modules after the selected module (Undo removes them). */
+  const addTemplate = (content: Course) => {
+    const copies = cloneCourse(content).modules,
+      at = selectedModule ? c.modules.indexOf(selectedModule) + 1 : c.modules.length;
+    commit({ ...c, modules: [...c.modules.slice(0, at), ...copies, ...c.modules.slice(at)] });
+    setModuleId(copies[0]?.id);
+    setBlockId(copies[0]?.blocks[0]?.id);
+    setModal(null);
+    setNotice(`${copies.length} ${copies.length === 1 ? "module" : "modules"} added from the template. Use Undo to remove them.`);
+    if (copies[0]) reveal(`ce-module-${copies[0].id}`);
+  };
+  /** Save this draft first, persist an independent new draft, then open it. Stops on any failed save. */
+  const createFromTemplate = (content: Course) => {
+    setTemplateError("");
+    if (!save()) { setTemplateError("Your current draft couldn’t be saved, so no new lesson was created. Free up browser storage and try again. Your edits are still here."); return; }
     const course = cloneCourse(content),
       lessonId = newId();
-    setLessons((ls) => [
-      ...ls,
-      {
-        id: lessonId,
-        title: course.title,
-        outcome: course.goal,
-        language: course.language,
-        level: course.level,
-        notes: "",
-        blocks: [],
-        archived: false,
-        status: "Draft",
-        ...coursePatch(course),
-      },
-    ]);
+    const created: Lesson = {
+      id: lessonId,
+      title: course.title,
+      outcome: course.goal,
+      language: course.language,
+      level: course.level,
+      notes: "",
+      blocks: [],
+      archived: false,
+      status: "Draft",
+      ...coursePatch(course),
+      savedEditor: structuredClone(course),
+      savedAt: new Date().toISOString(),
+    };
+    try { writeDraft(created, templates); }
+    catch { setTemplateError("The new lesson couldn’t be saved on this device. Your current lesson is saved and still open."); return; }
+    setLessons((ls) => [...ls, created]);
+    setModal(null);
     navigate({ page: "editor", id: lessonId });
-    setNotice("An editable template copy is ready. The original is preserved.");
+    setNotice("New lesson created from the template. The template and your previous lesson are unchanged.");
   };
   const move = (from: Move, to: Move, after = false) => {
     const next = moveOutline(c, from, to, after);
@@ -600,6 +628,7 @@ function Editor({ lesson, navigate }: { lesson: Lesson; navigate: Navigate }) {
         aria-expanded={moveMenu === (target.blockId || target.moduleId)}
         onClick={() => {
           keyboard.hide();
+          setMoveTarget("");
           setMoveMenu(
             moveMenu === (target.blockId || target.moduleId)
               ? null
@@ -651,21 +680,39 @@ function Editor({ lesson, navigate }: { lesson: Lesson; navigate: Navigate }) {
           >
             Move later
           </Button>
-          {target.blockId && (
-            <Select
-              label="Move to module"
-              value=""
-              options={[
-                { value: "", label: "Choose module" },
-                ...c.modules
-                  .filter((m) => m.id !== target.moduleId)
-                  .map((m) => ({ value: m.id, label: moduleHeading(m) })),
-              ]}
-              onChange={(v) => {
-                if (v) move(target, { moduleId: v });
-              }}
-            />
-          )}
+          <Select
+            label={target.blockId ? "Move to module" : "Move to position"}
+            value={moveTarget}
+            options={target.blockId
+              ? [{ value: "", label: "Choose module" }, ...c.modules.map((m) => ({ value: m.id, label: moduleHeading(m) }))]
+              : [{ value: "", label: "Choose position" }, { value: "start", label: "At the start" }, ...c.modules.filter((m) => m.id !== target.moduleId).map((m) => ({ value: m.id, label: `After ${moduleHeading(m)}` }))]}
+            onChange={(v) => {
+              if (target.blockId) { setMoveTarget(v); return; }
+              if (!v) return;
+              const first = c.modules.find((m) => m.id !== target.moduleId);
+              if (v === "start") { if (first) move(target, { moduleId: first.id }); }
+              else move(target, { moduleId: v }, true);
+              setMoveTarget("");
+            }}
+          />
+          {target.blockId && moveTarget && (() => {
+            const destination = c.modules.find((m) => m.id === moveTarget);
+            if (!destination) return null;
+            const others = destination.blocks.filter((b) => b.id !== target.blockId);
+            return (
+              <Select
+                label="Position"
+                value=""
+                options={[{ value: "", label: "Choose position" }, { value: "start", label: "At the start" }, ...others.map((b) => ({ value: b.id, label: `After ${b.title || b.format}` }))]}
+                onChange={(v) => {
+                  if (!v) return;
+                  if (v === "start") move(target, others[0] ? { moduleId: destination.id, blockId: others[0].id } : { moduleId: destination.id });
+                  else move(target, { moduleId: destination.id, blockId: v }, true);
+                  setMoveTarget("");
+                }}
+              />
+            );
+          })()}
         </div>
       )}
     </div>
@@ -702,6 +749,42 @@ function Editor({ lesson, navigate }: { lesson: Lesson; navigate: Navigate }) {
       <Icon name="plus" size={14} />
     </button>
   );
+  const outlineList = (
+    <div className="ce-outline-list">
+      <div className="ce-outline-tools">
+        <Button kind="quiet" onClick={() => setCollapsed(new Set(c.modules.map((m) => m.id)))}>Collapse all</Button>
+        <Button kind="quiet" onClick={() => setCollapsed(new Set())}>Expand all</Button>
+        <Button kind="quiet" icon="plus" onClick={() => { setOutlineOpen(false); open("module"); }}>Add module</Button>
+      </div>
+      <p className="ce-outline-hint">Drag the grip to reorder, or use More actions to move items with the keyboard.</p>
+      {!c.modules.length && <p>Add a module to start building your lesson.</p>}
+      {c.modules.map((m, i) => (
+        <div className="ce-outline-group" key={m.id}>
+          <div className={`ce-outline-row ${selectedModule?.id === m.id && !selectedBlock ? "selected" : ""}`} data-ce-module={m.id}>
+            <button className="tw-icon-button ce-outline-toggle" aria-expanded={!collapsed.has(m.id)} aria-label={`${collapsed.has(m.id) ? "Expand" : "Collapse"} ${moduleHeading(m)}`} onClick={() => setCollapsed((current) => { const next = new Set(current); if (next.has(m.id)) next.delete(m.id); else next.add(m.id); return next; })}>
+              <Icon name={collapsed.has(m.id) ? "arrow" : "down"} size={14} />
+            </button>
+            {grip({ moduleId: m.id }, moduleHeading(m))}
+            <button className="ce-outline-title" onClick={() => { selectModule(m); if (mobile) setOutlineOpen(false); reveal(`ce-module-${m.id}`); }}>
+              <span>{String(i + 1).padStart(2, "0")} · {moduleHeading(m)}</span>
+              <small>{m.type} · {m.minutes} min · {m.blocks.length} {m.blocks.length === 1 ? "block" : "blocks"}</small>
+            </button>
+            {more({ moduleId: m.id }, moduleHeading(m), i, c.modules.length)}
+          </div>
+          {!collapsed.has(m.id) && m.blocks.map((b, j) => (
+            <div className={`ce-outline-row ce-outline-block ${selectedBlock?.id === b.id ? "selected" : ""}`} data-ce-module={m.id} data-ce-block={b.id} key={b.id}>
+              {grip({ moduleId: m.id, blockId: b.id }, b.title)}
+              <button className="ce-outline-title" onClick={() => { selectBlock(m, b); if (mobile) setOutlineOpen(false); reveal(`ce-block-${b.id}`); }}>
+                <span>{b.title || b.format}</span>
+                <small>{b.purpose} · {b.format}</small>
+              </button>
+              {more({ moduleId: m.id, blockId: b.id }, b.title, j, m.blocks.length)}
+            </div>
+          ))}
+        </div>
+      ))}
+    </div>
+  );
   return (
     <div
       className={`ce-editor ${dragging ? "ce-dragging" : ""}`}
@@ -728,183 +811,38 @@ function Editor({ lesson, navigate }: { lesson: Lesson; navigate: Navigate }) {
           ))}
         </div>
       )}
-      <nav className="ce-mobile-panels" aria-label="Editor areas">
-        {["Elements", "Canvas", "Properties"].map((p) => (
-          <button
-            key={p}
-            aria-pressed={mobilePanel === p}
-            onClick={() => {
-              keyboard.hide();
-              setMobilePanel(p);
-            }}
-          >
-            {p}
-          </button>
-        ))}
-      </nav>
-      <div className="ce-layout" data-mobile-panel={mobilePanel}>
-        <aside className="ce-elements">
-          <div className="ce-panel-heading">
-            <div className="ce-heading-title">
-              <h2>Elements</h2>
-              <div
-                className="ce-history"
-                role="group"
-                aria-label="Edit history"
-              >
-                {" "}
-                <button
-                  className="tw-icon-button"
-                  aria-label="Undo"
-                  title="Undo (⌘/Ctrl Z)"
-                  disabled={!histories.past.length}
-                  onClick={() => undo()}
-                >
-                  <Icon name="undo" />
-                </button>
-                <button
-                  className="tw-icon-button"
-                  aria-label="Redo"
-                  title="Redo (⌘/Ctrl Shift Z)"
-                  disabled={!histories.future.length}
-                  onClick={() => undo(true)}
-                >
-                  <Icon name="redo" />
-                </button>
-              </div>
+      {mobile && (
+        <div className="ce-mode-switch" role="tablist" aria-label="Editor view">
+          {([["Canvas", "Edit lesson"], ["Preview", "Student preview"]] as const).map(([value, label]) => (
+            <button key={value} role="tab" aria-selected={mobilePanel === value} onClick={() => { keyboard.hide(); setMobilePanel(value); }}>{label}</button>
+          ))}
+        </div>
+      )}
+      <div className="ce-layout ce-canvas-first" data-mobile-panel={mobilePanel}>
+        <div className="ce-canvas-column">
+          <div className="ce-toolbar" role="toolbar" aria-label="Lesson tools">
+            <div className="ce-history" role="group" aria-label="Edit history">
+              <button className="tw-icon-button" aria-label="Undo" title="Undo (⌘/Ctrl Z)" disabled={!histories.past.length} onClick={() => undo()}><Icon name="undo" /></button>
+              <button className="tw-icon-button" aria-label="Redo" title="Redo (⌘/Ctrl Shift Z)" disabled={!histories.future.length} onClick={() => undo(true)}><Icon name="redo" /></button>
             </div>
+            <button className="ce-tool-button" aria-expanded={outlineOpen} aria-controls={outlineId} aria-pressed={outlineOpen} onClick={() => { keyboard.hide(); setOutlineOpen(!outlineOpen); }}>
+              <Icon name="sidebar" size={16} /><span>Lesson outline</span><Icon name={outlineOpen ? "up" : "down"} size={14} />
+            </button>
+            <button className="ce-tool-button" aria-haspopup="dialog" onClick={() => { setTemplateQuery(""); setTemplateError(""); setOutlineOpen(false); open("templates"); }}>
+              <Icon name="book" size={16} /><span>Lesson templates</span><Icon name="down" size={14} />
+            </button>
+            <Badge tone={applied ? "green" : "orange"}>{status}</Badge>
           </div>
-          <div className="ce-tabs">
-            {["Modules", "Teach", "Practice", "Lesson templates"].map((t) => (
-              <button
-                key={t}
-                aria-pressed={library === t}
-                onClick={() => setLibrary(t)}
-              >
-                {t}
-              </button>
-            ))}
-          </div>
-          <div className="ce-palette">
-            {library === "Modules" ? (
-              <>
-                <p>
-                  Choose a learning focus. Add any teaching or practice blocks.
-                </p>
-                <div className="ce-module-palette">
-                  {moduleTypes.map((type) => (
-                    <button key={type} onClick={() => addModule(type)}>
-                      <Icon name={type === "Listening" ? "message" : "book"} />
-                      <span>{type}</span>
-                    </button>
-                  ))}
-                </div>
-              </>
-            ) : library === "Lesson templates" ? (
-              <>
-                <p>
-                  Start an editable copy. Your current lesson stays in the
-                  library.
-                </p>
-                {[...builtInTemplates, ...templates].map((t) => (
-                  <section className="ce-template" key={t.id}>
-                    <Badge>
-                      {t.own ? "Your template" : "Ready-made"} · {t.level}
-                    </Badge>
-                    <h3>{t.name}</h3>
-                    <p>
-                      {t.content.modules.length} modules ·{" "}
-                      {totalMinutes(t.content)} min
-                    </p>
-                    <Button
-                      kind="secondary"
-                      onClick={() => useTemplate(t.content)}
-                    >
-                      Use template
-                    </Button>
-                  </section>
-                ))}
-              </>
-            ) : (
-              (library === "Teach" ? teachFormats : practiceFormats).map((f) =>
-                paletteItem(f, library as Purpose),
-              )
-            )}
-          </div>
-          <div className="ce-outline">
-            <div className="ce-panel-heading">
-              <h2>Lesson outline</h2>
-              <button
-                className="tw-icon-button"
-                aria-label="Add module to outline"
-                onClick={() => open("module")}
-              >
-                <Icon name="plus" size={16} />
-              </button>
-            </div>
-            <p className="ce-outline-hint">
-              Drag the grip to reorder. More actions offers the same controls.
-            </p>
-            {!c.modules.length && (
-              <p>Add a module to start building your lesson.</p>
-            )}
-            {c.modules.map((m, i) => (
-              <div className="ce-outline-group" key={m.id}>
-                <div
-                  className={`ce-outline-row ${selectedModule?.id === m.id && !selectedBlock ? "selected" : ""}`}
-                  data-ce-module={m.id}
-                >
-                  {grip({ moduleId: m.id }, moduleHeading(m))}
-                  <button
-                    className="ce-outline-title"
-                    onClick={() => selectModule(m)}
-                  >
-                    <span>
-                      {String(i + 1).padStart(2, "0")} · {moduleHeading(m)}
-                    </span>
-                    <small>
-                      {m.type} · {m.minutes} min
-                    </small>
-                  </button>
-                  {more({ moduleId: m.id }, moduleHeading(m), i, c.modules.length)}
-                </div>
-                {m.blocks.map((b, j) => (
-                  <div
-                    className={`ce-outline-row ce-outline-block ${selectedBlock?.id === b.id ? "selected" : ""}`}
-                    data-ce-module={m.id}
-                    data-ce-block={b.id}
-                    key={b.id}
-                  >
-                    {grip({ moduleId: m.id, blockId: b.id }, b.title)}
-                    <button
-                      className="ce-outline-title"
-                      onClick={() => selectBlock(m, b)}
-                    >
-                      <span>{b.title}</span>
-                      <small>
-                        {b.purpose} · {b.format}
-                      </small>
-                    </button>
-                    {more(
-                      { moduleId: m.id, blockId: b.id },
-                      b.title,
-                      j,
-                      m.blocks.length,
-                    )}
-                  </div>
-                ))}
+          {outlineOpen && !mobile && (
+            <div className="ce-outline-overlay" id={outlineId} role="region" aria-label="Lesson outline">
+              <div className="ce-outline-overlay-heading">
+                <h2>Lesson outline</h2>
+                <button className="tw-icon-button" aria-label="Close lesson outline" onClick={() => setOutlineOpen(false)}><Icon name="close" size={16} /></button>
               </div>
-            ))}
-          </div>
-        </aside>
-        <main className="ce-canvas">
-          <div className="ce-canvas-label">
-            <span>Lesson editor</span>
-            <span className="ce-view-status">
-              <span>Teacher view</span>
-              <Badge tone={applied ? "green" : "orange"}>{status}</Badge>
-            </span>
-          </div>
+              {outlineList}
+            </div>
+          )}
+          <main className="ce-canvas">
           <div className="ce-lesson-paper">
             <div className="ce-lesson-heading">
               <div role="heading" aria-level={1}>
@@ -945,6 +883,7 @@ function Editor({ lesson, navigate }: { lesson: Lesson; navigate: Navigate }) {
             </div>
             {c.modules.map((m, i) => (
               <section
+                id={`ce-module-${m.id}`}
                 className={`ce-module ${selectedModule?.id === m.id ? "ce-module-selected" : ""}`}
                 key={m.id}
                 onDragOver={(e) => {
@@ -973,7 +912,6 @@ function Editor({ lesson, navigate }: { lesson: Lesson; navigate: Navigate }) {
                     });
                     setModuleId(m.id);
                     setBlockId(b.id);
-                    setTab("Block");
                   } catch {
                     /* Ignore unrelated drops. */
                   }
@@ -1022,39 +960,36 @@ function Editor({ lesson, navigate }: { lesson: Lesson; navigate: Navigate }) {
                       onChange={(goal) => changeModule({ ...m, goal })}
                     />
                   </div>
-                  <button
-                    className="tw-icon-button"
-                    aria-label={`Settings for ${moduleHeading(m)}`}
-                    onClick={() => {
-                      selectModule(m);
-                      if (mobile) {
-                        keyboard.hide();
-                        setMobilePanel("Properties");
-                      }
-                    }}
-                  >
-                    <Icon name="settings" size={18} />
-                  </button>
+                  <div className="ce-item-actions" role="group" aria-label={`Actions for ${moduleHeading(m)}`}>
+                    <button className="tw-icon-button" aria-label={`Move ${moduleHeading(m)} earlier`} disabled={i === 0} onClick={() => move({ moduleId: m.id }, { moduleId: c.modules[i - 1].id })}><Icon name="up" size={16} /></button>
+                    <button className="tw-icon-button" aria-label={`Move ${moduleHeading(m)} later`} disabled={i === c.modules.length - 1} onClick={() => move({ moduleId: m.id }, { moduleId: c.modules[i + 1].id }, true)}><Icon name="down" size={16} /></button>
+                    <button className="tw-icon-button ce-danger-icon" aria-label={`Delete ${moduleHeading(m)}`} onClick={() => deleteModule(m)}><Icon name="close" size={16} /></button>
+                  </div>
                 </div>
-                {m.blocks.map((b) => (
+                {m.blocks.map((b, j) => (
                   <article
+                    id={`ce-block-${b.id}`}
                     className={`ce-canvas-block ${selectedBlock?.id === b.id ? "selected" : ""}`}
                     key={b.id}
                     onFocusCapture={() => selectBlock(m, b)}
+                    onPointerDown={() => selectBlock(m, b)}
                   >
-                    <button
-                      className="ce-block-select"
-                      onClick={() => selectBlock(m, b, mobile)}
-                      aria-label={`Settings for ${b.title}`}
-                    >
-                      <span
-                        className={`ce-purpose ${b.purpose === "Teach" ? "teach" : "practice"}`}
-                      >
-                        {b.purpose}
-                      </span>
-                      <span>{b.format}</span>
-                      <Icon name="settings" size={16} />
-                    </button>
+                    <div className="ce-block-header">
+                      <span className={`ce-purpose ${b.purpose === "Teach" ? "teach" : "practice"}`}>{b.purpose}</span>
+                      <span className="ce-block-format">{b.format}</span>
+                      <div className="ce-item-actions" role="group" aria-label={`Actions for ${b.title || b.format}`}>
+                        <button className="tw-icon-button" aria-label={`Move ${b.title || b.format} earlier`} disabled={j === 0} onClick={() => move({ moduleId: m.id, blockId: b.id }, { moduleId: m.id, blockId: m.blocks[j - 1].id })}><Icon name="up" size={16} /></button>
+                        <button className="tw-icon-button" aria-label={`Move ${b.title || b.format} later`} disabled={j === m.blocks.length - 1} onClick={() => move({ moduleId: m.id, blockId: b.id }, { moduleId: m.id, blockId: m.blocks[j + 1].id }, true)}><Icon name="down" size={16} /></button>
+                        <button className="tw-icon-button ce-danger-icon" aria-label={`Delete ${b.title || b.format}`} onClick={() => deleteBlock(m, b)}><Icon name="close" size={16} /></button>
+                      </div>
+                    </div>
+                    <details className="ce-block-settings">
+                      <summary><Icon name="settings" size={14} />Block settings</summary>
+                      <div className="ce-block-settings-body">
+                        <Select label="Block purpose" value={b.purpose} options={["Teach", "Practice"]} onChange={(v) => changeBlock({ ...b, purpose: v as Purpose }, m)} />
+                        <Select label="Block type" value={b.format} options={[...new Set([b.format, ...(b.purpose === "Teach" ? teachFormats : practiceFormats)])]} onChange={(v) => changeBlock({ ...b, format: v as Format }, m)} />
+                      </div>
+                    </details>
                     <div className="ce-inline-block-content">
                       <BlockProperties inline block={b} change={(next) => changeBlock(next, m)} />
                     </div>
@@ -1077,9 +1012,6 @@ function Editor({ lesson, navigate }: { lesson: Lesson; navigate: Navigate }) {
               Add module
             </button>
           </div>
-          <p className="ce-canvas-footnote">
-            Type directly in the lesson to edit. Preview shows the student view.
-          </p>
           {lesson.publishedEditor && (
             <div className="ce-applied-link">
               <button
@@ -1095,22 +1027,17 @@ function Editor({ lesson, navigate }: { lesson: Lesson; navigate: Navigate }) {
               </small>
             </div>
           )}
-        </main>
-        <CourseProperties
-          tab={tab}
-          course={c}
-          module={selectedModule}
-          block={selectedBlock}
-          onTab={setTab}
-          changeCourse={commit}
-          changeModule={changeModule}
-          changeBlock={(next) => changeBlock(next)}
-          addModule={() => open("module")}
-          deleteModule={deleteModule}
-          addBlock={() => open("block")}
-          deleteBlock={deleteBlock}
-        />
+          </main>
+        </div>
+        {(!mobile || mobilePanel === "Preview") && (
+          <LiveLessonPreview course={c} followId={selectedBlock?.id ?? selectedModule?.blocks[0]?.id} native={mobile} />
+        )}
       </div>
+      {mobile && outlineOpen && (
+        <BottomSheet open onOpenChange={(value) => { if (!value) setOutlineOpen(false); }} title="Lesson outline" snap={0.76}>
+          <div className="teacher-workspace ce-sheet" id={outlineId}>{outlineList}</div>
+        </BottomSheet>
+      )}
       <EditorActions>
         <div className="ce-footer-back">
           <Button
@@ -1122,9 +1049,6 @@ function Editor({ lesson, navigate }: { lesson: Lesson; navigate: Navigate }) {
           </Button>
         </div>
         <div className="ce-bottom-actions">
-          <Button kind="secondary" onClick={() => open("preview")}>
-            Preview lesson
-          </Button>
           <Button kind="secondary" onClick={() => save()}>
             Save draft
           </Button>
@@ -1140,20 +1064,47 @@ function Editor({ lesson, navigate }: { lesson: Lesson; navigate: Navigate }) {
                 ? "Preview lesson"
                 : modal === "apply"
                   ? "Use lesson"
-                  : modal === "module"
-                    ? "Add module"
-                    : "Add block"
+                  : modal === "templates"
+                    ? "Lesson templates"
+                    : modal === "module"
+                      ? "Add module"
+                      : "Add block"
           }
           onClose={modal === "apply" ? closeUse : () => setModal(null)}
           busy={busy}
           description={modal === "apply" ? "Assign this lesson to a student, save it as a reusable template, or do both." : undefined}
           restoreFocus={modal === "apply" ? () => useTrigger.current?.focus() : undefined}
-          wide={modal === "preview" || modal === "published"}
+          wide={modal === "preview" || modal === "published" || modal === "templates"}
         >
           {modal === "published" && lesson.publishedEditor ? (
             <LessonPlayer course={lesson.publishedEditor.content} />
           ) : modal === "preview" ? (
             <LessonPlayer course={c} />
+          ) : modal === "templates" ? (
+            <div className="ce-templates">
+              <TextField label="Search lesson templates" value={templateQuery} onChange={setTemplateQuery} />
+              {templateError && <div className="ce-warning" role="alert"><p>{templateError}</p></div>}
+              {(() => {
+                const query = templateQuery.trim().toLowerCase();
+                const list = [...builtInTemplates, ...templates].filter((t) => !query || `${t.name} ${t.content.goal} ${t.level} ${t.content.modules.map((m) => moduleHeading(m)).join(" ")}`.toLowerCase().includes(query));
+                return list.length ? list.map((t) => (
+                  <section className="ce-template" key={t.id}>
+                    <Badge>{t.own ? "Your template" : "Ready-made"} · {t.level}</Badge>
+                    <h3>{t.name}</h3>
+                    {t.content.goal && <p>{t.content.goal}</p>}
+                    <p className="tw-subtle">{t.content.modules.length} {t.content.modules.length === 1 ? "module" : "modules"} · {totalMinutes(t.content)} min</p>
+                    <details className="ce-template-outline">
+                      <summary>Module outline</summary>
+                      <ol>{t.content.modules.map((m) => <li key={m.id}>{moduleHeading(m)} <small>· {m.blocks.length} {m.blocks.length === 1 ? "block" : "blocks"}</small></li>)}</ol>
+                    </details>
+                    <div className="ce-actions">
+                      <Button kind="secondary" icon="plus" onClick={() => addTemplate(t.content)}>Add to this lesson</Button>
+                      <Button icon="book" onClick={() => createFromTemplate(t.content)}>Create a new lesson</Button>
+                    </div>
+                  </section>
+                )) : <p>No lesson templates match “{templateQuery.trim()}”. Try another word.</p>;
+              })()}
+            </div>
           ) : modal === "module" ? (
             <>
               <p>
